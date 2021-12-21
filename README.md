@@ -120,17 +120,13 @@ git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/co
 
 ```bash
 
-cd ~/.ansible/roles/computate.computate_postgres
-ansible-playbook install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml
 
-cd ~/.ansible/roles/computate.computate_zookeeper
-ansible-playbook install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml
 
-cd ~/.ansible/roles/computate.computate_solr
-ansible-playbook install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml
 
-cd ~/.ansible/roles/computate.computate_project
-ansible-playbook install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true
+ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e SITE_ZONE=America/New_York -e @~/.local/src/ActiveLearningStudio-API-ansible/vaults/curriki-defaults/vault --vault-id @prompt
 ```
 
 # Configure Eclipse
