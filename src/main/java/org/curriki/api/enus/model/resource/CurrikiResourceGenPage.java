@@ -233,6 +233,6 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("user-cog");
+			c.o("file");
 	}
 }
