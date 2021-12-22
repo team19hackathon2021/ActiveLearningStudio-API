@@ -71,4 +71,16 @@ ENABLE_DB_SOLR_SYNC: false
 # TODO: Enable the refresh data properties, in case you want to reindex the data in the search engine after doing more search engine tuning. 
 ENABLE_REFRESH_DATA: false
 
-MOONSHOTS_DRIVER_CLASS: com.mysql.jdbc.Driver
+MOONSHOTS_DRIVER_CLASS: com.mysql.cj.jdbc.Driver
+MOONSHOTS_HOST: "localhost"
+MOONSHOTS_PORT: 3306
+MOONSHOTS_DATABASE: "currikidb"
+MOONSHOTS_USERNAME: ""
+MOONSHOTS_PASSWORD: "*"
+MOONSHOTS_FETCH_SIZE: 100
+
+ENABLE_IMPORT_DATA: true
+
+ENABLE_IMPORT_DATA_CurrikiResource: true
+IMPORT_DATA_START_TIME_CurrikiResource: 00:00 America/New_York
+IMPORT_DATA_PERIOD_CurrikiResource: 1 hour
