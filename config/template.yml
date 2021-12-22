@@ -49,8 +49,20 @@ ENABLE_SESSION_ID: {{ ENABLE_SESSION_ID }}
 ENABLE_DELETED: {{ ENABLE_DELETED }}
 # Enable an object in the database to be archived. 
 ENABLE_ARCHIVED: {{ ENABLE_ARCHIVED }}
-# Enable data import in the site. 
-ENABLE_IMPORT_DATA: {{ ENABLE_IMPORT_DATA }}
 
 # The Auth roles required to be an admin in the site. 
 AUTH_ROLES_ADMIN: {{ AUTH_ROLES_ADMIN }}
+
+# Connection to the Moonshots MySQL database. 
+MOONSHOTS_HOST: "{{ MOONSHOTS_HOST }}"
+MOONSHOTS_PORT: {{ MOONSHOTS_PORT }}
+MOONSHOTS_DATABASE: "{{ MOONSHOTS_DATABASE }}"
+MOONSHOTS_USERNAME: "{{ MOONSHOTS_USERNAME }}"
+MOONSHOTS_PASSWORD: "{{ MOONSHOTS_PASSWORD }}"
+
+# Enable data import in the site. 
+ENABLE_IMPORT_DATA: {{ ENABLE_IMPORT_DATA | lower }}
+
+ENABLE_IMPORT_DATA_CurrikiResource: true
+IMPORT_DATA_START_TIME_CurrikiResource: 00:00 {{ SITE_ZONE }}
+IMPORT_DATA_PERIOD_CurrikiResource: 1 hour

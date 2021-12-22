@@ -1,26 +1,23 @@
 package org.curriki.api.enus.vertx;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.curriki.api.enus.config.ConfigKeys;
+import org.curriki.api.enus.java.TimeTool;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import org.curriki.api.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.curriki.api.enus.config.ConfigKeys;
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.search.SearchList;
-
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
@@ -29,13 +26,15 @@ import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
+import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
+import io.vertx.ext.sql.SQLConnection;
+import io.vertx.ext.sql.SQLOptions;
+import io.vertx.ext.sql.SQLRowStream;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
-import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
-import io.vertx.sqlclient.PoolOptions;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowStream;
 
@@ -48,6 +47,8 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 	public static final Integer FACET_LIMIT = 100;
 
+	public final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss VV");
+
 	/**
 	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database PostgreSQL. 
 	 **/
@@ -57,6 +58,10 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 	WorkerExecutor workerExecutor;
 
+	JDBCClient jdbcClient;
+
+	Integer commitWithin;
+
 	/**	
 	 *	This is called by Vert.x when the verticle instance is deployed. 
 	 *	Initialize a new site context object for storing information about the entire site in English. 
@@ -64,14 +69,17 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 **/
 	@Override()
 	public void  start(Promise<Void> startPromise) throws Exception, Exception {
+		commitWithin = config().getInteger(ConfigKeys.SOLR_WORKER_COMMIT_WITHIN_MILLIS);
 
 		try {
 			configureWebClient().compose(a -> 
 				configureSharedWorkerExecutor().compose(c -> 
 					configureEmail().compose(d -> 
-						importData().compose(e -> 
-							syncDbToSolr().compose(f -> 
-								refreshAllData()
+						configureMoonshotsData().compose(e -> 
+							importData().compose(f -> 
+								syncDbToSolr().compose(g -> 
+									refreshAllData()
+								)
 							)
 						)
 					)
@@ -150,42 +158,216 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	/**	
-	 * Import initial data
-	 * Val.Complete.enUS:Importing initial data completed. 
-	 * Val.Fail.enUS:Importing initial data failed. 
-	 * Val.Skip.enUS:data import skipped. 
-	 **/
-	private Future<Void> importData() {
+	/**
+	 * Val.Complete.enUS:The Moonshot database was configured successfully. 
+	 * Val.Fail.enUS:The Moonshot database configuration failed. 
+	 */
+	private Future<Void> configureMoonshotsData() {
 		Promise<Void> promise = Promise.promise();
-		Integer commitWithin = config().getInteger(ConfigKeys.SOLR_WORKER_COMMIT_WITHIN_MILLIS);
+
 		try {
-			if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, true)) {
-				List<Future> futures = new ArrayList<>();
-				futures.add(Future.future(promise1 -> {
-					workerExecutor.executeBlocking(blockingCodeHandler -> {
-					}, false).onSuccess(a -> {
-						promise1.complete();
-					}).onFailure(ex -> {
-						LOG.error(String.format("executeBlocking failed. "), ex);
-						promise1.fail(ex);
-					});
-				}));
-				CompositeFuture.all(futures).onSuccess(a -> {
-					LOG.info("importData futures completed. ");
-					promise.complete();
-				}).onFailure(ex -> {
-					LOG.error(String.format("importData futures failed. "), ex);
-					promise.fail(ex);
-				});
-			} else {
-				LOG.info(String.format(importDataSkip));
-				promise.complete();
-			}
-		} catch (Exception ex) {
-			LOG.error(configureEmailFail, ex);
+			JsonObject jdbcOptions = new JsonObject();
+			jdbcOptions.put("driver_class", config().getString(ConfigKeys.MOONSHOTS_DRIVER_CLASS));
+			jdbcOptions.put("url", String.format("jdbc:mysql://%s:%s@%s:%s/%s?useSSL=false&zeroDateTimeBehavior=convertToNull", 
+					config().getString(ConfigKeys.MOONSHOTS_USERNAME)
+					, config().getString(ConfigKeys.MOONSHOTS_PASSWORD)
+					, config().getString(ConfigKeys.MOONSHOTS_HOST)
+					, config().getString(ConfigKeys.MOONSHOTS_PORT)
+					, config().getString(ConfigKeys.MOONSHOTS_DATABASE)
+					));
+			jdbcOptions.put("max_pool_size", config().getInteger(ConfigKeys.MOONSHOTS_MAX_POOL_SIZE));
+			jdbcOptions.put("min_pool_size", config().getInteger(ConfigKeys.MOONSHOTS_MIN_POOL_SIZE));
+			jdbcOptions.put("max_idle_time", config().getInteger(ConfigKeys.MOONSHOTS_MAX_IDLE_TIME));
+			jdbcOptions.put("max_statements", config().getInteger(ConfigKeys.MOONSHOTS_MAX_STATEMENTS));
+			jdbcOptions.put("max_statements_per_connection", config().getInteger(ConfigKeys.MOONSHOTS_MAX_STATEMENTS_PER_CONNECTION));
+
+			jdbcClient = JDBCClient.createShared(vertx, jdbcOptions);
+			LOG.info(configureMoonshotsDataComplete);
+			promise.complete();
+		} catch(Exception ex) {
+			LOG.error(configureMoonshotsDataFail, ex);
 			promise.fail(ex);
 		}
+		return promise.future();
+	}
+
+	/**
+	 * Val.Scheduling.enUS:Scheduling the %s import at %s
+	 * Val.Skip.enUS:Skip importing %s data. 
+	 */
+	private void importTimer(String classSimpleName) {
+		if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_IMPORT_DATA, classSimpleName), true)) {
+			// Load the import start time and period configuration. 
+			String importStartTime = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_START_TIME, classSimpleName));
+			String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+			// Get the duration of the import period. 
+			Duration duration = TimeTool.parseNextDuration(importPeriod);
+			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
+			// to give the following code enough time to complete it's calculations to ensure the import starts correctly. 
+			ZonedDateTime nextStartTime = Optional.of(TimeTool.parseNextZonedTime(importStartTime))
+					.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+			// Get the time now for the import start time zone. 
+			ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
+			BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
+					.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
+			Duration nextStartDuration = Duration.between(now, nextStartTime);
+			if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
+				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
+				nextStartTime = now.plus(nextStartDuration);
+			}
+			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+			ZonedDateTime nextStartTime2 = nextStartTime;
+			vertx.setTimer(nextStartDuration.toMillis(), a -> {
+				importData(classSimpleName, nextStartTime2);
+			});
+		} else {
+			LOG.info(String.format(importTimerSkip, classSimpleName));
+		}
+	}
+
+	/**	
+	 * Import initial data
+	 * Val.Complete.enUS:Configuring the import of %s data completed. 
+	 * Val.Fail.enUS:Configuring the import of %s data failed. 
+	 **/
+	private void importData(String classSimpleName, ZonedDateTime startDateTime) {
+		if("CurrikiResource".equals(classSimpleName)) {
+			try {
+				jdbcClient.getConnection(a -> {
+					if(a.succeeded()) {
+						SQLConnection sqlConnection = a.result();
+						sqlConnection.setOptions(new SQLOptions().setFetchSize(config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE)));
+						importDataCurrikiResource(sqlConnection).onComplete(b -> {
+							String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+							Duration duration = TimeTool.parseNextDuration(importPeriod);
+							ZonedDateTime nextStartTime = startDateTime.plus(duration);
+							LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+							Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+							vertx.setTimer(nextStartDuration.toMillis(), c -> {
+								importData(classSimpleName, nextStartTime);
+							});
+						});
+					} else {
+						LOG.error(String.format(importDataFail, classSimpleName), a.cause());
+						String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+						Duration duration = TimeTool.parseNextDuration(importPeriod);
+						ZonedDateTime nextStartTime = startDateTime.plus(duration);
+						LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+						Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+						vertx.setTimer(nextStartDuration.toMillis(), c -> {
+							importData(classSimpleName, nextStartTime);
+						});
+					}
+				});
+			} catch(Exception ex) {
+				LOG.error(String.format(importDataFail, classSimpleName), ex);
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				Duration duration = TimeTool.parseNextDuration(importPeriod);
+				ZonedDateTime nextStartTime = startDateTime.plus(duration);
+				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+				vertx.setTimer(nextStartDuration.toMillis(), c -> {
+					importData(classSimpleName, nextStartTime);
+				});
+			}
+		}
+	}
+
+	private Future<Void> importData() {
+		Promise<Void> promise = Promise.promise();
+		importTimer("CurrikiResource");
+		return promise.future();
+	}
+
+	/**	
+	 * Val.Complete.enUS:Importing all CurrikiResource records completed. 
+	 * Val.Fail.enUS:Importing CurrikiResource records failed. 
+	 * Val.Skip.enUS:Skip importing CurrikiResource records. 
+	 **/
+	private Future<Void> importDataCurrikiResource(SQLConnection sqlConnection) {
+		Promise<Void> promise = Promise.promise();
+
+		try {
+			sqlConnection.queryStreamWithParams(
+					"SELECT * from currikidb.resources"
+					, new JsonArray(), a -> {
+				SQLRowStream sqlRowStream = a.result();
+				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
+				ApiCounter counter = new ApiCounter();
+				sqlRowStream.pause();
+				sqlRowStream.fetch(fetchSize);
+				sqlRowStream.resultSetClosedHandler(b -> {
+					sqlRowStream.moreResults();
+				}).handler(row -> {
+					counter.incrementQueueNum();
+					processRowCurrikiResource(row).onSuccess(b -> {
+						counter.decrementQueueNum();
+						counter.incrementTotalNum();
+						if(counter.getQueueNum().compareTo(0L) == 0) {
+							sqlRowStream.fetch(fetchSize);
+						}
+					}).onFailure(ex -> {
+						LOG.error(importDataCurrikiResourceFail, ex);
+						promise.fail(ex);
+					});
+				}).exceptionHandler(ex -> {
+					LOG.error(importDataCurrikiResourceComplete, ex);
+					promise.fail(ex);
+				}).endHandler(b -> {
+					LOG.info(importDataCurrikiResourceComplete);
+					promise.complete();
+				});
+			});
+		} catch(Exception ex) {
+			LOG.error(importDataCurrikiResourceFail, ex);
+			promise.fail(ex);
+		}
+
+		return promise.future();
+	}
+
+	/**	
+	 * Val.Complete.enUS:Importing CurrikiResource row completed. 
+	 * Val.Fail.enUS:Importing CurrikiResource row failed. 
+	 **/
+	private Future<Void> processRowCurrikiResource(JsonArray row) {
+		Promise<Void> promise = Promise.promise();
+
+		try {
+//			String resourceId = row.getString(0);
+//			JsonObject body = new JsonObject();
+//			body.put(CurrikiResource.VAR_saves, new JsonArray()
+//					.add(CurrikiResource.VAR_inheritPk)
+//					.add(CurrikiResource.VAR_created)
+//					.add(CurrikiResource.VAR_resourceId)
+//					);
+//			body.put(CurrikiResource.VAR_pk, resourceId);
+//
+//			JsonObject params = new JsonObject();
+//			params.put("body", body);
+//			params.put("path", new JsonObject());
+//			params.put("cookie", new JsonObject());
+//			params.put("header", new JsonObject());
+//			params.put("form", new JsonObject());
+//			params.put("query", new JsonObject()
+//					.put("var", new JsonArray().add("refresh:false"))
+//					.put("commitWithin", commitWithin)
+//					);
+//			JsonObject context = new JsonObject().put("params", params);
+//			JsonObject json = new JsonObject().put("context", context);
+//			vertx.eventBus().request("shi-api-enUS-HostGroup", json, new DeliveryOptions().addHeader("action", "putimportCurrikiResourceFuture")).onSuccess(a -> {
+//				promise.complete();
+//			}).onFailure(ex -> {
+//				LOG.error(processRowCurrikiResourceFail);
+//				promise.fail(ex);
+//			});
+			LOG.info(row.toString());
+			promise.complete();
+		} catch(Exception ex) {
+			LOG.error(processRowCurrikiResourceFail);
+			promise.fail(ex);
+		}
+
 		return promise.future();
 	}
 

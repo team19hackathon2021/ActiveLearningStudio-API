@@ -33,6 +33,7 @@ TODO: Define the groupId and artifactId for ActiveLearningStudio-API.
 		<maven-jarsigner-plugin.version>1.4</maven-jarsigner-plugin.version>
 		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
 		<postgresql.version>42.2.2.jre7</postgresql.version>
+		<mysql.version>8.0.27</mysql.version>
 		<solr.version>8.4.1</solr.version>
 		<vertx-maven-plugin.version>1.0.9</vertx-maven-plugin.version>
 		<build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
@@ -171,6 +172,16 @@ TODO: Define the groupId and artifactId for ActiveLearningStudio-API.
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
+		</dependency>
+
+		<!-- ##### -->
+		<!-- MySQL -->
+		<!-- ##### -->
+
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
 
 		<!-- #### -->
