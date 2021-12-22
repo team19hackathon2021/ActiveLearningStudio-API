@@ -128,7 +128,24 @@ ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml
 ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml
 
 ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e SITE_ZONE=America/New_York -e @~/.local/src/ActiveLearningStudio-API-ansible/vaults/curriki-defaults/vault --vault-id @prompt
+
+ansible-playbook ~/.ansible/roles/computate.computate_squirrelsql/install.yml
 ```
+
+# Setup Drivers and Connections in SquirreL SQL
+
+## Setup a MySQL driver
+
+* Download the "Platform Independent" driver here: https://dev.mysql.com/downloads/connector/j/
+* Extract the mysql-connector-java-8.0.27.jar to this directory: ~/.local/opt/squirrel-sql/lib
+* In SQuirreL SQL, click the Drivers tab, then double click on "MySQL Driver"
+* Click the "Extra Class Path" tab and add this file: ~/.local/opt/squirrel-sql/lib/mysql-connector-java-8.0.27.jar
+
+## Setup a MySQL connection
+
+* In the Aliases tab, click the [ + ] button.
+* Provide a name for your connection and enter the JDBC URL to your MySQL database, the username and password (Please reach out to the team for information to connect to the moonshots database).
+* Click [ Test ] button to test the connection, then click [ Connect ] to connect.
 
 # Configure Eclipse
 
