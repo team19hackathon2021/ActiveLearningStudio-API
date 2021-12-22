@@ -30,6 +30,819 @@ paths:
               schema:
                 type: string
 
+  /api/resource:
+    get:
+      operationId: searchCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: cursorMark
+          description: 'To use a cursor with the API, specify a cursorMark parameter with the value of *. In addition to returning the top N sorted results (where you can control N using the rows parameter) the API response will also include an encoded String named nextCursorMark. You then take the nextCursorMark String value from the response, and pass it back to API as the cursorMark parameter for your next request. You can repeat this process until you’ve fetched as many docs as you want, or until the nextCursorMark returned matches the cursorMark you’ve already specified — indicating that there are no more results. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: softCommit
+          description: 'Solr performs a soft commit, meaning that Solr will commit the changes to the data structures quickly, but not guarantee that the Lucene index files are written to stable storage. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: commitWithin
+          description: 'The commit within setting allows forcing document commits to happen in a defined time period. '
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchCurrikiResourceResponse'
+    patch:
+      operationId: patchCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: cursorMark
+          description: 'To use a cursor with the API, specify a cursorMark parameter with the value of *. In addition to returning the top N sorted results (where you can control N using the rows parameter) the API response will also include an encoded String named nextCursorMark. You then take the nextCursorMark String value from the response, and pass it back to API as the cursorMark parameter for your next request. You can repeat this process until you’ve fetched as many docs as you want, or until the nextCursorMark returned matches the cursorMark you’ve already specified — indicating that there are no more results. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: softCommit
+          description: 'Solr performs a soft commit, meaning that Solr will commit the changes to the data structures quickly, but not guarantee that the Lucene index files are written to stable storage. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: commitWithin
+          description: 'The commit within setting allows forcing document commits to happen in a defined time period. '
+          required: false
+          schema:
+            type: integer
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHCurrikiResourceRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PATCHCurrikiResourceResponse'
+    post:
+      operationId: postCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTCurrikiResourceRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/POSTCurrikiResourceResponse'
+  /api/resource/import:
+    put:
+      operationId: putimportCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: cursorMark
+          description: 'To use a cursor with the API, specify a cursorMark parameter with the value of *. In addition to returning the top N sorted results (where you can control N using the rows parameter) the API response will also include an encoded String named nextCursorMark. You then take the nextCursorMark String value from the response, and pass it back to API as the cursorMark parameter for your next request. You can repeat this process until you’ve fetched as many docs as you want, or until the nextCursorMark returned matches the cursorMark you’ve already specified — indicating that there are no more results. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: softCommit
+          description: 'Solr performs a soft commit, meaning that Solr will commit the changes to the data structures quickly, but not guarantee that the Lucene index files are written to stable storage. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: commitWithin
+          description: 'The commit within setting allows forcing document commits to happen in a defined time period. '
+          required: false
+          schema:
+            type: integer
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTImportCurrikiResourceRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PUTImportCurrikiResourceResponse'
+  /resource:
+    get:
+      operationId: searchpageCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: cursorMark
+          description: 'To use a cursor with the API, specify a cursorMark parameter with the value of *. In addition to returning the top N sorted results (where you can control N using the rows parameter) the API response will also include an encoded String named nextCursorMark. You then take the nextCursorMark String value from the response, and pass it back to API as the cursorMark parameter for your next request. You can repeat this process until you’ve fetched as many docs as you want, or until the nextCursorMark returned matches the cursorMark you’ve already specified — indicating that there are no more results. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: softCommit
+          description: 'Solr performs a soft commit, meaning that Solr will commit the changes to the data structures quickly, but not guarantee that the Lucene index files are written to stable storage. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: commitWithin
+          description: 'The commit within setting allows forcing document commits to happen in a defined time period. '
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageCurrikiResourceResponse'
+  /resource/{id}:
+    get:
+      operationId: searchpageCurrikiResourceId
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: cursorMark
+          description: 'To use a cursor with the API, specify a cursorMark parameter with the value of *. In addition to returning the top N sorted results (where you can control N using the rows parameter) the API response will also include an encoded String named nextCursorMark. You then take the nextCursorMark String value from the response, and pass it back to API as the cursorMark parameter for your next request. You can repeat this process until you’ve fetched as many docs as you want, or until the nextCursorMark returned matches the cursorMark you’ve already specified — indicating that there are no more results. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: softCommit
+          description: 'Solr performs a soft commit, meaning that Solr will commit the changes to the data structures quickly, but not guarantee that the Lucene index files are written to stable storage. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: commitWithin
+          description: 'The commit within setting allows forcing document commits to happen in a defined time period. '
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageCurrikiResourceResponse'
   /api/user:
     get:
       operationId: searchSiteUser
@@ -691,6 +1504,46 @@ components:
       type: openIdConnect
       openIdConnectUrl: https://sso.computate.org/auth/realms/TEAM19/.well-known/openid-configuration
   requestBodies:
+    SearchCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchCurrikiResourceResponse'
+    PATCHCurrikiResourceRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHCurrikiResourceRequest'
+    PATCHCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHCurrikiResourceResponse'
+    POSTCurrikiResourceRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTCurrikiResourceRequest'
+    POSTCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTCurrikiResourceResponse'
+    PUTImportCurrikiResourceRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUTImportCurrikiResourceRequest'
+    PUTImportCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PUTImportCurrikiResourceResponse'
+    SearchPageCurrikiResourceResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageCurrikiResourceResponse'
     SearchSiteUserResponse:
       content:
         application/json; charset=utf-8:
@@ -722,6 +1575,141 @@ components:
           schema:
             $ref: '#/components/schemas/SearchPageSiteUserResponse'
   schemas:
+    SearchCurrikiResourceResponse:
+      allOf:
+        - type: array
+          items:
+            type: object
+            properties:
+              resourceId:
+                type: string
+              keywordsStr:
+                type: string
+              keywords:
+                type: array
+                items:
+                  type: string
+    PATCHCurrikiResourceRequest:
+      allOf:
+        - type: object
+          properties:
+            setResourceId:
+              type: string
+              nullable: true
+            removeResourceId:
+              type: string
+            removeAllResourceId:
+              type: string
+            setKeywordsStr:
+              type: string
+              nullable: true
+            removeKeywordsStr:
+              type: string
+            removeAllKeywordsStr:
+              type: string
+            setKeywords:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeKeywords:
+              type: string
+            removeAllKeywords:
+              type: array
+              items:
+                type: string
+            addKeywords:
+              type: string
+            addAllKeywords:
+              type: array
+              items:
+                type: string
+    PATCHCurrikiResourceResponse:
+      allOf:
+        - type: object
+          properties:
+            setResourceId:
+              type: string
+              nullable: true
+            removeResourceId:
+              type: string
+            removeAllResourceId:
+              type: string
+            setKeywordsStr:
+              type: string
+              nullable: true
+            removeKeywordsStr:
+              type: string
+            removeAllKeywordsStr:
+              type: string
+            setKeywords:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeKeywords:
+              type: string
+            removeAllKeywords:
+              type: array
+              items:
+                type: string
+            addKeywords:
+              type: string
+            addAllKeywords:
+              type: array
+              items:
+                type: string
+    POSTCurrikiResourceRequest:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+    POSTCurrikiResourceResponse:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+    PUTImportCurrikiResourceRequest:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+    PUTImportCurrikiResourceResponse:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+    SearchPageCurrikiResourceResponse:
+      allOf:
+        - type: string
     SearchSiteUserResponse:
       allOf:
         - type: array
