@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.curriki.api.enus.config.ConfigKeys;
+import org.curriki.api.enus.model.resource.CurrikiResourceEnUSGenApiService;
 import org.curriki.api.enus.user.SiteUserEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -482,6 +483,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			templateEngine = HandlebarsTemplateEngine.create(vertx);
 
 			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			CurrikiResourceEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 
 			LOG.info(configureApiComplete);
 			promise.complete();
