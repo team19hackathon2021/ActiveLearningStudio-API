@@ -1,4 +1,4 @@
-# About CurrikiStudio
+    # About CurrikiStudio
 CurrikiStudio is an open source authoring platform for education. It is designed to let content authors develop and publish effective, engaging learning experiences quickly and easily.
 
 ## Learn More
@@ -114,23 +114,20 @@ git clone git@github.com:computate-org/computate_postgres.git ~/.ansible/roles/c
 git clone git@github.com:computate-org/computate_zookeeper.git ~/.ansible/roles/computate.computate_zookeeper
 git clone git@github.com:computate-org/computate_solr.git ~/.ansible/roles/computate.computate_solr
 git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/computate.computate_project
+git clone git@github.com:computate-org/computate_squirrelsql.git ~/.ansible/roles/computate.computate_squirrelsql
 ```
 
 ## Run the Ansible Galaxy roles to install the complete project locally. 
 
 ```bash
 
-cd ~/.ansible/roles/computate.computate_postgres
-ansible-playbook install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml
 
-cd ~/.ansible/roles/computate.computate_zookeeper
-ansible-playbook install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml
 
-cd ~/.ansible/roles/computate.computate_solr
-ansible-playbook install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml
 
-cd ~/.ansible/roles/computate.computate_project
-ansible-playbook install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true
+ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e SITE_ZONE=America/New_York -e @~/.local/src/ActiveLearningStudio-API-ansible/vaults/curriki-defaults/vault --vault-id @prompt
 ```
 
 # Configure Eclipse

@@ -43,6 +43,17 @@ import org.curriki.api.enus.java.LocalDateSerializer;
 public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
 
 /*
+CREATE TABLE CurrikiResource(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
+	, resourceId text
+	, keywordsStr text
+	);
 CREATE TABLE SiteUser(
 	pk bigserial primary key
 	, inheritPk text
@@ -59,6 +70,7 @@ CREATE TABLE SiteUser(
 	, userFullName text
 	);
 
+DROP TABLE CurrikiResource CASCADE;
 DROP TABLE SiteUser CASCADE;
 */
 
