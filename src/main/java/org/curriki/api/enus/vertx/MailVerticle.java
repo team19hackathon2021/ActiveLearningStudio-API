@@ -1,6 +1,7 @@
 package org.curriki.api.enus.vertx;
 
 import org.apache.commons.lang3.StringUtils;
+import org.curriki.api.enus.config.ConfigKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,12 +111,12 @@ public class MailVerticle extends AbstractVerticle {
 
 		retrieverOptions.setScanPeriod(0);
 
-		ConfigStoreOptions storeApplicationProperties = new ConfigStoreOptions().setType("file").setFormat("properties").setConfig(new JsonObject().put("path", "application.properties"));
+		ConfigStoreOptions storeApplicationProperties = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", "application.yml"));
 		retrieverOptions.addStore(storeApplicationProperties);
 
-		String configPath = System.getenv("configPath");
+		String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
 		if(StringUtils.isNotBlank(configPath)) {
-			ConfigStoreOptions storeIni = new ConfigStoreOptions().setType("file").setFormat("properties").setConfig(new JsonObject().put("path", configPath));
+			ConfigStoreOptions storeIni = new ConfigStoreOptions().setType("file").setFormat("yml").setConfig(new JsonObject().put("path", configPath));
 			retrieverOptions.addStore(storeIni);
 		}
 
