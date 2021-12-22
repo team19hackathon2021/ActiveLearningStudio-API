@@ -218,7 +218,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			ZonedDateTime nextStartTime2 = nextStartTime;
 			vertx.setTimer(nextStartDuration.toMillis(), a -> {
-				importData(classSimpleName, nextStartTime2);
+				importDataClass(classSimpleName, nextStartTime2);
 			});
 		} else {
 			LOG.info(String.format(importTimerSkip, classSimpleName));
@@ -230,7 +230,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 * Val.Complete.enUS:Configuring the import of %s data completed. 
 	 * Val.Fail.enUS:Configuring the import of %s data failed. 
 	 **/
-	private void importData(String classSimpleName, ZonedDateTime startDateTime) {
+	private void importDataClass(String classSimpleName, ZonedDateTime startDateTime) {
 		if("CurrikiResource".equals(classSimpleName)) {
 			try {
 				jdbcClient.getConnection(a -> {
@@ -244,38 +244,49 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 							Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 							vertx.setTimer(nextStartDuration.toMillis(), c -> {
-								importData(classSimpleName, nextStartTime);
+								importDataClass(classSimpleName, nextStartTime);
 							});
 						});
 					} else {
-						LOG.error(String.format(importDataFail, classSimpleName), a.cause());
+						LOG.error(String.format(importDataClassFail, classSimpleName), a.cause());
 						String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 						Duration duration = TimeTool.parseNextDuration(importPeriod);
 						ZonedDateTime nextStartTime = startDateTime.plus(duration);
 						LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 						Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 						vertx.setTimer(nextStartDuration.toMillis(), c -> {
-							importData(classSimpleName, nextStartTime);
+							importDataClass(classSimpleName, nextStartTime);
 						});
 					}
 				});
 			} catch(Exception ex) {
-				LOG.error(String.format(importDataFail, classSimpleName), ex);
+				LOG.error(String.format(importDataClassFail, classSimpleName), ex);
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
 				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), c -> {
-					importData(classSimpleName, nextStartTime);
+					importDataClass(classSimpleName, nextStartTime);
 				});
 			}
 		}
 	}
 
+	/**	
+	 * Import initial data
+	 * Val.Skip.enUS:The data import is disabled. 
+	 **/
 	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
-		importTimer("CurrikiResource");
+		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA)) {
+			importTimer("CurrikiResource");
+			promise.complete();
+		}
+		else {
+			LOG.info(importDataSkip);
+			promise.complete();
+		}
 		return promise.future();
 	}
 

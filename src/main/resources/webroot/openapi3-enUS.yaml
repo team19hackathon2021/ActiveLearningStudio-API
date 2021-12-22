@@ -36,7 +36,7 @@ paths:
       x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -189,7 +189,7 @@ paths:
       x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -349,7 +349,7 @@ paths:
       x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -374,7 +374,7 @@ paths:
       x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -528,7 +528,7 @@ paths:
       x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
