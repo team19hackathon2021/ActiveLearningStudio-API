@@ -1,4 +1,4 @@
-# hackathonTitle: create an application.properties file for defining the default config variable values
+# hackathonTitle: create an application.yml file for defining the default config variable values
 # hackathonColumn: Develop Base Resources
 # hackathonLabels: Java,Maven
 # TODO: Define the JDBC Database properties. 

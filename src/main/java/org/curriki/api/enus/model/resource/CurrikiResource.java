@@ -31,9 +31,9 @@ import org.curriki.api.enus.wrap.Wrap;
  * Saves: true
  * 
  * AName.enUS: a resource
- * Color: gray
+ * Color: blue
  * IconGroup: regular
- * IconName: user-cog
+ * IconName: file
  * 
  * 
  */ 
