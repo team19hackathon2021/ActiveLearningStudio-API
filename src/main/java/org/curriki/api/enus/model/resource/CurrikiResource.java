@@ -45,7 +45,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * Define: true
 	 * DisplayName: resource ID
 	 * HtmlRow: 3
-	 * HtmlCell 1
+	 * HtmlCell: 1
 	 */
 	protected void _resourceId(Wrap<String> w) {
 		
@@ -57,7 +57,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * Define: true
 	 * DisplayName: Keywords
 	 * HtmlRow: 3
-	 * HtmlCell 2
+	 * HtmlCell: 2
 	 */
 	protected void _keywordsStr(Wrap<String> w) {
 		
@@ -68,7 +68,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * DocValues: true
 	 * DisplayName: resource ID
 	 * HtmlRow: 3
-	 * HtmlCell 2
+	 * HtmlCell: 2
 	 */
 	protected void _keywords(List<String> l) {
 		l.addAll(Arrays.asList(keywordsStr.split(" ")));
