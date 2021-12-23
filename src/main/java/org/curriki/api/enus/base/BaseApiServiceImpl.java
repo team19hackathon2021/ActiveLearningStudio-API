@@ -144,12 +144,13 @@ public class BaseApiServiceImpl {
 			} else {
 				User token = User.create(userJson);
 				oauth2AuthenticationProvider.authenticate(token.principal()).onSuccess(user -> {
+					user.attributes().put("tokenPrincipal", token.principal());
 					user.attributes().put("accessToken", user.principal());
 					authorizationProvider.getAuthorizations(user).onSuccess(b -> {
 						try {
 							JsonObject userAttributes = user.attributes();
-							JsonObject accessToken = userAttributes.getJsonObject("accessToken");
-							String userId = accessToken.getString("sub");
+							JsonObject userPrincipal = userAttributes.getJsonObject("accessToken");
+							String userId = userPrincipal.getString("sub");
 							SiteRequestEnUS siteRequest = generateSiteRequestEnUS(user, serviceRequest);
 							SearchList<SiteUser> searchList = new SearchList<SiteUser>();
 							searchList.setQuery("*:*");
@@ -162,12 +163,12 @@ public class BaseApiServiceImpl {
 
 								if(siteUser1 == null) {
 									JsonObject jsonObject = new JsonObject();
-									jsonObject.put("userName", accessToken.getString("preferred_username"));
-									jsonObject.put("userFirstName", accessToken.getString("given_name"));
-									jsonObject.put("userLastName", accessToken.getString("family_name"));
-									jsonObject.put("userFullName", accessToken.getString("name"));
-									jsonObject.put("userId", accessToken.getString("sub"));
-									jsonObject.put("userEmail", accessToken.getString("email"));
+									jsonObject.put("userName", userPrincipal.getString("preferred_username"));
+									jsonObject.put("userFirstName", userPrincipal.getString("given_name"));
+									jsonObject.put("userLastName", userPrincipal.getString("family_name"));
+									jsonObject.put("userFullName", userPrincipal.getString("name"));
+									jsonObject.put("userId", userPrincipal.getString("sub"));
+									jsonObject.put("userEmail", userPrincipal.getString("email"));
 									userDefine(siteRequest, jsonObject, false);
 
 									SiteRequestEnUS siteRequest2 = siteRequest.copy();
@@ -182,11 +183,11 @@ public class BaseApiServiceImpl {
 									siteRequest2.setApiRequest_(apiRequest);
 
 									userService.postSiteUserFuture(siteRequest2, false).onSuccess(siteUser -> {
-										siteRequest.setUserName(accessToken.getString("preferred_username"));
-										siteRequest.setUserFirstName(accessToken.getString("given_name"));
-										siteRequest.setUserLastName(accessToken.getString("family_name"));
-										siteRequest.setUserEmail(accessToken.getString("email"));
-										siteRequest.setUserId(accessToken.getString("sub"));
+										siteRequest.setUserName(userPrincipal.getString("preferred_username"));
+										siteRequest.setUserFirstName(userPrincipal.getString("given_name"));
+										siteRequest.setUserLastName(userPrincipal.getString("family_name"));
+										siteRequest.setUserEmail(userPrincipal.getString("email"));
+										siteRequest.setUserId(userPrincipal.getString("sub"));
 										siteRequest.setUserKey(siteUser.getPk());
 										promise.complete(siteRequest);
 									}).onFailure(ex -> {
@@ -194,12 +195,12 @@ public class BaseApiServiceImpl {
 									});
 								} else {
 									JsonObject jsonObject = new JsonObject();
-									jsonObject.put("setUserName", accessToken.getString("preferred_username"));
-									jsonObject.put("setUserFirstName", accessToken.getString("given_name"));
-									jsonObject.put("setUserLastName", accessToken.getString("family_name"));
-									jsonObject.put("setUserCompleteName", accessToken.getString("name"));
-									jsonObject.put("setUserId", accessToken.getString("sub"));
-									jsonObject.put("setUserEmail", accessToken.getString("email"));
+									jsonObject.put("setUserName", userPrincipal.getString("preferred_username"));
+									jsonObject.put("setUserFirstName", userPrincipal.getString("given_name"));
+									jsonObject.put("setUserLastName", userPrincipal.getString("family_name"));
+									jsonObject.put("setUserCompleteName", userPrincipal.getString("name"));
+									jsonObject.put("setUserId", userPrincipal.getString("sub"));
+									jsonObject.put("setUserEmail", userPrincipal.getString("email"));
 									Boolean define = userDefine(siteRequest, jsonObject, true);
 									if(define) {
 
