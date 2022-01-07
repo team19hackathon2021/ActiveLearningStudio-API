@@ -56,7 +56,7 @@ import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
-
+ 
 /**	
  *	A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
@@ -71,7 +71,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 	private Integer siteInstances;
 	private Integer workerPoolSize;
-	private Integer jdbcMaxPoolSize;
+	private Integer jdbcMaxPoolSize; 
 	private Integer jdbcMaxWaitQueueSize;
 
 	/**
