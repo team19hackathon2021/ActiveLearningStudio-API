@@ -47,58 +47,21 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepCurrikiResourcePage(SiteRequestEnUS siteRequest_) {
-		setSiteRequest_(siteRequest_);
-		return promiseDeepCurrikiResourcePage();
+	public CurrikiResourcePage initDeepCurrikiResourcePage(SiteRequestEnUS siteRequest_) {
+		initDeepCurrikiResourcePage();
+		return (CurrikiResourcePage)this;
 	}
 
-	public Future<Void> promiseDeepCurrikiResourcePage() {
-		Promise<Void> promise = Promise.promise();
-		Promise<Void> promise2 = Promise.promise();
-		promiseCurrikiResourcePage(promise2);
-		promise2.future().onSuccess(a -> {
-			super.promiseDeepCurrikiResourceGenPage(siteRequest_).onSuccess(b -> {
-				promise.complete();
-			}).onFailure(ex -> {
-				promise.fail(ex);
-			});
-		}).onFailure(ex -> {
-			promise.fail(ex);
-		});
-		return promise.future();
+	public void initDeepCurrikiResourcePage() {
+		initCurrikiResourcePage();
+		super.initDeepCurrikiResourceGenPage(siteRequest_);
 	}
 
-	public Future<Void> promiseCurrikiResourcePage(Promise<Void> promise) {
-		Future.future(a -> a.complete()).compose(a -> {
-			Promise<Void> promise2 = Promise.promise();
-			try {
-				promise2.complete();
-			} catch(Exception ex) {
-				promise2.fail(ex);
-			}
-			return promise2.future();
-		}).onSuccess(a -> {
-			promise.complete();
-		}).onFailure(ex -> {
-			promise.fail(ex);
-		});
-		return promise.future();
+	public void initCurrikiResourcePage() {
 	}
 
-	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
-		return promiseDeepCurrikiResourcePage(siteRequest_);
-	}
-
-	/////////////////
-	// siteRequest //
-	/////////////////
-
-	public void siteRequestCurrikiResourcePage(SiteRequestEnUS siteRequest_) {
-			super.siteRequestCurrikiResourceGenPage(siteRequest_);
-	}
-
-	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
-		siteRequestCurrikiResourcePage(siteRequest_);
+	@Override public void initDeepForClass(SiteRequestEnUS siteRequest_) {
+		initDeepCurrikiResourcePage(siteRequest_);
 	}
 
 	/////////////
@@ -234,19 +197,6 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		switch(var.toLowerCase()) {
 			default:
 				return super.defineCurrikiResourceGenPage(var, val);
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestCurrikiResourcePage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof CurrikiResourcePage) {
-			CurrikiResourcePage original = (CurrikiResourcePage)o;
-			super.apiRequestCurrikiResourceGenPage();
 		}
 	}
 

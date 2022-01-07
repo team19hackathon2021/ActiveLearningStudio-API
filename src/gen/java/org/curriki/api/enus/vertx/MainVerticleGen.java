@@ -52,7 +52,80 @@ CREATE TABLE CurrikiResource(
 	, sessionId text
 	, userKey bigint
 	, resourceId text
+	, licenseId text
+	, contributorId bigint
+	, contributionDate timestamp with time zone
+	, description text
+	, title text
 	, keywordsStr text
+	, generatedKeywordsStr text
+	, language text
+	, lastEditorId bigint
+	, lastEditDate timestamp with time zone
+	, currikiLicense 
+	, externalUrl text
+	, resourceChecked 
+	, content text
+	, resourceCheckRequestNote text
+	, resourceCheckDate timestamp with time zone
+	, resourceCheckId bigint
+	, resourceCheckNote text
+	, studentFacing 
+	, source text
+	, reviewStatus text
+	, lastReviewDate timestamp with time zone
+	, reviewByID bigint
+	, reviewRating decimal
+	, technicalCompleteness integer
+	, contentAccuracy integer
+	, pedagogy integer
+	, ratingComment text
+	, standardsAlignment integer
+	, standardsAlignmentComment text
+	, subjectMatter integer
+	, subjectMatterComment text
+	, supportsTeaching integer
+	, supportsTeachingComment text
+	, assessmentsQuality integer
+	, assessmentsQualityComment text
+	, interactivityQuality integer
+	, interactivityQualityComment text
+	, instructionalQuality integer
+	, instructionalQualityComment text
+	, deeperLearning integer
+	, deeperLearningComment text
+	, partner 
+	, createDate timestamp with time zone
+	, type text
+	, featured 
+	, page text
+	, active 
+	, Public 
+	, xwd_id integer
+	, mediaType text
+	, access text
+	, memberRating decimal
+	, aligned 
+	, pageUrl text
+	, indexed 
+	, lastIndexDate timestamp with time zone
+	, indexRequired 
+	, indexRequiredDate timestamp with time zone
+	, rescrape 
+	, goButton 
+	, downloadButton 
+	, topOfSearch 
+	, remove 
+	, spam 
+	, topOfSearchInt integer
+	, partnerInt integer
+	, reviewResource 
+	, oldUrl text
+	, contentDisplayOk 
+	, metadata text
+	, approvalStatus text
+	, approvalStatusDate timestamp with time zone
+	, spamUser 
 	);
 CREATE TABLE SiteUser(
 	pk bigserial primary key
