@@ -31,9 +31,9 @@ import org.curriki.api.enus.wrap.Wrap;
  * Saves: true
  * 
  * AName.enUS: a resource
- * Color: gray
+ * Color: blue
  * IconGroup: regular
- * IconName: user-cog
+ * IconName: file
  * 
  * 
  */ 
@@ -44,6 +44,8 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * DocValues: true
 	 * Define: true
 	 * DisplayName: resource ID
+	 * HtmlRow: 3
+	 * HtmlCell: 1
 	 */
 	protected void _resourceId(Wrap<String> w) {
 		
@@ -53,7 +55,9 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Define: true
-	 * DisplayName: resource ID
+	 * DisplayName: Keywords
+	 * HtmlRow: 3
+	 * HtmlCell: 2
 	 */
 	protected void _keywordsStr(Wrap<String> w) {
 		
@@ -63,6 +67,8 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * DisplayName: resource ID
+	 * HtmlRow: 3
+	 * HtmlCell: 2
 	 */
 	protected void _keywords(List<String> l) {
 		l.addAll(Arrays.asList(keywordsStr.split(" ")));

@@ -72,9 +72,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String CurrikiResource_ANameAdjective = "a resource";
 	public static final String CurrikiResource_NameAdjectiveSingular = "resource";
 	public static final String CurrikiResource_NameAdjectivePlural = "resources";
-	public static final String CurrikiResource_Color = "gray";
+	public static final String CurrikiResource_Color = "blue";
 	public static final String CurrikiResource_IconGroup = "regular";
-	public static final String CurrikiResource_IconName = "user-cog";
+	public static final String CurrikiResource_IconName = "file";
 
 	////////////////
 	// resourceId //
@@ -494,7 +494,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	}
 	public void populateCurrikiResource(SolrDocument solrDocument) {
 		CurrikiResource oCurrikiResource = (CurrikiResource)this;
-		saves = (List<String>)solrDocument.get("saves_indexedstored_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 		}
 
@@ -554,6 +554,11 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public void storeCurrikiResource(SolrDocument solrDocument) {
 		CurrikiResource oCurrikiResource = (CurrikiResource)this;
 
+		oCurrikiResource.setResourceId(Optional.ofNullable(solrDocument.get("resourceId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setKeywordsStr(Optional.ofNullable(solrDocument.get("keywordsStr_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)solrDocument.get("keywords_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oCurrikiResource.addKeywords(v.toString());
+		});
 
 		super.storeBaseModel(solrDocument);
 	}
