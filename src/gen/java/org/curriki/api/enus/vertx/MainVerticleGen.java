@@ -62,15 +62,15 @@ CREATE TABLE CurrikiResource(
 	, language text
 	, lastEditorId bigint
 	, lastEditDate timestamp with time zone
-	, currikiLicense 
+	, currikiLicense text
 	, externalUrl text
-	, resourceChecked 
+	, resourceChecked text
 	, content text
 	, resourceCheckRequestNote text
 	, resourceCheckDate timestamp with time zone
 	, resourceCheckId bigint
 	, resourceCheckNote text
-	, studentFacing 
+	, studentFacing text
 	, source text
 	, reviewStatus text
 	, lastReviewDate timestamp with time zone
@@ -94,38 +94,38 @@ CREATE TABLE CurrikiResource(
 	, instructionalQualityComment text
 	, deeperLearning integer
 	, deeperLearningComment text
-	, partner 
+	, partner text
 	, createDate timestamp with time zone
 	, type text
-	, featured 
+	, featured text
 	, page text
-	, active 
-	, Public 
+	, active text
+	, Public text
 	, xwd_id integer
 	, mediaType text
 	, access text
 	, memberRating decimal
-	, aligned 
+	, aligned text
 	, pageUrl text
-	, indexed 
+	, indexed text
 	, lastIndexDate timestamp with time zone
-	, indexRequired 
+	, indexRequired text
 	, indexRequiredDate timestamp with time zone
-	, rescrape 
-	, goButton 
-	, downloadButton 
-	, topOfSearch 
-	, remove 
-	, spam 
+	, rescrape text
+	, goButton text
+	, downloadButton text
+	, topOfSearch text
+	, remove text
+	, spam text
 	, topOfSearchInt integer
 	, partnerInt integer
-	, reviewResource 
+	, reviewResource text
 	, oldUrl text
-	, contentDisplayOk 
+	, contentDisplayOk text
 	, metadata text
 	, approvalStatus text
 	, approvalStatusDate timestamp with time zone
-	, spamUser 
+	, spamUser text
 	);
 CREATE TABLE SiteUser(
 	pk bigserial primary key
