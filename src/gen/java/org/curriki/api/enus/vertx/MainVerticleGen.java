@@ -52,7 +52,80 @@ CREATE TABLE CurrikiResource(
 	, sessionId text
 	, userKey bigint
 	, resourceId text
+	, licenseId text
+	, contributorId bigint
+	, contributionDate timestamp with time zone
+	, description text
+	, title text
 	, keywordsStr text
+	, generatedKeywordsStr text
+	, language text
+	, lastEditorId bigint
+	, lastEditDate timestamp with time zone
+	, currikiLicense text
+	, externalUrl text
+	, resourceChecked text
+	, content text
+	, resourceCheckRequestNote text
+	, resourceCheckDate timestamp with time zone
+	, resourceCheckId bigint
+	, resourceCheckNote text
+	, studentFacing text
+	, source text
+	, reviewStatus text
+	, lastReviewDate timestamp with time zone
+	, reviewByID bigint
+	, reviewRating decimal
+	, technicalCompleteness integer
+	, contentAccuracy integer
+	, pedagogy integer
+	, ratingComment text
+	, standardsAlignment integer
+	, standardsAlignmentComment text
+	, subjectMatter integer
+	, subjectMatterComment text
+	, supportsTeaching integer
+	, supportsTeachingComment text
+	, assessmentsQuality integer
+	, assessmentsQualityComment text
+	, interactivityQuality integer
+	, interactivityQualityComment text
+	, instructionalQuality integer
+	, instructionalQualityComment text
+	, deeperLearning integer
+	, deeperLearningComment text
+	, partner text
+	, createDate timestamp with time zone
+	, type text
+	, featured text
+	, page text
+	, active text
+	, Public text
+	, xwd_id integer
+	, mediaType text
+	, access text
+	, memberRating decimal
+	, aligned text
+	, pageUrl text
+	, indexed text
+	, lastIndexDate timestamp with time zone
+	, indexRequired text
+	, indexRequiredDate timestamp with time zone
+	, rescrape text
+	, goButton text
+	, downloadButton text
+	, topOfSearch text
+	, remove text
+	, spam text
+	, topOfSearchInt integer
+	, partnerInt integer
+	, reviewResource text
+	, oldUrl text
+	, contentDisplayOk text
+	, metadata text
+	, approvalStatus text
+	, approvalStatusDate timestamp with time zone
+	, spamUser text
 	);
 CREATE TABLE SiteUser(
 	pk bigserial primary key

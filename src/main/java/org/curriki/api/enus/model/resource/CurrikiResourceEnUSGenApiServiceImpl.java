@@ -604,6 +604,46 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							num++;
 							bParams.add(o2.sqlResourceId());
 						break;
+					case "setLicenseId":
+							o2.setLicenseId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_licenseId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLicenseId());
+						break;
+					case "setContributorId":
+							o2.setContributorId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_contributorId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlContributorId());
+						break;
+					case "setContributionDate":
+							o2.setContributionDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_contributionDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlContributionDate());
+						break;
+					case "setDescription":
+							o2.setDescription(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_description + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDescription());
+						break;
+					case "setTitle":
+							o2.setTitle(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_title + "=$" + num);
+							num++;
+							bParams.add(o2.sqlTitle());
+						break;
 					case "setKeywordsStr":
 							o2.setKeywordsStr(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -611,6 +651,550 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							bSql.append(CurrikiResource.VAR_keywordsStr + "=$" + num);
 							num++;
 							bParams.add(o2.sqlKeywordsStr());
+						break;
+					case "setGeneratedKeywordsStr":
+							o2.setGeneratedKeywordsStr(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_generatedKeywordsStr + "=$" + num);
+							num++;
+							bParams.add(o2.sqlGeneratedKeywordsStr());
+						break;
+					case "setLanguage":
+							o2.setLanguage(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_language + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLanguage());
+						break;
+					case "setLastEditorId":
+							o2.setLastEditorId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_lastEditorId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLastEditorId());
+						break;
+					case "setLastEditDate":
+							o2.setLastEditDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_lastEditDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLastEditDate());
+						break;
+					case "setCurrikiLicense":
+							o2.setCurrikiLicense(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_currikiLicense + "=$" + num);
+							num++;
+							bParams.add(o2.sqlCurrikiLicense());
+						break;
+					case "setExternalUrl":
+							o2.setExternalUrl(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_externalUrl + "=$" + num);
+							num++;
+							bParams.add(o2.sqlExternalUrl());
+						break;
+					case "setResourceChecked":
+							o2.setResourceChecked(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_resourceChecked + "=$" + num);
+							num++;
+							bParams.add(o2.sqlResourceChecked());
+						break;
+					case "setContent":
+							o2.setContent(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_content + "=$" + num);
+							num++;
+							bParams.add(o2.sqlContent());
+						break;
+					case "setResourceCheckRequestNote":
+							o2.setResourceCheckRequestNote(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_resourceCheckRequestNote + "=$" + num);
+							num++;
+							bParams.add(o2.sqlResourceCheckRequestNote());
+						break;
+					case "setResourceCheckDate":
+							o2.setResourceCheckDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_resourceCheckDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlResourceCheckDate());
+						break;
+					case "setResourceCheckId":
+							o2.setResourceCheckId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_resourceCheckId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlResourceCheckId());
+						break;
+					case "setResourceCheckNote":
+							o2.setResourceCheckNote(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_resourceCheckNote + "=$" + num);
+							num++;
+							bParams.add(o2.sqlResourceCheckNote());
+						break;
+					case "setStudentFacing":
+							o2.setStudentFacing(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_studentFacing + "=$" + num);
+							num++;
+							bParams.add(o2.sqlStudentFacing());
+						break;
+					case "setSource":
+							o2.setSource(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_source + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSource());
+						break;
+					case "setReviewStatus":
+							o2.setReviewStatus(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_reviewStatus + "=$" + num);
+							num++;
+							bParams.add(o2.sqlReviewStatus());
+						break;
+					case "setLastReviewDate":
+							o2.setLastReviewDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_lastReviewDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLastReviewDate());
+						break;
+					case "setReviewByID":
+							o2.setReviewByID(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_reviewByID + "=$" + num);
+							num++;
+							bParams.add(o2.sqlReviewByID());
+						break;
+					case "setReviewRating":
+							o2.setReviewRating(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_reviewRating + "=$" + num);
+							num++;
+							bParams.add(o2.sqlReviewRating());
+						break;
+					case "setTechnicalCompleteness":
+							o2.setTechnicalCompleteness(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_technicalCompleteness + "=$" + num);
+							num++;
+							bParams.add(o2.sqlTechnicalCompleteness());
+						break;
+					case "setContentAccuracy":
+							o2.setContentAccuracy(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_contentAccuracy + "=$" + num);
+							num++;
+							bParams.add(o2.sqlContentAccuracy());
+						break;
+					case "setPedagogy":
+							o2.setPedagogy(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_pedagogy + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPedagogy());
+						break;
+					case "setRatingComment":
+							o2.setRatingComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_ratingComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlRatingComment());
+						break;
+					case "setStandardsAlignment":
+							o2.setStandardsAlignment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_standardsAlignment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlStandardsAlignment());
+						break;
+					case "setStandardsAlignmentComment":
+							o2.setStandardsAlignmentComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_standardsAlignmentComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlStandardsAlignmentComment());
+						break;
+					case "setSubjectMatter":
+							o2.setSubjectMatter(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_subjectMatter + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSubjectMatter());
+						break;
+					case "setSubjectMatterComment":
+							o2.setSubjectMatterComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_subjectMatterComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSubjectMatterComment());
+						break;
+					case "setSupportsTeaching":
+							o2.setSupportsTeaching(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_supportsTeaching + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSupportsTeaching());
+						break;
+					case "setSupportsTeachingComment":
+							o2.setSupportsTeachingComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_supportsTeachingComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSupportsTeachingComment());
+						break;
+					case "setAssessmentsQuality":
+							o2.setAssessmentsQuality(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_assessmentsQuality + "=$" + num);
+							num++;
+							bParams.add(o2.sqlAssessmentsQuality());
+						break;
+					case "setAssessmentsQualityComment":
+							o2.setAssessmentsQualityComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_assessmentsQualityComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlAssessmentsQualityComment());
+						break;
+					case "setInteractivityQuality":
+							o2.setInteractivityQuality(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_interactivityQuality + "=$" + num);
+							num++;
+							bParams.add(o2.sqlInteractivityQuality());
+						break;
+					case "setInteractivityQualityComment":
+							o2.setInteractivityQualityComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_interactivityQualityComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlInteractivityQualityComment());
+						break;
+					case "setInstructionalQuality":
+							o2.setInstructionalQuality(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_instructionalQuality + "=$" + num);
+							num++;
+							bParams.add(o2.sqlInstructionalQuality());
+						break;
+					case "setInstructionalQualityComment":
+							o2.setInstructionalQualityComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_instructionalQualityComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlInstructionalQualityComment());
+						break;
+					case "setDeeperLearning":
+							o2.setDeeperLearning(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_deeperLearning + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDeeperLearning());
+						break;
+					case "setDeeperLearningComment":
+							o2.setDeeperLearningComment(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_deeperLearningComment + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDeeperLearningComment());
+						break;
+					case "setPartner":
+							o2.setPartner(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_partner + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPartner());
+						break;
+					case "setCreateDate":
+							o2.setCreateDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_createDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlCreateDate());
+						break;
+					case "setType":
+							o2.setType(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_type + "=$" + num);
+							num++;
+							bParams.add(o2.sqlType());
+						break;
+					case "setFeatured":
+							o2.setFeatured(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_featured + "=$" + num);
+							num++;
+							bParams.add(o2.sqlFeatured());
+						break;
+					case "setPage":
+							o2.setPage(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_page + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPage());
+						break;
+					case "setActive":
+							o2.setActive(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_active + "=$" + num);
+							num++;
+							bParams.add(o2.sqlActive());
+						break;
+					case "setPublic":
+							o2.setPublic(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_Public + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPublic());
+						break;
+					case "setXwd_id":
+							o2.setXwd_id(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_xwd_id + "=$" + num);
+							num++;
+							bParams.add(o2.sqlXwd_id());
+						break;
+					case "setMediaType":
+							o2.setMediaType(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_mediaType + "=$" + num);
+							num++;
+							bParams.add(o2.sqlMediaType());
+						break;
+					case "setAccess":
+							o2.setAccess(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_access + "=$" + num);
+							num++;
+							bParams.add(o2.sqlAccess());
+						break;
+					case "setMemberRating":
+							o2.setMemberRating(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_memberRating + "=$" + num);
+							num++;
+							bParams.add(o2.sqlMemberRating());
+						break;
+					case "setAligned":
+							o2.setAligned(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_aligned + "=$" + num);
+							num++;
+							bParams.add(o2.sqlAligned());
+						break;
+					case "setPageUrl":
+							o2.setPageUrl(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_pageUrl + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPageUrl());
+						break;
+					case "setIndexed":
+							o2.setIndexed(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_indexed + "=$" + num);
+							num++;
+							bParams.add(o2.sqlIndexed());
+						break;
+					case "setLastIndexDate":
+							o2.setLastIndexDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_lastIndexDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLastIndexDate());
+						break;
+					case "setIndexRequired":
+							o2.setIndexRequired(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_indexRequired + "=$" + num);
+							num++;
+							bParams.add(o2.sqlIndexRequired());
+						break;
+					case "setIndexRequiredDate":
+							o2.setIndexRequiredDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_indexRequiredDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlIndexRequiredDate());
+						break;
+					case "setRescrape":
+							o2.setRescrape(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_rescrape + "=$" + num);
+							num++;
+							bParams.add(o2.sqlRescrape());
+						break;
+					case "setGoButton":
+							o2.setGoButton(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_goButton + "=$" + num);
+							num++;
+							bParams.add(o2.sqlGoButton());
+						break;
+					case "setDownloadButton":
+							o2.setDownloadButton(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_downloadButton + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDownloadButton());
+						break;
+					case "setTopOfSearch":
+							o2.setTopOfSearch(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_topOfSearch + "=$" + num);
+							num++;
+							bParams.add(o2.sqlTopOfSearch());
+						break;
+					case "setRemove":
+							o2.setRemove(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_remove + "=$" + num);
+							num++;
+							bParams.add(o2.sqlRemove());
+						break;
+					case "setSpam":
+							o2.setSpam(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_spam + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSpam());
+						break;
+					case "setTopOfSearchInt":
+							o2.setTopOfSearchInt(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_topOfSearchInt + "=$" + num);
+							num++;
+							bParams.add(o2.sqlTopOfSearchInt());
+						break;
+					case "setPartnerInt":
+							o2.setPartnerInt(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_partnerInt + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPartnerInt());
+						break;
+					case "setReviewResource":
+							o2.setReviewResource(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_reviewResource + "=$" + num);
+							num++;
+							bParams.add(o2.sqlReviewResource());
+						break;
+					case "setOldUrl":
+							o2.setOldUrl(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_oldUrl + "=$" + num);
+							num++;
+							bParams.add(o2.sqlOldUrl());
+						break;
+					case "setContentDisplayOk":
+							o2.setContentDisplayOk(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_contentDisplayOk + "=$" + num);
+							num++;
+							bParams.add(o2.sqlContentDisplayOk());
+						break;
+					case "setMetadata":
+							o2.setMetadata(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_metadata + "=$" + num);
+							num++;
+							bParams.add(o2.sqlMetadata());
+						break;
+					case "setApprovalStatus":
+							o2.setApprovalStatus(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_approvalStatus + "=$" + num);
+							num++;
+							bParams.add(o2.sqlApprovalStatus());
+						break;
+					case "setApprovalStatusDate":
+							o2.setApprovalStatusDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_approvalStatusDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlApprovalStatusDate());
+						break;
+					case "setSpamUser":
+							o2.setSpamUser(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_spamUser + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSpamUser());
 						break;
 				}
 			}
@@ -944,6 +1528,51 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						num++;
 						bParams.add(o2.sqlResourceId());
 						break;
+					case CurrikiResource.VAR_licenseId:
+						o2.setLicenseId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_licenseId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLicenseId());
+						break;
+					case CurrikiResource.VAR_contributorId:
+						o2.setContributorId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_contributorId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlContributorId());
+						break;
+					case CurrikiResource.VAR_contributionDate:
+						o2.setContributionDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_contributionDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlContributionDate());
+						break;
+					case CurrikiResource.VAR_description:
+						o2.setDescription(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_description + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDescription());
+						break;
+					case CurrikiResource.VAR_title:
+						o2.setTitle(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_title + "=$" + num);
+						num++;
+						bParams.add(o2.sqlTitle());
+						break;
 					case CurrikiResource.VAR_keywordsStr:
 						o2.setKeywordsStr(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -952,6 +1581,618 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						bSql.append(CurrikiResource.VAR_keywordsStr + "=$" + num);
 						num++;
 						bParams.add(o2.sqlKeywordsStr());
+						break;
+					case CurrikiResource.VAR_generatedKeywordsStr:
+						o2.setGeneratedKeywordsStr(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_generatedKeywordsStr + "=$" + num);
+						num++;
+						bParams.add(o2.sqlGeneratedKeywordsStr());
+						break;
+					case CurrikiResource.VAR_language:
+						o2.setLanguage(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_language + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLanguage());
+						break;
+					case CurrikiResource.VAR_lastEditorId:
+						o2.setLastEditorId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_lastEditorId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLastEditorId());
+						break;
+					case CurrikiResource.VAR_lastEditDate:
+						o2.setLastEditDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_lastEditDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLastEditDate());
+						break;
+					case CurrikiResource.VAR_currikiLicense:
+						o2.setCurrikiLicense(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_currikiLicense + "=$" + num);
+						num++;
+						bParams.add(o2.sqlCurrikiLicense());
+						break;
+					case CurrikiResource.VAR_externalUrl:
+						o2.setExternalUrl(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_externalUrl + "=$" + num);
+						num++;
+						bParams.add(o2.sqlExternalUrl());
+						break;
+					case CurrikiResource.VAR_resourceChecked:
+						o2.setResourceChecked(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_resourceChecked + "=$" + num);
+						num++;
+						bParams.add(o2.sqlResourceChecked());
+						break;
+					case CurrikiResource.VAR_content:
+						o2.setContent(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_content + "=$" + num);
+						num++;
+						bParams.add(o2.sqlContent());
+						break;
+					case CurrikiResource.VAR_resourceCheckRequestNote:
+						o2.setResourceCheckRequestNote(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_resourceCheckRequestNote + "=$" + num);
+						num++;
+						bParams.add(o2.sqlResourceCheckRequestNote());
+						break;
+					case CurrikiResource.VAR_resourceCheckDate:
+						o2.setResourceCheckDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_resourceCheckDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlResourceCheckDate());
+						break;
+					case CurrikiResource.VAR_resourceCheckId:
+						o2.setResourceCheckId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_resourceCheckId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlResourceCheckId());
+						break;
+					case CurrikiResource.VAR_resourceCheckNote:
+						o2.setResourceCheckNote(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_resourceCheckNote + "=$" + num);
+						num++;
+						bParams.add(o2.sqlResourceCheckNote());
+						break;
+					case CurrikiResource.VAR_studentFacing:
+						o2.setStudentFacing(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_studentFacing + "=$" + num);
+						num++;
+						bParams.add(o2.sqlStudentFacing());
+						break;
+					case CurrikiResource.VAR_source:
+						o2.setSource(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_source + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSource());
+						break;
+					case CurrikiResource.VAR_reviewStatus:
+						o2.setReviewStatus(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_reviewStatus + "=$" + num);
+						num++;
+						bParams.add(o2.sqlReviewStatus());
+						break;
+					case CurrikiResource.VAR_lastReviewDate:
+						o2.setLastReviewDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_lastReviewDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLastReviewDate());
+						break;
+					case CurrikiResource.VAR_reviewByID:
+						o2.setReviewByID(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_reviewByID + "=$" + num);
+						num++;
+						bParams.add(o2.sqlReviewByID());
+						break;
+					case CurrikiResource.VAR_reviewRating:
+						o2.setReviewRating(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_reviewRating + "=$" + num);
+						num++;
+						bParams.add(o2.sqlReviewRating());
+						break;
+					case CurrikiResource.VAR_technicalCompleteness:
+						o2.setTechnicalCompleteness(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_technicalCompleteness + "=$" + num);
+						num++;
+						bParams.add(o2.sqlTechnicalCompleteness());
+						break;
+					case CurrikiResource.VAR_contentAccuracy:
+						o2.setContentAccuracy(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_contentAccuracy + "=$" + num);
+						num++;
+						bParams.add(o2.sqlContentAccuracy());
+						break;
+					case CurrikiResource.VAR_pedagogy:
+						o2.setPedagogy(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_pedagogy + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPedagogy());
+						break;
+					case CurrikiResource.VAR_ratingComment:
+						o2.setRatingComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_ratingComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlRatingComment());
+						break;
+					case CurrikiResource.VAR_standardsAlignment:
+						o2.setStandardsAlignment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_standardsAlignment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlStandardsAlignment());
+						break;
+					case CurrikiResource.VAR_standardsAlignmentComment:
+						o2.setStandardsAlignmentComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_standardsAlignmentComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlStandardsAlignmentComment());
+						break;
+					case CurrikiResource.VAR_subjectMatter:
+						o2.setSubjectMatter(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_subjectMatter + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSubjectMatter());
+						break;
+					case CurrikiResource.VAR_subjectMatterComment:
+						o2.setSubjectMatterComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_subjectMatterComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSubjectMatterComment());
+						break;
+					case CurrikiResource.VAR_supportsTeaching:
+						o2.setSupportsTeaching(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_supportsTeaching + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSupportsTeaching());
+						break;
+					case CurrikiResource.VAR_supportsTeachingComment:
+						o2.setSupportsTeachingComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_supportsTeachingComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSupportsTeachingComment());
+						break;
+					case CurrikiResource.VAR_assessmentsQuality:
+						o2.setAssessmentsQuality(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_assessmentsQuality + "=$" + num);
+						num++;
+						bParams.add(o2.sqlAssessmentsQuality());
+						break;
+					case CurrikiResource.VAR_assessmentsQualityComment:
+						o2.setAssessmentsQualityComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_assessmentsQualityComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlAssessmentsQualityComment());
+						break;
+					case CurrikiResource.VAR_interactivityQuality:
+						o2.setInteractivityQuality(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_interactivityQuality + "=$" + num);
+						num++;
+						bParams.add(o2.sqlInteractivityQuality());
+						break;
+					case CurrikiResource.VAR_interactivityQualityComment:
+						o2.setInteractivityQualityComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_interactivityQualityComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlInteractivityQualityComment());
+						break;
+					case CurrikiResource.VAR_instructionalQuality:
+						o2.setInstructionalQuality(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_instructionalQuality + "=$" + num);
+						num++;
+						bParams.add(o2.sqlInstructionalQuality());
+						break;
+					case CurrikiResource.VAR_instructionalQualityComment:
+						o2.setInstructionalQualityComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_instructionalQualityComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlInstructionalQualityComment());
+						break;
+					case CurrikiResource.VAR_deeperLearning:
+						o2.setDeeperLearning(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_deeperLearning + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDeeperLearning());
+						break;
+					case CurrikiResource.VAR_deeperLearningComment:
+						o2.setDeeperLearningComment(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_deeperLearningComment + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDeeperLearningComment());
+						break;
+					case CurrikiResource.VAR_partner:
+						o2.setPartner(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_partner + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPartner());
+						break;
+					case CurrikiResource.VAR_createDate:
+						o2.setCreateDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_createDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlCreateDate());
+						break;
+					case CurrikiResource.VAR_type:
+						o2.setType(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_type + "=$" + num);
+						num++;
+						bParams.add(o2.sqlType());
+						break;
+					case CurrikiResource.VAR_featured:
+						o2.setFeatured(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_featured + "=$" + num);
+						num++;
+						bParams.add(o2.sqlFeatured());
+						break;
+					case CurrikiResource.VAR_page:
+						o2.setPage(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_page + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPage());
+						break;
+					case CurrikiResource.VAR_active:
+						o2.setActive(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_active + "=$" + num);
+						num++;
+						bParams.add(o2.sqlActive());
+						break;
+					case CurrikiResource.VAR_Public:
+						o2.setPublic(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_Public + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPublic());
+						break;
+					case CurrikiResource.VAR_xwd_id:
+						o2.setXwd_id(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_xwd_id + "=$" + num);
+						num++;
+						bParams.add(o2.sqlXwd_id());
+						break;
+					case CurrikiResource.VAR_mediaType:
+						o2.setMediaType(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_mediaType + "=$" + num);
+						num++;
+						bParams.add(o2.sqlMediaType());
+						break;
+					case CurrikiResource.VAR_access:
+						o2.setAccess(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_access + "=$" + num);
+						num++;
+						bParams.add(o2.sqlAccess());
+						break;
+					case CurrikiResource.VAR_memberRating:
+						o2.setMemberRating(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_memberRating + "=$" + num);
+						num++;
+						bParams.add(o2.sqlMemberRating());
+						break;
+					case CurrikiResource.VAR_aligned:
+						o2.setAligned(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_aligned + "=$" + num);
+						num++;
+						bParams.add(o2.sqlAligned());
+						break;
+					case CurrikiResource.VAR_pageUrl:
+						o2.setPageUrl(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_pageUrl + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPageUrl());
+						break;
+					case CurrikiResource.VAR_indexed:
+						o2.setIndexed(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_indexed + "=$" + num);
+						num++;
+						bParams.add(o2.sqlIndexed());
+						break;
+					case CurrikiResource.VAR_lastIndexDate:
+						o2.setLastIndexDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_lastIndexDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLastIndexDate());
+						break;
+					case CurrikiResource.VAR_indexRequired:
+						o2.setIndexRequired(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_indexRequired + "=$" + num);
+						num++;
+						bParams.add(o2.sqlIndexRequired());
+						break;
+					case CurrikiResource.VAR_indexRequiredDate:
+						o2.setIndexRequiredDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_indexRequiredDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlIndexRequiredDate());
+						break;
+					case CurrikiResource.VAR_rescrape:
+						o2.setRescrape(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_rescrape + "=$" + num);
+						num++;
+						bParams.add(o2.sqlRescrape());
+						break;
+					case CurrikiResource.VAR_goButton:
+						o2.setGoButton(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_goButton + "=$" + num);
+						num++;
+						bParams.add(o2.sqlGoButton());
+						break;
+					case CurrikiResource.VAR_downloadButton:
+						o2.setDownloadButton(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_downloadButton + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDownloadButton());
+						break;
+					case CurrikiResource.VAR_topOfSearch:
+						o2.setTopOfSearch(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_topOfSearch + "=$" + num);
+						num++;
+						bParams.add(o2.sqlTopOfSearch());
+						break;
+					case CurrikiResource.VAR_remove:
+						o2.setRemove(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_remove + "=$" + num);
+						num++;
+						bParams.add(o2.sqlRemove());
+						break;
+					case CurrikiResource.VAR_spam:
+						o2.setSpam(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_spam + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSpam());
+						break;
+					case CurrikiResource.VAR_topOfSearchInt:
+						o2.setTopOfSearchInt(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_topOfSearchInt + "=$" + num);
+						num++;
+						bParams.add(o2.sqlTopOfSearchInt());
+						break;
+					case CurrikiResource.VAR_partnerInt:
+						o2.setPartnerInt(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_partnerInt + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPartnerInt());
+						break;
+					case CurrikiResource.VAR_reviewResource:
+						o2.setReviewResource(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_reviewResource + "=$" + num);
+						num++;
+						bParams.add(o2.sqlReviewResource());
+						break;
+					case CurrikiResource.VAR_oldUrl:
+						o2.setOldUrl(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_oldUrl + "=$" + num);
+						num++;
+						bParams.add(o2.sqlOldUrl());
+						break;
+					case CurrikiResource.VAR_contentDisplayOk:
+						o2.setContentDisplayOk(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_contentDisplayOk + "=$" + num);
+						num++;
+						bParams.add(o2.sqlContentDisplayOk());
+						break;
+					case CurrikiResource.VAR_metadata:
+						o2.setMetadata(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_metadata + "=$" + num);
+						num++;
+						bParams.add(o2.sqlMetadata());
+						break;
+					case CurrikiResource.VAR_approvalStatus:
+						o2.setApprovalStatus(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_approvalStatus + "=$" + num);
+						num++;
+						bParams.add(o2.sqlApprovalStatus());
+						break;
+					case CurrikiResource.VAR_approvalStatusDate:
+						o2.setApprovalStatusDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_approvalStatusDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlApprovalStatusDate());
+						break;
+					case CurrikiResource.VAR_spamUser:
+						o2.setSpamUser(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_spamUser + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSpamUser());
 						break;
 					}
 				}
