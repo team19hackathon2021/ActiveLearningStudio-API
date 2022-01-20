@@ -9,9 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.java.TimeTool;
+import org.curriki.api.enus.model.resource.CurrikiResource;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.curriki.api.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
@@ -300,7 +300,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 		try {
 			sqlConnection.queryStreamWithParams(
-					"SELECT * from currikidb.resources"
+					"SELECT resourceid, title, description from currikidb.resources"
 					, new JsonArray(), a -> {
 				SQLRowStream sqlRowStream = a.result();
 				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
@@ -318,6 +318,9 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							sqlRowStream.fetch(fetchSize);
 						}
 					}).onFailure(ex -> {
+						counter.decrementQueueNum();
+						counter.incrementTotalNum();
+						sqlRowStream.pause();
 						LOG.error(importDataCurrikiResourceFail, ex);
 						promise.fail(ex);
 					});
@@ -345,37 +348,42 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		Promise<Void> promise = Promise.promise();
 
 		try {
-//			String resourceId = row.getString(0);
-//			JsonObject body = new JsonObject();
-//			body.put(CurrikiResource.VAR_saves, new JsonArray()
-//					.add(CurrikiResource.VAR_inheritPk)
-//					.add(CurrikiResource.VAR_created)
-//					.add(CurrikiResource.VAR_resourceId)
-//					);
-//			body.put(CurrikiResource.VAR_pk, resourceId);
-//
-//			JsonObject params = new JsonObject();
-//			params.put("body", body);
-//			params.put("path", new JsonObject());
-//			params.put("cookie", new JsonObject());
-//			params.put("header", new JsonObject());
-//			params.put("form", new JsonObject());
-//			params.put("query", new JsonObject()
-//					.put("var", new JsonArray().add("refresh:false"))
-//					.put("commitWithin", commitWithin)
-//					);
-//			JsonObject context = new JsonObject().put("params", params);
-//			JsonObject json = new JsonObject().put("context", context);
-//			vertx.eventBus().request("shi-api-enUS-HostGroup", json, new DeliveryOptions().addHeader("action", "putimportCurrikiResourceFuture")).onSuccess(a -> {
-//				promise.complete();
-//			}).onFailure(ex -> {
-//				LOG.error(processRowCurrikiResourceFail);
-//				promise.fail(ex);
-//			});
+			String resourceId = row.getString(0);
+			String title = row.getString(1);
+			String description = row.getString(2);
+			JsonObject body = new JsonObject();
+			body.put(CurrikiResource.VAR_saves, new JsonArray()
+					.add(CurrikiResource.VAR_inheritPk)
+					.add(CurrikiResource.VAR_created)
+					.add(CurrikiResource.VAR_resourceId)
+					.add(CurrikiResource.VAR_title)
+					.add(CurrikiResource.VAR_description)
+					);
+			body.put(CurrikiResource.VAR_pk, resourceId);
+			body.put(CurrikiResource.VAR_title, title);
+			body.put(CurrikiResource.VAR_description, description);
+
+			JsonObject params = new JsonObject();
+			params.put("body", body);
+			params.put("path", new JsonObject());
+			params.put("cookie", new JsonObject());
+			params.put("header", new JsonObject());
+			params.put("form", new JsonObject());
+			params.put("query", new JsonObject()
+					.put("var", new JsonArray().add("refresh:false"))
+					.put("commitWithin", commitWithin)
+					);
+			JsonObject context = new JsonObject().put("params", params);
+			JsonObject json = new JsonObject().put("context", context);
+			vertx.eventBus().request("ActiveLearningStudio-API-enUS-CurrikiResource", json, new DeliveryOptions().addHeader("action", "putimportCurrikiResourceFuture")).onSuccess(a -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				LOG.error(processRowCurrikiResourceFail, ex);
+				promise.fail(ex);
+			});
 			LOG.info(row.toString());
-			promise.complete();
 		} catch(Exception ex) {
-			LOG.error(processRowCurrikiResourceFail);
+			LOG.error(processRowCurrikiResourceFail, ex);
 			promise.fail(ex);
 		}
 

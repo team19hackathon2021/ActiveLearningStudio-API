@@ -133,7 +133,8 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlCell: 2
 	 */
 	protected void _keywords(List<String> l) {
-		l.addAll(Arrays.asList(keywordsStr.split(" ")));
+		if(keywordsStr != null)
+			l.addAll(Arrays.asList(keywordsStr.split(" ")));
 	}
 	
 	/**
@@ -155,7 +156,8 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlCell: 1
 	 */
 	protected void _generatedKeywords(List<String> l) {
-		l.addAll(Arrays.asList(generatedKeywordsStr.split(" ")));
+		if(generatedKeywordsStr != null)
+			l.addAll(Arrays.asList(generatedKeywordsStr.split(" ")));
 	}
 	
 	/**
