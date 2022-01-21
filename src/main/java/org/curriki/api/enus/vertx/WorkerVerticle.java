@@ -349,19 +349,242 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 		try {
 			String resourceId = row.getString(0);
-			String title = row.getString(1);
-			String description = row.getString(2);
+			String licenseId = row.getString(1);
+			String contributorId = row.getString(2);
+			String contributionDate = row.getString(3);
+			String description = row.getString(4);
+			String title = row.getString(5);
+			String keywordsStr = row.getString(6);
+			String keywords = row.getString(7);
+			String generatedKeywordsStr = row.getString(8);
+			String generatedKeywords = row.getString(9);
+			String language = row.getString(10);
+			String lastEditorId = row.getString(11);
+			String lastEditDate = row.getString(12);
+			String currikiLicense = row.getString(13);
+			String externalUrl = row.getString(14);
+			String resourceChecked = row.getString(15);
+			String content = row.getString(16);
+			String resourceCheckRequestNote = row.getString(17);
+			String resourceCheckDate = row.getString(18);
+			String resourceCheckId = row.getString(19);
+			String resourceCheckNote = row.getString(20);
+			String studentFacing = row.getString(21);
+			String source = row.getString(22);
+			String reviewStatus = row.getString(23);
+			String lastReviewDate = row.getString(24);
+			String reviewByID = row.getString(25);
+			String reviewRating = row.getString(26);
+			String technicalCompleteness = row.getString(27);
+			String contentAccuracy = row.getString(28);
+			String pedagogy = row.getString(29);
+			String ratingComment = row.getString(30);
+			String standardsAlignment = row.getString(31);
+			String standardsAlignmentComment = row.getString(32);
+			String subjectMatter = row.getString(33);
+			String subjectMatterComment = row.getString(34);
+			String supportsTeaching = row.getString(35);
+			String supportsTeachingComment = row.getString(36);
+			String assessmentsQuality = row.getString(37);
+			String assessmentsQualityComment = row.getString(38);
+			String interactivityQuality = row.getString(39);
+			String interactivityQualityComment = row.getString(40);
+			String instructionalQuality = row.getString(41);
+			String instructionalQualityComment = row.getString(42);
+			String deeperLearning = row.getString(43);
+			String deeperLearningComment = row.getString(44);
+			String partner = row.getString(45);
+			String createDate = row.getString(46);
+			String type = row.getString(47);
+			String featured = row.getString(48);
+			String page = row.getString(49);
+			String active = row.getString(50);
+			String Public = row.getString(51);
+			String xwd_id = row.getString(52);
+			String mediaType = row.getString(53);
+			String access = row.getString(54);
+			String memberRating = row.getString(55);
+			String aligned = row.getString(56);
+			String pageUrl = row.getString(57);
+			String indexed = row.getString(58);
+			String lastIndexDate = row.getString(59);
+			String indexRequired = row.getString(60);
+			String indexRequiredDate = row.getString(61);
+			String rescrape = row.getString(62);
+			String goButton = row.getString(63);
+			String downloadButton = row.getString(64);
+			String topOfSearch = row.getString(65);
+			String remove = row.getString(66);
+			String spam = row.getString(67);
+			String topOfSearchInt = row.getString(68);
+			String partnerInt = row.getString(69);
+			String reviewResource = row.getString(70);
+			String oldUrl = row.getString(71);
+			String contentDisplayOk = row.getString(72);
+			String metadata = row.getString(73);
+			String approvalStatus = row.getString(74);
+			String approvalStatusDate = row.getString(75);
+			String spamUser = row.getString(76);
 			JsonObject body = new JsonObject();
 			body.put(CurrikiResource.VAR_saves, new JsonArray()
 					.add(CurrikiResource.VAR_inheritPk)
 					.add(CurrikiResource.VAR_created)
 					.add(CurrikiResource.VAR_resourceId)
-					.add(CurrikiResource.VAR_title)
+					.add(CurrikiResource.VAR_licenseId)
+					.add(CurrikiResource.VAR_contributorId)
+					.add(CurrikiResource.VAR_contributionDate)
 					.add(CurrikiResource.VAR_description)
-					);
+					.add(CurrikiResource.VAR_title)
+					.add(CurrikiResource.VAR_keywordsStr)
+					.add(CurrikiResource.VAR_keywords)
+					.add(CurrikiResource.VAR_generatedKeywordsStr)
+					.add(CurrikiResource.VAR_generatedKeywords)
+					.add(CurrikiResource.VAR_language)
+					.add(CurrikiResource.VAR_lastEditorId)
+					.add(CurrikiResource.VAR_lastEditDate)
+					.add(CurrikiResource.VAR_currikiLicense)
+					.add(CurrikiResource.VAR_externalUrl)
+					.add(CurrikiResource.VAR_resourceChecked)
+					.add(CurrikiResource.VAR_content)
+					.add(CurrikiResource.VAR_resourceCheckRequestNote)
+					.add(CurrikiResource.VAR_resourceCheckDate)
+					.add(CurrikiResource.VAR_resourceCheckId)
+					.add(CurrikiResource.VAR_resourceCheckNote)
+					.add(CurrikiResource.VAR_studentFacing)
+					.add(CurrikiResource.VAR_source)
+					.add(CurrikiResource.VAR_reviewStatus)
+					.add(CurrikiResource.VAR_lastReviewDate)
+					.add(CurrikiResource.VAR_reviewByID)
+					.add(CurrikiResource.VAR_reviewRating)
+					.add(CurrikiResource.VAR_technicalCompleteness)
+					.add(CurrikiResource.VAR_contentAccuracy)
+					.add(CurrikiResource.VAR_pedagogy)
+					.add(CurrikiResource.VAR_ratingComment)
+					.add(CurrikiResource.VAR_standardsAlignment)
+					.add(CurrikiResource.VAR_standardsAlignmentComment)
+					.add(CurrikiResource.VAR_subjectMatter)
+					.add(CurrikiResource.VAR_subjectMatterComment)
+					.add(CurrikiResource.VAR_supportsTeaching)
+					.add(CurrikiResource.VAR_supportsTeachingComment)
+					.add(CurrikiResource.VAR_assessmentsQuality)
+					.add(CurrikiResource.VAR_assessmentsQualityComment)
+					.add(CurrikiResource.VAR_interactivityQuality)
+					.add(CurrikiResource.VAR_interactivityQualityComment)
+					.add(CurrikiResource.VAR_instructionalQuality)
+					.add(CurrikiResource.VAR_instructionalQualityComment)
+					.add(CurrikiResource.VAR_deeperLearning)
+					.add(CurrikiResource.VAR_deeperLearningComment)
+					.add(CurrikiResource.VAR_partner)
+					.add(CurrikiResource.VAR_createDate)
+					.add(CurrikiResource.VAR_type)
+					.add(CurrikiResource.VAR_featured)
+					.add(CurrikiResource.VAR_page)
+					.add(CurrikiResource.VAR_active)
+					.add(CurrikiResource.VAR_Public)
+					.add(CurrikiResource.VAR_xwd_id)
+					.add(CurrikiResource.VAR_mediaType)
+					.add(CurrikiResource.VAR_access)
+					.add(CurrikiResource.VAR_memberRating)
+					.add(CurrikiResource.VAR_aligned)
+					.add(CurrikiResource.VAR_pageUrl)
+					.add(CurrikiResource.VAR_indexed)
+					.add(CurrikiResource.VAR_lastIndexDate)
+					.add(CurrikiResource.VAR_indexRequired)
+					.add(CurrikiResource.VAR_indexRequiredDate)
+					.add(CurrikiResource.VAR_rescrape)
+					.add(CurrikiResource.VAR_goButton)
+					.add(CurrikiResource.VAR_downloadButton)
+					.add(CurrikiResource.VAR_topOfSearch)
+					.add(CurrikiResource.VAR_remove)
+					.add(CurrikiResource.VAR_spam)
+					.add(CurrikiResource.VAR_topOfSearchInt)
+					.add(CurrikiResource.VAR_partnerInt)
+					.add(CurrikiResource.VAR_reviewResource)
+					.add(CurrikiResource.VAR_oldUrl)
+					.add(CurrikiResource.VAR_contentDisplayOk)
+					.add(CurrikiResource.VAR_metadata)
+					.add(CurrikiResource.VAR_approvalStatus)
+					.add(CurrikiResource.VAR_approvalStatusDate)
+					.add(CurrikiResource.VAR_spamUser));
+
 			body.put(CurrikiResource.VAR_pk, resourceId);
-			body.put(CurrikiResource.VAR_title, title);
+			body.put(CurrikiResource.VAR_resourceId, resourceId);
+			body.put(CurrikiResource.VAR_licenseId, licenseId);
+			body.put(CurrikiResource.VAR_contributorId, contributorId);
+			body.put(CurrikiResource.VAR_contributionDate, contributionDate);
 			body.put(CurrikiResource.VAR_description, description);
+			body.put(CurrikiResource.VAR_title, title);
+			body.put(CurrikiResource.VAR_keywordsStr, keywordsStr);
+			body.put(CurrikiResource.VAR_keywords, keywords);
+			body.put(CurrikiResource.VAR_generatedKeywordsStr, generatedKeywordsStr);
+			body.put(CurrikiResource.VAR_generatedKeywords, generatedKeywords);
+			body.put(CurrikiResource.VAR_language, language);
+			body.put(CurrikiResource.VAR_lastEditorId, lastEditorId);
+			body.put(CurrikiResource.VAR_lastEditDate, lastEditDate);
+			body.put(CurrikiResource.VAR_currikiLicense, currikiLicense);
+			body.put(CurrikiResource.VAR_externalUrl, externalUrl);
+			body.put(CurrikiResource.VAR_resourceChecked, resourceChecked);
+			body.put(CurrikiResource.VAR_content, content);
+			body.put(CurrikiResource.VAR_resourceCheckRequestNote, resourceCheckRequestNote);
+			body.put(CurrikiResource.VAR_resourceCheckDate, resourceCheckDate);
+			body.put(CurrikiResource.VAR_resourceCheckId, resourceCheckId);
+			body.put(CurrikiResource.VAR_resourceCheckNote, resourceCheckNote);
+			body.put(CurrikiResource.VAR_studentFacing, studentFacing);
+			body.put(CurrikiResource.VAR_source, source);
+			body.put(CurrikiResource.VAR_reviewStatus, reviewStatus);
+			body.put(CurrikiResource.VAR_lastReviewDate, lastReviewDate);
+			body.put(CurrikiResource.VAR_reviewByID, reviewByID);
+			body.put(CurrikiResource.VAR_reviewRating, reviewRating);
+			body.put(CurrikiResource.VAR_technicalCompleteness, technicalCompleteness);
+			body.put(CurrikiResource.VAR_contentAccuracy, contentAccuracy);
+			body.put(CurrikiResource.VAR_pedagogy, pedagogy);
+			body.put(CurrikiResource.VAR_ratingComment, ratingComment);
+			body.put(CurrikiResource.VAR_standardsAlignment, standardsAlignment);
+			body.put(CurrikiResource.VAR_standardsAlignmentComment, standardsAlignmentComment);
+			body.put(CurrikiResource.VAR_subjectMatter, subjectMatter);
+			body.put(CurrikiResource.VAR_subjectMatterComment, subjectMatterComment);
+			body.put(CurrikiResource.VAR_supportsTeaching, supportsTeaching);
+			body.put(CurrikiResource.VAR_supportsTeachingComment, supportsTeachingComment);
+			body.put(CurrikiResource.VAR_assessmentsQuality, assessmentsQuality);
+			body.put(CurrikiResource.VAR_assessmentsQualityComment, assessmentsQualityComment);
+			body.put(CurrikiResource.VAR_interactivityQuality, interactivityQuality);
+			body.put(CurrikiResource.VAR_interactivityQualityComment, interactivityQualityComment);
+			body.put(CurrikiResource.VAR_instructionalQuality, instructionalQuality);
+			body.put(CurrikiResource.VAR_instructionalQualityComment, instructionalQualityComment);
+			body.put(CurrikiResource.VAR_deeperLearning, deeperLearning);
+			body.put(CurrikiResource.VAR_deeperLearningComment, deeperLearningComment);
+			body.put(CurrikiResource.VAR_partner, partner);
+			body.put(CurrikiResource.VAR_createDate, createDate);
+			body.put(CurrikiResource.VAR_type, type);
+			body.put(CurrikiResource.VAR_featured, featured);
+			body.put(CurrikiResource.VAR_page, page);
+			body.put(CurrikiResource.VAR_active, active);
+			body.put(CurrikiResource.VAR_Public, Public);
+			body.put(CurrikiResource.VAR_xwd_id, xwd_id);
+			body.put(CurrikiResource.VAR_mediaType, mediaType);
+			body.put(CurrikiResource.VAR_access, access);
+			body.put(CurrikiResource.VAR_memberRating, memberRating);
+			body.put(CurrikiResource.VAR_aligned, aligned);
+			body.put(CurrikiResource.VAR_pageUrl, pageUrl);
+			body.put(CurrikiResource.VAR_indexed, indexed);
+			body.put(CurrikiResource.VAR_lastIndexDate, lastIndexDate);
+			body.put(CurrikiResource.VAR_indexRequired, indexRequired);
+			body.put(CurrikiResource.VAR_indexRequiredDate, indexRequiredDate);
+			body.put(CurrikiResource.VAR_rescrape, rescrape);
+			body.put(CurrikiResource.VAR_goButton, goButton);
+			body.put(CurrikiResource.VAR_downloadButton, downloadButton);
+			body.put(CurrikiResource.VAR_topOfSearch, topOfSearch);
+			body.put(CurrikiResource.VAR_remove, remove);
+			body.put(CurrikiResource.VAR_spam, spam);
+			body.put(CurrikiResource.VAR_topOfSearchInt, topOfSearchInt);
+			body.put(CurrikiResource.VAR_partnerInt, partnerInt);
+			body.put(CurrikiResource.VAR_reviewResource, reviewResource);
+			body.put(CurrikiResource.VAR_oldUrl, oldUrl);
+			body.put(CurrikiResource.VAR_contentDisplayOk, contentDisplayOk);
+			body.put(CurrikiResource.VAR_metadata, metadata);
+			body.put(CurrikiResource.VAR_approvalStatus, approvalStatus);
+			body.put(CurrikiResource.VAR_approvalStatusDate, approvalStatusDate);
+			body.put(CurrikiResource.VAR_spamUser, spamUser);
 
 			JsonObject params = new JsonObject();
 			params.put("body", body);
