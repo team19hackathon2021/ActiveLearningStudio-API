@@ -133,7 +133,8 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlCell: 2
 	 */
 	protected void _keywords(List<String> l) {
-		l.addAll(Arrays.asList(keywordsStr.split(" ")));
+		if(keywordsStr != null)
+			l.addAll(Arrays.asList(keywordsStr.split(" ")));
 	}
 	
 	/**
@@ -155,7 +156,8 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlCell: 1
 	 */
 	protected void _generatedKeywords(List<String> l) {
-		l.addAll(Arrays.asList(generatedKeywordsStr.split(" ")));
+		if(generatedKeywordsStr != null)
+			l.addAll(Arrays.asList(generatedKeywordsStr.split(" ")));
 	}
 	
 	/**
@@ -202,7 +204,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 7
 	 * HtmlCell: 2
 	 */
-	protected void _currikiLicense(Wrap<Character> w) {
+	protected void _currikiLicense(Wrap<String> w) {
 		
 	}
 	
@@ -226,7 +228,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 8
 	 * HtmlCell: 1
 	 */
-	protected void _resourceChecked(Wrap<Character> w) {
+	protected void _resourceChecked(Wrap<String> w) {
 		
 	}
 	
@@ -296,7 +298,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 10
 	 * HtmlCell: 1
 	 */
-	protected void _studentFacing(Wrap<Character> w) {
+	protected void _studentFacing(Wrap<String> w) {
 		
 	}
 	
@@ -584,7 +586,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 18
 	 * HtmlCell: 1
 	 */
-	protected void _partner(Wrap<Character> w) {
+	protected void _partner(Wrap<String> w) {
 		
 	}
 	
@@ -620,7 +622,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 19
 	 * HtmlCell: 1
 	 */
-	protected void _featured(Wrap<Character> w) {
+	protected void _featured(Wrap<String> w) {
 		
 	}
 	
@@ -644,7 +646,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 19
 	 * HtmlCell: 3
 	 */
-	protected void _active(Wrap<Character> w) {
+	protected void _active(Wrap<String> w) {
 		
 	}
 	
@@ -656,7 +658,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 20
 	 * HtmlCell: 1
 	 */
-	protected void _Public(Wrap<Character> w) {
+	protected void _Public(Wrap<String> w) {
 		
 	}
 	
@@ -716,7 +718,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 21
 	 * HtmlCell: 3
 	 */
-	protected void _aligned(Wrap<Character> w) {
+	protected void _aligned(Wrap<String> w) {
 		
 	}
 	
@@ -740,7 +742,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 22
 	 * HtmlCell: 2
 	 */
-	protected void _indexed(Wrap<Character> w) {
+	protected void _indexed(Wrap<String> w) {
 		
 	}
 	
@@ -764,7 +766,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 23
 	 * HtmlCell: 1
 	 */
-	protected void _indexRequired(Wrap<Character> w) {
+	protected void _indexRequired(Wrap<String> w) {
 		
 	}
 	
@@ -788,7 +790,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 24
 	 * HtmlCell: 3
 	 */
-	protected void _rescrape(Wrap<Character> w) {
+	protected void _rescrape(Wrap<String> w) {
 		
 	}
 	
@@ -800,7 +802,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 25
 	 * HtmlCell: 1
 	 */
-	protected void _goButton(Wrap<Character> w) {
+	protected void _goButton(Wrap<String> w) {
 		
 	}
 	
@@ -812,7 +814,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 25
 	 * HtmlCell: 2
 	 */
-	protected void _downloadButton(Wrap<Character> w) {
+	protected void _downloadButton(Wrap<String> w) {
 		
 	}
 	
@@ -824,7 +826,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 25
 	 * HtmlCell: 3
 	 */
-	protected void _topOfSearch(Wrap<Character> w) {
+	protected void _topOfSearch(Wrap<String> w) {
 		
 	}
 	
@@ -836,7 +838,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 26
 	 * HtmlCell: 1
 	 */
-	protected void _remove(Wrap<Character> w) {
+	protected void _remove(Wrap<String> w) {
 		
 	}
 	
@@ -848,7 +850,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 26
 	 * HtmlCell: 2
 	 */
-	protected void _spam(Wrap<Character> w) {
+	protected void _spam(Wrap<String> w) {
 		
 	}
 	
@@ -884,7 +886,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 27
 	 * HtmlCell: 2
 	 */
-	protected void _reviewResource(Wrap<Character> w) {
+	protected void _reviewResource(Wrap<String> w) {
 		
 	}
 	
@@ -908,7 +910,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 28
 	 * HtmlCell: 1
 	 */
-	protected void _contentDisplayOk(Wrap<Character> w) {
+	protected void _contentDisplayOk(Wrap<String> w) {
 		
 	}
 	
@@ -956,8 +958,13 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 29
 	 * HtmlCell: 2
 	 */
-	protected void _spamUser(Wrap<Character> w) {
+	protected void _spamUser(Wrap<String> w) {
 		
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s: %s", title, description);
 	}
 
 }

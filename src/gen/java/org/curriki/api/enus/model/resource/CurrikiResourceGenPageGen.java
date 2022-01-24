@@ -148,7 +148,7 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	}
 	@JsonIgnore
 	public void setCurrikiResourceCount(String o) {
-		this.currikiResourceCount = CurrikiResourceGenPage.staticSetCurrikiResourceCount(null, o);
+		this.currikiResourceCount = CurrikiResourceGenPage.staticSetCurrikiResourceCount(siteRequest_, o);
 	}
 	public static Integer staticSetCurrikiResourceCount(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -164,12 +164,12 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 		return (CurrikiResourceGenPage)this;
 	}
 
-	public static Object staticSolrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
-		return null;
+	public static Integer staticSolrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
 	}
 
-	public static String staticSolrStrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Object o) {
-		return null;
+	public static String staticSolrStrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
 	}
 
 	public static String staticSolrFqCurrikiResourceCount(SiteRequestEnUS siteRequest_, String o) {
@@ -243,7 +243,7 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	}
 	@JsonIgnore
 	public void setPk(String o) {
-		this.pk = CurrikiResourceGenPage.staticSetPk(null, o);
+		this.pk = CurrikiResourceGenPage.staticSetPk(siteRequest_, o);
 	}
 	public static Long staticSetPk(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -259,12 +259,12 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 		return (CurrikiResourceGenPage)this;
 	}
 
-	public static Object staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
-		return null;
+	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
 	}
 
-	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Object o) {
-		return null;
+	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
 	}
 
 	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
@@ -275,26 +275,63 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	// initDeep //
 	//////////////
 
-	public CurrikiResourceGenPage initDeepCurrikiResourceGenPage(SiteRequestEnUS siteRequest_) {
-		initDeepCurrikiResourceGenPage();
-		return (CurrikiResourceGenPage)this;
+	public Future<Void> promiseDeepCurrikiResourceGenPage(SiteRequestEnUS siteRequest_) {
+		setSiteRequest_(siteRequest_);
+		return promiseDeepCurrikiResourceGenPage();
 	}
 
-	public void initDeepCurrikiResourceGenPage() {
-		initCurrikiResourceGenPage();
-		super.initDeepBaseModelPage(siteRequest_);
+	public Future<Void> promiseDeepCurrikiResourceGenPage() {
+		Promise<Void> promise = Promise.promise();
+		Promise<Void> promise2 = Promise.promise();
+		promiseCurrikiResourceGenPage(promise2);
+		promise2.future().onSuccess(a -> {
+			super.promiseDeepBaseModelPage(siteRequest_).onSuccess(b -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
 	}
 
-	public void initCurrikiResourceGenPage() {
+	public Future<Void> promiseCurrikiResourceGenPage(Promise<Void> promise) {
+		Future.future(a -> a.complete()).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			try {
 				searchListCurrikiResource_Init();
 				listCurrikiResourceInit();
 				currikiResourceCountInit();
 				currikiResource_Init();
 				pkInit();
+				promise2.complete();
+			} catch(Exception ex) {
+				promise2.fail(ex);
+			}
+			return promise2.future();
+		}).onSuccess(a -> {
+			promise.complete();
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
 	}
 
-	@Override public void initDeepForClass(SiteRequestEnUS siteRequest_) {
-		initDeepCurrikiResourceGenPage(siteRequest_);
+	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
+		return promiseDeepCurrikiResourceGenPage(siteRequest_);
+	}
+
+	/////////////////
+	// siteRequest //
+	/////////////////
+
+	public void siteRequestCurrikiResourceGenPage(SiteRequestEnUS siteRequest_) {
+			super.siteRequestBaseModelPage(siteRequest_);
+	}
+
+	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
+		siteRequestCurrikiResourceGenPage(siteRequest_);
 	}
 
 	/////////////
@@ -456,6 +493,19 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 		switch(var.toLowerCase()) {
 			default:
 				return super.defineBaseModelPage(var, val);
+		}
+	}
+
+	//////////////////
+	// apiRequest //
+	//////////////////
+
+	public void apiRequestCurrikiResourceGenPage() {
+		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
+		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
+		if(o != null && o instanceof CurrikiResourceGenPage) {
+			CurrikiResourceGenPage original = (CurrikiResourceGenPage)o;
+			super.apiRequestBaseModelPage();
 		}
 	}
 

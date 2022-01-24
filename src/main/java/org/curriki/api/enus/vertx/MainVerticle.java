@@ -521,7 +521,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			router.get("/").handler(a -> {
 				a.reroute("/template/enUS/home-page");
 			});
-
+ 
 			router.get("/api").handler(ctx -> {
 				ctx.reroute("/template/enUS/openapi");
 			});

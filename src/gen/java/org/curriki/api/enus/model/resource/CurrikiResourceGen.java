@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import java.math.BigDecimal;
-import java.lang.Character;
 import java.lang.Long;
 import java.util.Locale;
 import java.util.Map;
@@ -869,7 +868,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character currikiLicense;
+	protected String currikiLicense;
 
 	/**	<br/> The entity currikiLicense
 	 *  is defined as null before being initialized. 
@@ -877,25 +876,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _currikiLicense(Wrap<Character> w);
+	protected abstract void _currikiLicense(Wrap<String> w);
 
-	public Character getCurrikiLicense() {
+	public String getCurrikiLicense() {
 		return currikiLicense;
 	}
-
-	public void setCurrikiLicense(Character currikiLicense) {
-		this.currikiLicense = currikiLicense;
+	public void setCurrikiLicense(String o) {
+		this.currikiLicense = CurrikiResource.staticSetCurrikiLicense(siteRequest_, o);
 	}
-	public static Character staticSetCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource currikiLicenseInit() {
-		Wrap<Character> currikiLicenseWrap = new Wrap<Character>().var("currikiLicense");
+		Wrap<String> currikiLicenseWrap = new Wrap<String>().var("currikiLicense");
 		if(currikiLicense == null) {
 			_currikiLicense(currikiLicenseWrap);
 			setCurrikiLicense(currikiLicenseWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrCurrikiLicense(siteRequest_, CurrikiResource.staticSolrCurrikiLicense(siteRequest_, CurrikiResource.staticSetCurrikiLicense(siteRequest_, o)));
+	}
+
+	public String sqlCurrikiLicense() {
+		return currikiLicense;
 	}
 
 	/////////////////
@@ -960,7 +974,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character resourceChecked;
+	protected String resourceChecked;
 
 	/**	<br/> The entity resourceChecked
 	 *  is defined as null before being initialized. 
@@ -968,25 +982,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _resourceChecked(Wrap<Character> w);
+	protected abstract void _resourceChecked(Wrap<String> w);
 
-	public Character getResourceChecked() {
+	public String getResourceChecked() {
 		return resourceChecked;
 	}
-
-	public void setResourceChecked(Character resourceChecked) {
-		this.resourceChecked = resourceChecked;
+	public void setResourceChecked(String o) {
+		this.resourceChecked = CurrikiResource.staticSetResourceChecked(siteRequest_, o);
 	}
-	public static Character staticSetResourceChecked(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource resourceCheckedInit() {
-		Wrap<Character> resourceCheckedWrap = new Wrap<Character>().var("resourceChecked");
+		Wrap<String> resourceCheckedWrap = new Wrap<String>().var("resourceChecked");
 		if(resourceChecked == null) {
 			_resourceChecked(resourceCheckedWrap);
 			setResourceChecked(resourceCheckedWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceChecked(siteRequest_, CurrikiResource.staticSolrResourceChecked(siteRequest_, CurrikiResource.staticSetResourceChecked(siteRequest_, o)));
+	}
+
+	public String sqlResourceChecked() {
+		return resourceChecked;
 	}
 
 	/////////////
@@ -1291,7 +1320,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character studentFacing;
+	protected String studentFacing;
 
 	/**	<br/> The entity studentFacing
 	 *  is defined as null before being initialized. 
@@ -1299,25 +1328,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _studentFacing(Wrap<Character> w);
+	protected abstract void _studentFacing(Wrap<String> w);
 
-	public Character getStudentFacing() {
+	public String getStudentFacing() {
 		return studentFacing;
 	}
-
-	public void setStudentFacing(Character studentFacing) {
-		this.studentFacing = studentFacing;
+	public void setStudentFacing(String o) {
+		this.studentFacing = CurrikiResource.staticSetStudentFacing(siteRequest_, o);
 	}
-	public static Character staticSetStudentFacing(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource studentFacingInit() {
-		Wrap<Character> studentFacingWrap = new Wrap<Character>().var("studentFacing");
+		Wrap<String> studentFacingWrap = new Wrap<String>().var("studentFacing");
 		if(studentFacing == null) {
 			_studentFacing(studentFacingWrap);
 			setStudentFacing(studentFacingWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrStudentFacing(siteRequest_, CurrikiResource.staticSolrStudentFacing(siteRequest_, CurrikiResource.staticSetStudentFacing(siteRequest_, o)));
+	}
+
+	public String sqlStudentFacing() {
+		return studentFacing;
 	}
 
 	////////////
@@ -2673,7 +2717,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character partner;
+	protected String partner;
 
 	/**	<br/> The entity partner
 	 *  is defined as null before being initialized. 
@@ -2681,25 +2725,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _partner(Wrap<Character> w);
+	protected abstract void _partner(Wrap<String> w);
 
-	public Character getPartner() {
+	public String getPartner() {
 		return partner;
 	}
-
-	public void setPartner(Character partner) {
-		this.partner = partner;
+	public void setPartner(String o) {
+		this.partner = CurrikiResource.staticSetPartner(siteRequest_, o);
 	}
-	public static Character staticSetPartner(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetPartner(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource partnerInit() {
-		Wrap<Character> partnerWrap = new Wrap<Character>().var("partner");
+		Wrap<String> partnerWrap = new Wrap<String>().var("partner");
 		if(partner == null) {
 			_partner(partnerWrap);
 			setPartner(partnerWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrPartner(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrPartner(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqPartner(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPartner(siteRequest_, CurrikiResource.staticSolrPartner(siteRequest_, CurrikiResource.staticSetPartner(siteRequest_, o)));
+	}
+
+	public String sqlPartner() {
+		return partner;
 	}
 
 	////////////////
@@ -2837,7 +2896,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character featured;
+	protected String featured;
 
 	/**	<br/> The entity featured
 	 *  is defined as null before being initialized. 
@@ -2845,25 +2904,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _featured(Wrap<Character> w);
+	protected abstract void _featured(Wrap<String> w);
 
-	public Character getFeatured() {
+	public String getFeatured() {
 		return featured;
 	}
-
-	public void setFeatured(Character featured) {
-		this.featured = featured;
+	public void setFeatured(String o) {
+		this.featured = CurrikiResource.staticSetFeatured(siteRequest_, o);
 	}
-	public static Character staticSetFeatured(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetFeatured(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource featuredInit() {
-		Wrap<Character> featuredWrap = new Wrap<Character>().var("featured");
+		Wrap<String> featuredWrap = new Wrap<String>().var("featured");
 		if(featured == null) {
 			_featured(featuredWrap);
 			setFeatured(featuredWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrFeatured(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrFeatured(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqFeatured(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrFeatured(siteRequest_, CurrikiResource.staticSolrFeatured(siteRequest_, CurrikiResource.staticSetFeatured(siteRequest_, o)));
+	}
+
+	public String sqlFeatured() {
+		return featured;
 	}
 
 	//////////
@@ -2928,7 +3002,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character active;
+	protected String active;
 
 	/**	<br/> The entity active
 	 *  is defined as null before being initialized. 
@@ -2936,25 +3010,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _active(Wrap<Character> w);
+	protected abstract void _active(Wrap<String> w);
 
-	public Character getActive() {
+	public String getActive() {
 		return active;
 	}
-
-	public void setActive(Character active) {
-		this.active = active;
+	public void setActive(String o) {
+		this.active = CurrikiResource.staticSetActive(siteRequest_, o);
 	}
-	public static Character staticSetActive(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetActive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource activeInit() {
-		Wrap<Character> activeWrap = new Wrap<Character>().var("active");
+		Wrap<String> activeWrap = new Wrap<String>().var("active");
 		if(active == null) {
 			_active(activeWrap);
 			setActive(activeWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrActive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrActive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqActive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrActive(siteRequest_, CurrikiResource.staticSolrActive(siteRequest_, CurrikiResource.staticSetActive(siteRequest_, o)));
+	}
+
+	public String sqlActive() {
+		return active;
 	}
 
 	////////////
@@ -2966,7 +3055,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character Public;
+	protected String Public;
 
 	/**	<br/> The entity Public
 	 *  is defined as null before being initialized. 
@@ -2974,25 +3063,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _Public(Wrap<Character> w);
+	protected abstract void _Public(Wrap<String> w);
 
-	public Character getPublic() {
+	public String getPublic() {
 		return Public;
 	}
-
-	public void setPublic(Character Public) {
-		this.Public = Public;
+	public void setPublic(String o) {
+		this.Public = CurrikiResource.staticSetPublic(siteRequest_, o);
 	}
-	public static Character staticSetPublic(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetPublic(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource PublicInit() {
-		Wrap<Character> PublicWrap = new Wrap<Character>().var("Public");
+		Wrap<String> PublicWrap = new Wrap<String>().var("Public");
 		if(Public == null) {
 			_Public(PublicWrap);
 			setPublic(PublicWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrPublic(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrPublic(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqPublic(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPublic(siteRequest_, CurrikiResource.staticSolrPublic(siteRequest_, CurrikiResource.staticSetPublic(siteRequest_, o)));
+	}
+
+	public String sqlPublic() {
+		return Public;
 	}
 
 	////////////
@@ -3241,7 +3345,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character aligned;
+	protected String aligned;
 
 	/**	<br/> The entity aligned
 	 *  is defined as null before being initialized. 
@@ -3249,25 +3353,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _aligned(Wrap<Character> w);
+	protected abstract void _aligned(Wrap<String> w);
 
-	public Character getAligned() {
+	public String getAligned() {
 		return aligned;
 	}
-
-	public void setAligned(Character aligned) {
-		this.aligned = aligned;
+	public void setAligned(String o) {
+		this.aligned = CurrikiResource.staticSetAligned(siteRequest_, o);
 	}
-	public static Character staticSetAligned(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetAligned(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource alignedInit() {
-		Wrap<Character> alignedWrap = new Wrap<Character>().var("aligned");
+		Wrap<String> alignedWrap = new Wrap<String>().var("aligned");
 		if(aligned == null) {
 			_aligned(alignedWrap);
 			setAligned(alignedWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrAligned(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrAligned(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqAligned(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrAligned(siteRequest_, CurrikiResource.staticSolrAligned(siteRequest_, CurrikiResource.staticSetAligned(siteRequest_, o)));
+	}
+
+	public String sqlAligned() {
+		return aligned;
 	}
 
 	/////////////
@@ -3332,7 +3451,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character indexed;
+	protected String indexed;
 
 	/**	<br/> The entity indexed
 	 *  is defined as null before being initialized. 
@@ -3340,25 +3459,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _indexed(Wrap<Character> w);
+	protected abstract void _indexed(Wrap<String> w);
 
-	public Character getIndexed() {
+	public String getIndexed() {
 		return indexed;
 	}
-
-	public void setIndexed(Character indexed) {
-		this.indexed = indexed;
+	public void setIndexed(String o) {
+		this.indexed = CurrikiResource.staticSetIndexed(siteRequest_, o);
 	}
-	public static Character staticSetIndexed(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetIndexed(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource indexedInit() {
-		Wrap<Character> indexedWrap = new Wrap<Character>().var("indexed");
+		Wrap<String> indexedWrap = new Wrap<String>().var("indexed");
 		if(indexed == null) {
 			_indexed(indexedWrap);
 			setIndexed(indexedWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrIndexed(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrIndexed(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqIndexed(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrIndexed(siteRequest_, CurrikiResource.staticSolrIndexed(siteRequest_, CurrikiResource.staticSetIndexed(siteRequest_, o)));
+	}
+
+	public String sqlIndexed() {
+		return indexed;
 	}
 
 	///////////////////
@@ -3443,7 +3577,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character indexRequired;
+	protected String indexRequired;
 
 	/**	<br/> The entity indexRequired
 	 *  is defined as null before being initialized. 
@@ -3451,25 +3585,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _indexRequired(Wrap<Character> w);
+	protected abstract void _indexRequired(Wrap<String> w);
 
-	public Character getIndexRequired() {
+	public String getIndexRequired() {
 		return indexRequired;
 	}
-
-	public void setIndexRequired(Character indexRequired) {
-		this.indexRequired = indexRequired;
+	public void setIndexRequired(String o) {
+		this.indexRequired = CurrikiResource.staticSetIndexRequired(siteRequest_, o);
 	}
-	public static Character staticSetIndexRequired(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource indexRequiredInit() {
-		Wrap<Character> indexRequiredWrap = new Wrap<Character>().var("indexRequired");
+		Wrap<String> indexRequiredWrap = new Wrap<String>().var("indexRequired");
 		if(indexRequired == null) {
 			_indexRequired(indexRequiredWrap);
 			setIndexRequired(indexRequiredWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrIndexRequired(siteRequest_, CurrikiResource.staticSolrIndexRequired(siteRequest_, CurrikiResource.staticSetIndexRequired(siteRequest_, o)));
+	}
+
+	public String sqlIndexRequired() {
+		return indexRequired;
 	}
 
 	///////////////////////
@@ -3554,7 +3703,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character rescrape;
+	protected String rescrape;
 
 	/**	<br/> The entity rescrape
 	 *  is defined as null before being initialized. 
@@ -3562,25 +3711,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _rescrape(Wrap<Character> w);
+	protected abstract void _rescrape(Wrap<String> w);
 
-	public Character getRescrape() {
+	public String getRescrape() {
 		return rescrape;
 	}
-
-	public void setRescrape(Character rescrape) {
-		this.rescrape = rescrape;
+	public void setRescrape(String o) {
+		this.rescrape = CurrikiResource.staticSetRescrape(siteRequest_, o);
 	}
-	public static Character staticSetRescrape(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetRescrape(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource rescrapeInit() {
-		Wrap<Character> rescrapeWrap = new Wrap<Character>().var("rescrape");
+		Wrap<String> rescrapeWrap = new Wrap<String>().var("rescrape");
 		if(rescrape == null) {
 			_rescrape(rescrapeWrap);
 			setRescrape(rescrapeWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrRescrape(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrRescrape(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqRescrape(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrRescrape(siteRequest_, CurrikiResource.staticSolrRescrape(siteRequest_, CurrikiResource.staticSetRescrape(siteRequest_, o)));
+	}
+
+	public String sqlRescrape() {
+		return rescrape;
 	}
 
 	//////////////
@@ -3592,7 +3756,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character goButton;
+	protected String goButton;
 
 	/**	<br/> The entity goButton
 	 *  is defined as null before being initialized. 
@@ -3600,25 +3764,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _goButton(Wrap<Character> w);
+	protected abstract void _goButton(Wrap<String> w);
 
-	public Character getGoButton() {
+	public String getGoButton() {
 		return goButton;
 	}
-
-	public void setGoButton(Character goButton) {
-		this.goButton = goButton;
+	public void setGoButton(String o) {
+		this.goButton = CurrikiResource.staticSetGoButton(siteRequest_, o);
 	}
-	public static Character staticSetGoButton(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetGoButton(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource goButtonInit() {
-		Wrap<Character> goButtonWrap = new Wrap<Character>().var("goButton");
+		Wrap<String> goButtonWrap = new Wrap<String>().var("goButton");
 		if(goButton == null) {
 			_goButton(goButtonWrap);
 			setGoButton(goButtonWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrGoButton(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrGoButton(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqGoButton(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrGoButton(siteRequest_, CurrikiResource.staticSolrGoButton(siteRequest_, CurrikiResource.staticSetGoButton(siteRequest_, o)));
+	}
+
+	public String sqlGoButton() {
+		return goButton;
 	}
 
 	////////////////////
@@ -3630,7 +3809,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character downloadButton;
+	protected String downloadButton;
 
 	/**	<br/> The entity downloadButton
 	 *  is defined as null before being initialized. 
@@ -3638,25 +3817,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _downloadButton(Wrap<Character> w);
+	protected abstract void _downloadButton(Wrap<String> w);
 
-	public Character getDownloadButton() {
+	public String getDownloadButton() {
 		return downloadButton;
 	}
-
-	public void setDownloadButton(Character downloadButton) {
-		this.downloadButton = downloadButton;
+	public void setDownloadButton(String o) {
+		this.downloadButton = CurrikiResource.staticSetDownloadButton(siteRequest_, o);
 	}
-	public static Character staticSetDownloadButton(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource downloadButtonInit() {
-		Wrap<Character> downloadButtonWrap = new Wrap<Character>().var("downloadButton");
+		Wrap<String> downloadButtonWrap = new Wrap<String>().var("downloadButton");
 		if(downloadButton == null) {
 			_downloadButton(downloadButtonWrap);
 			setDownloadButton(downloadButtonWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDownloadButton(siteRequest_, CurrikiResource.staticSolrDownloadButton(siteRequest_, CurrikiResource.staticSetDownloadButton(siteRequest_, o)));
+	}
+
+	public String sqlDownloadButton() {
+		return downloadButton;
 	}
 
 	/////////////////
@@ -3668,7 +3862,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character topOfSearch;
+	protected String topOfSearch;
 
 	/**	<br/> The entity topOfSearch
 	 *  is defined as null before being initialized. 
@@ -3676,25 +3870,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _topOfSearch(Wrap<Character> w);
+	protected abstract void _topOfSearch(Wrap<String> w);
 
-	public Character getTopOfSearch() {
+	public String getTopOfSearch() {
 		return topOfSearch;
 	}
-
-	public void setTopOfSearch(Character topOfSearch) {
-		this.topOfSearch = topOfSearch;
+	public void setTopOfSearch(String o) {
+		this.topOfSearch = CurrikiResource.staticSetTopOfSearch(siteRequest_, o);
 	}
-	public static Character staticSetTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource topOfSearchInit() {
-		Wrap<Character> topOfSearchWrap = new Wrap<Character>().var("topOfSearch");
+		Wrap<String> topOfSearchWrap = new Wrap<String>().var("topOfSearch");
 		if(topOfSearch == null) {
 			_topOfSearch(topOfSearchWrap);
 			setTopOfSearch(topOfSearchWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTopOfSearch(siteRequest_, CurrikiResource.staticSolrTopOfSearch(siteRequest_, CurrikiResource.staticSetTopOfSearch(siteRequest_, o)));
+	}
+
+	public String sqlTopOfSearch() {
+		return topOfSearch;
 	}
 
 	////////////
@@ -3706,7 +3915,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character remove;
+	protected String remove;
 
 	/**	<br/> The entity remove
 	 *  is defined as null before being initialized. 
@@ -3714,25 +3923,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _remove(Wrap<Character> w);
+	protected abstract void _remove(Wrap<String> w);
 
-	public Character getRemove() {
+	public String getRemove() {
 		return remove;
 	}
-
-	public void setRemove(Character remove) {
-		this.remove = remove;
+	public void setRemove(String o) {
+		this.remove = CurrikiResource.staticSetRemove(siteRequest_, o);
 	}
-	public static Character staticSetRemove(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetRemove(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource removeInit() {
-		Wrap<Character> removeWrap = new Wrap<Character>().var("remove");
+		Wrap<String> removeWrap = new Wrap<String>().var("remove");
 		if(remove == null) {
 			_remove(removeWrap);
 			setRemove(removeWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrRemove(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrRemove(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqRemove(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrRemove(siteRequest_, CurrikiResource.staticSolrRemove(siteRequest_, CurrikiResource.staticSetRemove(siteRequest_, o)));
+	}
+
+	public String sqlRemove() {
+		return remove;
 	}
 
 	//////////
@@ -3744,7 +3968,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character spam;
+	protected String spam;
 
 	/**	<br/> The entity spam
 	 *  is defined as null before being initialized. 
@@ -3752,25 +3976,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _spam(Wrap<Character> w);
+	protected abstract void _spam(Wrap<String> w);
 
-	public Character getSpam() {
+	public String getSpam() {
 		return spam;
 	}
-
-	public void setSpam(Character spam) {
-		this.spam = spam;
+	public void setSpam(String o) {
+		this.spam = CurrikiResource.staticSetSpam(siteRequest_, o);
 	}
-	public static Character staticSetSpam(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetSpam(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource spamInit() {
-		Wrap<Character> spamWrap = new Wrap<Character>().var("spam");
+		Wrap<String> spamWrap = new Wrap<String>().var("spam");
 		if(spam == null) {
 			_spam(spamWrap);
 			setSpam(spamWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrSpam(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrSpam(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSpam(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSpam(siteRequest_, CurrikiResource.staticSolrSpam(siteRequest_, CurrikiResource.staticSetSpam(siteRequest_, o)));
+	}
+
+	public String sqlSpam() {
+		return spam;
 	}
 
 	////////////////////
@@ -3904,7 +4143,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character reviewResource;
+	protected String reviewResource;
 
 	/**	<br/> The entity reviewResource
 	 *  is defined as null before being initialized. 
@@ -3912,25 +4151,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _reviewResource(Wrap<Character> w);
+	protected abstract void _reviewResource(Wrap<String> w);
 
-	public Character getReviewResource() {
+	public String getReviewResource() {
 		return reviewResource;
 	}
-
-	public void setReviewResource(Character reviewResource) {
-		this.reviewResource = reviewResource;
+	public void setReviewResource(String o) {
+		this.reviewResource = CurrikiResource.staticSetReviewResource(siteRequest_, o);
 	}
-	public static Character staticSetReviewResource(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetReviewResource(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource reviewResourceInit() {
-		Wrap<Character> reviewResourceWrap = new Wrap<Character>().var("reviewResource");
+		Wrap<String> reviewResourceWrap = new Wrap<String>().var("reviewResource");
 		if(reviewResource == null) {
 			_reviewResource(reviewResourceWrap);
 			setReviewResource(reviewResourceWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrReviewResource(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrReviewResource(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqReviewResource(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrReviewResource(siteRequest_, CurrikiResource.staticSolrReviewResource(siteRequest_, CurrikiResource.staticSetReviewResource(siteRequest_, o)));
+	}
+
+	public String sqlReviewResource() {
+		return reviewResource;
 	}
 
 	////////////
@@ -3995,7 +4249,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character contentDisplayOk;
+	protected String contentDisplayOk;
 
 	/**	<br/> The entity contentDisplayOk
 	 *  is defined as null before being initialized. 
@@ -4003,25 +4257,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _contentDisplayOk(Wrap<Character> w);
+	protected abstract void _contentDisplayOk(Wrap<String> w);
 
-	public Character getContentDisplayOk() {
+	public String getContentDisplayOk() {
 		return contentDisplayOk;
 	}
-
-	public void setContentDisplayOk(Character contentDisplayOk) {
-		this.contentDisplayOk = contentDisplayOk;
+	public void setContentDisplayOk(String o) {
+		this.contentDisplayOk = CurrikiResource.staticSetContentDisplayOk(siteRequest_, o);
 	}
-	public static Character staticSetContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource contentDisplayOkInit() {
-		Wrap<Character> contentDisplayOkWrap = new Wrap<Character>().var("contentDisplayOk");
+		Wrap<String> contentDisplayOkWrap = new Wrap<String>().var("contentDisplayOk");
 		if(contentDisplayOk == null) {
 			_contentDisplayOk(contentDisplayOkWrap);
 			setContentDisplayOk(contentDisplayOkWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrContentDisplayOk(siteRequest_, CurrikiResource.staticSolrContentDisplayOk(siteRequest_, CurrikiResource.staticSetContentDisplayOk(siteRequest_, o)));
+	}
+
+	public String sqlContentDisplayOk() {
+		return contentDisplayOk;
 	}
 
 	//////////////
@@ -4207,7 +4476,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Character spamUser;
+	protected String spamUser;
 
 	/**	<br/> The entity spamUser
 	 *  is defined as null before being initialized. 
@@ -4215,25 +4484,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _spamUser(Wrap<Character> w);
+	protected abstract void _spamUser(Wrap<String> w);
 
-	public Character getSpamUser() {
+	public String getSpamUser() {
 		return spamUser;
 	}
-
-	public void setSpamUser(Character spamUser) {
-		this.spamUser = spamUser;
+	public void setSpamUser(String o) {
+		this.spamUser = CurrikiResource.staticSetSpamUser(siteRequest_, o);
 	}
-	public static Character staticSetSpamUser(SiteRequestEnUS siteRequest_, String o) {
-		return null;
+	public static String staticSetSpamUser(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource spamUserInit() {
-		Wrap<Character> spamUserWrap = new Wrap<Character>().var("spamUser");
+		Wrap<String> spamUserWrap = new Wrap<String>().var("spamUser");
 		if(spamUser == null) {
 			_spamUser(spamUserWrap);
 			setSpamUser(spamUserWrap.o);
 		}
 		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrSpamUser(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrSpamUser(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSpamUser(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSpamUser(siteRequest_, CurrikiResource.staticSolrSpamUser(siteRequest_, CurrikiResource.staticSetSpamUser(siteRequest_, o)));
+	}
+
+	public String sqlSpamUser() {
+		return spamUser;
 	}
 
 	//////////////
@@ -4614,8 +4898,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetLastEditorId(siteRequest_, o);
 		case "lastEditDate":
 			return CurrikiResource.staticSetLastEditDate(siteRequest_, o);
+		case "currikiLicense":
+			return CurrikiResource.staticSetCurrikiLicense(siteRequest_, o);
 		case "externalUrl":
 			return CurrikiResource.staticSetExternalUrl(siteRequest_, o);
+		case "resourceChecked":
+			return CurrikiResource.staticSetResourceChecked(siteRequest_, o);
 		case "content":
 			return CurrikiResource.staticSetContent(siteRequest_, o);
 		case "resourceCheckRequestNote":
@@ -4626,6 +4914,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetResourceCheckId(siteRequest_, o);
 		case "resourceCheckNote":
 			return CurrikiResource.staticSetResourceCheckNote(siteRequest_, o);
+		case "studentFacing":
+			return CurrikiResource.staticSetStudentFacing(siteRequest_, o);
 		case "source":
 			return CurrikiResource.staticSetSource(siteRequest_, o);
 		case "reviewStatus":
@@ -4672,12 +4962,20 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetDeeperLearning(siteRequest_, o);
 		case "deeperLearningComment":
 			return CurrikiResource.staticSetDeeperLearningComment(siteRequest_, o);
+		case "partner":
+			return CurrikiResource.staticSetPartner(siteRequest_, o);
 		case "createDate":
 			return CurrikiResource.staticSetCreateDate(siteRequest_, o);
 		case "type":
 			return CurrikiResource.staticSetType(siteRequest_, o);
+		case "featured":
+			return CurrikiResource.staticSetFeatured(siteRequest_, o);
 		case "page":
 			return CurrikiResource.staticSetPage(siteRequest_, o);
+		case "active":
+			return CurrikiResource.staticSetActive(siteRequest_, o);
+		case "Public":
+			return CurrikiResource.staticSetPublic(siteRequest_, o);
 		case "xwd_id":
 			return CurrikiResource.staticSetXwd_id(siteRequest_, o);
 		case "mediaType":
@@ -4686,24 +4984,48 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetAccess(siteRequest_, o);
 		case "memberRating":
 			return CurrikiResource.staticSetMemberRating(siteRequest_, o);
+		case "aligned":
+			return CurrikiResource.staticSetAligned(siteRequest_, o);
 		case "pageUrl":
 			return CurrikiResource.staticSetPageUrl(siteRequest_, o);
+		case "indexed":
+			return CurrikiResource.staticSetIndexed(siteRequest_, o);
 		case "lastIndexDate":
 			return CurrikiResource.staticSetLastIndexDate(siteRequest_, o);
+		case "indexRequired":
+			return CurrikiResource.staticSetIndexRequired(siteRequest_, o);
 		case "indexRequiredDate":
 			return CurrikiResource.staticSetIndexRequiredDate(siteRequest_, o);
+		case "rescrape":
+			return CurrikiResource.staticSetRescrape(siteRequest_, o);
+		case "goButton":
+			return CurrikiResource.staticSetGoButton(siteRequest_, o);
+		case "downloadButton":
+			return CurrikiResource.staticSetDownloadButton(siteRequest_, o);
+		case "topOfSearch":
+			return CurrikiResource.staticSetTopOfSearch(siteRequest_, o);
+		case "remove":
+			return CurrikiResource.staticSetRemove(siteRequest_, o);
+		case "spam":
+			return CurrikiResource.staticSetSpam(siteRequest_, o);
 		case "topOfSearchInt":
 			return CurrikiResource.staticSetTopOfSearchInt(siteRequest_, o);
 		case "partnerInt":
 			return CurrikiResource.staticSetPartnerInt(siteRequest_, o);
+		case "reviewResource":
+			return CurrikiResource.staticSetReviewResource(siteRequest_, o);
 		case "oldUrl":
 			return CurrikiResource.staticSetOldUrl(siteRequest_, o);
+		case "contentDisplayOk":
+			return CurrikiResource.staticSetContentDisplayOk(siteRequest_, o);
 		case "metadata":
 			return CurrikiResource.staticSetMetadata(siteRequest_, o);
 		case "approvalStatus":
 			return CurrikiResource.staticSetApprovalStatus(siteRequest_, o);
 		case "approvalStatusDate":
 			return CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o);
+		case "spamUser":
+			return CurrikiResource.staticSetSpamUser(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -4744,8 +5066,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrLastEditorId(siteRequest_, (Long)o);
 		case "lastEditDate":
 			return CurrikiResource.staticSolrLastEditDate(siteRequest_, (ZonedDateTime)o);
+		case "currikiLicense":
+			return CurrikiResource.staticSolrCurrikiLicense(siteRequest_, (String)o);
 		case "externalUrl":
 			return CurrikiResource.staticSolrExternalUrl(siteRequest_, (String)o);
+		case "resourceChecked":
+			return CurrikiResource.staticSolrResourceChecked(siteRequest_, (String)o);
 		case "content":
 			return CurrikiResource.staticSolrContent(siteRequest_, (String)o);
 		case "resourceCheckRequestNote":
@@ -4756,6 +5082,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrResourceCheckId(siteRequest_, (Long)o);
 		case "resourceCheckNote":
 			return CurrikiResource.staticSolrResourceCheckNote(siteRequest_, (String)o);
+		case "studentFacing":
+			return CurrikiResource.staticSolrStudentFacing(siteRequest_, (String)o);
 		case "source":
 			return CurrikiResource.staticSolrSource(siteRequest_, (String)o);
 		case "reviewStatus":
@@ -4802,12 +5130,20 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrDeeperLearning(siteRequest_, (Integer)o);
 		case "deeperLearningComment":
 			return CurrikiResource.staticSolrDeeperLearningComment(siteRequest_, (String)o);
+		case "partner":
+			return CurrikiResource.staticSolrPartner(siteRequest_, (String)o);
 		case "createDate":
 			return CurrikiResource.staticSolrCreateDate(siteRequest_, (ZonedDateTime)o);
 		case "type":
 			return CurrikiResource.staticSolrType(siteRequest_, (String)o);
+		case "featured":
+			return CurrikiResource.staticSolrFeatured(siteRequest_, (String)o);
 		case "page":
 			return CurrikiResource.staticSolrPage(siteRequest_, (String)o);
+		case "active":
+			return CurrikiResource.staticSolrActive(siteRequest_, (String)o);
+		case "Public":
+			return CurrikiResource.staticSolrPublic(siteRequest_, (String)o);
 		case "xwd_id":
 			return CurrikiResource.staticSolrXwd_id(siteRequest_, (Integer)o);
 		case "mediaType":
@@ -4816,24 +5152,48 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrAccess(siteRequest_, (String)o);
 		case "memberRating":
 			return CurrikiResource.staticSolrMemberRating(siteRequest_, (BigDecimal)o);
+		case "aligned":
+			return CurrikiResource.staticSolrAligned(siteRequest_, (String)o);
 		case "pageUrl":
 			return CurrikiResource.staticSolrPageUrl(siteRequest_, (String)o);
+		case "indexed":
+			return CurrikiResource.staticSolrIndexed(siteRequest_, (String)o);
 		case "lastIndexDate":
 			return CurrikiResource.staticSolrLastIndexDate(siteRequest_, (ZonedDateTime)o);
+		case "indexRequired":
+			return CurrikiResource.staticSolrIndexRequired(siteRequest_, (String)o);
 		case "indexRequiredDate":
 			return CurrikiResource.staticSolrIndexRequiredDate(siteRequest_, (ZonedDateTime)o);
+		case "rescrape":
+			return CurrikiResource.staticSolrRescrape(siteRequest_, (String)o);
+		case "goButton":
+			return CurrikiResource.staticSolrGoButton(siteRequest_, (String)o);
+		case "downloadButton":
+			return CurrikiResource.staticSolrDownloadButton(siteRequest_, (String)o);
+		case "topOfSearch":
+			return CurrikiResource.staticSolrTopOfSearch(siteRequest_, (String)o);
+		case "remove":
+			return CurrikiResource.staticSolrRemove(siteRequest_, (String)o);
+		case "spam":
+			return CurrikiResource.staticSolrSpam(siteRequest_, (String)o);
 		case "topOfSearchInt":
 			return CurrikiResource.staticSolrTopOfSearchInt(siteRequest_, (Integer)o);
 		case "partnerInt":
 			return CurrikiResource.staticSolrPartnerInt(siteRequest_, (Integer)o);
+		case "reviewResource":
+			return CurrikiResource.staticSolrReviewResource(siteRequest_, (String)o);
 		case "oldUrl":
 			return CurrikiResource.staticSolrOldUrl(siteRequest_, (String)o);
+		case "contentDisplayOk":
+			return CurrikiResource.staticSolrContentDisplayOk(siteRequest_, (String)o);
 		case "metadata":
 			return CurrikiResource.staticSolrMetadata(siteRequest_, (String)o);
 		case "approvalStatus":
 			return CurrikiResource.staticSolrApprovalStatus(siteRequest_, (String)o);
 		case "approvalStatusDate":
 			return CurrikiResource.staticSolrApprovalStatusDate(siteRequest_, (LocalDateTime)o);
+		case "spamUser":
+			return CurrikiResource.staticSolrSpamUser(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSolrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -4874,8 +5234,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrStrLastEditorId(siteRequest_, (Long)o);
 		case "lastEditDate":
 			return CurrikiResource.staticSolrStrLastEditDate(siteRequest_, (Date)o);
+		case "currikiLicense":
+			return CurrikiResource.staticSolrStrCurrikiLicense(siteRequest_, (String)o);
 		case "externalUrl":
 			return CurrikiResource.staticSolrStrExternalUrl(siteRequest_, (String)o);
+		case "resourceChecked":
+			return CurrikiResource.staticSolrStrResourceChecked(siteRequest_, (String)o);
 		case "content":
 			return CurrikiResource.staticSolrStrContent(siteRequest_, (String)o);
 		case "resourceCheckRequestNote":
@@ -4886,6 +5250,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrStrResourceCheckId(siteRequest_, (Long)o);
 		case "resourceCheckNote":
 			return CurrikiResource.staticSolrStrResourceCheckNote(siteRequest_, (String)o);
+		case "studentFacing":
+			return CurrikiResource.staticSolrStrStudentFacing(siteRequest_, (String)o);
 		case "source":
 			return CurrikiResource.staticSolrStrSource(siteRequest_, (String)o);
 		case "reviewStatus":
@@ -4932,12 +5298,20 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrStrDeeperLearning(siteRequest_, (Integer)o);
 		case "deeperLearningComment":
 			return CurrikiResource.staticSolrStrDeeperLearningComment(siteRequest_, (String)o);
+		case "partner":
+			return CurrikiResource.staticSolrStrPartner(siteRequest_, (String)o);
 		case "createDate":
 			return CurrikiResource.staticSolrStrCreateDate(siteRequest_, (Date)o);
 		case "type":
 			return CurrikiResource.staticSolrStrType(siteRequest_, (String)o);
+		case "featured":
+			return CurrikiResource.staticSolrStrFeatured(siteRequest_, (String)o);
 		case "page":
 			return CurrikiResource.staticSolrStrPage(siteRequest_, (String)o);
+		case "active":
+			return CurrikiResource.staticSolrStrActive(siteRequest_, (String)o);
+		case "Public":
+			return CurrikiResource.staticSolrStrPublic(siteRequest_, (String)o);
 		case "xwd_id":
 			return CurrikiResource.staticSolrStrXwd_id(siteRequest_, (Integer)o);
 		case "mediaType":
@@ -4946,24 +5320,48 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrStrAccess(siteRequest_, (String)o);
 		case "memberRating":
 			return CurrikiResource.staticSolrStrMemberRating(siteRequest_, (Double)o);
+		case "aligned":
+			return CurrikiResource.staticSolrStrAligned(siteRequest_, (String)o);
 		case "pageUrl":
 			return CurrikiResource.staticSolrStrPageUrl(siteRequest_, (String)o);
+		case "indexed":
+			return CurrikiResource.staticSolrStrIndexed(siteRequest_, (String)o);
 		case "lastIndexDate":
 			return CurrikiResource.staticSolrStrLastIndexDate(siteRequest_, (Date)o);
+		case "indexRequired":
+			return CurrikiResource.staticSolrStrIndexRequired(siteRequest_, (String)o);
 		case "indexRequiredDate":
 			return CurrikiResource.staticSolrStrIndexRequiredDate(siteRequest_, (Date)o);
+		case "rescrape":
+			return CurrikiResource.staticSolrStrRescrape(siteRequest_, (String)o);
+		case "goButton":
+			return CurrikiResource.staticSolrStrGoButton(siteRequest_, (String)o);
+		case "downloadButton":
+			return CurrikiResource.staticSolrStrDownloadButton(siteRequest_, (String)o);
+		case "topOfSearch":
+			return CurrikiResource.staticSolrStrTopOfSearch(siteRequest_, (String)o);
+		case "remove":
+			return CurrikiResource.staticSolrStrRemove(siteRequest_, (String)o);
+		case "spam":
+			return CurrikiResource.staticSolrStrSpam(siteRequest_, (String)o);
 		case "topOfSearchInt":
 			return CurrikiResource.staticSolrStrTopOfSearchInt(siteRequest_, (Integer)o);
 		case "partnerInt":
 			return CurrikiResource.staticSolrStrPartnerInt(siteRequest_, (Integer)o);
+		case "reviewResource":
+			return CurrikiResource.staticSolrStrReviewResource(siteRequest_, (String)o);
 		case "oldUrl":
 			return CurrikiResource.staticSolrStrOldUrl(siteRequest_, (String)o);
+		case "contentDisplayOk":
+			return CurrikiResource.staticSolrStrContentDisplayOk(siteRequest_, (String)o);
 		case "metadata":
 			return CurrikiResource.staticSolrStrMetadata(siteRequest_, (String)o);
 		case "approvalStatus":
 			return CurrikiResource.staticSolrStrApprovalStatus(siteRequest_, (String)o);
 		case "approvalStatusDate":
 			return CurrikiResource.staticSolrStrApprovalStatusDate(siteRequest_, (Date)o);
+		case "spamUser":
+			return CurrikiResource.staticSolrStrSpamUser(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSolrStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5004,8 +5402,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrFqLastEditorId(siteRequest_, o);
 		case "lastEditDate":
 			return CurrikiResource.staticSolrFqLastEditDate(siteRequest_, o);
+		case "currikiLicense":
+			return CurrikiResource.staticSolrFqCurrikiLicense(siteRequest_, o);
 		case "externalUrl":
 			return CurrikiResource.staticSolrFqExternalUrl(siteRequest_, o);
+		case "resourceChecked":
+			return CurrikiResource.staticSolrFqResourceChecked(siteRequest_, o);
 		case "content":
 			return CurrikiResource.staticSolrFqContent(siteRequest_, o);
 		case "resourceCheckRequestNote":
@@ -5016,6 +5418,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrFqResourceCheckId(siteRequest_, o);
 		case "resourceCheckNote":
 			return CurrikiResource.staticSolrFqResourceCheckNote(siteRequest_, o);
+		case "studentFacing":
+			return CurrikiResource.staticSolrFqStudentFacing(siteRequest_, o);
 		case "source":
 			return CurrikiResource.staticSolrFqSource(siteRequest_, o);
 		case "reviewStatus":
@@ -5062,12 +5466,20 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrFqDeeperLearning(siteRequest_, o);
 		case "deeperLearningComment":
 			return CurrikiResource.staticSolrFqDeeperLearningComment(siteRequest_, o);
+		case "partner":
+			return CurrikiResource.staticSolrFqPartner(siteRequest_, o);
 		case "createDate":
 			return CurrikiResource.staticSolrFqCreateDate(siteRequest_, o);
 		case "type":
 			return CurrikiResource.staticSolrFqType(siteRequest_, o);
+		case "featured":
+			return CurrikiResource.staticSolrFqFeatured(siteRequest_, o);
 		case "page":
 			return CurrikiResource.staticSolrFqPage(siteRequest_, o);
+		case "active":
+			return CurrikiResource.staticSolrFqActive(siteRequest_, o);
+		case "Public":
+			return CurrikiResource.staticSolrFqPublic(siteRequest_, o);
 		case "xwd_id":
 			return CurrikiResource.staticSolrFqXwd_id(siteRequest_, o);
 		case "mediaType":
@@ -5076,24 +5488,48 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrFqAccess(siteRequest_, o);
 		case "memberRating":
 			return CurrikiResource.staticSolrFqMemberRating(siteRequest_, o);
+		case "aligned":
+			return CurrikiResource.staticSolrFqAligned(siteRequest_, o);
 		case "pageUrl":
 			return CurrikiResource.staticSolrFqPageUrl(siteRequest_, o);
+		case "indexed":
+			return CurrikiResource.staticSolrFqIndexed(siteRequest_, o);
 		case "lastIndexDate":
 			return CurrikiResource.staticSolrFqLastIndexDate(siteRequest_, o);
+		case "indexRequired":
+			return CurrikiResource.staticSolrFqIndexRequired(siteRequest_, o);
 		case "indexRequiredDate":
 			return CurrikiResource.staticSolrFqIndexRequiredDate(siteRequest_, o);
+		case "rescrape":
+			return CurrikiResource.staticSolrFqRescrape(siteRequest_, o);
+		case "goButton":
+			return CurrikiResource.staticSolrFqGoButton(siteRequest_, o);
+		case "downloadButton":
+			return CurrikiResource.staticSolrFqDownloadButton(siteRequest_, o);
+		case "topOfSearch":
+			return CurrikiResource.staticSolrFqTopOfSearch(siteRequest_, o);
+		case "remove":
+			return CurrikiResource.staticSolrFqRemove(siteRequest_, o);
+		case "spam":
+			return CurrikiResource.staticSolrFqSpam(siteRequest_, o);
 		case "topOfSearchInt":
 			return CurrikiResource.staticSolrFqTopOfSearchInt(siteRequest_, o);
 		case "partnerInt":
 			return CurrikiResource.staticSolrFqPartnerInt(siteRequest_, o);
+		case "reviewResource":
+			return CurrikiResource.staticSolrFqReviewResource(siteRequest_, o);
 		case "oldUrl":
 			return CurrikiResource.staticSolrFqOldUrl(siteRequest_, o);
+		case "contentDisplayOk":
+			return CurrikiResource.staticSolrFqContentDisplayOk(siteRequest_, o);
 		case "metadata":
 			return CurrikiResource.staticSolrFqMetadata(siteRequest_, o);
 		case "approvalStatus":
 			return CurrikiResource.staticSolrFqApprovalStatus(siteRequest_, o);
 		case "approvalStatusDate":
 			return CurrikiResource.staticSolrFqApprovalStatusDate(siteRequest_, o);
+		case "spamUser":
+			return CurrikiResource.staticSolrFqSpamUser(siteRequest_, o);
 			default:
 				return BaseModel.staticSolrFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5180,8 +5616,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("lastEditDate");
 				return val;
 			case "currikilicense":
-				if(val instanceof Character)
-					setCurrikiLicense((Character)val);
+				if(val instanceof String)
+					setCurrikiLicense((String)val);
 				saves.add("currikiLicense");
 				return val;
 			case "externalurl":
@@ -5190,8 +5626,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("externalUrl");
 				return val;
 			case "resourcechecked":
-				if(val instanceof Character)
-					setResourceChecked((Character)val);
+				if(val instanceof String)
+					setResourceChecked((String)val);
 				saves.add("resourceChecked");
 				return val;
 			case "content":
@@ -5222,8 +5658,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("resourceCheckNote");
 				return val;
 			case "studentfacing":
-				if(val instanceof Character)
-					setStudentFacing((Character)val);
+				if(val instanceof String)
+					setStudentFacing((String)val);
 				saves.add("studentFacing");
 				return val;
 			case "source":
@@ -5346,8 +5782,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("deeperLearningComment");
 				return val;
 			case "partner":
-				if(val instanceof Character)
-					setPartner((Character)val);
+				if(val instanceof String)
+					setPartner((String)val);
 				saves.add("partner");
 				return val;
 			case "createdate":
@@ -5363,8 +5799,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("type");
 				return val;
 			case "featured":
-				if(val instanceof Character)
-					setFeatured((Character)val);
+				if(val instanceof String)
+					setFeatured((String)val);
 				saves.add("featured");
 				return val;
 			case "page":
@@ -5373,13 +5809,13 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("page");
 				return val;
 			case "active":
-				if(val instanceof Character)
-					setActive((Character)val);
+				if(val instanceof String)
+					setActive((String)val);
 				saves.add("active");
 				return val;
 			case "public":
-				if(val instanceof Character)
-					setPublic((Character)val);
+				if(val instanceof String)
+					setPublic((String)val);
 				saves.add("Public");
 				return val;
 			case "xwd_id":
@@ -5405,8 +5841,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("memberRating");
 				return val;
 			case "aligned":
-				if(val instanceof Character)
-					setAligned((Character)val);
+				if(val instanceof String)
+					setAligned((String)val);
 				saves.add("aligned");
 				return val;
 			case "pageurl":
@@ -5415,8 +5851,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("pageUrl");
 				return val;
 			case "indexed":
-				if(val instanceof Character)
-					setIndexed((Character)val);
+				if(val instanceof String)
+					setIndexed((String)val);
 				saves.add("indexed");
 				return val;
 			case "lastindexdate":
@@ -5427,8 +5863,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("lastIndexDate");
 				return val;
 			case "indexrequired":
-				if(val instanceof Character)
-					setIndexRequired((Character)val);
+				if(val instanceof String)
+					setIndexRequired((String)val);
 				saves.add("indexRequired");
 				return val;
 			case "indexrequireddate":
@@ -5439,33 +5875,33 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("indexRequiredDate");
 				return val;
 			case "rescrape":
-				if(val instanceof Character)
-					setRescrape((Character)val);
+				if(val instanceof String)
+					setRescrape((String)val);
 				saves.add("rescrape");
 				return val;
 			case "gobutton":
-				if(val instanceof Character)
-					setGoButton((Character)val);
+				if(val instanceof String)
+					setGoButton((String)val);
 				saves.add("goButton");
 				return val;
 			case "downloadbutton":
-				if(val instanceof Character)
-					setDownloadButton((Character)val);
+				if(val instanceof String)
+					setDownloadButton((String)val);
 				saves.add("downloadButton");
 				return val;
 			case "topofsearch":
-				if(val instanceof Character)
-					setTopOfSearch((Character)val);
+				if(val instanceof String)
+					setTopOfSearch((String)val);
 				saves.add("topOfSearch");
 				return val;
 			case "remove":
-				if(val instanceof Character)
-					setRemove((Character)val);
+				if(val instanceof String)
+					setRemove((String)val);
 				saves.add("remove");
 				return val;
 			case "spam":
-				if(val instanceof Character)
-					setSpam((Character)val);
+				if(val instanceof String)
+					setSpam((String)val);
 				saves.add("spam");
 				return val;
 			case "topofsearchint":
@@ -5479,8 +5915,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("partnerInt");
 				return val;
 			case "reviewresource":
-				if(val instanceof Character)
-					setReviewResource((Character)val);
+				if(val instanceof String)
+					setReviewResource((String)val);
 				saves.add("reviewResource");
 				return val;
 			case "oldurl":
@@ -5489,8 +5925,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("oldUrl");
 				return val;
 			case "contentdisplayok":
-				if(val instanceof Character)
-					setContentDisplayOk((Character)val);
+				if(val instanceof String)
+					setContentDisplayOk((String)val);
 				saves.add("contentDisplayOk");
 				return val;
 			case "metadata":
@@ -5509,8 +5945,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("approvalStatusDate");
 				return val;
 			case "spamuser":
-				if(val instanceof Character)
-					setSpamUser((Character)val);
+				if(val instanceof String)
+					setSpamUser((String)val);
 				saves.add("spamUser");
 				return val;
 			default:
@@ -5585,13 +6021,13 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("lastEditDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastEditDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(currikiLicense != null) {
-			document.addField("currikiLicense_docvalues", currikiLicense);
+			document.addField("currikiLicense_docvalues_string", currikiLicense);
 		}
 		if(externalUrl != null) {
 			document.addField("externalUrl_docvalues_string", externalUrl);
 		}
 		if(resourceChecked != null) {
-			document.addField("resourceChecked_docvalues", resourceChecked);
+			document.addField("resourceChecked_docvalues_string", resourceChecked);
 		}
 		if(content != null) {
 			document.addField("content_stored_string", content);
@@ -5603,7 +6039,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("resourceCheckId_docvalues_long", resourceCheckId);
 		}
 		if(studentFacing != null) {
-			document.addField("studentFacing_docvalues", studentFacing);
+			document.addField("studentFacing_docvalues_string", studentFacing);
 		}
 		if(source != null) {
 			document.addField("source_docvalues_string", source);
@@ -5675,7 +6111,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("deeperLearningComment_docvalues_string", deeperLearningComment);
 		}
 		if(partner != null) {
-			document.addField("partner_docvalues", partner);
+			document.addField("partner_docvalues_string", partner);
 		}
 		if(createDate != null) {
 			document.addField("createDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(createDate.toInstant(), ZoneId.of("UTC"))));
@@ -5684,16 +6120,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("type_docvalues_string", type);
 		}
 		if(featured != null) {
-			document.addField("featured_docvalues", featured);
+			document.addField("featured_docvalues_string", featured);
 		}
 		if(page != null) {
 			document.addField("page_docvalues_string", page);
 		}
 		if(active != null) {
-			document.addField("active_docvalues", active);
+			document.addField("active_docvalues_string", active);
 		}
 		if(Public != null) {
-			document.addField("Public_docvalues", Public);
+			document.addField("Public_docvalues_string", Public);
 		}
 		if(xwd_id != null) {
 			document.addField("xwd_id_docvalues_int", xwd_id);
@@ -5708,40 +6144,40 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("memberRating_docvalues_double", memberRating.doubleValue());
 		}
 		if(aligned != null) {
-			document.addField("aligned_docvalues", aligned);
+			document.addField("aligned_docvalues_string", aligned);
 		}
 		if(pageUrl != null) {
 			document.addField("pageUrl_docvalues_string", pageUrl);
 		}
 		if(indexed != null) {
-			document.addField("indexed_docvalues", indexed);
+			document.addField("indexed_docvalues_string", indexed);
 		}
 		if(lastIndexDate != null) {
 			document.addField("lastIndexDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastIndexDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(indexRequired != null) {
-			document.addField("indexRequired_docvalues", indexRequired);
+			document.addField("indexRequired_docvalues_string", indexRequired);
 		}
 		if(indexRequiredDate != null) {
 			document.addField("indexRequiredDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(indexRequiredDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(rescrape != null) {
-			document.addField("rescrape_docvalues", rescrape);
+			document.addField("rescrape_docvalues_string", rescrape);
 		}
 		if(goButton != null) {
-			document.addField("goButton_docvalues", goButton);
+			document.addField("goButton_docvalues_string", goButton);
 		}
 		if(downloadButton != null) {
-			document.addField("downloadButton_docvalues", downloadButton);
+			document.addField("downloadButton_docvalues_string", downloadButton);
 		}
 		if(topOfSearch != null) {
-			document.addField("topOfSearch_docvalues", topOfSearch);
+			document.addField("topOfSearch_docvalues_string", topOfSearch);
 		}
 		if(remove != null) {
-			document.addField("remove_docvalues", remove);
+			document.addField("remove_docvalues_string", remove);
 		}
 		if(spam != null) {
-			document.addField("spam_docvalues", spam);
+			document.addField("spam_docvalues_string", spam);
 		}
 		if(topOfSearchInt != null) {
 			document.addField("topOfSearchInt_docvalues_int", topOfSearchInt);
@@ -5750,13 +6186,13 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("partnerInt_docvalues_int", partnerInt);
 		}
 		if(reviewResource != null) {
-			document.addField("reviewResource_docvalues", reviewResource);
+			document.addField("reviewResource_docvalues_string", reviewResource);
 		}
 		if(oldUrl != null) {
 			document.addField("oldUrl_docvalues_string", oldUrl);
 		}
 		if(contentDisplayOk != null) {
-			document.addField("contentDisplayOk_docvalues", contentDisplayOk);
+			document.addField("contentDisplayOk_docvalues_string", contentDisplayOk);
 		}
 		if(metadata != null) {
 			document.addField("metadata_docvalues_string", metadata);
@@ -5768,7 +6204,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("approvalStatusDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(approvalStatusDate.atOffset(ZoneOffset.UTC)));
 		}
 		if(spamUser != null) {
-			document.addField("spamUser_docvalues", spamUser);
+			document.addField("spamUser_docvalues_string", spamUser);
 		}
 		super.indexBaseModel(document);
 
@@ -5799,17 +6235,17 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "lastEditDate":
 				return "lastEditDate_docvalues_date";
 			case "currikiLicense":
-				return "currikiLicense_docvalues";
+				return "currikiLicense_docvalues_string";
 			case "externalUrl":
 				return "externalUrl_docvalues_string";
 			case "resourceChecked":
-				return "resourceChecked_docvalues";
+				return "resourceChecked_docvalues_string";
 			case "resourceCheckDate":
 				return "resourceCheckDate_docvalues_date";
 			case "resourceCheckId":
 				return "resourceCheckId_docvalues_long";
 			case "studentFacing":
-				return "studentFacing_docvalues";
+				return "studentFacing_docvalues_string";
 			case "source":
 				return "source_docvalues_string";
 			case "reviewStatus":
@@ -5855,19 +6291,19 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "deeperLearningComment":
 				return "deeperLearningComment_docvalues_string";
 			case "partner":
-				return "partner_docvalues";
+				return "partner_docvalues_string";
 			case "createDate":
 				return "createDate_docvalues_date";
 			case "type":
 				return "type_docvalues_string";
 			case "featured":
-				return "featured_docvalues";
+				return "featured_docvalues_string";
 			case "page":
 				return "page_docvalues_string";
 			case "active":
-				return "active_docvalues";
+				return "active_docvalues_string";
 			case "Public":
-				return "Public_docvalues";
+				return "Public_docvalues_string";
 			case "xwd_id":
 				return "xwd_id_docvalues_int";
 			case "mediaType":
@@ -5877,39 +6313,39 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "memberRating":
 				return "memberRating_docvalues_double";
 			case "aligned":
-				return "aligned_docvalues";
+				return "aligned_docvalues_string";
 			case "pageUrl":
 				return "pageUrl_docvalues_string";
 			case "indexed":
-				return "indexed_docvalues";
+				return "indexed_docvalues_string";
 			case "lastIndexDate":
 				return "lastIndexDate_docvalues_date";
 			case "indexRequired":
-				return "indexRequired_docvalues";
+				return "indexRequired_docvalues_string";
 			case "indexRequiredDate":
 				return "indexRequiredDate_docvalues_date";
 			case "rescrape":
-				return "rescrape_docvalues";
+				return "rescrape_docvalues_string";
 			case "goButton":
-				return "goButton_docvalues";
+				return "goButton_docvalues_string";
 			case "downloadButton":
-				return "downloadButton_docvalues";
+				return "downloadButton_docvalues_string";
 			case "topOfSearch":
-				return "topOfSearch_docvalues";
+				return "topOfSearch_docvalues_string";
 			case "remove":
-				return "remove_docvalues";
+				return "remove_docvalues_string";
 			case "spam":
-				return "spam_docvalues";
+				return "spam_docvalues_string";
 			case "topOfSearchInt":
 				return "topOfSearchInt_docvalues_int";
 			case "partnerInt":
 				return "partnerInt_docvalues_int";
 			case "reviewResource":
-				return "reviewResource_docvalues";
+				return "reviewResource_docvalues_string";
 			case "oldUrl":
 				return "oldUrl_docvalues_string";
 			case "contentDisplayOk":
-				return "contentDisplayOk_docvalues";
+				return "contentDisplayOk_docvalues_string";
 			case "metadata":
 				return "metadata_docvalues_string";
 			case "approvalStatus":
@@ -5917,7 +6353,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "approvalStatusDate":
 				return "approvalStatusDate_docvalues_date";
 			case "spamUser":
-				return "spamUser_docvalues";
+				return "spamUser_docvalues_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -5962,13 +6398,13 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setLanguage(Optional.ofNullable(solrDocument.get("language_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setLastEditorId(Optional.ofNullable(solrDocument.get("lastEditorId_docvalues_long")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setLastEditDate(Optional.ofNullable(solrDocument.get("lastEditDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setCurrikiLicense(Optional.ofNullable(solrDocument.get("currikiLicense_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setCurrikiLicense(Optional.ofNullable(solrDocument.get("currikiLicense_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setExternalUrl(Optional.ofNullable(solrDocument.get("externalUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setResourceChecked(Optional.ofNullable(solrDocument.get("resourceChecked_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setResourceChecked(Optional.ofNullable(solrDocument.get("resourceChecked_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setContent(Optional.ofNullable(solrDocument.get("content_stored_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setResourceCheckDate(Optional.ofNullable(solrDocument.get("resourceCheckDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setResourceCheckId(Optional.ofNullable(solrDocument.get("resourceCheckId_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setStudentFacing(Optional.ofNullable(solrDocument.get("studentFacing_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setStudentFacing(Optional.ofNullable(solrDocument.get("studentFacing_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setSource(Optional.ofNullable(solrDocument.get("source_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setReviewStatus(Optional.ofNullable(solrDocument.get("reviewStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setLastReviewDate(Optional.ofNullable(solrDocument.get("lastReviewDate_docvalues_date")).map(v -> v.toString()).orElse(null));
@@ -5992,38 +6428,38 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setInstructionalQualityComment(Optional.ofNullable(solrDocument.get("instructionalQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setDeeperLearning(Optional.ofNullable(solrDocument.get("deeperLearning_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setDeeperLearningComment(Optional.ofNullable(solrDocument.get("deeperLearningComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPartner(Optional.ofNullable(solrDocument.get("partner_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPartner(Optional.ofNullable(solrDocument.get("partner_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setCreateDate(Optional.ofNullable(solrDocument.get("createDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setType(Optional.ofNullable(solrDocument.get("type_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setFeatured(Optional.ofNullable(solrDocument.get("featured_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setFeatured(Optional.ofNullable(solrDocument.get("featured_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setPage(Optional.ofNullable(solrDocument.get("page_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setActive(Optional.ofNullable(solrDocument.get("active_docvalues")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPublic(Optional.ofNullable(solrDocument.get("Public_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setActive(Optional.ofNullable(solrDocument.get("active_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPublic(Optional.ofNullable(solrDocument.get("Public_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setXwd_id(Optional.ofNullable(solrDocument.get("xwd_id_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setMediaType(Optional.ofNullable(solrDocument.get("mediaType_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setAccess(Optional.ofNullable(solrDocument.get("access_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setMemberRating(Optional.ofNullable(solrDocument.get("memberRating_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setAligned(Optional.ofNullable(solrDocument.get("aligned_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setAligned(Optional.ofNullable(solrDocument.get("aligned_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setPageUrl(Optional.ofNullable(solrDocument.get("pageUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setIndexed(Optional.ofNullable(solrDocument.get("indexed_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIndexed(Optional.ofNullable(solrDocument.get("indexed_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setLastIndexDate(Optional.ofNullable(solrDocument.get("lastIndexDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setIndexRequired(Optional.ofNullable(solrDocument.get("indexRequired_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIndexRequired(Optional.ofNullable(solrDocument.get("indexRequired_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setIndexRequiredDate(Optional.ofNullable(solrDocument.get("indexRequiredDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setRescrape(Optional.ofNullable(solrDocument.get("rescrape_docvalues")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setGoButton(Optional.ofNullable(solrDocument.get("goButton_docvalues")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDownloadButton(Optional.ofNullable(solrDocument.get("downloadButton_docvalues")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setTopOfSearch(Optional.ofNullable(solrDocument.get("topOfSearch_docvalues")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setRemove(Optional.ofNullable(solrDocument.get("remove_docvalues")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSpam(Optional.ofNullable(solrDocument.get("spam_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setRescrape(Optional.ofNullable(solrDocument.get("rescrape_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setGoButton(Optional.ofNullable(solrDocument.get("goButton_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDownloadButton(Optional.ofNullable(solrDocument.get("downloadButton_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTopOfSearch(Optional.ofNullable(solrDocument.get("topOfSearch_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setRemove(Optional.ofNullable(solrDocument.get("remove_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSpam(Optional.ofNullable(solrDocument.get("spam_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setTopOfSearchInt(Optional.ofNullable(solrDocument.get("topOfSearchInt_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setPartnerInt(Optional.ofNullable(solrDocument.get("partnerInt_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setReviewResource(Optional.ofNullable(solrDocument.get("reviewResource_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setReviewResource(Optional.ofNullable(solrDocument.get("reviewResource_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setOldUrl(Optional.ofNullable(solrDocument.get("oldUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setContentDisplayOk(Optional.ofNullable(solrDocument.get("contentDisplayOk_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setContentDisplayOk(Optional.ofNullable(solrDocument.get("contentDisplayOk_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setMetadata(Optional.ofNullable(solrDocument.get("metadata_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setApprovalStatus(Optional.ofNullable(solrDocument.get("approvalStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setApprovalStatusDate(Optional.ofNullable(solrDocument.get("approvalStatusDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSpamUser(Optional.ofNullable(solrDocument.get("spamUser_docvalues")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSpamUser(Optional.ofNullable(solrDocument.get("spamUser_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
 	}
@@ -6215,15 +6651,15 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(language).map(v -> "language: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(lastEditorId).map(v -> "lastEditorId: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(lastEditDate).map(v -> "lastEditDate: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(currikiLicense).map(v -> "currikiLicense: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(currikiLicense).map(v -> "currikiLicense: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(externalUrl).map(v -> "externalUrl: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(resourceChecked).map(v -> "resourceChecked: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(resourceChecked).map(v -> "resourceChecked: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(content).map(v -> "content: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(resourceCheckRequestNote).map(v -> "resourceCheckRequestNote: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(resourceCheckDate).map(v -> "resourceCheckDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(resourceCheckId).map(v -> "resourceCheckId: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(resourceCheckNote).map(v -> "resourceCheckNote: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(studentFacing).map(v -> "studentFacing: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(studentFacing).map(v -> "studentFacing: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(source).map(v -> "source: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(reviewStatus).map(v -> "reviewStatus: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(lastReviewDate).map(v -> "lastReviewDate: " + v + "\n").orElse(""));
@@ -6247,38 +6683,38 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(instructionalQualityComment).map(v -> "instructionalQualityComment: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(deeperLearning).map(v -> "deeperLearning: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(deeperLearningComment).map(v -> "deeperLearningComment: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(partner).map(v -> "partner: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(partner).map(v -> "partner: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(createDate).map(v -> "createDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(type).map(v -> "type: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(featured).map(v -> "featured: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(featured).map(v -> "featured: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(page).map(v -> "page: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(active).map(v -> "active: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(Public).map(v -> "Public: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(active).map(v -> "active: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(Public).map(v -> "Public: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(xwd_id).map(v -> "xwd_id: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(mediaType).map(v -> "mediaType: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(access).map(v -> "access: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(memberRating).map(v -> "memberRating: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(aligned).map(v -> "aligned: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(aligned).map(v -> "aligned: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(pageUrl).map(v -> "pageUrl: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(indexed).map(v -> "indexed: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(indexed).map(v -> "indexed: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(lastIndexDate).map(v -> "lastIndexDate: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(indexRequired).map(v -> "indexRequired: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(indexRequired).map(v -> "indexRequired: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(indexRequiredDate).map(v -> "indexRequiredDate: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(rescrape).map(v -> "rescrape: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(goButton).map(v -> "goButton: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(downloadButton).map(v -> "downloadButton: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(topOfSearch).map(v -> "topOfSearch: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(remove).map(v -> "remove: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(spam).map(v -> "spam: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(rescrape).map(v -> "rescrape: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(goButton).map(v -> "goButton: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(downloadButton).map(v -> "downloadButton: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(topOfSearch).map(v -> "topOfSearch: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(remove).map(v -> "remove: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(spam).map(v -> "spam: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(topOfSearchInt).map(v -> "topOfSearchInt: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(partnerInt).map(v -> "partnerInt: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(reviewResource).map(v -> "reviewResource: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(reviewResource).map(v -> "reviewResource: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(oldUrl).map(v -> "oldUrl: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(contentDisplayOk).map(v -> "contentDisplayOk: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(contentDisplayOk).map(v -> "contentDisplayOk: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(metadata).map(v -> "metadata: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(approvalStatus).map(v -> "approvalStatus: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(approvalStatusDate).map(v -> "approvalStatusDate: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(spamUser).map(v -> "spamUser: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(spamUser).map(v -> "spamUser: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
