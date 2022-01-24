@@ -300,7 +300,24 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 		try {
 			sqlConnection.queryStreamWithParams(
-					"SELECT resourceid, title, description from currikidb.resources"
+					"SELECT resourceid, licenseid, contributorid, contributiondate,"
+					+ " description, title, keywords, generatedKeywords, language,"
+					+ " lasteditorid, lasteditdate, currikilicense, externalurl,"
+					+ " resourcechecked, content, resourcecheckrequestnote, resourcecheckdate,"
+					+ " resourcecheckid, resourcechecknote, studentfacing, source, reviewstatus,"
+					+ " lastreviewdate, reviewedbyid, reviewrating, technicalcompleteness,"
+					+ " contentaccuracy, pedagogy, ratingcomment, standardsalignment,"
+					+ " standardsalignmentcomment, subjectmatter, subjectmattercomment,"
+					+ " supportsteaching, supportsteachingcomment, assessmentsquality,"
+					+ " assessmentsqualitycomment, interactivityquality,"
+					+ " interactivityqualitycomment, instructionalquality,"
+					+ " instructionalqualitycomment, deeperlearning, deeperlearningcomment,"
+					+ " partner, createdate, type, featured, page, active, public, xwd_id,"
+					+ " mediatype, access, memberrating, aligned, pageurl, indexed,"
+					+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
+					+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
+					+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
+					+ " approvalStatusDate, spamUser from currikidb.resources"
 					, new JsonArray(), a -> {
 				SQLRowStream sqlRowStream = a.result();
 				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
