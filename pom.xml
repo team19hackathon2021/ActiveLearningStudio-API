@@ -44,7 +44,7 @@ TODO: Define the groupId and artifactId for ActiveLearningStudio-API.
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
 		<quarkus.platform.version>2.2.2.Final</quarkus.platform.version>
 		<apache-curator.version>4.3.0</apache-curator.version>
-		<computate.version>4.2.4.1</computate.version>
+		<computate.version>4.2.4.2</computate.version>
 	</properties>
 
 
