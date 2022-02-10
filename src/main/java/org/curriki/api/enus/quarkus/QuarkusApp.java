@@ -11,10 +11,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.curator.RetryPolicy;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.vertx.MainVerticle;
 import org.curriki.api.enus.vertx.WorkerVerticle;

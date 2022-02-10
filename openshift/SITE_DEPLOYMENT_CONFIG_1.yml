@@ -274,12 +274,8 @@ spec:
               value: "{{ TIMER_DB_SOLR_SYNC_IN_SECONDS }}"
             - name: AUTH_ROLES_ADMIN
               value: '{{ AUTH_ROLES_ADMIN | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_SequenceRun
-              value: '{{ AUTH_ROLES_REQUIRED_SequenceRun | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_BioSample
-              value: '{{ AUTH_ROLES_REQUIRED_BioSample | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_Taxonomy
-              value: '{{ AUTH_ROLES_REQUIRED_Taxonomy | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_CurrikiResource
+              value: '{{ AUTH_ROLES_REQUIRED_CurrikiResource | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteUser
               value: '{{ AUTH_ROLES_REQUIRED_SiteUser | to_json }}'
           volumeMounts:

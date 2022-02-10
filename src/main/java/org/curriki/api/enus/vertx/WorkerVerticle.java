@@ -9,11 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.computate.search.tool.TimeTool;
+import org.computate.vertx.api.ApiCounter;
+import org.computate.vertx.api.ApiRequest;
 import org.curriki.api.enus.config.ConfigKeys;
-import org.curriki.api.enus.java.TimeTool;
 import org.curriki.api.enus.model.resource.CurrikiResource;
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -317,7 +318,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
 					+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
 					+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
-					+ " approvalStatusDate, spamUser from currikidb.resources"
+					+ " approvalStatusDate, spamUser from currikidb.resources limit 0,10"
 					, new JsonArray(), a -> {
 				SQLRowStream sqlRowStream = a.result();
 				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
@@ -671,7 +672,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							Optional<Long> rowCountOptional = Optional.ofNullable(countRowSet.iterator().next()).map(row -> row.getLong(0));
 							if(rowCountOptional.isPresent()) {
 								Long apiCounterResume = config().getLong(ConfigKeys.API_COUNTER_RESUME);
-								Integer apiCounterFetch = config().getInteger(ConfigKeys.API_COUNTER_FETCH);
+								Long apiCounterFetch = config().getLong(ConfigKeys.API_COUNTER_FETCH);
 								ApiCounter apiCounter = new ApiCounter();
 	
 								SiteRequestEnUS siteRequest = new SiteRequestEnUS();
@@ -679,7 +680,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 								siteRequest.initDeepSiteRequestEnUS(siteRequest);
 		
 								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(apiCounterFetch.intValue());
+								apiRequest.setRows(apiCounterFetch);
 								apiRequest.setNumFound(rowCountOptional.get());
 								apiRequest.setNumPATCH(apiCounter.getQueueNum());
 								apiRequest.setCreated(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))));
@@ -690,7 +691,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 									apiCounter.setQueueNum(0L);
 									apiCounter.setTotalNum(0L);
 									try {
-										RowStream<Row> stream = preparedStatement.createStream(apiCounterFetch);
+										RowStream<Row> stream = preparedStatement.createStream(apiCounterFetch.intValue());
 										stream.pause();
 										stream.fetch(apiCounterFetch);
 										stream.exceptionHandler(ex -> {

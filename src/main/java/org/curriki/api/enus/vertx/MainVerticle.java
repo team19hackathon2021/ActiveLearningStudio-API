@@ -9,9 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.computate.vertx.handlebars.AuthHelpers;
+import org.computate.vertx.handlebars.DateHelpers;
+import org.computate.vertx.handlebars.SiteHelpers;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.model.resource.CurrikiResourceEnUSGenApiService;
-import org.curriki.api.enus.user.SiteUserEnUSGenApiService;
+import org.curriki.api.enus.model.user.SiteUserEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

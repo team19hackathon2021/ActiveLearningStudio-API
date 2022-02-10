@@ -3,47 +3,46 @@ package org.curriki.api.enus.model.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.curriki.api.enus.base.BaseModel;
-import org.curriki.api.enus.request.api.ApiRequest;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.curriki.api.enus.model.resource.CurrikiResource;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.apache.commons.lang3.StringUtils;
+import org.curriki.api.enus.model.base.BaseModelPage;
 import java.lang.Integer;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.curriki.api.enus.wrap.Wrap;
-import org.curriki.api.enus.java.ZonedDateTimeDeserializer;
-import org.apache.commons.collections.CollectionUtils;
+import org.computate.vertx.api.ApiRequest;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.curriki.api.enus.java.ZonedDateTimeSerializer;
 import java.lang.String;
+import org.curriki.api.enus.model.base.BaseModel;
 import java.math.RoundingMode;
-import org.curriki.api.enus.search.SearchList;
 import org.slf4j.Logger;
 import java.math.MathContext;
 import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.curriki.api.enus.config.ConfigKeys;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.vertx.search.list.SearchList;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.curriki.api.enus.base.BaseModelPage;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(CurrikiResourceGenPage.class);
@@ -59,10 +58,10 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected SearchList<CurrikiResource> searchListCurrikiResource_;
 
-	/**	<br/> The entity searchListCurrikiResource_
+	/**	<br> The entity searchListCurrikiResource_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListCurrikiResource_">Find the entity searchListCurrikiResource_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListCurrikiResource_">Find the entity searchListCurrikiResource_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _searchListCurrikiResource_(Wrap<SearchList<CurrikiResource>> w);
@@ -91,16 +90,16 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	/////////////////////////
 
 	/**	 The entity listCurrikiResource
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonArray(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonInclude(Include.NON_NULL)
 	protected JsonArray listCurrikiResource = new JsonArray();
 
-	/**	<br/> The entity listCurrikiResource
-	 *  It is constructed before being initialized with the constructor by default JsonArray(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listCurrikiResource">Find the entity listCurrikiResource in Solr</a>
-	 * <br/>
-	 * @param listCurrikiResource is the entity already constructed. 
+	/**	<br> The entity listCurrikiResource
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listCurrikiResource">Find the entity listCurrikiResource in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _listCurrikiResource(JsonArray l);
 
@@ -131,10 +130,10 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer currikiResourceCount;
 
-	/**	<br/> The entity currikiResourceCount
+	/**	<br> The entity currikiResourceCount
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:currikiResourceCount">Find the entity currikiResourceCount in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:currikiResourceCount">Find the entity currikiResourceCount in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _currikiResourceCount(Wrap<Integer> w);
@@ -164,16 +163,16 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 		return (CurrikiResourceGenPage)this;
 	}
 
-	public static Integer staticSolrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrCurrikiResourceCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqCurrikiResourceCount(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResourceGenPage.staticSolrStrCurrikiResourceCount(siteRequest_, CurrikiResourceGenPage.staticSolrCurrikiResourceCount(siteRequest_, CurrikiResourceGenPage.staticSetCurrikiResourceCount(siteRequest_, o)));
+	public static String staticSearchFqCurrikiResourceCount(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResourceGenPage.staticSearchStrCurrikiResourceCount(siteRequest_, CurrikiResourceGenPage.staticSearchCurrikiResourceCount(siteRequest_, CurrikiResourceGenPage.staticSetCurrikiResourceCount(siteRequest_, o)));
 	}
 
 	//////////////////////
@@ -187,10 +186,10 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected CurrikiResource currikiResource_;
 
-	/**	<br/> The entity currikiResource_
+	/**	<br> The entity currikiResource_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:currikiResource_">Find the entity currikiResource_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:currikiResource_">Find the entity currikiResource_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _currikiResource_(Wrap<CurrikiResource> w);
@@ -226,10 +225,10 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br/> The entity pk
+	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourceGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> w);
@@ -259,16 +258,16 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 		return (CurrikiResourceGenPage)this;
 	}
 
-	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResourceGenPage.staticSolrStrPk(siteRequest_, CurrikiResourceGenPage.staticSolrPk(siteRequest_, CurrikiResourceGenPage.staticSetPk(siteRequest_, o)));
+	public static String staticSearchFqPk(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResourceGenPage.staticSearchStrPk(siteRequest_, CurrikiResourceGenPage.staticSearchPk(siteRequest_, CurrikiResourceGenPage.staticSetPk(siteRequest_, o)));
 	}
 
 	//////////////
@@ -417,56 +416,56 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchCurrikiResourceGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrCurrikiResourceGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchCurrikiResourceGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "currikiResourceCount":
-			return CurrikiResourceGenPage.staticSolrCurrikiResourceCount(siteRequest_, (Integer)o);
+			return CurrikiResourceGenPage.staticSearchCurrikiResourceCount(siteRequest_, (Integer)o);
 		case "pk":
-			return CurrikiResourceGenPage.staticSolrPk(siteRequest_, (Long)o);
+			return CurrikiResourceGenPage.staticSearchPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrCurrikiResourceGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrCurrikiResourceGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "currikiResourceCount":
-			return CurrikiResourceGenPage.staticSolrStrCurrikiResourceCount(siteRequest_, (Integer)o);
+			return CurrikiResourceGenPage.staticSearchStrCurrikiResourceCount(siteRequest_, (Integer)o);
 		case "pk":
-			return CurrikiResourceGenPage.staticSolrStrPk(siteRequest_, (Long)o);
+			return CurrikiResourceGenPage.staticSearchStrPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrStrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchStrBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqCurrikiResourceGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqCurrikiResourceGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqCurrikiResourceGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "currikiResourceCount":
-			return CurrikiResourceGenPage.staticSolrFqCurrikiResourceCount(siteRequest_, o);
+			return CurrikiResourceGenPage.staticSearchFqCurrikiResourceCount(siteRequest_, o);
 		case "pk":
-			return CurrikiResourceGenPage.staticSolrFqPk(siteRequest_, o);
+			return CurrikiResourceGenPage.staticSearchFqPk(siteRequest_, o);
 			default:
-				return BaseModelPage.staticSolrFqBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchFqBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -496,19 +495,6 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 		}
 	}
 
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestCurrikiResourceGenPage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof CurrikiResourceGenPage) {
-			CurrikiResourceGenPage original = (CurrikiResourceGenPage)o;
-			super.apiRequestBaseModelPage();
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -524,4 +510,30 @@ public abstract class CurrikiResourceGenPageGen<DEV> extends BaseModelPage {
 	public static final String VAR_currikiResourceCount = "currikiResourceCount";
 	public static final String VAR_currikiResource_ = "currikiResource_";
 	public static final String VAR_pk = "pk";
+
+	public static final String DISPLAY_NAME_searchListCurrikiResource_ = "";
+	public static final String DISPLAY_NAME_listCurrikiResource = "";
+	public static final String DISPLAY_NAME_currikiResourceCount = "";
+	public static final String DISPLAY_NAME_currikiResource_ = "";
+	public static final String DISPLAY_NAME_pk = "";
+
+	public static String displayNameForClass(String var) {
+		return CurrikiResourceGenPage.displayNameCurrikiResourceGenPage(var);
+	}
+	public static String displayNameCurrikiResourceGenPage(String var) {
+		switch(var) {
+		case VAR_searchListCurrikiResource_:
+			return DISPLAY_NAME_searchListCurrikiResource_;
+		case VAR_listCurrikiResource:
+			return DISPLAY_NAME_listCurrikiResource;
+		case VAR_currikiResourceCount:
+			return DISPLAY_NAME_currikiResourceCount;
+		case VAR_currikiResource_:
+			return DISPLAY_NAME_currikiResource_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		default:
+			return BaseModelPage.displayNameBaseModelPage(var);
+		}
+	}
 }

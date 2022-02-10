@@ -1,23 +1,21 @@
-package org.curriki.api.enus.model.resource;
+package org.curriki.api.enus.model.base;
 
-import java.lang.String;
+import org.curriki.api.enus.request.SiteRequestEnUS;
 import java.lang.Long;
+import java.lang.String;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.lang.Boolean;
 import java.util.List;
-import java.math.BigDecimal;
-import java.lang.Integer;
-import java.time.LocalDateTime;
-import org.curriki.api.enus.model.base.BaseModelPage;
-import org.curriki.api.enus.request.SiteRequestEnUS;
+import org.curriki.api.enus.page.PageLayout;
 import org.curriki.api.enus.model.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import org.computate.vertx.search.list.SearchList;
 import org.computate.search.wrap.Wrap;
-import org.curriki.api.enus.page.PageLayout;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import io.vertx.core.json.JsonObject;
@@ -31,6 +29,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,34 +41,34 @@ import org.curriki.api.enus.config.ConfigKeys;
 /**
  * Translate: false
  **/
-public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelPage> {
+public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 
 	/**
 	 * {@inheritDoc}
 	 * Ignore: true
 	 **/
-	protected void _searchListCurrikiResource_(Wrap<SearchList<CurrikiResource>> w) {
+	protected void _searchListBaseModel_(Wrap<SearchList<BaseModel>> w) {
 	}
 
 	/**
 	 * {@inheritDoc}
 	 **/
-	protected void _listCurrikiResource(JsonArray l) {
-		Optional.ofNullable(searchListCurrikiResource_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+	protected void _listBaseModel(JsonArray l) {
+		Optional.ofNullable(searchListBaseModel_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
 	}
 
-	protected void _currikiResourceCount(Wrap<Integer> w) {
-		w.o(searchListCurrikiResource_ == null ? 0 : searchListCurrikiResource_.size());
+	protected void _baseModelCount(Wrap<Integer> w) {
+		w.o(searchListBaseModel_ == null ? 0 : searchListBaseModel_.size());
 	}
 
-	protected void _currikiResource_(Wrap<CurrikiResource> w) {
-		if(currikiResourceCount == 1)
-			w.o(searchListCurrikiResource_.get(0));
+	protected void _baseModel_(Wrap<BaseModel> w) {
+		if(baseModelCount == 1)
+			w.o(searchListBaseModel_.get(0));
 	}
 
 	protected void _pk(Wrap<Long> w) {
-		if(currikiResourceCount == 1)
-			w.o(currikiResource_.getPk());
+		if(baseModelCount == 1)
+			w.o(baseModel_.getPk());
 	}
 
 	@Override
@@ -79,24 +78,22 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 
 	@Override
 	protected void _classSimpleName(Wrap<String> w) {
-		w.o("CurrikiResource");
+		w.o("BaseModel");
 	}
 
 	@Override
 	protected void _pageTitle(Wrap<String> c) {
-		if(currikiResource_ != null && currikiResource_.getObjectTitle() != null)
-			c.o(currikiResource_.getObjectTitle());
-		else if(currikiResource_ != null)
-			c.o("resources");
-		else if(searchListCurrikiResource_ == null || currikiResourceCount == 0)
-			c.o("no resource found");
-		else
-			c.o("resources");
+		if(baseModel_ != null && baseModel_.getObjectTitle() != null)
+			c.o(baseModel_.getObjectTitle());
+		else if(baseModel_ != null)
+			c.o("");
+		else if(searchListBaseModel_ == null || baseModelCount == 0)
+			c.o("");
 	}
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/api/resource");
+		c.o("");
 	}
 
 	@Override
@@ -107,16 +104,11 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 	}
 
 	@Override
-	protected void _rolesRequired(List<String> l) {
-		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_CurrikiResource")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
-	}
-
-	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
-		Long start = searchListCurrikiResource_.getStart().longValue();
-		Long rows = searchListCurrikiResource_.getRows().longValue();
-		Long foundNum = searchListCurrikiResource_.getQueryResponse().getResponse().getNumFound().longValue();
+		Long start = searchListBaseModel_.getStart().longValue();
+		Long rows = searchListBaseModel_.getRows().longValue();
+		Long foundNum = searchListBaseModel_.getQueryResponse().getResponse().getNumFound().longValue();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -162,7 +154,7 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListCurrikiResource_.getQueryResponse().getResponse().getNumFound().longValue();
+		Long num = searchListBaseModel_.getQueryResponse().getResponse().getNumFound().longValue();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -190,15 +182,15 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 		}
 		query.put("q", q);
 
-		Long rows1 = Optional.ofNullable(searchListCurrikiResource_).map(l -> l.getRows()).orElse(10L);
-		Long start1 = Optional.ofNullable(searchListCurrikiResource_).map(l -> l.getStart()).orElse(1L);
+		Long rows1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getRows()).orElse(10L);
+		Long start1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getStart()).orElse(1L);
 		Long start2 = start1 - rows1;
 		Long start3 = start1 + rows1;
 		Long rows2 = rows1 / 2;
 		Long rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(searchListCurrikiResource_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
+		for(String fq : Optional.ofNullable(searchListBaseModel_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -209,7 +201,7 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(String sort : Optional.ofNullable(searchListCurrikiResource_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+		for(String sort : Optional.ofNullable(searchListBaseModel_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
 			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort, "_")).put("order", StringUtils.substringAfter(sort, " ")));
 		}
 		query.put("sort", sorts);
@@ -222,16 +214,6 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/api/resource-999.png");
-	}
-
-	@Override
-	protected void _contextIconGroup(Wrap<String> c) {
-			c.o("regular");
-	}
-
-	@Override
-	protected void _contextIconName(Wrap<String> c) {
-			c.o("file");
+			c.o("/png-999.png");
 	}
 }
