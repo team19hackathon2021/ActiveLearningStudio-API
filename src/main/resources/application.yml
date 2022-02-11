@@ -82,8 +82,7 @@ MOONSHOTS_FETCH_SIZE: 100
 ENABLE_IMPORT_DATA: true
 
 ENABLE_IMPORT_DATA_CurrikiResource: true
-IMPORT_DATA_START_TIME_CurrikiResource: 00:00 America/New_York
-IMPORT_DATA_PERIOD_CurrikiResource: 1 hour
+IMPORT_DATA_PERIOD_CurrikiResource: 1 day
 
 # The Auth roles required to be an admin in the site. 
 AUTH_ROLES_ADMIN: ['SiteAdmin']

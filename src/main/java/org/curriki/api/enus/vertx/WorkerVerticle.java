@@ -205,8 +205,16 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			Duration duration = TimeTool.parseNextDuration(importPeriod);
 			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
 			// to give the following code enough time to complete it's calculations to ensure the import starts correctly. 
-			ZonedDateTime nextStartTime = Optional.of(TimeTool.parseNextZonedTime(importStartTime))
-					.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+
+			ZonedDateTime nextStartTime;
+			if(importStartTime == null) {
+				nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
+						.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+			} else {
+				nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
+						.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+			}
+
 			// Get the time now for the import start time zone. 
 			ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
 			BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
@@ -218,9 +226,14 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			}
 			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			ZonedDateTime nextStartTime2 = nextStartTime;
-			vertx.setTimer(nextStartDuration.toMillis(), a -> {
+				
+			if(importStartTime == null) {
 				importDataClass(classSimpleName, nextStartTime2);
-			});
+			} else {
+				vertx.setTimer(nextStartDuration.toMillis(), a -> {
+					importDataClass(classSimpleName, nextStartTime2);
+				});
+			}
 		} else {
 			LOG.info(String.format(importTimerSkip, classSimpleName));
 		}
@@ -318,7 +331,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
 					+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
 					+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
-					+ " approvalStatusDate, spamUser from currikidb.resources limit 0,10"
+					+ " approvalStatusDate, spamUser from currikidb.resources"
 					, new JsonArray(), a -> {
 				SQLRowStream sqlRowStream = a.result();
 				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
@@ -618,7 +631,6 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				LOG.error(processRowCurrikiResourceFail, ex);
 				promise.fail(ex);
 			});
-			LOG.info(row.toString());
 		} catch(Exception ex) {
 			LOG.error(processRowCurrikiResourceFail, ex);
 			promise.fail(ex);
