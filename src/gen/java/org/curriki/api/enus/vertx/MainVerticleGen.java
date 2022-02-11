@@ -161,6 +161,11 @@ DROP TABLE SiteUser CASCADE;
 	public static final String configureOpenApiSuccess1 = "The auth server and API was configured successfully. ";
 	public static final String configureOpenApiSuccess = configureOpenApiSuccess1;
 
+	public static final String configureConfigComplete1 = "The config was configured successfully. ";
+	public static final String configureConfigComplete = configureConfigComplete1;
+	public static final String configureConfigFail1 = "Could not configure the config(). ";
+	public static final String configureConfigFail = configureConfigFail1;
+
 	public static final String configureSharedWorkerExecutorFail1 = "Could not configure the shared worker executor. ";
 	public static final String configureSharedWorkerExecutorFail = configureSharedWorkerExecutorFail1;
 	public static final String configureSharedWorkerExecutorComplete1 = "The shared worker executor \"{}\" was configured successfully. ";
@@ -379,7 +384,7 @@ DROP TABLE SiteUser CASCADE;
 		return sb.toString();
 	}
 
-	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
+	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureConfigComplete1, configureConfigFail1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
 
 
 
