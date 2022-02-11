@@ -1,4 +1,4 @@
-package org.curriki.api.enus.model.resource;
+package org.curriki.api.enus.model.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
@@ -11,12 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.computate.vertx.api.ApiRequest;
+import org.curriki.api.enus.model.base.BaseModelGenPage;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.curriki.api.enus.model.base.BaseModel;
 import java.math.RoundingMode;
-import org.curriki.api.enus.model.resource.CurrikiResourceGenPage;
 import org.slf4j.Logger;
 import java.math.MathContext;
 import io.vertx.core.Promise;
@@ -36,27 +36,27 @@ import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourcePage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br>
  **/
-public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage {
-	protected static final Logger LOG = LoggerFactory.getLogger(CurrikiResourcePage.class);
+public abstract class BaseModelPageGen<DEV> extends BaseModelGenPage {
+	protected static final Logger LOG = LoggerFactory.getLogger(BaseModelPage.class);
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepCurrikiResourcePage(SiteRequestEnUS siteRequest_) {
+	public Future<Void> promiseDeepBaseModelPage(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		return promiseDeepCurrikiResourcePage();
+		return promiseDeepBaseModelPage();
 	}
 
-	public Future<Void> promiseDeepCurrikiResourcePage() {
+	public Future<Void> promiseDeepBaseModelPage() {
 		Promise<Void> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
-		promiseCurrikiResourcePage(promise2);
+		promiseBaseModelPage(promise2);
 		promise2.future().onSuccess(a -> {
-			super.promiseDeepCurrikiResourceGenPage(siteRequest_).onSuccess(b -> {
+			super.promiseDeepBaseModelGenPage(siteRequest_).onSuccess(b -> {
 				promise.complete();
 			}).onFailure(ex -> {
 				promise.fail(ex);
@@ -67,7 +67,7 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		return promise.future();
 	}
 
-	public Future<Void> promiseCurrikiResourcePage(Promise<Void> promise) {
+	public Future<Void> promiseBaseModelPage(Promise<Void> promise) {
 		Future.future(a -> a.complete()).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
@@ -85,19 +85,19 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	}
 
 	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
-		return promiseDeepCurrikiResourcePage(siteRequest_);
+		return promiseDeepBaseModelPage(siteRequest_);
 	}
 
 	/////////////////
 	// siteRequest //
 	/////////////////
 
-	public void siteRequestCurrikiResourcePage(SiteRequestEnUS siteRequest_) {
-			super.siteRequestCurrikiResourceGenPage(siteRequest_);
+	public void siteRequestBaseModelPage(SiteRequestEnUS siteRequest_) {
+			super.siteRequestBaseModelGenPage(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
-		siteRequestCurrikiResourcePage(siteRequest_);
+		siteRequestBaseModelPage(siteRequest_);
 	}
 
 	/////////////
@@ -109,7 +109,7 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = obtainCurrikiResourcePage(v);
+				o = obtainBaseModelPage(v);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.obtainForClass(v);
@@ -121,11 +121,11 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		}
 		return o;
 	}
-	public Object obtainCurrikiResourcePage(String var) {
-		CurrikiResourcePage oCurrikiResourcePage = (CurrikiResourcePage)this;
+	public Object obtainBaseModelPage(String var) {
+		BaseModelPage oBaseModelPage = (BaseModelPage)this;
 		switch(var) {
 			default:
-				return super.obtainCurrikiResourceGenPage(var);
+				return super.obtainBaseModelGenPage(var);
 		}
 	}
 
@@ -138,7 +138,7 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = relateCurrikiResourcePage(v, val);
+				o = relateBaseModelPage(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.relateForClass(v, val);
@@ -146,11 +146,11 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		}
 		return o != null;
 	}
-	public Object relateCurrikiResourcePage(String var, Object val) {
-		CurrikiResourcePage oCurrikiResourcePage = (CurrikiResourcePage)this;
+	public Object relateBaseModelPage(String var, Object val) {
+		BaseModelPage oBaseModelPage = (BaseModelPage)this;
 		switch(var) {
 			default:
-				return super.relateCurrikiResourceGenPage(var, val);
+				return super.relateBaseModelGenPage(var, val);
 		}
 	}
 
@@ -159,12 +159,12 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	///////////////
 
 	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSetCurrikiResourcePage(entityVar,  siteRequest_, o);
+		return staticSetBaseModelPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSetCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static Object staticSetBaseModelPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSetCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+				return BaseModelGenPage.staticSetBaseModelGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -173,12 +173,12 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	////////////////
 
 	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchCurrikiResourcePage(entityVar,  siteRequest_, o);
+		return staticSearchBaseModelPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSearchCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchBaseModelPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSearchCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+				return BaseModelGenPage.staticSearchBaseModelGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -187,12 +187,12 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	///////////////////
 
 	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchStrCurrikiResourcePage(entityVar,  siteRequest_, o);
+		return staticSearchStrBaseModelPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchStrCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrBaseModelPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSearchStrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+				return BaseModelGenPage.staticSearchStrBaseModelGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -201,12 +201,12 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	//////////////////
 
 	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSearchFqCurrikiResourcePage(entityVar,  siteRequest_, o);
+		return staticSearchFqBaseModelPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchFqCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqBaseModelPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSearchFqCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+				return BaseModelGenPage.staticSearchFqBaseModelGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -220,7 +220,7 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = defineCurrikiResourcePage(v, val);
+					o = defineBaseModelPage(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
 					o = oBaseModel.defineForClass(v, val);
@@ -229,10 +229,10 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		}
 		return o != null;
 	}
-	public Object defineCurrikiResourcePage(String var, Object val) {
+	public Object defineBaseModelPage(String var, Object val) {
 		switch(var.toLowerCase()) {
 			default:
-				return super.defineCurrikiResourceGenPage(var, val);
+				return super.defineBaseModelGenPage(var, val);
 		}
 	}
 
@@ -249,12 +249,12 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 
 
 	public static String displayNameForClass(String var) {
-		return CurrikiResourcePage.displayNameCurrikiResourcePage(var);
+		return BaseModelPage.displayNameBaseModelPage(var);
 	}
-	public static String displayNameCurrikiResourcePage(String var) {
+	public static String displayNameBaseModelPage(String var) {
 		switch(var) {
 		default:
-			return CurrikiResourceGenPage.displayNameCurrikiResourceGenPage(var);
+			return BaseModelGenPage.displayNameBaseModelGenPage(var);
 		}
 	}
 }

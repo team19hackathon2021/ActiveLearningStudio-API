@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;
-
-import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.wrap.Wrap;
-import org.curriki.api.enus.writer.AllWriter;
+import org.computate.search.wrap.Wrap;
+import org.computate.vertx.api.ApiRequest;
+import org.computate.vertx.model.user.ComputateVertxSiteUser;
+import org.computate.vertx.request.ComputateVertxSiteRequest;
+import org.curriki.api.enus.model.user.SiteUser;
 
 import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
@@ -31,7 +31,7 @@ import io.vertx.sqlclient.SqlConnection;
  * Map.hackathonLabels: Java
  * Map.hackathonLabelsGen: Java
  */
-public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Serializable {
+public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements ComputateVertxSiteRequest, Serializable {
 
 	private static final Pattern PATTERN_SESSION = Pattern.compile(".*vertx-web.session=(\\w+).*");
 
@@ -146,6 +146,17 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 		});
 	}
 
+	protected void _siteUser_(Wrap<SiteUser> c) { 
+		if(userId != null) {
+			SiteUser o = new SiteUser();
+			o.setUserName(userName);
+			o.setUserFirstName(userFirstName);
+			o.setUserLastName(userLastName);
+			o.setUserId(userId);
+			c.o(o);
+		}
+	}
+
 	protected void _solrDocument(Wrap<SolrDocument> c) {  
 	}
 
@@ -186,5 +197,20 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 		o.setUserId(userId); // The user identifier in the authentication system
 		o.setApiRequest_(apiRequest_); // The current API request information
 		return o;
+	}
+
+	@Override
+	public void initDeepForClass() {
+		initDeepForClass(siteRequest_);
+	}
+
+	@Override
+	public <T extends ComputateVertxSiteRequest> void setSiteRequest_(T siteRequest) {
+		this.siteRequest_ = (SiteRequestEnUS)siteRequest;
+	}
+
+	@Override
+	public <T extends ComputateVertxSiteUser> T getSiteUser_(Class<T> clazz) {
+		return (T)siteUser_;
 	}
 }

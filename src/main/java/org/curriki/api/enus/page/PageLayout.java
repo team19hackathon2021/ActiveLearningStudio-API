@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.computate.search.wrap.Wrap;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.wrap.Wrap;
 
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;

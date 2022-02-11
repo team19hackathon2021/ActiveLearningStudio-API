@@ -81,7 +81,7 @@ POSTGRES_HOST_NAME: "postgresql.{{ POSTGRES_NAMESPACE }}.svc"
 # The default username for the PostreSQL database.
 POSTGRES_DB_USER: computate
 # The default PostgreSQL database name.
-POSTGRES_DB_NAME: "{{ APP_NAME }}"
+POSTGRES_DB_NAME: "openlearnx"
 # The default PostgreSQL database password.
 POSTGRES_DB_PASSWORD: "..."
 # The default storage class name for persistent volumes for PostgreSQL. 
@@ -94,14 +94,14 @@ POSTGRES_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
 # The Github Organization. 
 GITHUB_ORG_NAME: "team19hackathon2021"
 # The Github Repository name. 
-GITHUB_REPO_NAME: "{{ SITE_NAME }}"
+GITHUB_REPO_NAME: "ActiveLearningStudio-API"
 
 ###############################
 # application global defaults #
 ###############################
 
 # The source code directory of the application
-SITE_SRC: "/usr/local/src/{{ SITE_NAME }}"
+SITE_SRC: "{{ lookup('env', 'HOME') }}/.local/src/{{ SITE_NAME }}"
 # The application OpenShift base URL where application will be deployed.
 SITE_HOST: "{{ REDHAT_OPENSHIFT_HOST }}"
 # The application OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
@@ -109,7 +109,7 @@ SITE_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
 # The application OpenShift namespace where application be deployed.
 SITE_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
 # The base URL where the static files will point to.
-SITE_STATIC_BASE_URL: "https://computate.neocities.org/curriki"
+SITE_STATIC_BASE_URL: "https://computate.neocities.org/openlearnx"
 # Where static files are placed in the pod. 
 SITE_STATIC_PATH: 
 # App memory limit. 
@@ -132,6 +132,8 @@ SITE_BASE_URL_ENUS: "https://{{ SITE_HOST_NAME_ENUS }}"
 # The Solr collection of the site.
 SITE_SOLR_COLLECTION_ENUS: "{{ SITE_NAME }}"
 # The timezone of the site.
+SITE_LOCALE: "en-US"
+# The timezone of the site.
 SITE_ZONE_ENUS: "America/Denver"
 # The PostgreSQL database host name of the site.
 SITE_DB_HOST_NAME_ENUS: "localhost"
@@ -142,7 +144,7 @@ SITE_DB_PASSWORD_ENUS: "{{ POSTGRES_DB_PASSWORD }}"
 # The PostgreSQL database name of the site.
 SITE_DB_NAME_ENUS: "{{ SITE_NAME }}"
 # The Java main class of the site.
-SITE_JAVA_MAIN_CLASS_ENUS: io.serratus.api.enus.vertx.MainVerticle
+SITE_JAVA_MAIN_CLASS_ENUS: org.curriki.api.enus.vertx.MainVerticle
 
 ########################
 # serrtus-api defaults #
@@ -150,9 +152,7 @@ SITE_JAVA_MAIN_CLASS_ENUS: io.serratus.api.enus.vertx.MainVerticle
 
 AUTH_ROLES_ADMIN: [ SiteAdmin ]
 AUTH_ROLES_REQUIRED_SiteUser: [ "SiteAdmin" ]
-AUTH_ROLES_REQUIRED_SequenceRun: [ "User" ]
-AUTH_ROLES_REQUIRED_BioSample: [ "User" ]
-AUTH_ROLES_REQUIRED_Taxonomy: [ "User" ]
+AUTH_ROLES_REQUIRED_CurrikiResource: [ "User" ]
 
 #################
 # SMTP defaults #
@@ -282,3 +282,18 @@ ENABLE_DB_SOLR_SYNC: false
 ENABLE_REFRESH_DATA: false
 
 TIMER_DB_SOLR_SYNC_IN_SECONDS: 1
+
+# Connection to the Moonshots MySQL database. 
+MOONSHOTS_HOST: 
+MOONSHOTS_PORT: 
+MOONSHOTS_DATABASE: 
+MOONSHOTS_USERNAME: 
+MOONSHOTS_PASSWORD: 
+MOONSHOTS_FETCH_SIZE: 10
+
+# Enable data import in the site. 
+ENABLE_IMPORT_DATA: true
+
+ENABLE_IMPORT_DATA_CurrikiResource: true
+IMPORT_DATA_START_TIME_CurrikiResource: 10:48 America/Denver
+IMPORT_DATA_PERIOD_CurrikiResource: 1 hour

@@ -1,12 +1,12 @@
 package org.curriki.api.enus.model.resource;
 
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.user.SiteUser;
-import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.search.SearchResult;
-import org.curriki.api.enus.vertx.MailVerticle;
+import org.curriki.api.enus.model.user.SiteUser;
+import org.computate.vertx.api.ApiRequest;
+import org.computate.vertx.search.list.SearchResult;
+import org.computate.vertx.verticle.EmailVerticle;
 import org.curriki.api.enus.config.ConfigKeys;
-import org.curriki.api.enus.base.BaseApiServiceImpl;
+import org.computate.vertx.api.BaseApiServiceImpl;
 import io.vertx.ext.web.client.WebClient;
 import java.util.Objects;
 import io.vertx.core.WorkerExecutor;
@@ -22,17 +22,10 @@ import java.util.concurrent.TimeUnit;
 import java.time.Instant;
 import java.util.stream.Collectors;
 import io.vertx.core.json.Json;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.security.Principal;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.io.PrintWriter;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
 import java.util.Collection;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -71,9 +64,7 @@ import java.net.URLEncoder;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.http.HttpHeaders;
-import org.apache.http.client.utils.URLEncodedUtils;
 import java.nio.charset.Charset;
-import org.apache.http.NameValuePair;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.ext.web.api.service.ServiceResponse;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
@@ -82,22 +73,18 @@ import io.vertx.ext.auth.User;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.net.URLDecoder;
-import org.apache.solr.util.DateMathParser;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import org.apache.solr.common.util.NamedList;
-import org.apache.solr.client.solrj.response.PivotField;
-import org.apache.solr.client.solrj.response.RangeFacet;
-import org.apache.solr.client.solrj.response.FacetField;
 import java.util.Map.Entry;
 import java.util.Iterator;
+import org.computate.search.tool.SearchTool;
+import org.computate.search.response.solr.SolrResponse;
 import java.util.Base64;
 import java.time.ZonedDateTime;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.curriki.api.enus.user.SiteUserEnUSApiServiceImpl;
-import org.curriki.api.enus.search.SearchList;
+import org.curriki.api.enus.model.user.SiteUserEnUSApiServiceImpl;
+import org.computate.vertx.search.list.SearchList;
 
 
 /**
@@ -115,7 +102,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void searchCurrikiResource(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_CurrikiResource")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -155,7 +142,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -174,19 +161,17 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	public Future<ServiceResponse> response200SearchCurrikiResource(SearchList<CurrikiResource> listCurrikiResource) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listCurrikiResource.getSiteRequest_();
-			QueryResponse responseSearch = listCurrikiResource.getQueryResponse();
-			SolrDocumentList solrDocuments = listCurrikiResource.getSolrDocumentList();
-			Long searchInMillis = Long.valueOf(responseSearch.getQTime());
-			Long transmissionInMillis = responseSearch.getElapsedTime();
-			Long startNum = responseSearch.getResults().getStart();
-			Long foundNum = responseSearch.getResults().getNumFound();
-			Integer returnedNum = responseSearch.getResults().size();
+			SiteRequestEnUS siteRequest = listCurrikiResource.getSiteRequest_(SiteRequestEnUS.class);
+			SolrResponse responseSearch = listCurrikiResource.getQueryResponse();
+			List<SolrResponse.Doc> solrDocuments = listCurrikiResource.getQueryResponse().getResponse().getDocs();
+			Long searchInMillis = Long.valueOf(responseSearch.getResponseHeader().getqTime());
+			Long startNum = listCurrikiResource.getRequest().getStart();
+			Long foundNum = responseSearch.getResponse().getNumFound();
+			Integer returnedNum = responseSearch.getResponse().getDocs().size();
 			String searchTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(searchInMillis), TimeUnit.MILLISECONDS.toMillis(searchInMillis) - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(searchInMillis)));
-			String transmissionTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis), TimeUnit.MILLISECONDS.toMillis(transmissionInMillis) - TimeUnit.SECONDS.toSeconds(TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis)));
 			String nextCursorMark = responseSearch.getNextCursorMark();
-			Exception exceptionSearch = responseSearch.getException();
-			List<String> fls = listCurrikiResource.getFields();
+			String exceptionSearch = Optional.ofNullable(responseSearch.getError()).map(error -> error.getMsg()).orElse(null);
+			List<String> fls = listCurrikiResource.getRequest().getFields();
 
 			JsonObject json = new JsonObject();
 			json.put("startNum", startNum);
@@ -194,7 +179,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			json.put("returnedNum", returnedNum);
 			if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves")) {
 				json.put("searchTime", searchTime);
-				json.put("transmissionTime", transmissionTime);
 			}
 			if(nextCursorMark != null) {
 				json.put("nextCursorMark", nextCursorMark);
@@ -222,49 +206,42 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			});
 			json.put("list", l);
 
-			List<FacetField> facetFields = responseSearch.getFacetFields();
+			SolrResponse.FacetFields facetFields = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetFields()).orElse(null);
 			if(facetFields != null) {
 				JsonObject facetFieldsJson = new JsonObject();
 				json.put("facet_fields", facetFieldsJson);
-				for(FacetField facetField : facetFields) {
+				for(SolrResponse.FacetField facetField : facetFields.getFacets().values()) {
 					String facetFieldVar = StringUtils.substringBefore(facetField.getName(), "_docvalues_");
 					JsonObject facetFieldCounts = new JsonObject();
 					facetFieldsJson.put(facetFieldVar, facetFieldCounts);
-					List<FacetField.Count> facetFieldValues = facetField.getValues();
-					for(Integer i = 0; i < facetFieldValues.size(); i+= 1) {
-						FacetField.Count count = (FacetField.Count)facetFieldValues.get(i);
-						facetFieldCounts.put(count.getName(), count.getCount());
-					}
+					facetField.getCounts().forEach((name, count) -> {
+						facetFieldCounts.put(name, count);
+					});
 				}
 			}
 
-			List<RangeFacet> facetRanges = responseSearch.getFacetRanges();
+			SolrResponse.FacetRanges facetRanges = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetRanges()).orElse(null);
 			if(facetRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				json.put("facet_ranges", rangeJson);
-				for(RangeFacet rangeFacet : facetRanges) {
+				for(SolrResponse.FacetRange rangeFacet : facetRanges.getRanges().values()) {
 					JsonObject rangeFacetJson = new JsonObject();
 					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsMap = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsMap);
-					List<?> rangeFacetCounts = rangeFacet.getCounts();
-					for(Integer i = 0; i < rangeFacetCounts.size(); i+= 1) {
-						RangeFacet.Count count = (RangeFacet.Count)rangeFacetCounts.get(i);
-						rangeFacetCountsMap.put(count.getValue(), count.getCount());
-					}
+					rangeFacet.getCounts().forEach((name, count) -> {
+						rangeFacetCountsMap.put(name, count);
+					});
 				}
 			}
 
-			NamedList<List<PivotField>> facetPivot = responseSearch.getFacetPivot();
-			if(facetPivot != null) {
+			SolrResponse.FacetPivots facetPivots = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetPivots()).orElse(null);
+			if(facetPivots != null) {
 				JsonObject facetPivotJson = new JsonObject();
 				json.put("facet_pivot", facetPivotJson);
-				Iterator<Entry<String, List<PivotField>>> facetPivotIterator = responseSearch.getFacetPivot().iterator();
-				while(facetPivotIterator.hasNext()) {
-					Entry<String, List<PivotField>> pivotEntry = facetPivotIterator.next();
-					List<PivotField> pivotFields = pivotEntry.getValue();
-					String[] varsIndexed = pivotEntry.getKey().trim().split(",");
+				for(SolrResponse.FacetPivot facetPivot : facetPivots.getPivots().values()) {
+					String[] varsIndexed = facetPivot.getName().trim().split(",");
 					String[] entityVars = new String[varsIndexed.length];
 					for(Integer i = 0; i < entityVars.length; i++) {
 						String entityIndexed = varsIndexed[i];
@@ -272,11 +249,11 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					}
 					JsonArray pivotArray = new JsonArray();
 					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
-					responsePivotSearchCurrikiResource(pivotFields, pivotArray);
+					responsePivotSearchCurrikiResource(facetPivot.getPivot(), pivotArray);
 				}
 			}
 			if(exceptionSearch != null) {
-				json.put("exceptionSearch", exceptionSearch.getMessage());
+				json.put("exceptionSearch", exceptionSearch);
 			}
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
@@ -285,8 +262,8 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		}
 		return promise.future();
 	}
-	public void responsePivotSearchCurrikiResource(List<PivotField> pivotFields, JsonArray pivotArray) {
-		for(PivotField pivotField : pivotFields) {
+	public void responsePivotSearchCurrikiResource(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		for(SolrResponse.Pivot pivotField : pivots) {
 			String entityIndexed = pivotField.getField();
 			String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
 			JsonObject pivotJson = new JsonObject();
@@ -294,22 +271,20 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			pivotJson.put("field", entityVar);
 			pivotJson.put("value", pivotField.getValue());
 			pivotJson.put("count", pivotField.getCount());
-			List<RangeFacet> pivotRanges = pivotField.getFacetRanges();
-			List<PivotField> pivotFields2 = pivotField.getPivot();
+			Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+			List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivot();
 			if(pivotRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				pivotJson.put("ranges", rangeJson);
-				for(RangeFacet rangeFacet : pivotRanges) {
+				for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
 					JsonObject rangeFacetJson = new JsonObject();
 					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsObject = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsObject);
-					List<?> rangeFacetCounts = rangeFacet.getCounts();
-					for(Integer i = 0; i < rangeFacetCounts.size(); i+= 1) {
-						RangeFacet.Count count = (RangeFacet.Count)rangeFacetCounts.get(i);
-						rangeFacetCountsObject.put(count.getValue(), count.getCount());
-					}
+					rangeFacet.getCounts().forEach((value, count) -> {
+						rangeFacetCountsObject.put(value, count);
+					});
 				}
 			}
 			if(pivotFields2 != null) {
@@ -325,7 +300,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	@Override
 	public void patchCurrikiResource(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("patchCurrikiResource started. "));
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -348,7 +323,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					searchCurrikiResourceList(siteRequest, false, true, true).onSuccess(listCurrikiResource -> {
 						try {
 							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
-							if(listCurrikiResource.getQueryResponse().getResults().getNumFound() > 1
+							if(listCurrikiResource.getQueryResponse().getResponse().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
 									) {
@@ -358,8 +333,8 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							} else {
 
 								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(listCurrikiResource.getRows());
-								apiRequest.setNumFound(listCurrikiResource.getQueryResponse().getResults().getNumFound());
+								apiRequest.setRows(listCurrikiResource.getRequest().getRows());
+								apiRequest.setNumFound(listCurrikiResource.getQueryResponse().getResponse().getNumFound());
 								apiRequest.setNumPATCH(0L);
 								apiRequest.initDeepApiRequest(siteRequest);
 								siteRequest.setApiRequest_(apiRequest);
@@ -395,7 +370,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -413,9 +388,9 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	public Future<Void> listPATCHCurrikiResource(ApiRequest apiRequest, SearchList<CurrikiResource> listCurrikiResource) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
-		SiteRequestEnUS siteRequest = listCurrikiResource.getSiteRequest_();
+		SiteRequestEnUS siteRequest = listCurrikiResource.getSiteRequest_(SiteRequestEnUS.class);
 		listCurrikiResource.getList().forEach(o -> {
-			SiteRequestEnUS siteRequest2 = generateSiteRequestEnUS(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject());
+			SiteRequestEnUS siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequestEnUS.class);
 			o.setSiteRequest_(siteRequest2);
 			futures.add(Future.future(promise1 -> {
 				patchCurrikiResourceFuture(o, false).onSuccess(a -> {
@@ -428,7 +403,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		});
 		CompositeFuture.all(futures).onSuccess( a -> {
 			if(apiRequest != null) {
-				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listCurrikiResource.getQueryResponse().getResults().size());
+				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listCurrikiResource.getQueryResponse().getResponse().getDocs().size());
 				if(apiRequest.getNumFound() == 1L)
 					listCurrikiResource.first().apiRequestCurrikiResource();
 				eventBus.publish("websocketCurrikiResource", JsonObject.mapFrom(apiRequest).toString());
@@ -452,16 +427,16 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void patchCurrikiResourceFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
 				searchCurrikiResourceList(siteRequest, false, true, true).onSuccess(listCurrikiResource -> {
 					try {
 						CurrikiResource o = listCurrikiResource.first();
-						if(o != null && listCurrikiResource.getQueryResponse().getResults().getNumFound() == 1) {
+						if(o != null && listCurrikiResource.getQueryResponse().getResponse().getNumFound() == 1) {
 							ApiRequest apiRequest = new ApiRequest();
-							apiRequest.setRows(1);
+							apiRequest.setRows(1L);
 							apiRequest.setNumFound(1L);
 							apiRequest.setNumPATCH(0L);
 							apiRequest.initDeepApiRequest(siteRequest);
@@ -1253,7 +1228,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	@Override
 	public void postCurrikiResource(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("postCurrikiResource started. "));
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -1274,7 +1249,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					));
 				} else {
 					ApiRequest apiRequest = new ApiRequest();
-					apiRequest.setRows(1);
+					apiRequest.setRows(1L);
 					apiRequest.setNumFound(1L);
 					apiRequest.setNumPATCH(0L);
 					apiRequest.initDeepApiRequest(siteRequest);
@@ -1314,7 +1289,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1331,9 +1306,9 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void postCurrikiResourceFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			ApiRequest apiRequest = new ApiRequest();
-			apiRequest.setRows(1);
+			apiRequest.setRows(1L);
 			apiRequest.setNumFound(1L);
 			apiRequest.setNumPATCH(0L);
 			apiRequest.initDeepApiRequest(siteRequest);
@@ -1347,7 +1322,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2250,7 +2225,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	@Override
 	public void putimportCurrikiResource(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("putimportCurrikiResource started. "));
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -2273,8 +2248,8 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					try {
 						ApiRequest apiRequest = new ApiRequest();
 						JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
-						apiRequest.setRows(jsonArray.size());
-						apiRequest.setNumFound(new Integer(jsonArray.size()).longValue());
+						apiRequest.setRows(Long.valueOf(jsonArray.size()));
+						apiRequest.setNumFound(Long.valueOf(jsonArray.size()));
 						apiRequest.setNumPATCH(0L);
 						apiRequest.initDeepApiRequest(siteRequest);
 						siteRequest.setApiRequest_(apiRequest);
@@ -2306,7 +2281,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2370,10 +2345,10 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void putimportCurrikiResourceFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				ApiRequest apiRequest = new ApiRequest();
-				apiRequest.setRows(1);
+				apiRequest.setRows(1L);
 				apiRequest.setNumFound(1L);
 				apiRequest.setNumPATCH(0L);
 				apiRequest.initDeepApiRequest(siteRequest);
@@ -2385,11 +2360,11 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 				SearchList<CurrikiResource> searchList = new SearchList<CurrikiResource>();
 				searchList.setStore(true);
-				searchList.setQuery("*:*");
+				searchList.q("*:*");
 				searchList.setC(CurrikiResource.class);
-				searchList.addFilterQuery("deleted_docvalues_boolean:false");
-				searchList.addFilterQuery("archived_docvalues_boolean:false");
-				searchList.addFilterQuery("inheritPk_docvalues_string:" + ClientUtils.escapeQueryChars(body.getString("pk")));
+				searchList.fq("deleted_docvalues_boolean:false");
+				searchList.fq("archived_docvalues_boolean:false");
+				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(body.getString("pk")));
 				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 					try {
 						if(searchList.size() >= 1) {
@@ -2467,7 +2442,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				eventHandler.handle(Future.failedFuture(ex));
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2503,7 +2478,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void searchpageCurrikiResource(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_CurrikiResource")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -2543,7 +2518,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2566,7 +2541,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	public Future<ServiceResponse> response200SearchPageCurrikiResource(SearchList<CurrikiResource> listCurrikiResource) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listCurrikiResource.getSiteRequest_();
+			SiteRequestEnUS siteRequest = listCurrikiResource.getSiteRequest_(SiteRequestEnUS.class);
 			CurrikiResourcePage page = new CurrikiResourcePage();
 			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
 			siteRequest.setRequestHeaders(requestHeaders);
@@ -2624,7 +2599,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	}
 
 	public void searchCurrikiResourceQ(SearchList<CurrikiResource> searchList, String entityVar, String valueIndexed, String varIndexed) {
-		searchList.setQuery(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : ClientUtils.escapeQueryChars(valueIndexed)));
+		searchList.q(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : SearchTool.escapeQueryChars(valueIndexed)));
 		if(!"*".equals(entityVar)) {
 		}
 	}
@@ -2636,30 +2611,30 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			String[] fqs = StringUtils.substringBefore(StringUtils.substringAfter(valueIndexed, "["), "]").split(" TO ");
 			if(fqs.length != 2)
 				throw new RuntimeException(String.format("\"%s\" invalid range query. ", valueIndexed));
-			String fq1 = fqs[0].equals("*") ? fqs[0] : CurrikiResource.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[0]);
-			String fq2 = fqs[1].equals("*") ? fqs[1] : CurrikiResource.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[1]);
+			String fq1 = fqs[0].equals("*") ? fqs[0] : CurrikiResource.staticSearchFqForClass(entityVar, searchList.getSiteRequest_(SiteRequestEnUS.class), fqs[0]);
+			String fq2 = fqs[1].equals("*") ? fqs[1] : CurrikiResource.staticSearchFqForClass(entityVar, searchList.getSiteRequest_(SiteRequestEnUS.class), fqs[1]);
 			 return varIndexed + ":[" + fq1 + " TO " + fq2 + "]";
 		} else {
-			return varIndexed + ":" + ClientUtils.escapeQueryChars(CurrikiResource.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
+			return varIndexed + ":" + SearchTool.escapeQueryChars(CurrikiResource.staticSearchFqForClass(entityVar, searchList.getSiteRequest_(SiteRequestEnUS.class), valueIndexed)).replace("\\", "\\\\");
 		}
 	}
 
 	public void searchCurrikiResourceSort(SearchList<CurrikiResource> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
-		searchList.addSort(varIndexed, ORDER.valueOf(valueIndexed));
+		searchList.sort(varIndexed, valueIndexed);
 	}
 
-	public void searchCurrikiResourceRows(SearchList<CurrikiResource> searchList, Integer valueRows) {
-			searchList.setRows(valueRows != null ? valueRows : 10);
+	public void searchCurrikiResourceRows(SearchList<CurrikiResource> searchList, Long valueRows) {
+			searchList.rows(valueRows != null ? valueRows : 10L);
 	}
 
-	public void searchCurrikiResourceStart(SearchList<CurrikiResource> searchList, Integer valueStart) {
-		searchList.setStart(valueStart);
+	public void searchCurrikiResourceStart(SearchList<CurrikiResource> searchList, Long valueStart) {
+		searchList.start(valueStart);
 	}
 
 	public void searchCurrikiResourceVar(SearchList<CurrikiResource> searchList, String var, String value) {
-		searchList.getSiteRequest_().getRequestVars().put(var, value);
+		searchList.getSiteRequest_(SiteRequestEnUS.class).getRequestVars().put(var, value);
 	}
 
 	public void searchCurrikiResourceUri(SearchList<CurrikiResource> searchList) {
@@ -2704,17 +2679,17 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			SearchList<CurrikiResource> searchList = new SearchList<CurrikiResource>();
 			searchList.setPopulate(populate);
 			searchList.setStore(store);
-			searchList.setQuery("*:*");
+			searchList.q("*:*");
 			searchList.setC(CurrikiResource.class);
 			searchList.setSiteRequest_(siteRequest);
 			if(entityList != null)
-				searchList.addFields(entityList);
+				searchList.fl(entityList);
 
 			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
 			if(id != null && NumberUtils.isCreatable(id)) {
-				searchList.addFilterQuery("(pk_docvalues_long:" + ClientUtils.escapeQueryChars(id) + " OR objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id) + ")");
+				searchList.fq("(pk_docvalues_long:" + SearchTool.escapeQueryChars(id) + " OR objectId_docvalues_string:" + SearchTool.escapeQueryChars(id) + ")");
 			} else if(id != null) {
-				searchList.addFilterQuery("objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id));
+				searchList.fq("objectId_docvalues_string:" + SearchTool.escapeQueryChars(id));
 			}
 
 			serviceRequest.getParams().getJsonObject("query").forEach(paramRequest -> {
@@ -2722,8 +2697,8 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				String valueIndexed = null;
 				String varIndexed = null;
 				String valueSort = null;
-				Integer valueStart = null;
-				Integer valueRows = null;
+				Long valueStart = null;
+				Long valueRows = null;
 				String valueCursorMark = null;
 				String paramName = paramRequest.getKey();
 				Object paramValuesObject = paramRequest.getValue();
@@ -2741,7 +2716,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 								entityVar = entityVars[i];
 								varsIndexed[i] = CurrikiResource.varIndexedCurrikiResource(entityVar);
 							}
-							searchList.add("facet.pivot", (solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
+							searchList.facetPivot((solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
 						}
 					} else if(paramValuesObject != null) {
 						for(Object paramObject : paramObjects) {
@@ -2760,7 +2735,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 											foundQ = mQ.find();
 										}
 										mQ.appendTail(sb);
-										searchList.setQuery(sb.toString());
+										searchList.q(sb.toString());
 									}
 									break;
 								case "fq":
@@ -2777,7 +2752,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 											foundFq = mFq.find();
 										}
 										mFq.appendTail(sb);
-										searchList.addFilterQuery(sb.toString());
+										searchList.fq(sb.toString());
 									}
 									break;
 								case "sort":
@@ -2787,29 +2762,29 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 									searchCurrikiResourceSort(searchList, entityVar, valueIndexed, varIndexed);
 									break;
 								case "start":
-									valueStart = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
+									valueStart = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchCurrikiResourceStart(searchList, valueStart);
 									break;
 								case "rows":
-									valueRows = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
+									valueRows = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchCurrikiResourceRows(searchList, valueRows);
 									break;
 								case "facet":
-									searchList.add("facet", ((Boolean)paramObject).toString());
+									searchList.facet((Boolean)paramObject);
 									break;
 								case "facet.range.start":
 									String startMathStr = (String)paramObject;
-									Date start = DateMathParser.parseMath(null, startMathStr);
-									searchList.add("facet.range.start", start.toInstant().toString());
+									Date start = SearchTool.parseMath(startMathStr);
+									searchList.facetRangeStart(start.toInstant().toString());
 									break;
 								case "facet.range.end":
 									String endMathStr = (String)paramObject;
-									Date end = DateMathParser.parseMath(null, endMathStr);
-									searchList.add("facet.range.end", end.toInstant().toString());
+									Date end = SearchTool.parseMath(endMathStr);
+									searchList.facetRangeEnd(end.toInstant().toString());
 									break;
 								case "facet.range.gap":
 									String gap = (String)paramObject;
-									searchList.add("facet.range.gap", gap);
+									searchList.facetRangeGap(gap);
 									break;
 								case "facet.range":
 									Matcher mFacetRange = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
@@ -2818,14 +2793,14 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 										String solrLocalParams = mFacetRange.group(1);
 										entityVar = mFacetRange.group(2).trim();
 										varIndexed = CurrikiResource.varIndexedCurrikiResource(entityVar);
-										searchList.add("facet.range", (solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
+										searchList.facetRange((solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
 									}
 									break;
 								case "facet.field":
 									entityVar = (String)paramObject;
 									varIndexed = CurrikiResource.varIndexedCurrikiResource(entityVar);
 									if(varIndexed != null)
-										searchList.addFacetField(varIndexed);
+										searchList.facetField(varIndexed);
 									break;
 								case "var":
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
@@ -2834,7 +2809,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 									break;
 								case "cursorMark":
 									valueCursorMark = (String)paramObject;
-									searchList.add("cursorMark", (String)paramObject);
+									searchList.cursorMark((String)paramObject);
 									break;
 							}
 						}
@@ -2845,7 +2820,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				}
 			});
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
-				searchList.addSort("created_docvalues_date", ORDER.desc);
+				searchList.sort("created_docvalues_date", "desc");
 			}
 			searchCurrikiResource2(siteRequest, populate, store, modify, searchList);
 			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
@@ -2916,8 +2891,12 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			o.promiseDeepForClass(siteRequest).onSuccess(a -> {
-				SolrInputDocument document = new SolrInputDocument();
-				o.indexCurrikiResource(document);
+				JsonObject json = new JsonObject();
+				JsonObject add = new JsonObject();
+				json.put("add", add);
+				JsonObject doc = new JsonObject();
+				add.put("doc", doc);
+				o.indexCurrikiResource(doc);
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
@@ -2928,7 +2907,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					else if(softCommit == null)
 						softCommit = false;
 				String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-				JsonArray json = new JsonArray().add(new JsonObject(document.toMap(new HashMap<String, Object>())));
 				webClient.post(solrPort, solrHostName, solrRequestUri).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
 					promise.complete();
 				}).onFailure(ex -> {

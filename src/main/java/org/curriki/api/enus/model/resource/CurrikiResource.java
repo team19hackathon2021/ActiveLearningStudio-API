@@ -6,8 +6,8 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import org.curriki.api.enus.base.BaseModel;
-import org.curriki.api.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
+import org.curriki.api.enus.model.base.BaseModel;
 
 /**   
  * Model: true

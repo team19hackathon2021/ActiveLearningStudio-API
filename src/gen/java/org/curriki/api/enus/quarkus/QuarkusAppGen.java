@@ -3,42 +3,41 @@ package org.curriki.api.enus.quarkus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.curriki.api.enus.base.BaseModel;
-import org.curriki.api.enus.request.api.ApiRequest;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.apache.commons.lang3.StringUtils;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.curriki.api.enus.wrap.Wrap;
-import org.curriki.api.enus.java.ZonedDateTimeDeserializer;
-import org.apache.commons.collections.CollectionUtils;
+import org.computate.vertx.api.ApiRequest;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.curriki.api.enus.java.ZonedDateTimeSerializer;
+import org.curriki.api.enus.model.base.BaseModel;
 import java.math.RoundingMode;
 import org.slf4j.Logger;
 import java.math.MathContext;
 import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.curriki.api.enus.config.ConfigKeys;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.lang.Object;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.quarkus.QuarkusApp&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.quarkus.QuarkusApp&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class QuarkusAppGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(QuarkusApp.class);
@@ -146,13 +145,13 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrQuarkusApp(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchQuarkusApp(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrQuarkusApp(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchQuarkusApp(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -160,13 +159,13 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrQuarkusApp(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrQuarkusApp(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrQuarkusApp(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrQuarkusApp(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -174,13 +173,13 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqQuarkusApp(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqQuarkusApp(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqQuarkusApp(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqQuarkusApp(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -224,4 +223,15 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 
 	public static final String[] QuarkusAppVals = new String[] { configureConfigComplete1, configureConfigFail1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1 };
 
+
+
+	public static String displayNameForClass(String var) {
+		return QuarkusApp.displayNameQuarkusApp(var);
+	}
+	public static String displayNameQuarkusApp(String var) {
+		switch(var) {
+		default:
+			return null;
+		}
+	}
 }

@@ -3,15 +3,24 @@ package org.curriki.api.enus.vertx;
 import java.net.URLDecoder;
 import java.text.Normalizer;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.computate.vertx.handlebars.AuthHelpers;
+import org.computate.vertx.handlebars.DateHelpers;
+import org.computate.vertx.handlebars.SiteHelpers;
+import org.computate.vertx.openapi.OpenApi3Generator;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.model.resource.CurrikiResourceEnUSGenApiService;
-import org.curriki.api.enus.user.SiteUserEnUSGenApiService;
+import org.curriki.api.enus.model.user.SiteUserEnUSGenApiService;
+import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,16 +28,24 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
 
+import io.vertx.config.ConfigRetriever;
+import io.vertx.config.ConfigRetrieverOptions;
+import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import io.vertx.core.WorkerExecutor;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.JksOptions;
 import io.vertx.core.net.PemKeyCertOptions;
+import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.auth.oauth2.OAuth2Auth;
 import io.vertx.ext.auth.oauth2.OAuth2FlowType;
@@ -55,6 +72,7 @@ import io.vertx.ext.web.sstore.LocalSessionStore;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
+import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import io.vertx.sqlclient.PoolOptions;
  
 /**	
@@ -100,6 +118,44 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	HandlebarsTemplateEngine templateEngine;
 
 	/**	
+	 *	The main method for the Vert.x application that runs the Vert.x Runner class
+	 **/
+	public static void  main(String[] args) {
+		String runOpenApi3Generator = System.getenv(ConfigKeys.RUN_OPENAPI3_GENERATOR);
+		if(StringUtils.equalsIgnoreCase("true", runOpenApi3Generator))
+			runOpenApi3Generator(args);
+		else
+			run();
+	}
+
+	public static void  runOpenApi3Generator(String[] args) {
+		Vertx vertx = Vertx.vertx();
+		String configPath = System.getenv("CONFIG_PATH");
+		configureConfig(vertx).onSuccess(config -> {
+			OpenApi3Generator api = new OpenApi3Generator();
+			WebClient webClient = WebClient.create(vertx);
+			SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+			siteRequest.setConfig(config);
+			siteRequest.setWebClient(webClient);
+			api.setWebClient(webClient);
+			api.setConfig(config);
+			siteRequest.initDeepSiteRequestEnUS();
+			api.initDeepOpenApi3Generator(siteRequest);
+			api.writeOpenApi().onSuccess(a -> {
+				LOG.info("Write OpenAPI completed. ");
+				vertx.close();
+			}).onFailure(ex -> {
+				LOG.error("Write OpenAPI failed. ", ex);
+				vertx.close();
+			});
+			
+		}).onFailure(ex -> {
+			LOG.error(String.format("Error loading config: %s", configPath), ex);
+			vertx.close();
+		});
+	}
+
+	/**	
 	 *	This is called by Vert.x when the verticle instance is deployed. 
 	 *	Initialize a new site context object for storing information about the entire site in English. 
 	 *	Setup the startPromise to handle the configuration steps and starting the server. 
@@ -109,14 +165,16 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 		try {
 			Future<Void> promiseSteps = configureWebClient().compose(a ->
-				configureOpenApi().compose(d -> 
-					configureHealthChecks().compose(e -> 
-						configureSharedWorkerExecutor().compose(f -> 
-							configureWebsockets().compose(g -> 
-								configureEmail().compose(h -> 
-									configureApi().compose(i -> 
-										configureUi().compose(j -> 
-											startServer()
+				configureData().compose(b -> 
+					configureOpenApi().compose(d -> 
+						configureHealthChecks().compose(e -> 
+							configureSharedWorkerExecutor().compose(f -> 
+								configureWebsockets().compose(g -> 
+									configureEmail().compose(h -> 
+										configureApi().compose(i -> 
+											configureUi().compose(j -> 
+												startServer()
+											)
 										)
 									)
 								)
@@ -128,6 +186,127 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			promiseSteps.onComplete(startPromise);
 		} catch (Exception ex) {
 			LOG.error("Couldn't start verticle. ", ex);
+		}
+	}
+
+	public static void  run() {
+		Boolean enableZookeeperCluster = Optional.ofNullable(System.getenv(ConfigKeys.ENABLE_ZOOKEEPER_CLUSTER)).map(s -> Boolean.parseBoolean(s)).orElse(false);
+		VertxOptions vertxOptions = new VertxOptions();
+		EventBusOptions eventBusOptions = new EventBusOptions();
+
+		if(enableZookeeperCluster) {
+			JsonObject zkConfig = new JsonObject();
+			String hostname = System.getenv(ConfigKeys.HOSTNAME);
+			String openshiftService = System.getenv(ConfigKeys.OPENSHIFT_SERVICE);
+			String zookeeperHostName = System.getenv(ConfigKeys.ZOOKEEPER_HOST_NAME);
+			Integer zookeeperPort = Integer.parseInt(Optional.ofNullable(System.getenv(ConfigKeys.ZOOKEEPER_PORT)).orElse("2181"));
+			String zookeeperHosts = Optional.ofNullable(System.getenv(ConfigKeys.ZOOKEEPER_HOSTS)).orElse(zookeeperHostName + ":" + zookeeperPort);
+			Integer clusterPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
+			String clusterHostName = System.getenv(ConfigKeys.CLUSTER_HOST_NAME);
+			Integer clusterPublicPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PUBLIC_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
+			String clusterPublicHostName = System.getenv(ConfigKeys.CLUSTER_PUBLIC_HOST_NAME);
+			zkConfig.put("zookeeperHosts", zookeeperHosts);
+			zkConfig.put("sessionTimeout", 500000);
+			zkConfig.put("connectTimeout", 3000);
+			zkConfig.put("rootPath", "choice-reports");
+			zkConfig.put("retry", new JsonObject() {
+				{
+					put("initialSleepTime", 100);
+					put("intervalTimes", 10000);
+					put("maxTimes", 5);
+				}
+			});
+			ClusterManager clusterManager = new ZookeeperClusterManager(zkConfig);
+
+			if(clusterHostName == null) {
+				clusterHostName = hostname;
+			}
+			if(clusterPublicHostName == null) {
+				if(hostname != null && openshiftService != null) {
+					clusterPublicHostName = hostname + "." + openshiftService;
+				}
+			}
+			if(clusterHostName != null) {
+				LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_HOST_NAME, clusterHostName));
+				eventBusOptions.setHost(clusterHostName);
+			}
+			if(clusterPort != null) {
+				LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_PORT, clusterPort));
+				eventBusOptions.setPort(clusterPort);
+			}
+			if(clusterPublicHostName != null) {
+				LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_PUBLIC_HOST_NAME, clusterPublicHostName));
+				eventBusOptions.setClusterPublicHost(clusterPublicHostName);
+			}
+			if(clusterPublicPort != null) {
+				LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_PUBLIC_PORT, clusterPublicPort));
+				eventBusOptions.setClusterPublicPort(clusterPublicPort);
+			}
+			vertxOptions.setClusterManager(clusterManager);
+		}
+		Long vertxWarningExceptionSeconds = Optional.ofNullable(System.getenv(ConfigKeys.VERTX_WARNING_EXCEPTION_SECONDS)).map(s -> Long.parseLong(s)).orElse(10L);
+		Integer siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(1);
+		vertxOptions.setEventBusOptions(eventBusOptions);
+		vertxOptions.setWarningExceptionTime(vertxWarningExceptionSeconds);
+		vertxOptions.setWarningExceptionTimeUnit(TimeUnit.SECONDS);
+		vertxOptions.setWorkerPoolSize(System.getenv(ConfigKeys.WORKER_POOL_SIZE) == null ? 5 : Integer.parseInt(System.getenv(ConfigKeys.WORKER_POOL_SIZE)));
+		Consumer<Vertx> runner = vertx -> {
+			configureConfig(vertx).onSuccess(config -> {
+				try {
+					List<Future> futures = new ArrayList<>();
+
+					DeploymentOptions deploymentOptions = new DeploymentOptions();
+					deploymentOptions.setInstances(siteInstances);
+					deploymentOptions.setConfig(config);
+		
+					DeploymentOptions mailVerticleDeploymentOptions = new DeploymentOptions();
+					mailVerticleDeploymentOptions.setConfig(config);
+					mailVerticleDeploymentOptions.setWorker(true);
+		
+					DeploymentOptions workerVerticleDeploymentOptions = new DeploymentOptions();
+					workerVerticleDeploymentOptions.setConfig(config);
+					workerVerticleDeploymentOptions.setInstances(1);
+		
+					DeploymentOptions ceylonVerticleDeploymentOptions = new DeploymentOptions();
+					ceylonVerticleDeploymentOptions.setConfig(config);
+					ceylonVerticleDeploymentOptions.setInstances(1);
+		
+					vertx.deployVerticle(MainVerticle.class, deploymentOptions).onSuccess(a -> {
+						LOG.info("Started main verticle. ");
+						vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions).onSuccess(b -> {
+							LOG.info("Started worker verticle. ");
+//							vertx.deployVerticle(AppCeylonVerticle.class, ceylonVerticleDeploymentOptions).onSuccess(c -> {
+//								scheduling(vertx);
+								LOG.info("Started scheduler verticle. ");
+//							}).onFailure(ex -> {
+//								LOG.error("Failed to start scheduler verticle. ", ex);
+//							});
+						}).onFailure(ex -> {
+							LOG.error("Failed to start worker verticle. ", ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error("Failed to start main verticle. ", ex);
+					});
+				} catch (Throwable ex) {
+					LOG.error("Creating clustered Vertx failed. ", ex);
+					ExceptionUtils.rethrow(ex);
+				}
+			}).onFailure(ex -> {
+				LOG.error("Creating clustered Vertx failed. ", ex);
+				ExceptionUtils.rethrow(ex);
+			});
+		};
+
+		if(enableZookeeperCluster) {
+			Vertx.clusteredVertx(vertxOptions).onSuccess(vertx -> {
+				runner.accept(vertx);
+			}).onFailure(ex -> {
+				LOG.error("Creating clustered Vertx failed. ", ex);
+				ExceptionUtils.rethrow(ex);
+			});
+		} else {
+			Vertx vertx = Vertx.vertx(vertxOptions);
+			runner.accept(vertx);
 		}
 	}
 
@@ -331,6 +510,43 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			LOG.error(configureOpenApiError, ex);
 			promise.fail(ex);
 		}
+		return promise.future();
+	}
+
+	/**	
+	 * Val.Complete.enUS:The config was configured successfully. 
+	 * Val.Fail.enUS:Could not configure the config(). 
+	 **/
+	public static Future<JsonObject> configureConfig(Vertx vertx) {
+		Promise<JsonObject> promise = Promise.promise();
+
+		try {
+			ConfigRetrieverOptions retrieverOptions = new ConfigRetrieverOptions();
+
+			retrieverOptions.addStore(new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", "application.yml")));
+
+			String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
+			if(StringUtils.isNotBlank(configPath)) {
+				ConfigStoreOptions configIni = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", configPath));
+				retrieverOptions.addStore(configIni);
+			}
+
+			ConfigStoreOptions storeEnv = new ConfigStoreOptions().setType("env");
+			retrieverOptions.addStore(storeEnv);
+
+			ConfigRetriever configRetriever = ConfigRetriever.create(vertx, retrieverOptions);
+			configRetriever.getConfig().onSuccess(config -> {
+				LOG.info("The config was configured successfully. ");
+				promise.complete(config);
+			}).onFailure(ex -> {
+				LOG.error("Unable to configure site context. ", ex);
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error("Unable to configure site context. ", ex);
+			promise.fail(ex);
+		}
+
 		return promise.future();
 	}
 
