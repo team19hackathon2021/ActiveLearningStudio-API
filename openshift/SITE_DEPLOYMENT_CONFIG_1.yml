@@ -45,7 +45,7 @@ spec:
             httpGet:
               path: /health
               port: 8080
-              scheme: "{% if SSL_PASSTHROUGH %}HTTPS{% else %}HTTP{% endif %}"
+              scheme: "HTTP"
             initialDelaySeconds: 1
             periodSeconds: 10
             successThreshold: 1
@@ -55,7 +55,7 @@ spec:
             httpGet:
               path: /health
               port: 8080
-              scheme: "{% if SSL_PASSTHROUGH %}HTTPS{% else %}HTTP{% endif %}"
+              scheme: "HTTP"
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
@@ -162,62 +162,6 @@ spec:
                 secretKeyRef:
                   key: JDBC_PASSWORD
                   name: "{{ SITE_NAME }}-secret"
-            - name: SSL_PASSTHROUGH
-              valueFrom:
-                secretKeyRef:
-                  key: SSL_PASSTHROUGH
-                  name: "{{ SITE_NAME }}-secret"
-            - name: SSL_ALIAS
-              valueFrom:
-                secretKeyRef:
-                  key: SSL_ALIAS
-                  name: "{{ SITE_NAME }}-secret"
-            - name: SSL_CERT_PATH
-              valueFrom:
-                secretKeyRef:
-                  key: SSL_CERT_PATH
-                  name: "{{ SITE_NAME }}-secret"
-            - name: SSL_KEY_PATH
-              valueFrom:
-                secretKeyRef:
-                  key: SSL_KEY_PATH
-                  name: "{{ SITE_NAME }}-secret"
-            - name: SSL_KEYSTORE_PATH
-              valueFrom:
-                secretKeyRef:
-                  key: SSL_KEYSTORE_PATH
-                  name: "{{ SITE_NAME }}-secret"
-            - name: ACS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: ACS_API_KEY
-                  name: "{{ SITE_NAME }}-secret"
-
-            - name: FTP_SYNC_HOST_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: FTP_SYNC_HOST_NAME
-                  name: "{{ SITE_NAME }}-secret"
-            - name: FTP_SYNC_PORT
-              valueFrom:
-                secretKeyRef:
-                  key: FTP_SYNC_PORT
-                  name: "{{ SITE_NAME }}-secret"
-            - name: FTP_SYNC_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: FTP_SYNC_USERNAME
-                  name: "{{ SITE_NAME }}-secret"
-            - name: FTP_SYNC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: FTP_SYNC_PASSWORD
-                  name: "{{ SITE_NAME }}-secret"
-            - name: FTP_SYNC_REMOTE_PATH
-              valueFrom:
-                secretKeyRef:
-                  key: FTP_SYNC_REMOTE_PATH
-                  name: "{{ SITE_NAME }}-secret"
 
             - name: OPENSHIFT_SERVICE
               value: "{{ SITE_NAME }}"
@@ -279,21 +223,7 @@ spec:
             - name: AUTH_ROLES_REQUIRED_SiteUser
               value: '{{ AUTH_ROLES_REQUIRED_SiteUser | to_json }}'
           volumeMounts:
-            - mountPath: /opt/keystore
-              name: volume-certificate
-              readOnly: true
-            - mountPath: /opt/static/template/enUS
-              name: volume-template
-              readOnly: true
       volumes:
-        - name: volume-certificate
-          secret:
-            defaultMode: 420
-            secretName: "{{ SITE_NAME }}-certificate"
-        - name: volume-template
-          configMap:
-            defaultMode: 420
-            name: "{{ SITE_NAME }}-template"
   triggers:
     - imageChangeParams:
         automatic: true

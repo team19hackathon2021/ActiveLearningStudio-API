@@ -35,7 +35,7 @@ TODO: Define the groupId and artifactId for ActiveLearningStudio-API.
 		<postgresql.version>42.2.2.jre7</postgresql.version>
 		<mysql.version>8.0.27</mysql.version>
 		<solr.version>8.4.1</solr.version>
-		<vertx-maven-plugin.version>1.0.9</vertx-maven-plugin.version>
+		<vertx-maven-plugin.version>1.0.18</vertx-maven-plugin.version>
 		<build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
 		<exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
 		<vertx.version>4.2.3</vertx.version>
@@ -464,6 +464,23 @@ TODO: Define the groupId and artifactId for ActiveLearningStudio-API.
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.reactiverse</groupId>
+				<artifactId>vertx-maven-plugin</artifactId>
+				<version>${vertx-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>vmp</id>
+						<goals>
+							<goal>initialize</goal>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<redeploy>true</redeploy>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
