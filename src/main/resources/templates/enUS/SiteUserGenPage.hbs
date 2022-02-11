@@ -177,6 +177,10 @@
 {{> "htmArchived" classApiMethodMethod="PATCH"}}
 {{> "htmDeleted" classApiMethodMethod="PATCH"}}
 							</div>
+							<div class="w3-cell-row ">
+{{> "htmSeeArchived" classApiMethodMethod="PATCH"}}
+{{> "htmSeeDeleted" classApiMethodMethod="PATCH"}}
+							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-gray "
 							onclick="patchSiteUser(null, $('#patchSiteUserFormValues')); "
@@ -212,6 +216,10 @@
 {{> "htmArchived" classApiMethodMethod="POST"}}
 {{> "htmDeleted" classApiMethodMethod="POST"}}
 							</div>
+							<div class="w3-cell-row ">
+{{> "htmSeeArchived" classApiMethodMethod="POST"}}
+{{> "htmSeeDeleted" classApiMethodMethod="POST"}}
+							</div>
 						</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-gray "
@@ -243,6 +251,10 @@
 							<div class="w3-cell-row ">
 {{> "htmArchived" classApiMethodMethod="Page"}}
 {{> "htmDeleted" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmSeeArchived" classApiMethodMethod="Page"}}
+{{> "htmSeeDeleted" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 						<button
@@ -731,5 +743,131 @@
 
 													{{else}}
 															<span class="varSiteUser{{pk}}UserFullName ">{{siteUser_.userFullName}}</span>
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmSeeArchived"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserSeeArchived">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-gray">
+													<label for="{{classApiMethodMethod}}_seeArchived">see archived</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputSeeArchived"}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputSeeArchived"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+															<input
+																type="checkbox"
+																id="{{classApiMethodMethod}}_seeArchived"
+																value="true"
+	{{else}}
+														<select
+															id="{{classApiMethodMethod}}_seeArchived"
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+															class="classSiteUser inputSiteUser{{pk}}SeeArchived w3-input w3-border "
+															name="setSeeArchived"
+	{{else}}
+		{{#eq 'Page' classApiMethodMethod}}
+																class="classSiteUser inputSiteUser{{pk}}SeeArchived w3-input w3-border "
+																name="setSeeArchived"
+		{{else}}
+																class="setSeeArchived valueSeeArchived classSiteUser inputSiteUser{{pk}}SeeArchived w3-input w3-border "
+																name="setSeeArchived"
+		{{/eq}}
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+															onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setSeeArchived', $(this).prop('checked'), function() { addGlow($('#{{classApiMethodMethod}}_seeArchived')); }, function() { addError($('#{{classApiMethodMethod}}_seeArchived')); }); "
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+		{{#if siteUser_.seeArchived}}
+																checked="checked"
+		{{/if}}
+																/>
+	{{else}}
+															>
+															<option value="" selected="selected"></option>
+															<option value="true">true</option>
+															<option value="false">false</option>
+														</select>
+	{{/eq}}
+
+													{{else}}
+															<span class="varSiteUser{{pk}}SeeArchived ">{{siteUser_.seeArchived}}</span>
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmSeeDeleted"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserSeeDeleted">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-gray">
+													<label for="{{classApiMethodMethod}}_seeDeleted">see deleted</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputSeeDeleted"}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputSeeDeleted"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+															<input
+																type="checkbox"
+																id="{{classApiMethodMethod}}_seeDeleted"
+																value="true"
+	{{else}}
+														<select
+															id="{{classApiMethodMethod}}_seeDeleted"
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+															class="classSiteUser inputSiteUser{{pk}}SeeDeleted w3-input w3-border "
+															name="setSeeDeleted"
+	{{else}}
+		{{#eq 'Page' classApiMethodMethod}}
+																class="classSiteUser inputSiteUser{{pk}}SeeDeleted w3-input w3-border "
+																name="setSeeDeleted"
+		{{else}}
+																class="setSeeDeleted valueSeeDeleted classSiteUser inputSiteUser{{pk}}SeeDeleted w3-input w3-border "
+																name="setSeeDeleted"
+		{{/eq}}
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+															onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setSeeDeleted', $(this).prop('checked'), function() { addGlow($('#{{classApiMethodMethod}}_seeDeleted')); }, function() { addError($('#{{classApiMethodMethod}}_seeDeleted')); }); "
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+		{{#if siteUser_.seeDeleted}}
+																checked="checked"
+		{{/if}}
+																/>
+	{{else}}
+															>
+															<option value="" selected="selected"></option>
+															<option value="true">true</option>
+															<option value="false">false</option>
+														</select>
+	{{/eq}}
+
+													{{else}}
+															<span class="varSiteUser{{pk}}SeeDeleted ">{{siteUser_.seeDeleted}}</span>
 		{{/ifContainsAnyRoles}}
 {{/inline}}

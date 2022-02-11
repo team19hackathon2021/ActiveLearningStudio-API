@@ -102,7 +102,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void searchCurrikiResource(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_CurrikiResource")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -142,7 +142,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -300,7 +300,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	@Override
 	public void patchCurrikiResource(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("patchCurrikiResource started. "));
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -370,7 +370,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -427,7 +427,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void patchCurrikiResourceFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
@@ -1228,7 +1228,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	@Override
 	public void postCurrikiResource(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("postCurrikiResource started. "));
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -1289,7 +1289,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1306,7 +1306,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void postCurrikiResourceFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			ApiRequest apiRequest = new ApiRequest();
 			apiRequest.setRows(1L);
 			apiRequest.setNumFound(1L);
@@ -1322,7 +1322,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2225,7 +2225,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	@Override
 	public void putimportCurrikiResource(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("putimportCurrikiResource started. "));
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -2281,7 +2281,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2345,7 +2345,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void putimportCurrikiResourceFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				ApiRequest apiRequest = new ApiRequest();
 				apiRequest.setRows(1L);
@@ -2442,7 +2442,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				eventHandler.handle(Future.failedFuture(ex));
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -2478,7 +2478,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	@Override
 	public void searchpageCurrikiResource(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_CurrikiResource")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -2518,7 +2518,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {

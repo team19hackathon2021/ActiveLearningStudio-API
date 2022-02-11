@@ -105,7 +105,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void searchSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				{
 					searchSiteUserList(siteRequest, false, true, false).onSuccess(listSiteUser -> {
@@ -126,7 +126,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -284,7 +284,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	@Override
 	public void patchSiteUser(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("patchSiteUser started. "));
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				{
@@ -338,7 +338,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -395,7 +395,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void patchSiteUserFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
@@ -579,6 +579,22 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							num++;
 							bParams.add(o2.sqlUserFullName());
 						break;
+					case "setSeeArchived":
+							o2.setSeeArchived(jsonObject.getBoolean(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_seeArchived + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSeeArchived());
+						break;
+					case "setSeeDeleted":
+							o2.setSeeDeleted(jsonObject.getBoolean(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_seeDeleted + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSeeDeleted());
+						break;
 				}
 			}
 			bSql.append(" WHERE pk=$" + num);
@@ -636,7 +652,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	@Override
 	public void postSiteUser(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("postSiteUser started. "));
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				{
@@ -681,7 +697,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -698,7 +714,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void postSiteUserFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			ApiRequest apiRequest = new ApiRequest();
 			apiRequest.setRows(1L);
 			apiRequest.setNumFound(1L);
@@ -714,7 +730,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -948,6 +964,24 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						num++;
 						bParams.add(o2.sqlUserFullName());
 						break;
+					case SiteUser.VAR_seeArchived:
+						o2.setSeeArchived(jsonObject.getBoolean(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(SiteUser.VAR_seeArchived + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSeeArchived());
+						break;
+					case SiteUser.VAR_seeDeleted:
+						o2.setSeeDeleted(jsonObject.getBoolean(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(SiteUser.VAR_seeDeleted + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSeeDeleted());
+						break;
 					}
 				}
 			}
@@ -1008,7 +1042,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void searchpageSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequestEnUS.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				{
 					searchSiteUserList(siteRequest, false, true, false).onSuccess(listSiteUser -> {
@@ -1029,7 +1063,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {

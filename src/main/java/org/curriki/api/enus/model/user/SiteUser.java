@@ -3,7 +3,10 @@ package org.curriki.api.enus.model.user;
 import java.util.List;
 
 import org.computate.search.wrap.Wrap;
+import org.computate.vertx.model.user.ComputateVertxSiteUser;
+import org.computate.vertx.request.ComputateVertxSiteRequest;
 import org.curriki.api.enus.model.base.BaseModel;
+import org.curriki.api.enus.request.SiteRequestEnUS;
 
 
 /**   
@@ -55,7 +58,7 @@ import org.curriki.api.enus.model.base.BaseModel;
  * Map.hackathonColumnApiServiceImpl: Develop SiteUser API
  * Map.hackathonLabelsApiServiceImpl: Java,Vert.x
  */  
-public class SiteUser extends SiteUserGen<BaseModel> {
+public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSiteUser {
 
 	/**
 	 * {@inheritDoc}
@@ -113,10 +116,40 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 	 * Define: true
 	 */
 	protected void _userFullName(Wrap<String> c) {
+		c.o(String.format("%s %s", userFirstName, userLastName));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Define: true
+	 * HtmlRow: 3
+	 * HtmlCell: 2
+	 * DisplayName.enUS: see archived
+	 */
+	protected void _seeArchived(Wrap<Boolean> c) {
+		c.o(false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Define: true
+	 * HtmlRow: 3
+	 * HtmlCell: 3
+	 * DisplayName.enUS: see deleted
+	 */
+	protected void _seeDeleted(Wrap<Boolean> c) {
+		c.o(false);
 	}
 
 	@Override
 	protected void _objectTitle(Wrap<String> c) {
 		c.o(String.format("%s (%s) <%s>", userFullName, userName, userEmail));
+	}
+
+	@Override
+	public <T extends ComputateVertxSiteRequest> void setSiteRequest_(T siteRequest) {
+		siteRequest_ = (SiteRequestEnUS)siteRequest;
 	}
 }

@@ -17,6 +17,7 @@ import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.Boolean;
 import io.vertx.core.json.JsonObject;
 import java.lang.String;
 import org.curriki.api.enus.model.base.BaseModel;
@@ -474,6 +475,122 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return userFullName;
 	}
 
+	/////////////////
+	// seeArchived //
+	/////////////////
+
+	/**	 The entity seeArchived
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected Boolean seeArchived;
+
+	/**	<br> The entity seeArchived
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeArchived">Find the entity seeArchived in Solr</a>
+	 * <br>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _seeArchived(Wrap<Boolean> c);
+
+	public Boolean getSeeArchived() {
+		return seeArchived;
+	}
+
+	public void setSeeArchived(Boolean seeArchived) {
+		this.seeArchived = seeArchived;
+	}
+	@JsonIgnore
+	public void setSeeArchived(String o) {
+		this.seeArchived = SiteUser.staticSetSeeArchived(siteRequest_, o);
+	}
+	public static Boolean staticSetSeeArchived(SiteRequestEnUS siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
+	}
+	protected SiteUser seeArchivedInit() {
+		Wrap<Boolean> seeArchivedWrap = new Wrap<Boolean>().var("seeArchived");
+		if(seeArchived == null) {
+			_seeArchived(seeArchivedWrap);
+			setSeeArchived(seeArchivedWrap.o);
+		}
+		return (SiteUser)this;
+	}
+
+	public static Boolean staticSearchSeeArchived(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSearchStrSeeArchived(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSeeArchived(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSearchStrSeeArchived(siteRequest_, SiteUser.staticSearchSeeArchived(siteRequest_, SiteUser.staticSetSeeArchived(siteRequest_, o)));
+	}
+
+	public Boolean sqlSeeArchived() {
+		return seeArchived;
+	}
+
+	////////////////
+	// seeDeleted //
+	////////////////
+
+	/**	 The entity seeDeleted
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected Boolean seeDeleted;
+
+	/**	<br> The entity seeDeleted
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
+	 * <br>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _seeDeleted(Wrap<Boolean> c);
+
+	public Boolean getSeeDeleted() {
+		return seeDeleted;
+	}
+
+	public void setSeeDeleted(Boolean seeDeleted) {
+		this.seeDeleted = seeDeleted;
+	}
+	@JsonIgnore
+	public void setSeeDeleted(String o) {
+		this.seeDeleted = SiteUser.staticSetSeeDeleted(siteRequest_, o);
+	}
+	public static Boolean staticSetSeeDeleted(SiteRequestEnUS siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
+	}
+	protected SiteUser seeDeletedInit() {
+		Wrap<Boolean> seeDeletedWrap = new Wrap<Boolean>().var("seeDeleted");
+		if(seeDeleted == null) {
+			_seeDeleted(seeDeletedWrap);
+			setSeeDeleted(seeDeletedWrap.o);
+		}
+		return (SiteUser)this;
+	}
+
+	public static Boolean staticSearchSeeDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSearchStrSeeDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSeeDeleted(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSearchStrSeeDeleted(siteRequest_, SiteUser.staticSearchSeeDeleted(siteRequest_, SiteUser.staticSetSeeDeleted(siteRequest_, o)));
+	}
+
+	public Boolean sqlSeeDeleted() {
+		return seeDeleted;
+	}
+
 	//////////////
 	// initDeep //
 	//////////////
@@ -510,6 +627,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				userFirstNameInit();
 				userLastNameInit();
 				userFullNameInit();
+				seeArchivedInit();
+				seeDeletedInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -577,6 +696,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return oSiteUser.userLastName;
 			case "userFullName":
 				return oSiteUser.userFullName;
+			case "seeArchived":
+				return oSiteUser.seeArchived;
+			case "seeDeleted":
+				return oSiteUser.seeDeleted;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -630,6 +753,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSetUserLastName(siteRequest_, o);
 		case "userFullName":
 			return SiteUser.staticSetUserFullName(siteRequest_, o);
+		case "seeArchived":
+			return SiteUser.staticSetSeeArchived(siteRequest_, o);
+		case "seeDeleted":
+			return SiteUser.staticSetSeeDeleted(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -658,6 +785,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchUserLastName(siteRequest_, (String)o);
 		case "userFullName":
 			return SiteUser.staticSearchUserFullName(siteRequest_, (String)o);
+		case "seeArchived":
+			return SiteUser.staticSearchSeeArchived(siteRequest_, (Boolean)o);
+		case "seeDeleted":
+			return SiteUser.staticSearchSeeDeleted(siteRequest_, (Boolean)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -686,6 +817,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchStrUserLastName(siteRequest_, (String)o);
 		case "userFullName":
 			return SiteUser.staticSearchStrUserFullName(siteRequest_, (String)o);
+		case "seeArchived":
+			return SiteUser.staticSearchStrSeeArchived(siteRequest_, (Boolean)o);
+		case "seeDeleted":
+			return SiteUser.staticSearchStrSeeDeleted(siteRequest_, (Boolean)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -714,6 +849,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchFqUserLastName(siteRequest_, o);
 		case "userFullName":
 			return SiteUser.staticSearchFqUserFullName(siteRequest_, o);
+		case "seeArchived":
+			return SiteUser.staticSearchFqSeeArchived(siteRequest_, o);
+		case "seeDeleted":
+			return SiteUser.staticSearchFqSeeDeleted(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -770,6 +909,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 					setUserFullName((String)val);
 				saves.add("userFullName");
 				return val;
+			case "seearchived":
+				if(val instanceof Boolean)
+					setSeeArchived((Boolean)val);
+				saves.add("seeArchived");
+				return val;
+			case "seedeleted":
+				if(val instanceof Boolean)
+					setSeeDeleted((Boolean)val);
+				saves.add("seeDeleted");
+				return val;
 			default:
 				return super.defineBaseModel(var, val);
 		}
@@ -815,6 +964,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		if(userFullName != null) {
 			doc.put("userFullName_docvalues_string", userFullName);
 		}
+		if(seeArchived != null) {
+			doc.put("seeArchived_docvalues_boolean", seeArchived);
+		}
+		if(seeDeleted != null) {
+			doc.put("seeDeleted_docvalues_boolean", seeDeleted);
+		}
 		super.indexBaseModel(doc);
 
 	}
@@ -835,6 +990,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "userLastName_docvalues_string";
 			case "userFullName":
 				return "userFullName_docvalues_string";
+			case "seeArchived":
+				return "seeArchived_docvalues_boolean";
+			case "seeDeleted":
+				return "seeDeleted_docvalues_boolean";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -873,6 +1032,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		oSiteUser.setUserFirstName(Optional.ofNullable(doc.get("userFirstName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserLastName(Optional.ofNullable(doc.get("userLastName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserFullName(Optional.ofNullable(doc.get("userFullName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setSeeArchived(Optional.ofNullable(doc.get("seeArchived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setSeeDeleted(Optional.ofNullable(doc.get("seeDeleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
 	}
@@ -900,6 +1061,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				apiRequest.addVars("userLastName");
 			if(!Objects.equals(userFullName, original.getUserFullName()))
 				apiRequest.addVars("userFullName");
+			if(!Objects.equals(seeArchived, original.getSeeArchived()))
+				apiRequest.addVars("seeArchived");
+			if(!Objects.equals(seeDeleted, original.getSeeDeleted()))
+				apiRequest.addVars("seeDeleted");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -918,6 +1083,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(userFirstName).map(v -> "userFirstName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(userLastName).map(v -> "userLastName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(userFullName).map(v -> "userFullName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(seeArchived).map(v -> "seeArchived: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(seeDeleted).map(v -> "seeDeleted: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
@@ -928,6 +1095,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String VAR_userFirstName = "userFirstName";
 	public static final String VAR_userLastName = "userLastName";
 	public static final String VAR_userFullName = "userFullName";
+	public static final String VAR_seeArchived = "seeArchived";
+	public static final String VAR_seeDeleted = "seeDeleted";
 
 	public static final String DISPLAY_NAME_userKeys = "";
 	public static final String DISPLAY_NAME_userId = "user ID";
@@ -936,6 +1105,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_userFirstName = "";
 	public static final String DISPLAY_NAME_userLastName = "";
 	public static final String DISPLAY_NAME_userFullName = "";
+	public static final String DISPLAY_NAME_seeArchived = "see archived";
+	public static final String DISPLAY_NAME_seeDeleted = "see deleted";
 
 	public static String displayNameForClass(String var) {
 		return SiteUser.displayNameSiteUser(var);
@@ -956,6 +1127,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_userLastName;
 		case VAR_userFullName:
 			return DISPLAY_NAME_userFullName;
+		case VAR_seeArchived:
+			return DISPLAY_NAME_seeArchived;
+		case VAR_seeDeleted:
+			return DISPLAY_NAME_seeDeleted;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}

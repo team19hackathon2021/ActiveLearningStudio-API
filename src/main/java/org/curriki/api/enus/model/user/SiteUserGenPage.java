@@ -3,6 +3,7 @@ package org.curriki.api.enus.model.user;
 import java.util.List;
 import java.lang.Long;
 import java.lang.String;
+import java.lang.Boolean;
 import org.curriki.api.enus.model.base.BaseModelPage;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.curriki.api.enus.model.user.SiteUser;

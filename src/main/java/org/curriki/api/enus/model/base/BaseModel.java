@@ -17,7 +17,7 @@ import org.curriki.api.enus.request.SiteRequestEnUS;
  * Page: true
  * SuperPage: PageLayout
  * 
- * Keyword: classSimpleNameCluster
+ * Keyword: classSimpleNameBaseModel
  * Map.hackathonMission: to create a new Java class BaseModel to serve as the base persistent object for primary key, created and modified dates and other useful base model data. 
  * Map.hackathonColumn: Develop Base Classes
  * Map.hackathonLabels: Java
