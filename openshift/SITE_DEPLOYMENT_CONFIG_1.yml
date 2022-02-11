@@ -178,7 +178,7 @@ spec:
             - name: SOLR_PORT
               value: "{{ SOLR_PORT }}"
             - name: SOLR_URL
-              value: "http://{{ SOLR_HOST_NAME}}:{{SOLR_PORT}}/solr/{{SITE_SOLR_COLLECTION_ENUS }}"
+              value: "http://{{ SOLR_HOST_NAME}}:{{SOLR_PORT}}/solr/{{ SOLR_COLLECTION }}"
             - name: SOLR_COLLECTION
               value: "{{ SOLR_COLLECTION }}"
 
@@ -227,6 +227,18 @@ spec:
               value: '{{ AUTH_ROLES_REQUIRED_CurrikiResource | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteUser
               value: '{{ AUTH_ROLES_REQUIRED_SiteUser | to_json }}'
+            - name: MOONSHOTS_HOST
+              value: "{{ MOONSHOTS_HOST }}"
+            - name: MOONSHOTS_PORT
+              value: "{{ MOONSHOTS_PORT }}"
+            - name: MOONSHOTS_DATABASE
+              value: "{{ MOONSHOTS_DATABASE }}"
+            - name: MOONSHOTS_USERNAME
+              value: "{{ MOONSHOTS_USERNAME }}"
+            - name: MOONSHOTS_PASSWORD
+              value: "{{ MOONSHOTS_PASSWORD }}"
+            - name: MOONSHOTS_FETCH_SIZE
+              value: "{{ MOONSHOTS_FETCH_SIZE }}"
           volumeMounts:
       volumes:
   triggers:
