@@ -331,7 +331,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
 					+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
 					+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
-					+ " approvalStatusDate, spamUser from currikidb.resources"
+					+ " approvalStatusDate, spamUser from currikidb.resources limit 0,1000"
 					, new JsonArray(), a -> {
 				SQLRowStream sqlRowStream = a.result();
 				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
