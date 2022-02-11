@@ -165,14 +165,16 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 		try {
 			Future<Void> promiseSteps = configureWebClient().compose(a ->
-				configureOpenApi().compose(d -> 
-					configureHealthChecks().compose(e -> 
-						configureSharedWorkerExecutor().compose(f -> 
-							configureWebsockets().compose(g -> 
-								configureEmail().compose(h -> 
-									configureApi().compose(i -> 
-										configureUi().compose(j -> 
-											startServer()
+				configureData().compose(b -> 
+					configureOpenApi().compose(d -> 
+						configureHealthChecks().compose(e -> 
+							configureSharedWorkerExecutor().compose(f -> 
+								configureWebsockets().compose(g -> 
+									configureEmail().compose(h -> 
+										configureApi().compose(i -> 
+											configureUi().compose(j -> 
+												startServer()
+											)
 										)
 									)
 								)
