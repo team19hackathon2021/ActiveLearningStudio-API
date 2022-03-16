@@ -288,6 +288,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.contributionDate = CurrikiResource.staticSetContributionDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetContributionDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -819,6 +821,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.lastEditDate = CurrikiResource.staticSetLastEditDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetLastEditDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -1157,6 +1161,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.resourceCheckDate = CurrikiResource.staticSetResourceCheckDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetResourceCheckDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -1503,6 +1509,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.lastReviewDate = CurrikiResource.staticSetLastReviewDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetLastReviewDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -2794,6 +2802,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.createDate = CurrikiResource.staticSetCreateDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetCreateDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -3528,6 +3538,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.lastIndexDate = CurrikiResource.staticSetLastIndexDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetLastIndexDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -3654,6 +3666,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.indexRequiredDate = CurrikiResource.staticSetIndexRequiredDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetIndexRequiredDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -4401,9 +4415,11 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
-	protected LocalDateTime approvalStatusDate;
+	protected ZonedDateTime approvalStatusDate;
 
 	/**	<br> The entity approvalStatusDate
 	 *  is defined as null before being initialized. 
@@ -4411,33 +4427,38 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _approvalStatusDate(Wrap<LocalDateTime> w);
+	protected abstract void _approvalStatusDate(Wrap<ZonedDateTime> w);
 
-	public LocalDateTime getApprovalStatusDate() {
+	public ZonedDateTime getApprovalStatusDate() {
 		return approvalStatusDate;
 	}
 
-	public void setApprovalStatusDate(LocalDateTime approvalStatusDate) {
+	public void setApprovalStatusDate(ZonedDateTime approvalStatusDate) {
 		this.approvalStatusDate = approvalStatusDate;
 	}
 	@JsonIgnore
 	public void setApprovalStatusDate(Instant o) {
-		this.approvalStatusDate = o == null ? null : LocalDateTime.from(o).truncatedTo(ChronoUnit.MILLIS);
+		this.approvalStatusDate = o == null ? null : ZonedDateTime.from(o).truncatedTo(ChronoUnit.MILLIS);
 	}
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setApprovalStatusDate(String o) {
 		this.approvalStatusDate = CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o);
 	}
-	public static LocalDateTime staticSetApprovalStatusDate(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).truncatedTo(ChronoUnit.MILLIS);
+	public static ZonedDateTime staticSetApprovalStatusDate(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
+		if(StringUtils.endsWith(o, "Z"))
+			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+		else
+			return o == null ? null : ZonedDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).truncatedTo(ChronoUnit.MILLIS);
 	}
 	@JsonIgnore
 	public void setApprovalStatusDate(Date o) {
-		this.approvalStatusDate = o == null ? null : LocalDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+		this.approvalStatusDate = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 	}
 	protected CurrikiResource approvalStatusDateInit() {
-		Wrap<LocalDateTime> approvalStatusDateWrap = new Wrap<LocalDateTime>().var("approvalStatusDate");
+		Wrap<ZonedDateTime> approvalStatusDateWrap = new Wrap<ZonedDateTime>().var("approvalStatusDate");
 		if(approvalStatusDate == null) {
 			_approvalStatusDate(approvalStatusDateWrap);
 			setApprovalStatusDate(approvalStatusDateWrap.o);
@@ -4445,8 +4466,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchApprovalStatusDate(SiteRequestEnUS siteRequest_, LocalDateTime o) {
-		return o == null ? null : Date.from(o.atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z")).toInstant());
+	public static Date staticSearchApprovalStatusDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+		return o == null ? null : Date.from(o.toInstant());
 	}
 
 	public static String staticSearchStrApprovalStatusDate(SiteRequestEnUS siteRequest_, Date o) {
@@ -4457,8 +4478,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return CurrikiResource.staticSearchStrApprovalStatusDate(siteRequest_, CurrikiResource.staticSearchApprovalStatusDate(siteRequest_, CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o)));
 	}
 
-	public LocalDateTime sqlApprovalStatusDate() {
-		return approvalStatusDate;
+	public OffsetDateTime sqlApprovalStatusDate() {
+		return approvalStatusDate == null ? null : approvalStatusDate.toOffsetDateTime();
 	}
 
 	//////////////
@@ -5185,7 +5206,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		case "approvalStatus":
 			return CurrikiResource.staticSearchApprovalStatus(siteRequest_, (String)o);
 		case "approvalStatusDate":
-			return CurrikiResource.staticSearchApprovalStatusDate(siteRequest_, (LocalDateTime)o);
+			return CurrikiResource.staticSearchApprovalStatusDate(siteRequest_, (ZonedDateTime)o);
 		case "spamUser":
 			return CurrikiResource.staticSearchSpamUser(siteRequest_, (String)o);
 			default:
@@ -5563,11 +5584,15 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "contributorid":
 				if(val instanceof Long)
 					setContributorId((Long)val);
+				else if(val instanceof String)
+					setContributorId((String)val);
 				saves.add("contributorId");
 				return val;
 			case "contributiondate":
 				if(val instanceof ZonedDateTime)
 					setContributionDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setContributionDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setContributionDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("contributionDate");
@@ -5600,11 +5625,15 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "lasteditorid":
 				if(val instanceof Long)
 					setLastEditorId((Long)val);
+				else if(val instanceof String)
+					setLastEditorId((String)val);
 				saves.add("lastEditorId");
 				return val;
 			case "lasteditdate":
 				if(val instanceof ZonedDateTime)
 					setLastEditDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setLastEditDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setLastEditDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("lastEditDate");
@@ -5637,6 +5666,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "resourcecheckdate":
 				if(val instanceof ZonedDateTime)
 					setResourceCheckDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setResourceCheckDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setResourceCheckDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("resourceCheckDate");
@@ -5644,6 +5675,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "resourcecheckid":
 				if(val instanceof Long)
 					setResourceCheckId((Long)val);
+				else if(val instanceof String)
+					setResourceCheckId((String)val);
 				saves.add("resourceCheckId");
 				return val;
 			case "resourcechecknote":
@@ -5669,6 +5702,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "lastreviewdate":
 				if(val instanceof ZonedDateTime)
 					setLastReviewDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setLastReviewDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setLastReviewDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("lastReviewDate");
@@ -5676,6 +5711,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "reviewbyid":
 				if(val instanceof Long)
 					setReviewByID((Long)val);
+				else if(val instanceof String)
+					setReviewByID((String)val);
 				saves.add("reviewByID");
 				return val;
 			case "reviewrating":
@@ -5688,16 +5725,22 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "technicalcompleteness":
 				if(val instanceof Integer)
 					setTechnicalCompleteness((Integer)val);
+				else if(val instanceof String)
+					setTechnicalCompleteness((String)val);
 				saves.add("technicalCompleteness");
 				return val;
 			case "contentaccuracy":
 				if(val instanceof Integer)
 					setContentAccuracy((Integer)val);
+				else if(val instanceof String)
+					setContentAccuracy((String)val);
 				saves.add("contentAccuracy");
 				return val;
 			case "pedagogy":
 				if(val instanceof Integer)
 					setPedagogy((Integer)val);
+				else if(val instanceof String)
+					setPedagogy((String)val);
 				saves.add("pedagogy");
 				return val;
 			case "ratingcomment":
@@ -5708,6 +5751,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "standardsalignment":
 				if(val instanceof Integer)
 					setStandardsAlignment((Integer)val);
+				else if(val instanceof String)
+					setStandardsAlignment((String)val);
 				saves.add("standardsAlignment");
 				return val;
 			case "standardsalignmentcomment":
@@ -5718,6 +5763,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "subjectmatter":
 				if(val instanceof Integer)
 					setSubjectMatter((Integer)val);
+				else if(val instanceof String)
+					setSubjectMatter((String)val);
 				saves.add("subjectMatter");
 				return val;
 			case "subjectmattercomment":
@@ -5728,6 +5775,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "supportsteaching":
 				if(val instanceof Integer)
 					setSupportsTeaching((Integer)val);
+				else if(val instanceof String)
+					setSupportsTeaching((String)val);
 				saves.add("supportsTeaching");
 				return val;
 			case "supportsteachingcomment":
@@ -5738,6 +5787,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "assessmentsquality":
 				if(val instanceof Integer)
 					setAssessmentsQuality((Integer)val);
+				else if(val instanceof String)
+					setAssessmentsQuality((String)val);
 				saves.add("assessmentsQuality");
 				return val;
 			case "assessmentsqualitycomment":
@@ -5748,6 +5799,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "interactivityquality":
 				if(val instanceof Integer)
 					setInteractivityQuality((Integer)val);
+				else if(val instanceof String)
+					setInteractivityQuality((String)val);
 				saves.add("interactivityQuality");
 				return val;
 			case "interactivityqualitycomment":
@@ -5758,6 +5811,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "instructionalquality":
 				if(val instanceof Integer)
 					setInstructionalQuality((Integer)val);
+				else if(val instanceof String)
+					setInstructionalQuality((String)val);
 				saves.add("instructionalQuality");
 				return val;
 			case "instructionalqualitycomment":
@@ -5768,6 +5823,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "deeperlearning":
 				if(val instanceof Integer)
 					setDeeperLearning((Integer)val);
+				else if(val instanceof String)
+					setDeeperLearning((String)val);
 				saves.add("deeperLearning");
 				return val;
 			case "deeperlearningcomment":
@@ -5783,6 +5840,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "createdate":
 				if(val instanceof ZonedDateTime)
 					setCreateDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setCreateDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setCreateDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("createDate");
@@ -5815,6 +5874,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "xwd_id":
 				if(val instanceof Integer)
 					setXwd_id((Integer)val);
+				else if(val instanceof String)
+					setXwd_id((String)val);
 				saves.add("xwd_id");
 				return val;
 			case "mediatype":
@@ -5852,6 +5913,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "lastindexdate":
 				if(val instanceof ZonedDateTime)
 					setLastIndexDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setLastIndexDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setLastIndexDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("lastIndexDate");
@@ -5864,6 +5927,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "indexrequireddate":
 				if(val instanceof ZonedDateTime)
 					setIndexRequiredDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setIndexRequiredDate((String)val);
 				else if(val instanceof OffsetDateTime)
 					setIndexRequiredDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("indexRequiredDate");
@@ -5901,11 +5966,15 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "topofsearchint":
 				if(val instanceof Integer)
 					setTopOfSearchInt((Integer)val);
+				else if(val instanceof String)
+					setTopOfSearchInt((String)val);
 				saves.add("topOfSearchInt");
 				return val;
 			case "partnerint":
 				if(val instanceof Integer)
 					setPartnerInt((Integer)val);
+				else if(val instanceof String)
+					setPartnerInt((String)val);
 				saves.add("partnerInt");
 				return val;
 			case "reviewresource":
@@ -5934,8 +6003,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				saves.add("approvalStatus");
 				return val;
 			case "approvalstatusdate":
-				if(val instanceof LocalDateTime)
-					setApprovalStatusDate((LocalDateTime)val);
+				if(val instanceof ZonedDateTime)
+					setApprovalStatusDate((ZonedDateTime)val);
+				else if(val instanceof String)
+					setApprovalStatusDate((String)val);
+				else if(val instanceof OffsetDateTime)
+					setApprovalStatusDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("approvalStatusDate");
 				return val;
 			case "spamuser":
@@ -5996,13 +6069,17 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			doc.put("title_docvalues_string", title);
 		}
 		if(keywords != null) {
-			for(java.lang.String o : keywords) {
-				doc.put("keywords_docvalues_strings", o);
+			JsonArray l = new JsonArray();
+			doc.put("keywords_docvalues_strings", l);
+			for(String o : keywords) {
+				l.add(o);
 			}
 		}
 		if(generatedKeywords != null) {
-			for(java.lang.String o : generatedKeywords) {
-				doc.put("generatedKeywords_docvalues_strings", o);
+			JsonArray l = new JsonArray();
+			doc.put("generatedKeywords_docvalues_strings", l);
+			for(String o : generatedKeywords) {
+				l.add(o);
 			}
 		}
 		if(language != null) {
@@ -6195,7 +6272,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			doc.put("approvalStatus_docvalues_string", approvalStatus);
 		}
 		if(approvalStatusDate != null) {
-			doc.put("approvalStatusDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(approvalStatusDate.atOffset(ZoneOffset.UTC)));
+			doc.put("approvalStatusDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(approvalStatusDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(spamUser != null) {
 			doc.put("spamUser_docvalues_string", spamUser);

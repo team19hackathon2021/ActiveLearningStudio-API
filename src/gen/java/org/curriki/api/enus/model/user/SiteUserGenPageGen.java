@@ -469,32 +469,6 @@ public abstract class SiteUserGenPageGen<DEV> extends BaseModelPage {
 		}
 	}
 
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSiteUserGenPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSiteUserGenPage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineBaseModelPage(var, val);
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////

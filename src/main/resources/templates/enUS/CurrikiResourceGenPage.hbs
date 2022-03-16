@@ -805,7 +805,7 @@
 					name="suggestCurrikiResource"
 					id="suggestCurrikiResource{{id}}"
 					autocomplete="off"
-					oninput="suggestCurrikiResourceObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'pk,pageUrlPk,objectTitle' } ], $('#suggestListCurrikiResource{{id}}'), {{pk}}; "
+					oninput="suggestCurrikiResourceObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListCurrikiResource{{id}}'), {{pk}}; "
 					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/resource?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
 				{{#if listCurrikiResource}}
 					value="{{query2}}"

@@ -912,11 +912,15 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			case "seearchived":
 				if(val instanceof Boolean)
 					setSeeArchived((Boolean)val);
+				else if(val instanceof String)
+					setSeeArchived((String)val);
 				saves.add("seeArchived");
 				return val;
 			case "seedeleted":
 				if(val instanceof Boolean)
 					setSeeDeleted((Boolean)val);
+				else if(val instanceof String)
+					setSeeDeleted((String)val);
 				saves.add("seeDeleted");
 				return val;
 			default:
@@ -942,8 +946,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public void indexSiteUser(JsonObject doc) {
 		if(userKeys != null) {
-			for(java.lang.Long o : userKeys) {
-				doc.put("userKeys_docvalues_longs", o);
+			JsonArray l = new JsonArray();
+			doc.put("userKeys_docvalues_longs", l);
+			for(Long o : userKeys) {
+				l.add(o);
 			}
 		}
 		if(userId != null) {

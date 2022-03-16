@@ -81,6 +81,11 @@ public class ConfigKeys extends ComputateVertxConfigKeys {
 	public static final String MOONSHOTS_MAX_STATEMENTS_PER_CONNECTION = "MOONSHOTS_MAX_STATEMENTS_PER_CONNECTION";
 
 	/**
+	 * The timezone of the Moonshots database when retrieving local date time values. 
+	 **/
+	public static final String MOONSHOTS_ZONE = "MOONSHOTS_ZONE";
+
+	/**
 	 * 
 	 **/
 	public static final String MOONSHOTS_FETCH_SIZE = "MOONSHOTS_FETCH_SIZE";

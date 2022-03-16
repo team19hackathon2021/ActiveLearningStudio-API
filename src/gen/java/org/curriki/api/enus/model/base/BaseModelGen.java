@@ -299,6 +299,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		this.created = BaseModel.staticSetCreated(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetCreated(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -372,6 +374,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		this.modified = BaseModel.staticSetModified(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetModified(SiteRequestEnUS siteRequest_, String o) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -614,6 +618,72 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public static String staticSearchFqClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
 		return BaseModel.staticSearchStrClassSimpleName(siteRequest_, BaseModel.staticSearchClassSimpleName(siteRequest_, BaseModel.staticSetClassSimpleName(siteRequest_, o)));
+	}
+
+	/////////////////////////
+	// classCanonicalNames //
+	/////////////////////////
+
+	/**	 The entity classCanonicalNames
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonInclude(Include.NON_NULL)
+	protected List<String> classCanonicalNames = new ArrayList<String>();
+
+	/**	<br> The entity classCanonicalNames
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _classCanonicalNames(List<String> l);
+
+	public List<String> getClassCanonicalNames() {
+		return classCanonicalNames;
+	}
+
+	public void setClassCanonicalNames(List<String> classCanonicalNames) {
+		this.classCanonicalNames = classCanonicalNames;
+	}
+	public static String staticSetClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	public BaseModel addClassCanonicalNames(String...objets) {
+		for(String o : objets) {
+			addClassCanonicalNames(o);
+		}
+		return (BaseModel)this;
+	}
+	public BaseModel addClassCanonicalNames(String o) {
+		if(o != null)
+			this.classCanonicalNames.add(o);
+		return (BaseModel)this;
+	}
+	@JsonIgnore
+	public void setClassCanonicalNames(JsonArray objets) {
+		classCanonicalNames.clear();
+		for(int i = 0; i < objets.size(); i++) {
+			String o = objets.getString(i);
+			addClassCanonicalNames(o);
+		}
+	}
+	protected BaseModel classCanonicalNamesInit() {
+		_classCanonicalNames(classCanonicalNames);
+		return (BaseModel)this;
+	}
+
+	public static String staticSearchClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSearchStrClassCanonicalNames(siteRequest_, BaseModel.staticSearchClassCanonicalNames(siteRequest_, BaseModel.staticSetClassCanonicalNames(siteRequest_, o)));
 	}
 
 	///////////////
@@ -1223,6 +1293,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 				deletedInit();
 				classCanonicalNameInit();
 				classSimpleNameInit();
+				classCanonicalNamesInit();
 				sessionIdInit();
 				userKeyInit();
 				savesInit();
@@ -1306,6 +1377,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return oBaseModel.classCanonicalName;
 			case "classSimpleName":
 				return oBaseModel.classSimpleName;
+			case "classCanonicalNames":
+				return oBaseModel.classCanonicalNames;
 			case "sessionId":
 				return oBaseModel.sessionId;
 			case "userKey":
@@ -1385,6 +1458,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSetClassCanonicalName(siteRequest_, o);
 		case "classSimpleName":
 			return BaseModel.staticSetClassSimpleName(siteRequest_, o);
+		case "classCanonicalNames":
+			return BaseModel.staticSetClassCanonicalNames(siteRequest_, o);
 		case "sessionId":
 			return BaseModel.staticSetSessionId(siteRequest_, o);
 		case "userKey":
@@ -1439,6 +1514,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSearchClassCanonicalName(siteRequest_, (String)o);
 		case "classSimpleName":
 			return BaseModel.staticSearchClassSimpleName(siteRequest_, (String)o);
+		case "classCanonicalNames":
+			return BaseModel.staticSearchClassCanonicalNames(siteRequest_, (String)o);
 		case "sessionId":
 			return BaseModel.staticSearchSessionId(siteRequest_, (String)o);
 		case "userKey":
@@ -1493,6 +1570,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSearchStrClassCanonicalName(siteRequest_, (String)o);
 		case "classSimpleName":
 			return BaseModel.staticSearchStrClassSimpleName(siteRequest_, (String)o);
+		case "classCanonicalNames":
+			return BaseModel.staticSearchStrClassCanonicalNames(siteRequest_, (String)o);
 		case "sessionId":
 			return BaseModel.staticSearchStrSessionId(siteRequest_, (String)o);
 		case "userKey":
@@ -1547,6 +1626,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSearchFqClassCanonicalName(siteRequest_, o);
 		case "classSimpleName":
 			return BaseModel.staticSearchFqClassSimpleName(siteRequest_, o);
+		case "classCanonicalNames":
+			return BaseModel.staticSearchFqClassCanonicalNames(siteRequest_, o);
 		case "sessionId":
 			return BaseModel.staticSearchFqSessionId(siteRequest_, o);
 		case "userKey":
@@ -1603,6 +1684,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			case "created":
 				if(val instanceof ZonedDateTime)
 					setCreated((ZonedDateTime)val);
+				else if(val instanceof String)
+					setCreated((String)val);
 				else if(val instanceof OffsetDateTime)
 					setCreated(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 				saves.add("created");
@@ -1610,11 +1693,15 @@ public abstract class BaseModelGen<DEV> extends Object {
 			case "archived":
 				if(val instanceof Boolean)
 					setArchived((Boolean)val);
+				else if(val instanceof String)
+					setArchived((String)val);
 				saves.add("archived");
 				return val;
 			case "deleted":
 				if(val instanceof Boolean)
 					setDeleted((Boolean)val);
+				else if(val instanceof String)
+					setDeleted((String)val);
 				saves.add("deleted");
 				return val;
 			case "sessionid":
@@ -1625,6 +1712,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			case "userkey":
 				if(val instanceof Long)
 					setUserKey((Long)val);
+				else if(val instanceof String)
+					setUserKey((String)val);
 				saves.add("userKey");
 				return val;
 			default:
@@ -1674,6 +1763,13 @@ public abstract class BaseModelGen<DEV> extends Object {
 		if(classSimpleName != null) {
 			doc.put("classSimpleName_docvalues_string", classSimpleName);
 		}
+		if(classCanonicalNames != null) {
+			JsonArray l = new JsonArray();
+			doc.put("classCanonicalNames_docvalues_strings", l);
+			for(String o : classCanonicalNames) {
+				l.add(o);
+			}
+		}
 		if(sessionId != null) {
 			doc.put("sessionId_docvalues_string", sessionId);
 		}
@@ -1681,8 +1777,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 			doc.put("userKey_docvalues_long", userKey);
 		}
 		if(saves != null) {
-			for(java.lang.String o : saves) {
-				doc.put("saves_docvalues_strings", o);
+			JsonArray l = new JsonArray();
+			doc.put("saves_docvalues_strings", l);
+			for(String o : saves) {
+				l.add(o);
 			}
 		}
 		if(objectTitle != null) {
@@ -1726,6 +1824,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return "classCanonicalName_docvalues_string";
 			case "classSimpleName":
 				return "classSimpleName_docvalues_string";
+			case "classCanonicalNames":
+				return "classCanonicalNames_docvalues_strings";
 			case "sessionId":
 				return "sessionId_docvalues_string";
 			case "userKey":
@@ -1789,6 +1889,9 @@ public abstract class BaseModelGen<DEV> extends Object {
 		oBaseModel.setDeleted(Optional.ofNullable(doc.get("deleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setClassCanonicalName(Optional.ofNullable(doc.get("classCanonicalName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setClassSimpleName(Optional.ofNullable(doc.get("classSimpleName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("classCanonicalNames_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oBaseModel.addClassCanonicalNames(v.toString());
+		});
 		oBaseModel.setSessionId(Optional.ofNullable(doc.get("sessionId_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setUserKey(Optional.ofNullable(doc.get("userKey_docvalues_long")).map(v -> v.toString()).orElse(null));
 		Optional.ofNullable((List<?>)doc.get("saves_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
@@ -1830,6 +1933,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 				apiRequest.addVars("classCanonicalName");
 			if(!Objects.equals(classSimpleName, original.getClassSimpleName()))
 				apiRequest.addVars("classSimpleName");
+			if(!Objects.equals(classCanonicalNames, original.getClassCanonicalNames()))
+				apiRequest.addVars("classCanonicalNames");
 			if(!Objects.equals(sessionId, original.getSessionId()))
 				apiRequest.addVars("sessionId");
 			if(!Objects.equals(userKey, original.getUserKey()))
@@ -1866,6 +1971,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		sb.append(Optional.ofNullable(deleted).map(v -> "deleted: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(classCanonicalName).map(v -> "classCanonicalName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(classSimpleName).map(v -> "classSimpleName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(classCanonicalNames).map(v -> "classCanonicalNames: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(sessionId).map(v -> "sessionId: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(userKey).map(v -> "userKey: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(saves).map(v -> "saves: " + v + "\n").orElse(""));
@@ -1888,6 +1994,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String VAR_deleted = "deleted";
 	public static final String VAR_classCanonicalName = "classCanonicalName";
 	public static final String VAR_classSimpleName = "classSimpleName";
+	public static final String VAR_classCanonicalNames = "classCanonicalNames";
 	public static final String VAR_sessionId = "sessionId";
 	public static final String VAR_userKey = "userKey";
 	public static final String VAR_saves = "saves";
@@ -1910,6 +2017,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_deleted = "deleted";
 	public static final String DISPLAY_NAME_classCanonicalName = "";
 	public static final String DISPLAY_NAME_classSimpleName = "";
+	public static final String DISPLAY_NAME_classCanonicalNames = "";
 	public static final String DISPLAY_NAME_sessionId = "";
 	public static final String DISPLAY_NAME_userKey = "";
 	public static final String DISPLAY_NAME_saves = "";
@@ -1947,6 +2055,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return DISPLAY_NAME_classCanonicalName;
 		case VAR_classSimpleName:
 			return DISPLAY_NAME_classSimpleName;
+		case VAR_classCanonicalNames:
+			return DISPLAY_NAME_classCanonicalNames;
 		case VAR_sessionId:
 			return DISPLAY_NAME_sessionId;
 		case VAR_userKey:

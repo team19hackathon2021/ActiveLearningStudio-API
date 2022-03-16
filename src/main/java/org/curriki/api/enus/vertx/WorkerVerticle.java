@@ -3,12 +3,17 @@ package org.curriki.api.enus.vertx;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.computate.search.tool.TimeTool;
 import org.computate.vertx.api.ApiCounter;
 import org.computate.vertx.api.ApiRequest;
@@ -19,25 +24,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
-import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
-import io.vertx.ext.sql.SQLConnection;
-import io.vertx.ext.sql.SQLOptions;
-import io.vertx.ext.sql.SQLRowStream;
 import io.vertx.ext.web.client.WebClient;
-import io.vertx.ext.web.client.predicate.ResponsePredicate;
+import io.vertx.mysqlclient.MySQLConnectOptions;
+import io.vertx.mysqlclient.MySQLPool;
+import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Cursor;
+import io.vertx.sqlclient.PoolOptions;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowStream;
+import io.vertx.sqlclient.SqlConnection;
 
 /**
  * Map.hackathonMission: to create a new Java class to run Vert.x verticle as a background worker to perform tasks in the background. 
@@ -55,6 +61,19 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 **/
 	private PgPool pgPool;
 
+	/**
+	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database MySQL. 
+	 **/
+	private MySQLPool mysqlPool;
+
+	public PgPool getPgPool() {
+		return pgPool;
+	}
+
+	public void setPgPool(PgPool pgPool) {
+		this.pgPool = pgPool;
+	}
+
 	private WebClient webClient;
 
 	WorkerExecutor workerExecutor;
@@ -69,23 +88,25 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 *	Setup the startPromise to handle the configuration steps and starting the server. 
 	 **/
 	@Override()
-	public void  start(Promise<Void> startPromise) throws Exception, Exception {
+	public void start(Promise<Void> startPromise) throws Exception, Exception {
 		commitWithin = config().getInteger(ConfigKeys.SOLR_WORKER_COMMIT_WITHIN_MILLIS);
 
 		try {
-			configureWebClient().compose(a -> 
-				configureSharedWorkerExecutor().compose(c -> 
-					configureEmail().compose(d -> 
-						configureMoonshotsData().compose(e -> 
-							importData().compose(f -> 
-								syncDbToSolr().compose(g -> 
-									refreshAllData()
-								)
-							)
-						)
-					)
-				)
-			).onComplete(startPromise);
+			configureData().onSuccess(a -> 
+				configureWebClient().onSuccess(b -> 
+					configureSharedWorkerExecutor().onSuccess(c -> 
+						configureEmail().onSuccess(d -> 
+							configureMoonshotsData().onSuccess(e -> 
+								importData().onSuccess(f -> 
+									refreshAllData().onSuccess(g -> {
+										startPromise.complete();
+									}).onFailure(ex -> startPromise.fail(ex))
+								).onFailure(ex -> startPromise.fail(ex))
+							).onFailure(ex -> startPromise.fail(ex))
+						).onFailure(ex -> startPromise.fail(ex))
+					).onFailure(ex -> startPromise.fail(ex))
+				).onFailure(ex -> startPromise.fail(ex))
+			).onFailure(ex -> startPromise.fail(ex));
 		} catch (Exception ex) {
 			LOG.error("Couldn't start verticle. ", ex);
 		}
@@ -101,6 +122,50 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			promise.complete();
 		} catch(Exception ex) {
 			LOG.error("Unable to configure site context. ", ex);
+			promise.fail(ex);
+		}
+
+		return promise.future();
+	}
+
+	/**	
+	 * 
+	 * Val.ConnectionError.enUS:Could not open the database client connection. 
+	 * Val.ConnectionSuccess.enUS:The database client connection was successful. 
+	 * 
+	 * Val.InitError.enUS:Could not initialize the database tables. 
+	 * Val.InitSuccess.enUS:The database tables were created successfully. 
+	 * 
+	 *	Configure shared database connections across the cluster for massive scaling of the application. 
+	 *	Return a promise that configures a shared database client connection. 
+	 *	Load the database configuration into a shared io.vertx.ext.jdbc.JDBCClient for a scalable, clustered datasource connection pool. 
+	 *	Initialize the database tables if not already created for the first time. 
+	 **/
+	private Future<Void> configureData() {
+		Promise<Void> promise = Promise.promise();
+		try {
+			PgConnectOptions pgOptions = new PgConnectOptions();
+			Integer jdbcMaxPoolSize = config().getInteger(ConfigKeys.JDBC_MAX_POOL_SIZE, 1);
+
+			pgOptions.setPort(config().getInteger(ConfigKeys.JDBC_PORT));
+			pgOptions.setHost(config().getString(ConfigKeys.JDBC_HOST));
+			pgOptions.setDatabase(config().getString(ConfigKeys.JDBC_DATABASE));
+			pgOptions.setUser(config().getString(ConfigKeys.JDBC_USERNAME));
+			pgOptions.setPassword(config().getString(ConfigKeys.JDBC_PASSWORD));
+			pgOptions.setIdleTimeout(config().getInteger(ConfigKeys.JDBC_MAX_IDLE_TIME, 24));
+			pgOptions.setIdleTimeoutUnit(TimeUnit.HOURS);
+			pgOptions.setConnectTimeout(config().getInteger(ConfigKeys.JDBC_CONNECT_TIMEOUT, 86400000));
+
+			PoolOptions poolOptions = new PoolOptions();
+			poolOptions.setMaxSize(jdbcMaxPoolSize);
+			poolOptions.setMaxWaitQueueSize(config().getInteger(ConfigKeys.JDBC_MAX_WAIT_QUEUE_SIZE, 10));
+
+			pgPool = PgPool.pool(vertx, pgOptions, poolOptions);
+
+			LOG.info(configureDataInitSuccess);
+			promise.complete();
+		} catch (Exception ex) {
+			LOG.error(configureDataInitError, ex);
 			promise.fail(ex);
 		}
 
@@ -165,30 +230,32 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 */
 	private Future<Void> configureMoonshotsData() {
 		Promise<Void> promise = Promise.promise();
-
 		try {
-			JsonObject jdbcOptions = new JsonObject();
-			jdbcOptions.put("driver_class", config().getString(ConfigKeys.MOONSHOTS_DRIVER_CLASS));
-			jdbcOptions.put("url", String.format("jdbc:mysql://%s:%s@%s:%s/%s?useSSL=false&zeroDateTimeBehavior=convertToNull", 
-					config().getString(ConfigKeys.MOONSHOTS_USERNAME)
-					, config().getString(ConfigKeys.MOONSHOTS_PASSWORD)
-					, config().getString(ConfigKeys.MOONSHOTS_HOST)
-					, config().getString(ConfigKeys.MOONSHOTS_PORT)
-					, config().getString(ConfigKeys.MOONSHOTS_DATABASE)
-					));
-			jdbcOptions.put("max_pool_size", config().getInteger(ConfigKeys.MOONSHOTS_MAX_POOL_SIZE));
-			jdbcOptions.put("min_pool_size", config().getInteger(ConfigKeys.MOONSHOTS_MIN_POOL_SIZE));
-			jdbcOptions.put("max_idle_time", config().getInteger(ConfigKeys.MOONSHOTS_MAX_IDLE_TIME));
-			jdbcOptions.put("max_statements", config().getInteger(ConfigKeys.MOONSHOTS_MAX_STATEMENTS));
-			jdbcOptions.put("max_statements_per_connection", config().getInteger(ConfigKeys.MOONSHOTS_MAX_STATEMENTS_PER_CONNECTION));
+			MySQLConnectOptions mysqlOptions = new MySQLConnectOptions();
+			Integer jdbcMaxPoolSize = config().getInteger(ConfigKeys.MOONSHOTS_MAX_POOL_SIZE, 1);
 
-			jdbcClient = JDBCClient.createShared(vertx, jdbcOptions);
-			LOG.info(configureMoonshotsDataComplete);
+			mysqlOptions.setPort(config().getInteger(ConfigKeys.MOONSHOTS_PORT));
+			mysqlOptions.setHost(config().getString(ConfigKeys.MOONSHOTS_HOST));
+			mysqlOptions.setDatabase(config().getString(ConfigKeys.MOONSHOTS_DATABASE));
+			mysqlOptions.setUser(config().getString(ConfigKeys.MOONSHOTS_USERNAME));
+			mysqlOptions.setPassword(config().getString(ConfigKeys.MOONSHOTS_PASSWORD));
+			mysqlOptions.setIdleTimeout(config().getInteger(ConfigKeys.MOONSHOTS_MAX_IDLE_TIME, 24));
+			mysqlOptions.setIdleTimeoutUnit(TimeUnit.HOURS);
+			mysqlOptions.setConnectTimeout(config().getInteger(ConfigKeys.JDBC_CONNECT_TIMEOUT, 86400000));
+
+			PoolOptions poolOptions = new PoolOptions();
+			poolOptions.setMaxSize(jdbcMaxPoolSize);
+			poolOptions.setMaxWaitQueueSize(config().getInteger(ConfigKeys.JDBC_MAX_WAIT_QUEUE_SIZE, 10));
+
+			mysqlPool = MySQLPool.pool(vertx, mysqlOptions, poolOptions);
+
+			LOG.info(configureDataInitSuccess);
 			promise.complete();
-		} catch(Exception ex) {
-			LOG.error(configureMoonshotsDataFail, ex);
+		} catch (Exception ex) {
+			LOG.error(configureDataInitError, ex);
 			promise.fail(ex);
 		}
+
 		return promise.future();
 	}
 
@@ -202,31 +269,34 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			String importStartTime = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_START_TIME, classSimpleName));
 			String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 			// Get the duration of the import period. 
-			Duration duration = TimeTool.parseNextDuration(importPeriod);
 			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
 			// to give the following code enough time to complete it's calculations to ensure the import starts correctly. 
 
-			ZonedDateTime nextStartTime;
-			if(importStartTime == null) {
-				nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
-						.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
-			} else {
-				nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
-						.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
-			}
+			Duration nextStartDuration = null;
+			ZonedDateTime nextStartTime = null;
+			if(importPeriod != null) {
+				Duration duration = TimeTool.parseNextDuration(importPeriod);
+				if(importStartTime == null) {
+					nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
+							.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+				} else {
+					nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
+							.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+				}
 
-			// Get the time now for the import start time zone. 
-			ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
-			BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
-					.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
-			Duration nextStartDuration = Duration.between(now, nextStartTime);
-			if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
-				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
-				nextStartTime = now.plus(nextStartDuration);
+				// Get the time now for the import start time zone. 
+				ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
+				BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
+						.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
+				nextStartDuration = Duration.between(now, nextStartTime);
+				if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
+					nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
+					nextStartTime = now.plus(nextStartDuration);
+				}
+				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			}
-			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			ZonedDateTime nextStartTime2 = nextStartTime;
-				
+
 			if(importStartTime == null) {
 				importDataClass(classSimpleName, nextStartTime2);
 			} else {
@@ -247,12 +317,26 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private void importDataClass(String classSimpleName, ZonedDateTime startDateTime) {
 		if("CurrikiResource".equals(classSimpleName)) {
 			try {
-				jdbcClient.getConnection(a -> {
+				mysqlPool.getConnection(a -> {
 					if(a.succeeded()) {
-						SQLConnection sqlConnection = a.result();
-						sqlConnection.setOptions(new SQLOptions().setFetchSize(config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE)));
+						SqlConnection sqlConnection = a.result();
+//						sqlConnection.setOptions(new SQLOptions().setFetchSize(config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE)));
 						importDataCurrikiResource(sqlConnection).onComplete(b -> {
 							String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+							if(importPeriod != null && startDateTime != null) {
+								Duration duration = TimeTool.parseNextDuration(importPeriod);
+								ZonedDateTime nextStartTime = startDateTime.plus(duration);
+								LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+								Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+								vertx.setTimer(nextStartDuration.toMillis(), c -> {
+									importDataClass(classSimpleName, nextStartTime);
+								});
+							}
+						});
+					} else {
+						LOG.error(String.format(importDataClassFail, classSimpleName), a.cause());
+						String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+						if(importPeriod != null && startDateTime != null) {
 							Duration duration = TimeTool.parseNextDuration(importPeriod);
 							ZonedDateTime nextStartTime = startDateTime.plus(duration);
 							LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
@@ -260,29 +344,21 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							vertx.setTimer(nextStartDuration.toMillis(), c -> {
 								importDataClass(classSimpleName, nextStartTime);
 							});
-						});
-					} else {
-						LOG.error(String.format(importDataClassFail, classSimpleName), a.cause());
-						String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-						Duration duration = TimeTool.parseNextDuration(importPeriod);
-						ZonedDateTime nextStartTime = startDateTime.plus(duration);
-						LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-						Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-						vertx.setTimer(nextStartDuration.toMillis(), c -> {
-							importDataClass(classSimpleName, nextStartTime);
-						});
+						}
 					}
 				});
 			} catch(Exception ex) {
 				LOG.error(String.format(importDataClassFail, classSimpleName), ex);
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-				Duration duration = TimeTool.parseNextDuration(importPeriod);
-				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-				vertx.setTimer(nextStartDuration.toMillis(), c -> {
-					importDataClass(classSimpleName, nextStartTime);
-				});
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), c -> {
+						importDataClass(classSimpleName, nextStartTime);
+					});
+				}
 			}
 		}
 	}
@@ -309,58 +385,44 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 * Val.Fail.enUS:Importing CurrikiResource records failed. 
 	 * Val.Skip.enUS:Skip importing CurrikiResource records. 
 	 **/
-	private Future<Void> importDataCurrikiResource(SQLConnection sqlConnection) {
+	private Future<Void> importDataCurrikiResource(SqlConnection sqlConnection) {
 		Promise<Void> promise = Promise.promise();
 
 		try {
-			sqlConnection.queryStreamWithParams(
-					"SELECT resourceid, licenseid, contributorid, contributiondate,"
-					+ " description, title, keywords, generatedKeywords, language,"
-					+ " lasteditorid, lasteditdate, currikilicense, externalurl,"
-					+ " resourcechecked, content, resourcecheckrequestnote, resourcecheckdate,"
-					+ " resourcecheckid, resourcechecknote, studentfacing, source, reviewstatus,"
-					+ " lastreviewdate, reviewedbyid, reviewrating, technicalcompleteness,"
-					+ " contentaccuracy, pedagogy, ratingcomment, standardsalignment,"
-					+ " standardsalignmentcomment, subjectmatter, subjectmattercomment,"
-					+ " supportsteaching, supportsteachingcomment, assessmentsquality,"
-					+ " assessmentsqualitycomment, interactivityquality,"
-					+ " interactivityqualitycomment, instructionalquality,"
-					+ " instructionalqualitycomment, deeperlearning, deeperlearningcomment,"
-					+ " partner, createdate, type, featured, page, active, public, xwd_id,"
-					+ " mediatype, access, memberrating, aligned, pageurl, indexed,"
-					+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
-					+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
-					+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
-					+ " approvalStatusDate, spamUser from currikidb.resources limit 0,1000"
-					, new JsonArray(), a -> {
-				SQLRowStream sqlRowStream = a.result();
-				Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
-				ApiCounter counter = new ApiCounter();
-				sqlRowStream.pause();
-				sqlRowStream.fetch(fetchSize);
-				sqlRowStream.resultSetClosedHandler(b -> {
-					sqlRowStream.moreResults();
-				}).handler(row -> {
-					counter.incrementQueueNum();
-					processRowCurrikiResource(row).onSuccess(b -> {
-						counter.decrementQueueNum();
-						counter.incrementTotalNum();
-						if(counter.getQueueNum().compareTo(0L) == 0) {
-							sqlRowStream.fetch(fetchSize);
-						}
+			Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
+			sqlConnection.begin().onSuccess(transaction -> {
+				sqlConnection.prepare(
+						"SELECT resourceid, licenseid, contributorid, contributiondate,"
+						+ " description, title, keywords, generatedKeywords, language,"
+						+ " lasteditorid, lasteditdate, currikilicense, externalurl,"
+						+ " resourcechecked, content, resourcecheckrequestnote, resourcecheckdate,"
+						+ " resourcecheckid, resourcechecknote, studentfacing, source, reviewstatus,"
+						+ " lastreviewdate, reviewedbyid, reviewrating, technicalcompleteness,"
+						+ " contentaccuracy, pedagogy, ratingcomment, standardsalignment,"
+						+ " standardsalignmentcomment, subjectmatter, subjectmattercomment,"
+						+ " supportsteaching, supportsteachingcomment, assessmentsquality,"
+						+ " assessmentsqualitycomment, interactivityquality,"
+						+ " interactivityqualitycomment, instructionalquality,"
+						+ " instructionalqualitycomment, deeperlearning, deeperlearningcomment,"
+						+ " partner, createdate, type, featured, page, active, public, xwd_id,"
+						+ " mediatype, access, memberrating, aligned, pageurl, indexed,"
+						+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
+						+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
+						+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
+						+ " approvalStatusDate, spamUser from currikidb.resources"
+						).onSuccess(preparedStatement -> {
+					Cursor cursor = preparedStatement.cursor();
+					importDataCurrikiResourceRow(cursor, fetchSize).onSuccess(a -> {
+						transaction.commit();
+						promise.complete();
 					}).onFailure(ex -> {
-						counter.decrementQueueNum();
-						counter.incrementTotalNum();
-						sqlRowStream.pause();
-						LOG.error(importDataCurrikiResourceFail, ex);
+						transaction.rollback();
+						LOG.error(importDataCurrikiResourceComplete, ex);
 						promise.fail(ex);
 					});
-				}).exceptionHandler(ex -> {
+				}).onFailure(ex -> {
 					LOG.error(importDataCurrikiResourceComplete, ex);
 					promise.fail(ex);
-				}).endHandler(b -> {
-					LOG.info(importDataCurrikiResourceComplete);
-					promise.complete();
 				});
 			});
 		} catch(Exception ex) {
@@ -372,36 +434,78 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	}
 
 	/**	
-	 * Val.Complete.enUS:Importing CurrikiResource row completed. 
 	 * Val.Fail.enUS:Importing CurrikiResource row failed. 
 	 **/
-	private Future<Void> processRowCurrikiResource(JsonArray row) {
+	public Future<Void> importDataCurrikiResourceRow(Cursor cursor, Integer fetchSize) {
 		Promise<Void> promise = Promise.promise();
+		
+		cursor.read(fetchSize).onSuccess(rowset -> {
+			List<Future> futures = new ArrayList<>();
+			rowset.forEach(row -> {
+				futures.add(Future.future(promise1 -> {
+					processRowCurrikiResource(row).onSuccess(a -> {
+						promise1.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format(importDataCurrikiResourceRowFail), ex);
+						promise1.fail(ex);
+					});
+				}));
+			});
+			CompositeFuture.all(futures).onSuccess( a -> {
+				if(cursor.hasMore()) {
+					importDataCurrikiResourceRow(cursor, fetchSize).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						promise.fail(ex);
+					});
+				} else {
+					promise.complete();
+				}
+			}).onFailure(ex -> {
+				LOG.error(String.format(importDataCurrikiResourceRowFail), ex);
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			LOG.error(importDataCurrikiResourceComplete, ex);
+			promise.fail(ex);
+		});
+
+		return promise.future();
+	}
+
+	/**	
+	 * Val.Complete.enUS:Importing CurrikiResource row completed. 
+	 * Val.Fail.enUS:Importing CurrikiResource row failed. 
+	 * @param row 
+	 **/
+	private Future<Void> processRowCurrikiResource(Row row) {
+		Promise<Void> promise = Promise.promise();
+		ZoneId moonshotsZone = ZoneId.of(config().getString(ConfigKeys.MOONSHOTS_ZONE));
 
 		try {
-			String resourceId = row.getString(0);
-			String licenseId = row.getString(1);
-			String contributorId = row.getString(2);
-			ZonedDateTime contributionDate = null;//row.getString(3);
+			Integer resourceId = row.getInteger(0);
+			Integer licenseId = row.getInteger(1);
+			Long contributorId = row.getLong(2);
+			LocalDateTime contributionDate = row.getLocalDateTime(3);
 			String description = row.getString(4);
 			String title = row.getString(5);
 			String keywordsStr = row.getString(6);
 			String generatedKeywordsStr = row.getString(7);
 			String language = row.getString(8);
 			Long lastEditorId = row.getLong(9);
-			ZonedDateTime lastEditDate = null;//row.getString(10);
+			LocalDateTime lastEditDate = row.getLocalDateTime(10);
 			String currikiLicense = row.getString(11);
 			String externalUrl = row.getString(12);
 			String resourceChecked = row.getString(13);
 			String content = row.getString(14);
 			String resourceCheckRequestNote = row.getString(15);
-			ZonedDateTime resourceCheckDate = null;//row.getString(16);
+			LocalDateTime resourceCheckDate = row.getLocalDateTime(16);
 			Long resourceCheckId = row.getLong(17);
 			String resourceCheckNote = row.getString(18);
 			String studentFacing = row.getString(19);
 			String source = row.getString(20);
 			String reviewStatus = row.getString(21);
-			ZonedDateTime lastReviewDate = null;//row.getString(22);
+			LocalDateTime lastReviewDate = row.getLocalDateTime(22);
 			Long reviewByID = row.getLong(23);
 			BigDecimal reviewRating = Optional.ofNullable(row.getDouble(24)).map(o -> new BigDecimal(o)).orElse(null);
 			Integer technicalCompleteness = row.getInteger(25);
@@ -423,7 +527,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			Integer deeperLearning = row.getInteger(41);
 			String deeperLearningComment = row.getString(42);
 			String partner = row.getString(43);
-			ZonedDateTime createDate = null;//row.getString(44);
+			LocalDateTime createDate = row.getLocalDateTime(44);
 			String type = row.getString(45);
 			String featured = row.getString(46);
 			String page = row.getString(47);
@@ -436,9 +540,9 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			String aligned = row.getString(54);
 			String pageUrl = row.getString(55);
 			String indexed = row.getString(56);
-			ZonedDateTime lastIndexDate = null;//row.getString(57);
+			LocalDateTime lastIndexDate = row.getLocalDateTime(57);
 			String indexRequired = row.getString(58);
-			ZonedDateTime indexRequiredDate = null;//row.getString(59);
+			LocalDateTime indexRequiredDate = row.getLocalDateTime(59);
 			String rescrape = row.getString(60);
 			String goButton = row.getString(61);
 			String downloadButton = row.getString(62);
@@ -452,7 +556,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			String contentDisplayOk = row.getString(70);
 			String metadata = row.getString(71);
 			String approvalStatus = row.getString(72);
-			ZonedDateTime approvalStatusDate = null;//row.getString(73);
+			LocalDateTime approvalStatusDate = row.getLocalDateTime(73);
 			String spamUser = row.getString(74);
 			JsonObject body = new JsonObject();
 			body.put(CurrikiResource.VAR_saves, new JsonArray()
@@ -536,81 +640,81 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					.add(CurrikiResource.VAR_approvalStatusDate)
 					.add(CurrikiResource.VAR_spamUser));
 
-			body.put(CurrikiResource.VAR_pk, resourceId);
-			body.put(CurrikiResource.VAR_resourceId, resourceId);
-			body.put(CurrikiResource.VAR_licenseId, licenseId);
-			body.put(CurrikiResource.VAR_contributorId, contributorId);
-			body.put(CurrikiResource.VAR_contributionDate, contributionDate);
-			body.put(CurrikiResource.VAR_description, description);
+			body.put(CurrikiResource.VAR_pk, Optional.ofNullable(resourceId).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_resourceId, Optional.ofNullable(resourceId).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_licenseId, Optional.ofNullable(licenseId).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_contributorId, Optional.ofNullable(contributorId).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_contributionDate, Optional.ofNullable(contributionDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
+			body.put(CurrikiResource.VAR_description, StringUtils.substring(description, 0, 10000));
 			body.put(CurrikiResource.VAR_title, title);
 			body.put(CurrikiResource.VAR_keywordsStr, keywordsStr);
 			body.put(CurrikiResource.VAR_generatedKeywordsStr, generatedKeywordsStr);
 			body.put(CurrikiResource.VAR_language, language);
-			body.put(CurrikiResource.VAR_lastEditorId, lastEditorId);
-			body.put(CurrikiResource.VAR_lastEditDate, lastEditDate);
+			body.put(CurrikiResource.VAR_lastEditorId, Optional.ofNullable(lastEditorId).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_lastEditDate, Optional.ofNullable(lastEditDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
 			body.put(CurrikiResource.VAR_currikiLicense, currikiLicense);
 			body.put(CurrikiResource.VAR_externalUrl, externalUrl);
 			body.put(CurrikiResource.VAR_resourceChecked, resourceChecked);
 			body.put(CurrikiResource.VAR_content, content);
 			body.put(CurrikiResource.VAR_resourceCheckRequestNote, resourceCheckRequestNote);
-			body.put(CurrikiResource.VAR_resourceCheckDate, resourceCheckDate);
-			body.put(CurrikiResource.VAR_resourceCheckId, resourceCheckId);
+			body.put(CurrikiResource.VAR_resourceCheckDate, Optional.ofNullable(resourceCheckDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
+			body.put(CurrikiResource.VAR_resourceCheckId, Optional.ofNullable(resourceCheckId).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_resourceCheckNote, resourceCheckNote);
 			body.put(CurrikiResource.VAR_studentFacing, studentFacing);
 			body.put(CurrikiResource.VAR_source, source);
 			body.put(CurrikiResource.VAR_reviewStatus, reviewStatus);
-			body.put(CurrikiResource.VAR_lastReviewDate, lastReviewDate);
-			body.put(CurrikiResource.VAR_reviewByID, reviewByID);
-			body.put(CurrikiResource.VAR_reviewRating, reviewRating);
-			body.put(CurrikiResource.VAR_technicalCompleteness, technicalCompleteness);
-			body.put(CurrikiResource.VAR_contentAccuracy, contentAccuracy);
-			body.put(CurrikiResource.VAR_pedagogy, pedagogy);
+			body.put(CurrikiResource.VAR_lastReviewDate, Optional.ofNullable(lastReviewDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
+			body.put(CurrikiResource.VAR_reviewByID, Optional.ofNullable(reviewByID).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_reviewRating, Optional.ofNullable(reviewRating).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_technicalCompleteness, Optional.ofNullable(technicalCompleteness).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_contentAccuracy, Optional.ofNullable(contentAccuracy).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_pedagogy, Optional.ofNullable(pedagogy).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_ratingComment, ratingComment);
-			body.put(CurrikiResource.VAR_standardsAlignment, standardsAlignment);
+			body.put(CurrikiResource.VAR_standardsAlignment, Optional.ofNullable(standardsAlignment).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_standardsAlignmentComment, standardsAlignmentComment);
-			body.put(CurrikiResource.VAR_subjectMatter, subjectMatter);
+			body.put(CurrikiResource.VAR_subjectMatter, Optional.ofNullable(subjectMatter).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_subjectMatterComment, subjectMatterComment);
-			body.put(CurrikiResource.VAR_supportsTeaching, supportsTeaching);
+			body.put(CurrikiResource.VAR_supportsTeaching, Optional.ofNullable(supportsTeaching).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_supportsTeachingComment, supportsTeachingComment);
-			body.put(CurrikiResource.VAR_assessmentsQuality, assessmentsQuality);
+			body.put(CurrikiResource.VAR_assessmentsQuality, Optional.ofNullable(assessmentsQuality).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_assessmentsQualityComment, assessmentsQualityComment);
-			body.put(CurrikiResource.VAR_interactivityQuality, interactivityQuality);
+			body.put(CurrikiResource.VAR_interactivityQuality, Optional.ofNullable(interactivityQuality).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_interactivityQualityComment, interactivityQualityComment);
-			body.put(CurrikiResource.VAR_instructionalQuality, instructionalQuality);
+			body.put(CurrikiResource.VAR_instructionalQuality, Optional.ofNullable(instructionalQuality).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_instructionalQualityComment, instructionalQualityComment);
-			body.put(CurrikiResource.VAR_deeperLearning, deeperLearning);
+			body.put(CurrikiResource.VAR_deeperLearning, Optional.ofNullable(deeperLearning).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_deeperLearningComment, deeperLearningComment);
 			body.put(CurrikiResource.VAR_partner, partner);
-			body.put(CurrikiResource.VAR_createDate, createDate);
+			body.put(CurrikiResource.VAR_createDate, Optional.ofNullable(createDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
 			body.put(CurrikiResource.VAR_type, type);
 			body.put(CurrikiResource.VAR_featured, featured);
 			body.put(CurrikiResource.VAR_page, page);
 			body.put(CurrikiResource.VAR_active, active);
 			body.put(CurrikiResource.VAR_Public, Public);
-			body.put(CurrikiResource.VAR_xwd_id, xwd_id);
+			body.put(CurrikiResource.VAR_xwd_id, Optional.ofNullable(xwd_id).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_mediaType, mediaType);
 			body.put(CurrikiResource.VAR_access, access);
-			body.put(CurrikiResource.VAR_memberRating, memberRating);
+			body.put(CurrikiResource.VAR_memberRating, Optional.ofNullable(memberRating).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_aligned, aligned);
 			body.put(CurrikiResource.VAR_pageUrl, pageUrl);
 			body.put(CurrikiResource.VAR_indexed, indexed);
-			body.put(CurrikiResource.VAR_lastIndexDate, lastIndexDate);
+			body.put(CurrikiResource.VAR_lastIndexDate, Optional.ofNullable(lastIndexDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
 			body.put(CurrikiResource.VAR_indexRequired, indexRequired);
-			body.put(CurrikiResource.VAR_indexRequiredDate, indexRequiredDate);
+			body.put(CurrikiResource.VAR_indexRequiredDate, Optional.ofNullable(indexRequiredDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
 			body.put(CurrikiResource.VAR_rescrape, rescrape);
 			body.put(CurrikiResource.VAR_goButton, goButton);
 			body.put(CurrikiResource.VAR_downloadButton, downloadButton);
 			body.put(CurrikiResource.VAR_topOfSearch, topOfSearch);
 			body.put(CurrikiResource.VAR_remove, remove);
 			body.put(CurrikiResource.VAR_spam, spam);
-			body.put(CurrikiResource.VAR_topOfSearchInt, topOfSearchInt);
-			body.put(CurrikiResource.VAR_partnerInt, partnerInt);
+			body.put(CurrikiResource.VAR_topOfSearchInt, Optional.ofNullable(topOfSearchInt).map(v -> v.toString()).orElse(null));
+			body.put(CurrikiResource.VAR_partnerInt, Optional.ofNullable(partnerInt).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_reviewResource, reviewResource);
 			body.put(CurrikiResource.VAR_oldUrl, oldUrl);
 			body.put(CurrikiResource.VAR_contentDisplayOk, contentDisplayOk);
 			body.put(CurrikiResource.VAR_metadata, metadata);
 			body.put(CurrikiResource.VAR_approvalStatus, approvalStatus);
-			body.put(CurrikiResource.VAR_approvalStatusDate, approvalStatusDate);
+			body.put(CurrikiResource.VAR_approvalStatusDate, Optional.ofNullable(approvalStatusDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
 			body.put(CurrikiResource.VAR_spamUser, spamUser);
 
 			JsonObject params = new JsonObject();
@@ -640,159 +744,24 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	}
 
 	/**	
-	 * Val.Complete.enUS:Syncing database to Solr completed. 
-	 * Val.Fail.enUS:Syncing database to Solr failed. 
-	 * Val.Skip.enUS:Skip syncing database to Solr. 
-	 **/
-	private Future<Void> syncDbToSolr() {
-		Promise<Void> promise = Promise.promise();
-		if(config().getBoolean(ConfigKeys.ENABLE_DB_SOLR_SYNC, false)) {
-			Long millis = 1000L * config().getInteger(ConfigKeys.TIMER_DB_SOLR_SYNC_IN_SECONDS, 10);
-			vertx.setTimer(millis, a -> {
-				LOG.info(syncDbToSolrComplete);
-				promise.complete();
-			});
-		} else {
-			LOG.info(syncDbToSolrSkip);
-			promise.complete();
-		}
-		return promise.future();
-	}
-
-	/**	
-	 * Sync %s data from the database to Solr. 
-	 * Val.Complete.enUS:%s data sync completed. 
-	 * Val.Fail.enUS:%s data sync failed. 
-	 * Val.CounterResetFail.enUS:%s data sync failed to reset counter. 
-	 * Val.Skip.enUS:%s data sync skipped. 
-	 * Val.Started.enUS:%s data sync started. 
-	 **/
-	private Future<Void> syncData(String tableName) {
-		Promise<Void> promise = Promise.promise();
-		try {
-			if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_DB_SOLR_SYNC, tableName), true)) {
-
-				LOG.info(String.format(syncDataStarted, tableName));
-				pgPool.withTransaction(sqlConnection -> {
-					Promise<Void> promise1 = Promise.promise();
-					sqlConnection.query(String.format("SELECT count(pk) FROM %s", tableName)).execute().onSuccess(countRowSet -> {
-						try {
-							Optional<Long> rowCountOptional = Optional.ofNullable(countRowSet.iterator().next()).map(row -> row.getLong(0));
-							if(rowCountOptional.isPresent()) {
-								Long apiCounterResume = config().getLong(ConfigKeys.API_COUNTER_RESUME);
-								Long apiCounterFetch = config().getLong(ConfigKeys.API_COUNTER_FETCH);
-								ApiCounter apiCounter = new ApiCounter();
-	
-								SiteRequestEnUS siteRequest = new SiteRequestEnUS();
-								siteRequest.setConfig(config());
-								siteRequest.initDeepSiteRequestEnUS(siteRequest);
-		
-								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(apiCounterFetch);
-								apiRequest.setNumFound(rowCountOptional.get());
-								apiRequest.setNumPATCH(apiCounter.getQueueNum());
-								apiRequest.setCreated(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))));
-								apiRequest.initDeepApiRequest(siteRequest);
-								vertx.eventBus().publish(String.format("websocket%s", tableName), JsonObject.mapFrom(apiRequest));
-		
-								sqlConnection.prepare(String.format("SELECT pk FROM %s", tableName)).onSuccess(preparedStatement -> {
-									apiCounter.setQueueNum(0L);
-									apiCounter.setTotalNum(0L);
-									try {
-										RowStream<Row> stream = preparedStatement.createStream(apiCounterFetch.intValue());
-										stream.pause();
-										stream.fetch(apiCounterFetch);
-										stream.exceptionHandler(ex -> {
-											LOG.error(String.format(syncDataFail, tableName), new RuntimeException(ex));
-											promise1.fail(ex);
-										});
-										stream.endHandler(v -> {
-											LOG.info(String.format(syncDataComplete, tableName));
-											promise1.complete();
-										});
-										stream.handler(row -> {
-											apiCounter.incrementQueueNum();
-											try {
-												vertx.eventBus().request(
-														String.format("ActiveLearningStudio-API-enUS-%s", tableName)
-														, new JsonObject().put(
-																"context"
-																, new JsonObject().put(
-																		"params"
-																		, new JsonObject()
-																				.put("body", new JsonObject().put("pk", row.getLong(0).toString()))
-																				.put("path", new JsonObject())
-																				.put("cookie", new JsonObject())
-																				.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + row.getLong(0))).put("var", new JsonArray().add("refresh:false")))
-																)
-														)
-														, new DeliveryOptions().addHeader("action", String.format("patch%sFuture", tableName))).onSuccess(a -> {
-													apiCounter.incrementTotalNum();
-													apiCounter.decrementQueueNum();
-													if(apiCounter.getQueueNum().compareTo(apiCounterResume) == 0) {
-														stream.fetch(apiCounterFetch);
-														apiRequest.setNumPATCH(apiCounter.getTotalNum());
-														apiRequest.setTimeRemaining(apiRequest.calculateTimeRemaining());
-														vertx.eventBus().publish(String.format("websocket%s", tableName), JsonObject.mapFrom(apiRequest));
-													}
-												}).onFailure(ex -> {
-													LOG.error(String.format(syncDataFail, tableName), ex);
-													promise1.fail(ex);
-												});
-											} catch (Exception ex) {
-												LOG.error(String.format(syncDataFail, tableName), ex);
-												promise1.fail(ex);
-											}
-										});
-									} catch (Exception ex) {
-										LOG.error(String.format(syncDataFail, tableName), ex);
-										promise1.fail(ex);
-									}
-								}).onFailure(ex -> {
-									LOG.error(String.format(syncDataFail, tableName), ex);
-									promise1.fail(ex);
-								});
-							} else {
-								promise1.complete();
-							}
-						} catch (Exception ex) {
-							LOG.error(String.format(syncDataFail, tableName), ex);
-							promise1.fail(ex);
-						}
-					}).onFailure(ex -> {
-						LOG.error(String.format(syncDataFail, tableName), ex);
-						promise1.fail(ex);
-					});
-					return promise1.future();
-				}).onSuccess(a -> {
-					promise.complete();
-				}).onFailure(ex -> {
-					LOG.error(String.format(syncDataFail, tableName), ex);
-					promise.fail(ex);
-				});
-			} else {
-				LOG.info(String.format(syncDataSkip, tableName));
-				promise.complete();
-			}
-		} catch (Exception ex) {
-			LOG.error(String.format(syncDataFail, tableName), ex);
-			promise.fail(ex);
-		}
-		return promise.future();
-	}
-
-	/**	
 	 * Val.Complete.enUS:Refresh all data completed. 
+	 * Val.Started.enUS:Refresh all data started. 
 	 * Val.Fail.enUS:Refresh all data failed. 
 	 * Val.Skip.enUS:Refresh all data skipped. 
 	 **/
 	private Future<Void> refreshAllData() {
 		Promise<Void> promise = Promise.promise();
-		vertx.setTimer(1000 * 10, a -> {
+		try {
 			if(config().getBoolean(ConfigKeys.ENABLE_REFRESH_DATA, false)) {
-				refreshData("SiteUser").onSuccess(b -> {
-					LOG.info(refreshAllDataComplete);
-					promise.complete();
+			LOG.info(refreshAllDataStarted);
+				refreshData("SiteUser").onSuccess(q -> {
+					refreshData("CurrikiResource").onSuccess(a -> {
+						LOG.info(refreshAllDataComplete);
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(refreshAllDataFail, ex);
+						promise.fail(ex);
+					});
 				}).onFailure(ex -> {
 					LOG.error(refreshAllDataFail, ex);
 					promise.fail(ex);
@@ -801,53 +770,133 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				LOG.info(refreshAllDataSkip);
 				promise.complete();
 			}
-		});
+		} catch(Exception ex) {
+			LOG.error(refreshAllDataFail, ex);
+			promise.fail(ex);
+		}
 		return promise.future();
 	}
 
-	/**	
+	/**
+	 * Sync %s data from the database to Solr. 
 	 * Refresh %s data from the database to Solr. 
 	 * Val.Complete.enUS:%s refresh completed. 
-	 * Val.Fail.enUS:%s refresh failed. 
+	 * Val.Started.enUS:%s data sync started. 
 	 * Val.Skip.enUS:%s refresh skipped. 
+	 * Val.Fail.enUS:%s refresh failed. 
+	 * Val.CounterResetFail.enUS:%s data sync failed to reset counter. 
 	 **/
 	private Future<Void> refreshData(String tableName) {
 		Promise<Void> promise = Promise.promise();
-		try {
-			if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_REFRESH_DATA, tableName), true)) {
-				webClient.post(config().getInteger(ConfigKeys.AUTH_PORT), config().getString(ConfigKeys.AUTH_HOST_NAME), config().getString(ConfigKeys.AUTH_TOKEN_URI))
-						.expect(ResponsePredicate.SC_OK)
-						.ssl(config().getBoolean(ConfigKeys.AUTH_SSL))
-						.authentication(new UsernamePasswordCredentials(config().getString(ConfigKeys.AUTH_RESOURCE), config().getString(ConfigKeys.AUTH_SECRET)))
-						.putHeader("Content-Type", "application/x-www-form-urlencoded")
-						.sendForm(MultiMap.caseInsensitiveMultiMap().set("grant_type", "client_credentials"))
-						.onSuccess(tokenResponse -> {
-					JsonObject token = tokenResponse.bodyAsJsonObject();
-					JsonObject params = new JsonObject();
-					params.put("body", new JsonObject());
-					params.put("path", new JsonObject());
-					params.put("cookie", new JsonObject());
-					params.put("query", new JsonObject().put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
-					JsonObject context = new JsonObject().put("params", params).put("user", token);
-					JsonObject json = new JsonObject().put("context", context);
-					vertx.eventBus().request(String.format("ActiveLearningStudio-API-enUS-%s", tableName), json, new DeliveryOptions().addHeader("action", String.format("patch%s", tableName))).onSuccess(a -> {
-						LOG.info(String.format(refreshDataComplete, tableName));
+		if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_REFRESH_DATA, tableName), false)) {
+			vertx.setTimer(10000, timer -> {
+				try {
+					LOG.info(String.format(refreshDataStarted, tableName));
+					pgPool.withTransaction(sqlConnection -> {
+						Promise<Void> promise1 = Promise.promise();
+						sqlConnection.query(String.format("SELECT count(pk) FROM %s", tableName)).execute().onSuccess(countRowSet -> {
+							try {
+								Optional<Long> rowCountOptional = Optional.ofNullable(countRowSet.iterator().next()).map(row -> row.getLong(0));
+								if(rowCountOptional.isPresent()) {
+									Integer apiCounterResume = config().getInteger(ConfigKeys.API_COUNTER_RESUME);
+									Integer apiCounterFetch = config().getInteger(ConfigKeys.API_COUNTER_FETCH);
+									ApiCounter apiCounter = new ApiCounter();
+		
+									SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+									siteRequest.setConfig(config());
+									siteRequest.initDeepSiteRequestEnUS(siteRequest);
+			
+									ApiRequest apiRequest = new ApiRequest();
+									apiRequest.setRows(apiCounterFetch.longValue());
+									apiRequest.setNumFound(rowCountOptional.get());
+									apiRequest.setNumPATCH(apiCounter.getQueueNum());
+									apiRequest.setCreated(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))));
+									apiRequest.initDeepApiRequest(siteRequest);
+									vertx.eventBus().publish(String.format("websocket%s", tableName), JsonObject.mapFrom(apiRequest));
+			
+									sqlConnection.prepare(String.format("SELECT pk FROM %s", tableName)).onSuccess(preparedStatement -> {
+										apiCounter.setQueueNum(0L);
+										apiCounter.setTotalNum(0L);
+										try {
+											RowStream<Row> stream = preparedStatement.createStream(apiCounterFetch);
+											stream.pause();
+											stream.fetch(apiCounterFetch);
+											stream.exceptionHandler(ex -> {
+												LOG.error(String.format(refreshDataFail, tableName), new RuntimeException(ex));
+												promise1.fail(ex);
+											});
+											stream.endHandler(v -> {
+												LOG.info(String.format(refreshDataComplete, tableName));
+												promise1.complete();
+											});
+											stream.handler(row -> {
+												apiCounter.incrementQueueNum();
+												try {
+													vertx.eventBus().request(
+															String.format("eventphenomenon-enUS-%s", tableName)
+															, new JsonObject().put(
+																	"context"
+																	, new JsonObject().put(
+																			"params"
+																			, new JsonObject()
+																					.put("body", new JsonObject().put("pk", row.getLong(0).toString()))
+																					.put("path", new JsonObject())
+																					.put("cookie", new JsonObject())
+																					.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + row.getLong(0))).put("var", new JsonArray().add("refresh:false")))
+																	)
+															)
+															, new DeliveryOptions().addHeader("action", String.format("patch%sFuture", tableName))).onSuccess(a -> {
+														apiCounter.incrementTotalNum();
+														apiCounter.decrementQueueNum();
+														if(apiCounter.getQueueNum().compareTo(apiCounterResume.longValue()) == 0) {
+															stream.fetch(apiCounterFetch);
+															apiRequest.setNumPATCH(apiCounter.getTotalNum());
+															apiRequest.setTimeRemaining(apiRequest.calculateTimeRemaining());
+															vertx.eventBus().publish(String.format("websocket%s", tableName), JsonObject.mapFrom(apiRequest));
+														}
+													}).onFailure(ex -> {
+														LOG.error(String.format(refreshDataFail, tableName), ex);
+														promise1.fail(ex);
+													});
+												} catch (Exception ex) {
+													LOG.error(String.format(refreshDataFail, tableName), ex);
+													promise1.fail(ex);
+												}
+											});
+										} catch (Exception ex) {
+											LOG.error(String.format(refreshDataFail, tableName), ex);
+											promise1.fail(ex);
+										}
+									}).onFailure(ex -> {
+										LOG.error(String.format(refreshDataFail, tableName), ex);
+										promise1.fail(ex);
+									});
+								} else {
+									promise1.complete();
+								}
+							} catch (Exception ex) {
+								LOG.error(String.format(refreshDataFail, tableName), ex);
+								promise1.fail(ex);
+							}
+						}).onFailure(ex -> {
+							LOG.error(String.format(refreshDataFail, tableName), ex);
+							promise1.fail(ex);
+						});
+						return promise1.future();
+					}).onSuccess(a -> {
 						promise.complete();
 					}).onFailure(ex -> {
 						LOG.error(String.format(refreshDataFail, tableName), ex);
 						promise.fail(ex);
 					});
-				}).onFailure(ex -> {
+				} catch (Exception ex) {
 					LOG.error(String.format(refreshDataFail, tableName), ex);
 					promise.fail(ex);
-				});
-			} else {
-				LOG.info(String.format(refreshDataSkip, tableName));
-				promise.complete();
-			}
-		} catch (Exception ex) {
-			LOG.error(String.format(refreshDataFail, tableName), ex);
-			promise.fail(ex);
+				}
+			});
+		} else {
+			LOG.info(String.format(refreshDataSkip, tableName));
+			promise.complete();
 		}
 		return promise.future();
 	}

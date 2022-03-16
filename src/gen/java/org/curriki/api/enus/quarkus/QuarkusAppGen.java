@@ -186,32 +186,6 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 		}
 	}
 
-	/////////////
-	// define //
-	/////////////
-
-	public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineQuarkusApp(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineQuarkusApp(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
