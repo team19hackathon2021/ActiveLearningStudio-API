@@ -210,32 +210,6 @@ public abstract class BaseModelPageGen<DEV> extends BaseModelGenPage {
 		}
 	}
 
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineBaseModelPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineBaseModelPage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineBaseModelGenPage(var, val);
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////

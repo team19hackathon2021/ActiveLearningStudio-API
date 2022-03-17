@@ -140,6 +140,8 @@ CREATE TABLE SiteUser(
 	, userFirstName text
 	, userLastName text
 	, userFullName text
+	, seeArchived boolean
+	, seeDeleted boolean
 	);
 
 DROP TABLE CurrikiResource CASCADE;
@@ -203,6 +205,11 @@ DROP TABLE SiteUser CASCADE;
 	public static final String configureUiFail = configureUiFail1;
 	public static final String configureUiComplete1 = "The UI was configured properly. ";
 	public static final String configureUiComplete = configureUiComplete1;
+
+	public static final String configureCamelFail1 = "The Camel Component was not configured properly. ";
+	public static final String configureCamelFail = configureCamelFail1;
+	public static final String configureCamelComplete1 = "The Camel Component was configured properly. ";
+	public static final String configureCamelComplete = configureCamelComplete1;
 
 	public static final String startServerErrorServer1 = "The server is not configured properly. ";
 	public static final String startServerErrorServer = startServerErrorServer1;
@@ -349,32 +356,6 @@ DROP TABLE SiteUser CASCADE;
 		}
 	}
 
-	/////////////
-	// define //
-	/////////////
-
-	public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineMainVerticle(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineMainVerticle(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -384,7 +365,7 @@ DROP TABLE SiteUser CASCADE;
 		return sb.toString();
 	}
 
-	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureConfigComplete1, configureConfigFail1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
+	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureConfigComplete1, configureConfigFail1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, configureCamelFail1, configureCamelComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
 
 
 

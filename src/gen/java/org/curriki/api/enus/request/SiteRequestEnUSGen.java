@@ -358,6 +358,43 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	///////////////////
+	// userPrincipal //
+	///////////////////
+
+	/**	 The entity userPrincipal
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected JsonObject userPrincipal;
+
+	/**	<br> The entity userPrincipal
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userPrincipal">Find the entity userPrincipal in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userPrincipal(Wrap<JsonObject> w);
+
+	public JsonObject getUserPrincipal() {
+		return userPrincipal;
+	}
+
+	public void setUserPrincipal(JsonObject userPrincipal) {
+		this.userPrincipal = userPrincipal;
+	}
+	public static JsonObject staticSetUserPrincipal(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected SiteRequestEnUS userPrincipalInit() {
+		Wrap<JsonObject> userPrincipalWrap = new Wrap<JsonObject>().var("userPrincipal");
+		if(userPrincipal == null) {
+			_userPrincipal(userPrincipalWrap);
+			setUserPrincipal(userPrincipalWrap.o);
+		}
+		return (SiteRequestEnUS)this;
+	}
+
 	////////////
 	// userId //
 	////////////
@@ -1394,6 +1431,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				solrQueryInit();
 				serviceRequestInit();
 				userInit();
+				userPrincipalInit();
 				userIdInit();
 				userKeyInit();
 				sessionIdInit();
@@ -1472,6 +1510,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.serviceRequest;
 			case "user":
 				return oSiteRequestEnUS.user;
+			case "userPrincipal":
+				return oSiteRequestEnUS.userPrincipal;
 			case "userId":
 				return oSiteRequestEnUS.userId;
 			case "userKey":
@@ -1720,32 +1760,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		}
 	}
 
-	/////////////
-	// define //
-	/////////////
-
-	public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSiteRequestEnUS(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSiteRequestEnUS(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -1763,6 +1777,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_solrQuery = "solrQuery";
 	public static final String VAR_serviceRequest = "serviceRequest";
 	public static final String VAR_user = "user";
+	public static final String VAR_userPrincipal = "userPrincipal";
 	public static final String VAR_userId = "userId";
 	public static final String VAR_userKey = "userKey";
 	public static final String VAR_sessionId = "sessionId";
@@ -1793,6 +1808,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_solrQuery = "";
 	public static final String DISPLAY_NAME_serviceRequest = "";
 	public static final String DISPLAY_NAME_user = "";
+	public static final String DISPLAY_NAME_userPrincipal = "";
 	public static final String DISPLAY_NAME_userId = "";
 	public static final String DISPLAY_NAME_userKey = "";
 	public static final String DISPLAY_NAME_sessionId = "";
@@ -1836,6 +1852,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return DISPLAY_NAME_serviceRequest;
 		case VAR_user:
 			return DISPLAY_NAME_user;
+		case VAR_userPrincipal:
+			return DISPLAY_NAME_userPrincipal;
 		case VAR_userId:
 			return DISPLAY_NAME_userId;
 		case VAR_userKey:

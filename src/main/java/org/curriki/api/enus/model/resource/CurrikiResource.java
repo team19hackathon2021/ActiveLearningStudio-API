@@ -1,7 +1,6 @@
 package org.curriki.api.enus.model.resource;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -946,7 +945,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 29
 	 * HtmlCell: 1
 	 */
-	protected void _approvalStatusDate(Wrap<LocalDateTime> w) {
+	protected void _approvalStatusDate(Wrap<ZonedDateTime> w) {
 		
 	}
 	

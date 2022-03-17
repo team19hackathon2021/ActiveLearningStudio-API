@@ -12,6 +12,7 @@ import java.util.Objects;
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.pgclient.PgPool;
+import io.vertx.core.json.impl.JsonUtil;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -157,7 +158,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	}
 
 
-
 	public Future<ServiceResponse> response200SearchCurrikiResource(SearchList<CurrikiResource> listCurrikiResource) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -188,11 +188,15 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				JsonObject json2 = JsonObject.mapFrom(o);
 				if(fls.size() > 0) {
 					Set<String> fieldNames = new HashSet<String>();
-					fieldNames.addAll(json2.fieldNames());
-					if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves")) {
-						fieldNames.removeAll(Optional.ofNullable(json2.getJsonArray("saves")).orElse(new JsonArray()).stream().map(s -> s.toString()).collect(Collectors.toList()));
-						fieldNames.remove("pk");
-						fieldNames.remove("created");
+					for(String fieldName : json2.fieldNames()) {
+						String v = CurrikiResource.varIndexedCurrikiResource(fieldName);
+						if(v != null)
+							fieldNames.add(CurrikiResource.varIndexedCurrikiResource(fieldName));
+					}
+					if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves_docvalues_strings")) {
+						fieldNames.removeAll(Optional.ofNullable(json2.getJsonArray("saves_docvalues_strings")).orElse(new JsonArray()).stream().map(s -> s.toString()).collect(Collectors.toList()));
+						fieldNames.remove("pk_docvalues_long");
+						fieldNames.remove("created_docvalues_date");
 					}
 					else if(fls.size() >= 1) {
 						fieldNames.removeAll(fls);
@@ -236,12 +240,12 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				}
 			}
 
-			SolrResponse.FacetPivots facetPivots = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetPivots()).orElse(null);
-			if(facetPivots != null) {
+			SolrResponse.FacetPivot facetPivot = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetPivot()).orElse(null);
+			if(facetPivot != null) {
 				JsonObject facetPivotJson = new JsonObject();
 				json.put("facet_pivot", facetPivotJson);
-				for(SolrResponse.FacetPivot facetPivot : facetPivots.getPivots().values()) {
-					String[] varsIndexed = facetPivot.getName().trim().split(",");
+				for(SolrResponse.Pivot pivot : facetPivot.getPivotMap().values()) {
+					String[] varsIndexed = pivot.getName().trim().split(",");
 					String[] entityVars = new String[varsIndexed.length];
 					for(Integer i = 0; i < entityVars.length; i++) {
 						String entityIndexed = varsIndexed[i];
@@ -249,7 +253,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					}
 					JsonArray pivotArray = new JsonArray();
 					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
-					responsePivotSearchCurrikiResource(facetPivot.getPivot(), pivotArray);
+					responsePivotSearchCurrikiResource(pivot.getPivotList(), pivotArray);
 				}
 			}
 			if(exceptionSearch != null) {
@@ -272,7 +276,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			pivotJson.put("value", pivotField.getValue());
 			pivotJson.put("count", pivotField.getCount());
 			Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
-			List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivot();
+			List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
 			if(pivotRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				pivotJson.put("ranges", rangeJson);
@@ -392,6 +396,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		listCurrikiResource.getList().forEach(o -> {
 			SiteRequestEnUS siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequestEnUS.class);
 			o.setSiteRequest_(siteRequest2);
+			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
 			futures.add(Future.future(promise1 -> {
 				patchCurrikiResourceFuture(o, false).onSuccess(a -> {
 					promise1.complete();
@@ -1210,7 +1215,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		return promise.future();
 	}
 
-
 	public Future<ServiceResponse> response200PATCHCurrikiResource(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -1266,16 +1270,16 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
 						softCommit = true;
-					if(softCommit)
+					if(softCommit != null)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("ActiveLearningStudio-API-enUS-CurrikiResource", json, new DeliveryOptions().addHeader("action", "postCurrikiResourceFuture")).onSuccess(a -> {
 						JsonObject responseMessage = (JsonObject)a.body();
-						JsonObject responseBody = new JsonObject(new String(Base64.getDecoder().decode(responseMessage.getString("payload")), Charset.forName("UTF-8")));
+						JsonObject responseBody = new JsonObject(Buffer.buffer(JsonUtil.BASE64_DECODER.decode(responseMessage.getString("payload"))));
 						apiRequest.setPk(Long.parseLong(responseBody.getString("pk")));
 						eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(responseBody.encodePrettily()))));
 						LOG.debug(String.format("postCurrikiResource succeeded. "));
@@ -2206,7 +2210,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		return promise.future();
 	}
 
-
 	public Future<ServiceResponse> response200POSTCurrikiResource(CurrikiResource o) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -2314,12 +2317,12 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
 						softCommit = true;
-					if(softCommit)
+					if(softCommit != null)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("ActiveLearningStudio-API-enUS-CurrikiResource", json, new DeliveryOptions().addHeader("action", "putimportCurrikiResourceFuture")).onSuccess(a -> {
 						promise1.complete();
@@ -2456,7 +2459,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		});
 	}
 
-
 	public Future<ServiceResponse> response200PUTImportCurrikiResource(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -2535,6 +2537,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 	public void searchpageCurrikiResourcePageInit(CurrikiResourcePage page, SearchList<CurrikiResource> listCurrikiResource) {
 	}
+
 	public String templateSearchPageCurrikiResource() {
 		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/CurrikiResourcePage";
 	}
@@ -2682,8 +2685,11 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			searchList.q("*:*");
 			searchList.setC(CurrikiResource.class);
 			searchList.setSiteRequest_(siteRequest);
-			if(entityList != null)
-				searchList.fl(entityList);
+			if(entityList != null) {
+				for(String v : entityList) {
+					searchList.fl(CurrikiResource.varIndexedCurrikiResource(v));
+				}
+			}
 
 			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
 			if(id != null && NumberUtils.isCreatable(id)) {
@@ -2952,13 +2958,13 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
 						softCommit = true;
-					if(softCommit)
+					if(softCommit != null)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					query.put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk()));
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("ActiveLearningStudio-API-enUS-CurrikiResource", json, new DeliveryOptions().addHeader("action", "patchCurrikiResourceFuture")).onSuccess(c -> {
 						JsonObject responseMessage = (JsonObject)c.body();

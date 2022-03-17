@@ -130,6 +130,17 @@ public class BaseModel extends BaseModelGen<Object> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
+	 */ 
+	protected void _classCanonicalNames(List<String> l) { 
+		Class<?> cl = getClass();
+		if(!cl.equals(BaseModel.class))
+			l.add(cl.getCanonicalName());
+		l.add(BaseModel.class.getCanonicalName());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
 	 * Define: true
 	 * Modify: false
 	 */ 

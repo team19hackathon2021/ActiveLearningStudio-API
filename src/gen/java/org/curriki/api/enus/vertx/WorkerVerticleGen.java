@@ -41,6 +41,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  **/
 public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	protected static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
+	public static final String configureDataConnectionError1 = "Could not open the database client connection. ";
+	public static final String configureDataConnectionError = configureDataConnectionError1;
+	public static final String configureDataConnectionSuccess1 = "The database client connection was successful. ";
+	public static final String configureDataConnectionSuccess = configureDataConnectionSuccess1;
+	public static final String configureDataInitError1 = "Could not initialize the database tables. ";
+	public static final String configureDataInitError = configureDataInitError1;
+	public static final String configureDataInitSuccess1 = "The database tables were created successfully. ";
+	public static final String configureDataInitSuccess = configureDataInitSuccess1;
+
 	public static final String configureSharedWorkerExecutorFail1 = "Could not configure the shared worker executor. ";
 	public static final String configureSharedWorkerExecutorFail = configureSharedWorkerExecutorFail1;
 	public static final String configureSharedWorkerExecutorComplete1 = "The shared worker executor \"{}\" was configured successfully. ";
@@ -76,31 +85,18 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String importDataCurrikiResourceSkip1 = "Skip importing CurrikiResource records. ";
 	public static final String importDataCurrikiResourceSkip = importDataCurrikiResourceSkip1;
 
+	public static final String importDataCurrikiResourceRowFail1 = "Importing CurrikiResource row failed. ";
+	public static final String importDataCurrikiResourceRowFail = importDataCurrikiResourceRowFail1;
+
 	public static final String processRowCurrikiResourceComplete1 = "Importing CurrikiResource row completed. ";
 	public static final String processRowCurrikiResourceComplete = processRowCurrikiResourceComplete1;
 	public static final String processRowCurrikiResourceFail1 = "Importing CurrikiResource row failed. ";
 	public static final String processRowCurrikiResourceFail = processRowCurrikiResourceFail1;
 
-	public static final String syncDbToSolrComplete1 = "Syncing database to Solr completed. ";
-	public static final String syncDbToSolrComplete = syncDbToSolrComplete1;
-	public static final String syncDbToSolrFail1 = "Syncing database to Solr failed. ";
-	public static final String syncDbToSolrFail = syncDbToSolrFail1;
-	public static final String syncDbToSolrSkip1 = "Skip syncing database to Solr. ";
-	public static final String syncDbToSolrSkip = syncDbToSolrSkip1;
-
-	public static final String syncDataComplete1 = "%s data sync completed. ";
-	public static final String syncDataComplete = syncDataComplete1;
-	public static final String syncDataFail1 = "%s data sync failed. ";
-	public static final String syncDataFail = syncDataFail1;
-	public static final String syncDataCounterResetFail1 = "%s data sync failed to reset counter. ";
-	public static final String syncDataCounterResetFail = syncDataCounterResetFail1;
-	public static final String syncDataSkip1 = "%s data sync skipped. ";
-	public static final String syncDataSkip = syncDataSkip1;
-	public static final String syncDataStarted1 = "%s data sync started. ";
-	public static final String syncDataStarted = syncDataStarted1;
-
 	public static final String refreshAllDataComplete1 = "Refresh all data completed. ";
 	public static final String refreshAllDataComplete = refreshAllDataComplete1;
+	public static final String refreshAllDataStarted1 = "Refresh all data started. ";
+	public static final String refreshAllDataStarted = refreshAllDataStarted1;
 	public static final String refreshAllDataFail1 = "Refresh all data failed. ";
 	public static final String refreshAllDataFail = refreshAllDataFail1;
 	public static final String refreshAllDataSkip1 = "Refresh all data skipped. ";
@@ -108,10 +104,14 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 
 	public static final String refreshDataComplete1 = "%s refresh completed. ";
 	public static final String refreshDataComplete = refreshDataComplete1;
-	public static final String refreshDataFail1 = "%s refresh failed. ";
-	public static final String refreshDataFail = refreshDataFail1;
+	public static final String refreshDataStarted1 = "%s data sync started. ";
+	public static final String refreshDataStarted = refreshDataStarted1;
 	public static final String refreshDataSkip1 = "%s refresh skipped. ";
 	public static final String refreshDataSkip = refreshDataSkip1;
+	public static final String refreshDataFail1 = "%s refresh failed. ";
+	public static final String refreshDataFail = refreshDataFail1;
+	public static final String refreshDataCounterResetFail1 = "%s data sync failed to reset counter. ";
+	public static final String refreshDataCounterResetFail = refreshDataCounterResetFail1;
 
 
 	//////////////
@@ -244,32 +244,6 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		}
 	}
 
-	/////////////
-	// define //
-	/////////////
-
-	public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineWorkerVerticle(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineWorkerVerticle(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -279,7 +253,7 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		return sb.toString();
 	}
 
-	public static final String[] WorkerVerticleVals = new String[] { configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, configureMoonshotsDataComplete1, configureMoonshotsDataFail1, importTimerScheduling1, importTimerSkip1, importDataClassComplete1, importDataClassFail1, importDataSkip1, importDataCurrikiResourceComplete1, importDataCurrikiResourceFail1, importDataCurrikiResourceSkip1, processRowCurrikiResourceComplete1, processRowCurrikiResourceFail1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
+	public static final String[] WorkerVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, configureMoonshotsDataComplete1, configureMoonshotsDataFail1, importTimerScheduling1, importTimerSkip1, importDataClassComplete1, importDataClassFail1, importDataSkip1, importDataCurrikiResourceComplete1, importDataCurrikiResourceFail1, importDataCurrikiResourceSkip1, importDataCurrikiResourceRowFail1, processRowCurrikiResourceComplete1, processRowCurrikiResourceFail1, refreshAllDataComplete1, refreshAllDataStarted1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataStarted1, refreshDataSkip1, refreshDataFail1, refreshDataCounterResetFail1 };
 
 
 

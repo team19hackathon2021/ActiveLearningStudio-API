@@ -63,6 +63,9 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Compu
 	protected void _user(Wrap<User> c) {
 	}
 
+	protected void _userPrincipal(Wrap<JsonObject> w) {
+	}
+
 	protected void _userId(Wrap<String> c) {
 		if(user != null) {
 			String o = user.attributes().getString("sub");
