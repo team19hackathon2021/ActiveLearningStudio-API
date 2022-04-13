@@ -1,56 +1,58 @@
 package org.curriki.api.enus.request;
 
-import org.curriki.api.enus.model.user.SiteUser;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.vertx.ext.web.client.WebClient;
-import org.slf4j.LoggerFactory;
-import io.vertx.core.MultiMap;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.apache.commons.lang3.StringUtils;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.computate.vertx.api.ApiRequest;
-import io.vertx.sqlclient.SqlConnection;
-import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.lang.Boolean;
-import io.vertx.core.json.JsonObject;
-import java.lang.String;
 import org.curriki.api.enus.model.base.BaseModel;
-import java.math.RoundingMode;
-import org.slf4j.Logger;
-import java.math.MathContext;
-import io.vertx.core.Promise;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.computate.vertx.api.ApiRequest;
 import org.curriki.api.enus.config.ConfigKeys;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import io.vertx.ext.web.api.service.ServiceRequest;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
-import java.util.List;
-import io.vertx.ext.auth.User;
-import org.computate.search.wrap.Wrap;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import java.lang.Object;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import java.lang.Object;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.api.service.ServiceRequest;
+import io.vertx.ext.auth.User;
+import java.lang.String;
+import java.lang.Long;
+import io.vertx.core.json.JsonArray;
+import org.curriki.api.enus.model.user.SiteUser;
+import io.vertx.sqlclient.SqlConnection;
+import io.vertx.core.MultiMap;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
 
 /**	
- * Map.hackathonLabels: Java
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS">Find the class SiteRequestEnUS in Solr. </a>
+ * <br><br>Delete the class SiteRequestEnUS in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.curriki.api.enus.request in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.request&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project ActiveLearningStudio-API in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class SiteRequestEnUSGen<DEV> extends Object {
@@ -68,7 +70,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity config
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:config">Find the entity config in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:config">Find the entity config in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -106,7 +108,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -144,7 +146,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity webClient
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:webClient">Find the entity webClient in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:webClient">Find the entity webClient in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -182,7 +184,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity apiRequest_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:apiRequest_">Find the entity apiRequest_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:apiRequest_">Find the entity apiRequest_ in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -219,7 +221,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity jsonObject
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:jsonObject">Find the entity jsonObject in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:jsonObject">Find the entity jsonObject in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -244,44 +246,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
-	///////////////
-	// solrQuery //
-	///////////////
-
-	/**	 The entity solrQuery
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected SolrQuery solrQuery;
-
-	/**	<br> The entity solrQuery
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrQuery">Find the entity solrQuery in Solr</a>
-	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _solrQuery(Wrap<SolrQuery> c);
-
-	public SolrQuery getSolrQuery() {
-		return solrQuery;
-	}
-
-	public void setSolrQuery(SolrQuery solrQuery) {
-		this.solrQuery = solrQuery;
-	}
-	public static SolrQuery staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteRequestEnUS solrQueryInit() {
-		Wrap<SolrQuery> solrQueryWrap = new Wrap<SolrQuery>().var("solrQuery");
-		if(solrQuery == null) {
-			_solrQuery(solrQueryWrap);
-			setSolrQuery(solrQueryWrap.o);
-		}
-		return (SiteRequestEnUS)this;
-	}
-
 	////////////////////
 	// serviceRequest //
 	////////////////////
@@ -295,7 +259,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity serviceRequest
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:serviceRequest">Find the entity serviceRequest in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:serviceRequest">Find the entity serviceRequest in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -333,7 +297,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity user
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:user">Find the entity user in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:user">Find the entity user in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -370,7 +334,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userPrincipal
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userPrincipal">Find the entity userPrincipal in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userPrincipal">Find the entity userPrincipal in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -408,7 +372,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -458,7 +422,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userKey
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -514,7 +478,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity sessionId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -563,7 +527,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity sessionIdBefore
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionIdBefore">Find the entity sessionIdBefore in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:sessionIdBefore">Find the entity sessionIdBefore in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -612,7 +576,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -661,7 +625,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userLastName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -710,7 +674,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userFirstName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -759,7 +723,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userFullName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -808,7 +772,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userEmail
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -858,7 +822,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userRealmRoles
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userRealmRoles">Find the entity userRealmRoles in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userRealmRoles">Find the entity userRealmRoles in Solr</a>
 	 * <br>
 	 * @param o is the entity already constructed. 
 	 **/
@@ -922,7 +886,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userResource
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userResource">Find the entity userResource in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userResource">Find the entity userResource in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -961,7 +925,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity userResourceRoles
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userResourceRoles">Find the entity userResourceRoles in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:userResourceRoles">Find the entity userResourceRoles in Solr</a>
 	 * <br>
 	 * @param o is the entity already constructed. 
 	 **/
@@ -1026,7 +990,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity siteUser_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteUser_">Find the entity siteUser_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:siteUser_">Find the entity siteUser_ in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1051,98 +1015,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
-	//////////////////
-	// solrDocument //
-	//////////////////
-
-	/**	 The entity solrDocument
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected SolrDocument solrDocument;
-
-	/**	<br> The entity solrDocument
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrDocument">Find the entity solrDocument in Solr</a>
-	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _solrDocument(Wrap<SolrDocument> c);
-
-	public SolrDocument getSolrDocument() {
-		return solrDocument;
-	}
-
-	public void setSolrDocument(SolrDocument solrDocument) {
-		this.solrDocument = solrDocument;
-	}
-	public static SolrDocument staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteRequestEnUS solrDocumentInit() {
-		Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument");
-		if(solrDocument == null) {
-			_solrDocument(solrDocumentWrap);
-			setSolrDocument(solrDocumentWrap.o);
-		}
-		return (SiteRequestEnUS)this;
-	}
-
-	///////////////
-	// pageAdmin //
-	///////////////
-
-	/**	 The entity pageAdmin
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected Boolean pageAdmin;
-
-	/**	<br> The entity pageAdmin
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageAdmin">Find the entity pageAdmin in Solr</a>
-	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pageAdmin(Wrap<Boolean> c);
-
-	public Boolean getPageAdmin() {
-		return pageAdmin;
-	}
-
-	public void setPageAdmin(Boolean pageAdmin) {
-		this.pageAdmin = pageAdmin;
-	}
-	@JsonIgnore
-	public void setPageAdmin(String o) {
-		this.pageAdmin = SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
-	}
-	public static Boolean staticSetPageAdmin(SiteRequestEnUS siteRequest_, String o) {
-		return Boolean.parseBoolean(o);
-	}
-	protected SiteRequestEnUS pageAdminInit() {
-		Wrap<Boolean> pageAdminWrap = new Wrap<Boolean>().var("pageAdmin");
-		if(pageAdmin == null) {
-			_pageAdmin(pageAdminWrap);
-			setPageAdmin(pageAdminWrap.o);
-		}
-		return (SiteRequestEnUS)this;
-	}
-
-	public static Boolean staticSearchPageAdmin(SiteRequestEnUS siteRequest_, Boolean o) {
-		return o;
-	}
-
-	public static String staticSearchStrPageAdmin(SiteRequestEnUS siteRequest_, Boolean o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSearchFqPageAdmin(SiteRequestEnUS siteRequest_, String o) {
-		return SiteRequestEnUS.staticSearchStrPageAdmin(siteRequest_, SiteRequestEnUS.staticSearchPageAdmin(siteRequest_, SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o)));
-	}
-
 	///////////////
 	// requestPk //
 	///////////////
@@ -1157,7 +1029,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity requestPk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestPk">Find the entity requestPk in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:requestPk">Find the entity requestPk in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1213,7 +1085,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity requestUri
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestUri">Find the entity requestUri in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:requestUri">Find the entity requestUri in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1262,7 +1134,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity requestMethod
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestMethod">Find the entity requestMethod in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:requestMethod">Find the entity requestMethod in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1311,7 +1183,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity sqlConnection
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sqlConnection">Find the entity sqlConnection in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:sqlConnection">Find the entity sqlConnection in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1349,7 +1221,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity requestHeaders
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestHeaders">Find the entity requestHeaders in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:requestHeaders">Find the entity requestHeaders in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1387,7 +1259,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	/**	<br> The entity requestVars
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestVars">Find the entity requestVars in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:requestVars">Find the entity requestVars in Solr</a>
 	 * <br>
 	 * @param m is the entity already constructed. 
 	 **/
@@ -1428,7 +1300,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				webClientInit();
 				apiRequest_Init();
 				jsonObjectInit();
-				solrQueryInit();
 				serviceRequestInit();
 				userInit();
 				userPrincipalInit();
@@ -1445,8 +1316,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				userResourceInit();
 				userResourceRolesInit();
 				siteUser_Init();
-				solrDocumentInit();
-				pageAdminInit();
 				requestPkInit();
 				requestUriInit();
 				requestMethodInit();
@@ -1504,8 +1373,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.apiRequest_;
 			case "jsonObject":
 				return oSiteRequestEnUS.jsonObject;
-			case "solrQuery":
-				return oSiteRequestEnUS.solrQuery;
 			case "serviceRequest":
 				return oSiteRequestEnUS.serviceRequest;
 			case "user":
@@ -1538,10 +1405,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.userResourceRoles;
 			case "siteUser_":
 				return oSiteRequestEnUS.siteUser_;
-			case "solrDocument":
-				return oSiteRequestEnUS.solrDocument;
-			case "pageAdmin":
-				return oSiteRequestEnUS.pageAdmin;
 			case "requestPk":
 				return oSiteRequestEnUS.requestPk;
 			case "requestUri":
@@ -1615,8 +1478,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSetUserRealmRoles(siteRequest_, o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSetUserResourceRoles(siteRequest_, o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSetRequestPk(siteRequest_, o);
 		case "requestUri":
@@ -1659,8 +1520,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSearchUserRealmRoles(siteRequest_, (String)o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSearchUserResourceRoles(siteRequest_, (String)o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSearchPageAdmin(siteRequest_, (Boolean)o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSearchRequestPk(siteRequest_, (Long)o);
 		case "requestUri":
@@ -1703,8 +1562,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSearchStrUserRealmRoles(siteRequest_, (String)o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSearchStrUserResourceRoles(siteRequest_, (String)o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSearchStrPageAdmin(siteRequest_, (Boolean)o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSearchStrRequestPk(siteRequest_, (Long)o);
 		case "requestUri":
@@ -1747,8 +1604,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSearchFqUserRealmRoles(siteRequest_, o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSearchFqUserResourceRoles(siteRequest_, o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSearchFqPageAdmin(siteRequest_, o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSearchFqRequestPk(siteRequest_, o);
 		case "requestUri":
@@ -1769,12 +1624,12 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return sb.toString();
 	}
 
+	public static final String CLASS_SIMPLE_NAME = "SiteRequestEnUS";
 	public static final String VAR_config = "config";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_webClient = "webClient";
 	public static final String VAR_apiRequest_ = "apiRequest_";
 	public static final String VAR_jsonObject = "jsonObject";
-	public static final String VAR_solrQuery = "solrQuery";
 	public static final String VAR_serviceRequest = "serviceRequest";
 	public static final String VAR_user = "user";
 	public static final String VAR_userPrincipal = "userPrincipal";
@@ -1791,8 +1646,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_userResource = "userResource";
 	public static final String VAR_userResourceRoles = "userResourceRoles";
 	public static final String VAR_siteUser_ = "siteUser_";
-	public static final String VAR_solrDocument = "solrDocument";
-	public static final String VAR_pageAdmin = "pageAdmin";
 	public static final String VAR_requestPk = "requestPk";
 	public static final String VAR_requestUri = "requestUri";
 	public static final String VAR_requestMethod = "requestMethod";
@@ -1805,7 +1658,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_webClient = "";
 	public static final String DISPLAY_NAME_apiRequest_ = "";
 	public static final String DISPLAY_NAME_jsonObject = "";
-	public static final String DISPLAY_NAME_solrQuery = "";
 	public static final String DISPLAY_NAME_serviceRequest = "";
 	public static final String DISPLAY_NAME_user = "";
 	public static final String DISPLAY_NAME_userPrincipal = "";
@@ -1822,8 +1674,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_userResource = "";
 	public static final String DISPLAY_NAME_userResourceRoles = "";
 	public static final String DISPLAY_NAME_siteUser_ = "";
-	public static final String DISPLAY_NAME_solrDocument = "";
-	public static final String DISPLAY_NAME_pageAdmin = "";
 	public static final String DISPLAY_NAME_requestPk = "";
 	public static final String DISPLAY_NAME_requestUri = "";
 	public static final String DISPLAY_NAME_requestMethod = "";
@@ -1846,8 +1696,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return DISPLAY_NAME_apiRequest_;
 		case VAR_jsonObject:
 			return DISPLAY_NAME_jsonObject;
-		case VAR_solrQuery:
-			return DISPLAY_NAME_solrQuery;
 		case VAR_serviceRequest:
 			return DISPLAY_NAME_serviceRequest;
 		case VAR_user:
@@ -1880,10 +1728,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return DISPLAY_NAME_userResourceRoles;
 		case VAR_siteUser_:
 			return DISPLAY_NAME_siteUser_;
-		case VAR_solrDocument:
-			return DISPLAY_NAME_solrDocument;
-		case VAR_pageAdmin:
-			return DISPLAY_NAME_pageAdmin;
 		case VAR_requestPk:
 			return DISPLAY_NAME_requestPk;
 		case VAR_requestUri:

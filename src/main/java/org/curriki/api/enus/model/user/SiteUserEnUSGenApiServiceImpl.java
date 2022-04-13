@@ -89,9 +89,6 @@ import org.computate.vertx.search.list.SearchList;
 
 
 /**
- * Map.hackathonMission: to create a new Java API implementation class to persist information about site users in a database and a search engine. 
- * Map.hackathonColumn: Develop SiteUser API
- * Map.hackathonLabels: Java,Vert.x
  * Translate: false
  **/
 public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements SiteUserEnUSGenApiService {
@@ -383,7 +380,12 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			}
 			listSiteUser.next().onSuccess(next -> {
 				if(next) {
-					listPATCHSiteUser(apiRequest, listSiteUser);
+					listPATCHSiteUser(apiRequest, listSiteUser).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listPATCHSiteUser failed. "), ex);
+						promise.fail(ex);
+					});
 				} else {
 					promise.complete();
 				}
@@ -457,7 +459,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				Promise<SiteUser> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHSiteUser(o, inheritPk).onSuccess(siteUser -> {
-					defineSiteUser(siteUser).onSuccess(c -> {
+					persistSiteUser(siteUser).onSuccess(c -> {
 						relateSiteUser(siteUser).onSuccess(d -> {
 							indexSiteUser(siteUser).onSuccess(e -> {
 								promise1.complete(siteUser);
@@ -543,6 +545,14 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							bSql.append(SiteUser.VAR_deleted + "=$" + num);
 							num++;
 							bParams.add(o2.sqlDeleted());
+						break;
+					case "setUserId":
+							o2.setUserId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserId());
 						break;
 					case "setUserName":
 							o2.setUserName(jsonObject.getString(entityVar));
@@ -757,7 +767,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				siteRequest.setSqlConnection(sqlConnection);
 				createSiteUser(siteRequest).onSuccess(siteUser -> {
 					sqlPOSTSiteUser(siteUser, inheritPk).onSuccess(b -> {
-						defineSiteUser(siteUser).onSuccess(c -> {
+						persistSiteUser(siteUser).onSuccess(c -> {
 							relateSiteUser(siteUser).onSuccess(d -> {
 								indexSiteUser(siteUser).onSuccess(e -> {
 									promise1.complete(siteUser);
@@ -860,6 +870,24 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				Set<String> entityVars = jsonObject.fieldNames();
 				for(String entityVar : entityVars) {
 					switch(entityVar) {
+					case SiteUser.VAR_sessionId:
+						o2.setSessionId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(SiteUser.VAR_sessionId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSessionId());
+						break;
+					case SiteUser.VAR_userKey:
+						o2.setUserKey(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(SiteUser.VAR_userKey + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUserKey());
+						break;
 					case SiteUser.VAR_inheritPk:
 						o2.setInheritPk(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -895,24 +923,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						bSql.append(SiteUser.VAR_deleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDeleted());
-						break;
-					case SiteUser.VAR_sessionId:
-						o2.setSessionId(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(SiteUser.VAR_sessionId + "=$" + num);
-						num++;
-						bParams.add(o2.sqlSessionId());
-						break;
-					case SiteUser.VAR_userKey:
-						o2.setUserKey(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(SiteUser.VAR_userKey + "=$" + num);
-						num++;
-						bParams.add(o2.sqlUserKey());
 						break;
 					case SiteUser.VAR_userId:
 						o2.setUserId(jsonObject.getString(entityVar));
@@ -1031,6 +1041,238 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
 			LOG.error(String.format("response200POSTSiteUser failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	// PUTImport //
+
+	@Override
+	public void putimportSiteUser(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("putimportSiteUser started. "));
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+			try {
+				siteRequest.setJsonObject(body);
+				{
+					try {
+						ApiRequest apiRequest = new ApiRequest();
+						JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
+						apiRequest.setRows(Long.valueOf(jsonArray.size()));
+						apiRequest.setNumFound(Long.valueOf(jsonArray.size()));
+						apiRequest.setNumPATCH(0L);
+						apiRequest.initDeepApiRequest(siteRequest);
+						siteRequest.setApiRequest_(apiRequest);
+						eventBus.publish("websocketSiteUser", JsonObject.mapFrom(apiRequest).toString());
+						varsSiteUser(siteRequest).onSuccess(d -> {
+							listPUTImportSiteUser(apiRequest, siteRequest).onSuccess(e -> {
+								response200PUTImportSiteUser(siteRequest).onSuccess(response -> {
+									LOG.debug(String.format("putimportSiteUser succeeded. "));
+									eventHandler.handle(Future.succeededFuture(response));
+								}).onFailure(ex -> {
+									LOG.error(String.format("putimportSiteUser failed. "), ex);
+									error(siteRequest, eventHandler, ex);
+								});
+							}).onFailure(ex -> {
+								LOG.error(String.format("putimportSiteUser failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error(String.format("putimportSiteUser failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					} catch(Exception ex) {
+						LOG.error(String.format("putimportSiteUser failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					}
+				}
+			} catch(Exception ex) {
+				LOG.error(String.format("putimportSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("putimportSiteUser failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("putimportSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+
+	public Future<Void> listPUTImportSiteUser(ApiRequest apiRequest, SiteRequestEnUS siteRequest) {
+		Promise<Void> promise = Promise.promise();
+		List<Future> futures = new ArrayList<>();
+		JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
+		try {
+			jsonArray.forEach(obj -> {
+				futures.add(Future.future(promise1 -> {
+					JsonObject params = new JsonObject();
+					params.put("body", obj);
+					params.put("path", new JsonObject());
+					params.put("cookie", new JsonObject());
+					params.put("header", new JsonObject());
+					params.put("form", new JsonObject());
+					JsonObject query = new JsonObject();
+					Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
+					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
+					if(softCommit == null && commitWithin == null)
+						softCommit = true;
+					if(softCommit != null)
+						query.put("softCommit", softCommit);
+					if(commitWithin != null)
+						query.put("commitWithin", commitWithin);
+					params.put("query", query);
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
+					JsonObject json = new JsonObject().put("context", context);
+					eventBus.request("ActiveLearningStudio-API-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "putimportSiteUserFuture")).onSuccess(a -> {
+						promise1.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listPUTImportSiteUser failed. "), ex);
+						promise1.fail(ex);
+					});
+				}));
+			});
+			CompositeFuture.all(futures).onSuccess(a -> {
+				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + 1);
+				promise.complete();
+			}).onFailure(ex -> {
+				LOG.error(String.format("listPUTImportSiteUser failed. "), ex);
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("listPUTImportSiteUser failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	@Override
+	public void putimportSiteUserFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "ActiveLearningStudio-API-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+			try {
+				ApiRequest apiRequest = new ApiRequest();
+				apiRequest.setRows(1L);
+				apiRequest.setNumFound(1L);
+				apiRequest.setNumPATCH(0L);
+				apiRequest.initDeepApiRequest(siteRequest);
+				siteRequest.setApiRequest_(apiRequest);
+				body.put("inheritPk", body.getValue("pk"));
+				if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+					siteRequest.getRequestVars().put( "refresh", "false" );
+				}
+
+				SearchList<SiteUser> searchList = new SearchList<SiteUser>();
+				searchList.setStore(true);
+				searchList.q("*:*");
+				searchList.setC(SiteUser.class);
+				searchList.fq("deleted_docvalues_boolean:false");
+				searchList.fq("archived_docvalues_boolean:false");
+				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(body.getString("pk")));
+				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
+					try {
+						if(searchList.size() >= 1) {
+							SiteUser o = searchList.getList().stream().findFirst().orElse(null);
+							SiteUser o2 = new SiteUser();
+							JsonObject body2 = new JsonObject();
+							for(String f : body.fieldNames()) {
+								Object bodyVal = body.getValue(f);
+								if(bodyVal instanceof JsonArray) {
+									JsonArray bodyVals = (JsonArray)bodyVal;
+									Collection<?> vals = (Collection<?>)o.obtainForClass(f);
+									if(bodyVals.size() == vals.size()) {
+										Boolean match = true;
+										for(Object val : vals) {
+											if(val != null) {
+												if(!bodyVals.contains(val.toString())) {
+													match = false;
+													break;
+												}
+											} else {
+												match = false;
+												break;
+											}
+										}
+										if(!match) {
+											body2.put("set" + StringUtils.capitalize(f), bodyVal);
+										}
+									} else {
+										body2.put("set" + StringUtils.capitalize(f), bodyVal);
+									}
+								} else {
+									o2.persistForClass(f, bodyVal);
+									o2.relateForClass(f, bodyVal);
+									if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+										body2.put("set" + StringUtils.capitalize(f), bodyVal);
+								}
+							}
+							for(String f : Optional.ofNullable(o.getSaves()).orElse(new ArrayList<>())) {
+								if(!body.fieldNames().contains(f)) {
+									if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+										body2.putNull("set" + StringUtils.capitalize(f));
+								}
+							}
+							if(body2.size() > 0) {
+								siteRequest.setJsonObject(body2);
+								patchSiteUserFuture(o, true).onSuccess(b -> {
+									LOG.info("Import SiteUser {} succeeded, modified SiteUser. ", body.getValue("pk"));
+									eventHandler.handle(Future.succeededFuture());
+								}).onFailure(ex -> {
+									LOG.error(String.format("putimportSiteUserFuture failed. "), ex);
+									eventHandler.handle(Future.failedFuture(ex));
+								});
+							} else {
+								eventHandler.handle(Future.succeededFuture());
+							}
+						} else {
+							postSiteUserFuture(siteRequest, true).onSuccess(b -> {
+								LOG.info("Import SiteUser {} succeeded, created new SiteUser. ", body.getValue("pk"));
+								eventHandler.handle(Future.succeededFuture());
+							}).onFailure(ex -> {
+								LOG.error(String.format("putimportSiteUserFuture failed. "), ex);
+								eventHandler.handle(Future.failedFuture(ex));
+							});
+						}
+					} catch(Exception ex) {
+						LOG.error(String.format("putimportSiteUserFuture failed. "), ex);
+						eventHandler.handle(Future.failedFuture(ex));
+					}
+				}).onFailure(ex -> {
+					LOG.error(String.format("putimportSiteUserFuture failed. "), ex);
+					eventHandler.handle(Future.failedFuture(ex));
+				});
+			} catch(Exception ex) {
+				LOG.error(String.format("putimportSiteUserFuture failed. "), ex);
+				eventHandler.handle(Future.failedFuture(ex));
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("putimportSiteUser failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("putimportSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public Future<ServiceResponse> response200PUTImportSiteUser(SiteRequestEnUS siteRequest) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			JsonObject json = new JsonObject();
+			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+		} catch(Exception ex) {
+			LOG.error(String.format("response200PUTImportSiteUser failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -1402,7 +1644,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void searchSiteUser2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<SiteUser> searchList) {
 	}
 
-	public Future<Void> defineSiteUser(SiteUser o) {
+	public Future<Void> persistSiteUser(SiteUser o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
@@ -1419,25 +1661,25 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							Object columnValue = definition.getValue(i);
 							if(!"pk".equals(columnName)) {
 								try {
-									o.defineForClass(columnName, columnValue);
+									o.persistForClass(columnName, columnValue);
 								} catch(Exception e) {
-									LOG.error(String.format("defineSiteUser failed. "), e);
+									LOG.error(String.format("persistSiteUser failed. "), e);
 								}
 							}
 						}
 					}
 					promise.complete();
 				} catch(Exception ex) {
-					LOG.error(String.format("defineSiteUser failed. "), ex);
+					LOG.error(String.format("persistSiteUser failed. "), ex);
 					promise.fail(ex);
 				}
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error(String.format("defineSiteUser failed. "), ex2);
+				LOG.error(String.format("persistSiteUser failed. "), ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("defineSiteUser failed. "), ex);
+			LOG.error(String.format("persistSiteUser failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();

@@ -75,5 +75,5 @@ ENABLE_IMPORT_DATA_CurrikiResource: true
 
 # The Auth roles required to be an admin in the site. 
 AUTH_ROLES_ADMIN: ['SiteAdmin']
-# The Auth roles required to add and modify ChoiceDonor records. 
+# The Auth roles required to add and modify CurrikiResource records. 
 AUTH_ROLES_REQUIRED_CurrikiResource: ['SiteAdmin']

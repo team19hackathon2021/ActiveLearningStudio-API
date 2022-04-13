@@ -1,0 +1,3876 @@
+openapi: 3.0.0
+info:
+  title: "ActiveLearningStudio-API"
+  version: 3.0.0
+paths:
+
+  /callback:
+    get:
+      operationId: callback
+      x-vertx-event-bus: choice-reports-enUS-callback
+      description: >+
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+
+  /logout:
+    get:
+      operationId: logout
+      x-vertx-event-bus: choice-reports-enUS-logout
+      description: >+
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+
+  /api/resource:
+    get:
+      operationId: searchCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchCurrikiResourceResponse'
+    patch:
+      operationId: patchCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHCurrikiResourceRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PATCHCurrikiResourceResponse'
+    post:
+      operationId: postCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTCurrikiResourceRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/POSTCurrikiResourceResponse'
+  /api/resource/import:
+    put:
+      operationId: putimportCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTImportCurrikiResourceRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PUTImportCurrikiResourceResponse'
+  /resource:
+    get:
+      operationId: searchpageCurrikiResource
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageCurrikiResourceResponse'
+  /resource/{id}:
+    get:
+      operationId: searchpageCurrikiResourceId
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-CurrikiResource
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - Resource
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageCurrikiResourceResponse'
+  /api/user:
+    get:
+      operationId: searchSiteUser
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchSiteUserResponse'
+    patch:
+      operationId: patchSiteUser
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHSiteUserRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PATCHSiteUserResponse'
+    post:
+      operationId: postSiteUser
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - User
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTSiteUserRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/POSTSiteUserResponse'
+  /api/user/import:
+    put:
+      operationId: putimportSiteUser
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTImportSiteUserRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PUTImportSiteUserResponse'
+  /user:
+    get:
+      operationId: searchpageSiteUser
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageSiteUserResponse'
+  /user/{id}:
+    get:
+      operationId: searchpageSiteUserId
+      x-vertx-event-bus: ActiveLearningStudio-API-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageSiteUserResponse'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    openIdConnect:
+      type: openIdConnect
+      openIdConnectUrl: https://sso.computate.org/auth/realms/RH-IMPACT/.well-known/openid-configuration
+  requestBodies:
+    SearchCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchCurrikiResourceResponse'
+    PATCHCurrikiResourceRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHCurrikiResourceRequest'
+    PATCHCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHCurrikiResourceResponse'
+    POSTCurrikiResourceRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTCurrikiResourceRequest'
+    POSTCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTCurrikiResourceResponse'
+    PUTImportCurrikiResourceRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUTImportCurrikiResourceRequest'
+    PUTImportCurrikiResourceResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PUTImportCurrikiResourceResponse'
+    SearchPageCurrikiResourceResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageCurrikiResourceResponse'
+    SearchSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchSiteUserResponse'
+    PATCHSiteUserRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHSiteUserRequest'
+    PATCHSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHSiteUserResponse'
+    POSTSiteUserRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTSiteUserRequest'
+    POSTSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTSiteUserResponse'
+    PUTImportSiteUserRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUTImportSiteUserRequest'
+    PUTImportSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PUTImportSiteUserResponse'
+    SearchPageSiteUserResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageSiteUserResponse'
+  schemas:
+    SearchCurrikiResourceResponse:
+      allOf:
+        - type: array
+          items:
+            type: object
+            properties:
+              resourceId:
+                type: string
+              licenseId:
+                type: string
+              contributorId:
+                type: string
+              contributionDate:
+                type: string
+                format: date-time
+              description:
+                type: string
+              title:
+                type: string
+              keywordsStr:
+                type: string
+              keywords:
+                type: array
+                items:
+                  type: string
+              generatedKeywordsStr:
+                type: string
+              generatedKeywords:
+                type: array
+                items:
+                  type: string
+              language:
+                type: string
+              lastEditorId:
+                type: string
+              lastEditDate:
+                type: string
+                format: date-time
+              currikiLicense:
+                type: string
+              externalUrl:
+                type: string
+              resourceChecked:
+                type: string
+              content:
+                type: string
+              resourceCheckRequestNote:
+                type: string
+              resourceCheckDate:
+                type: string
+                format: date-time
+              resourceCheckId:
+                type: string
+              resourceCheckNote:
+                type: string
+              studentFacing:
+                type: string
+              source:
+                type: string
+              reviewStatus:
+                type: string
+              lastReviewDate:
+                type: string
+                format: date-time
+              reviewByID:
+                type: string
+              reviewRating:
+                type: string
+              technicalCompleteness:
+                type: string
+              contentAccuracy:
+                type: string
+              pedagogy:
+                type: string
+              ratingComment:
+                type: string
+              standardsAlignment:
+                type: string
+              standardsAlignmentComment:
+                type: string
+              subjectMatter:
+                type: string
+              subjectMatterComment:
+                type: string
+              supportsTeaching:
+                type: string
+              supportsTeachingComment:
+                type: string
+              assessmentsQuality:
+                type: string
+              assessmentsQualityComment:
+                type: string
+              interactivityQuality:
+                type: string
+              interactivityQualityComment:
+                type: string
+              instructionalQuality:
+                type: string
+              instructionalQualityComment:
+                type: string
+              deeperLearning:
+                type: string
+              deeperLearningComment:
+                type: string
+              partner:
+                type: string
+              createDate:
+                type: string
+                format: date-time
+              type:
+                type: string
+              featured:
+                type: string
+              page:
+                type: string
+              active:
+                type: string
+              Public:
+                type: string
+              xwd_id:
+                type: string
+              mediaType:
+                type: string
+              access:
+                type: string
+              memberRating:
+                type: string
+              aligned:
+                type: string
+              pageUrl:
+                type: string
+              indexed:
+                type: string
+              lastIndexDate:
+                type: string
+                format: date-time
+              indexRequired:
+                type: string
+              indexRequiredDate:
+                type: string
+                format: date-time
+              rescrape:
+                type: string
+              goButton:
+                type: string
+              downloadButton:
+                type: string
+              topOfSearch:
+                type: string
+              remove:
+                type: string
+              spam:
+                type: string
+              topOfSearchInt:
+                type: string
+              partnerInt:
+                type: string
+              reviewResource:
+                type: string
+              oldUrl:
+                type: string
+              contentDisplayOk:
+                type: string
+              metadata:
+                type: string
+              approvalStatus:
+                type: string
+              approvalStatusDate:
+                type: string
+                format: date-time
+              spamUser:
+                type: string
+    PATCHCurrikiResourceRequest:
+      allOf:
+        - type: object
+          properties:
+            setResourceId:
+              type: string
+              nullable: true
+            removeResourceId:
+              type: string
+            removeAllResourceId:
+              type: string
+            setLicenseId:
+              type: string
+              nullable: true
+            removeLicenseId:
+              type: string
+            removeAllLicenseId:
+              type: string
+            setContributorId:
+              type: string
+              nullable: true
+            removeContributorId:
+              type: string
+            removeAllContributorId:
+              type: string
+            setContributionDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeContributionDate:
+              type: string
+              format: date-time
+            removeAllContributionDate:
+              type: string
+              format: date-time
+            setDescription:
+              type: string
+              nullable: true
+            removeDescription:
+              type: string
+            removeAllDescription:
+              type: string
+            setTitle:
+              type: string
+              nullable: true
+            removeTitle:
+              type: string
+            removeAllTitle:
+              type: string
+            setKeywordsStr:
+              type: string
+              nullable: true
+            removeKeywordsStr:
+              type: string
+            removeAllKeywordsStr:
+              type: string
+            setKeywords:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeKeywords:
+              type: string
+            removeAllKeywords:
+              type: array
+              items:
+                type: string
+            addKeywords:
+              type: string
+            addAllKeywords:
+              type: array
+              items:
+                type: string
+            setGeneratedKeywordsStr:
+              type: string
+              nullable: true
+            removeGeneratedKeywordsStr:
+              type: string
+            removeAllGeneratedKeywordsStr:
+              type: string
+            setGeneratedKeywords:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeGeneratedKeywords:
+              type: string
+            removeAllGeneratedKeywords:
+              type: array
+              items:
+                type: string
+            addGeneratedKeywords:
+              type: string
+            addAllGeneratedKeywords:
+              type: array
+              items:
+                type: string
+            setLanguage:
+              type: string
+              nullable: true
+            removeLanguage:
+              type: string
+            removeAllLanguage:
+              type: string
+            setLastEditorId:
+              type: string
+              nullable: true
+            removeLastEditorId:
+              type: string
+            removeAllLastEditorId:
+              type: string
+            setLastEditDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeLastEditDate:
+              type: string
+              format: date-time
+            removeAllLastEditDate:
+              type: string
+              format: date-time
+            setCurrikiLicense:
+              type: string
+              nullable: true
+            removeCurrikiLicense:
+              type: string
+            removeAllCurrikiLicense:
+              type: string
+            setExternalUrl:
+              type: string
+              nullable: true
+            removeExternalUrl:
+              type: string
+            removeAllExternalUrl:
+              type: string
+            setResourceChecked:
+              type: string
+              nullable: true
+            removeResourceChecked:
+              type: string
+            removeAllResourceChecked:
+              type: string
+            setContent:
+              type: string
+              nullable: true
+            removeContent:
+              type: string
+            removeAllContent:
+              type: string
+            setResourceCheckRequestNote:
+              type: string
+              nullable: true
+            removeResourceCheckRequestNote:
+              type: string
+            removeAllResourceCheckRequestNote:
+              type: string
+            setResourceCheckDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeResourceCheckDate:
+              type: string
+              format: date-time
+            removeAllResourceCheckDate:
+              type: string
+              format: date-time
+            setResourceCheckId:
+              type: string
+              nullable: true
+            removeResourceCheckId:
+              type: string
+            removeAllResourceCheckId:
+              type: string
+            setResourceCheckNote:
+              type: string
+              nullable: true
+            removeResourceCheckNote:
+              type: string
+            removeAllResourceCheckNote:
+              type: string
+            setStudentFacing:
+              type: string
+              nullable: true
+            removeStudentFacing:
+              type: string
+            removeAllStudentFacing:
+              type: string
+            setSource:
+              type: string
+              nullable: true
+            removeSource:
+              type: string
+            removeAllSource:
+              type: string
+            setReviewStatus:
+              type: string
+              nullable: true
+            removeReviewStatus:
+              type: string
+            removeAllReviewStatus:
+              type: string
+            setLastReviewDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeLastReviewDate:
+              type: string
+              format: date-time
+            removeAllLastReviewDate:
+              type: string
+              format: date-time
+            setReviewByID:
+              type: string
+              nullable: true
+            removeReviewByID:
+              type: string
+            removeAllReviewByID:
+              type: string
+            setReviewRating:
+              type: string
+              nullable: true
+            removeReviewRating:
+              type: string
+            removeAllReviewRating:
+              type: string
+            setTechnicalCompleteness:
+              type: string
+              nullable: true
+            removeTechnicalCompleteness:
+              type: string
+            removeAllTechnicalCompleteness:
+              type: string
+            setContentAccuracy:
+              type: string
+              nullable: true
+            removeContentAccuracy:
+              type: string
+            removeAllContentAccuracy:
+              type: string
+            setPedagogy:
+              type: string
+              nullable: true
+            removePedagogy:
+              type: string
+            removeAllPedagogy:
+              type: string
+            setRatingComment:
+              type: string
+              nullable: true
+            removeRatingComment:
+              type: string
+            removeAllRatingComment:
+              type: string
+            setStandardsAlignment:
+              type: string
+              nullable: true
+            removeStandardsAlignment:
+              type: string
+            removeAllStandardsAlignment:
+              type: string
+            setStandardsAlignmentComment:
+              type: string
+              nullable: true
+            removeStandardsAlignmentComment:
+              type: string
+            removeAllStandardsAlignmentComment:
+              type: string
+            setSubjectMatter:
+              type: string
+              nullable: true
+            removeSubjectMatter:
+              type: string
+            removeAllSubjectMatter:
+              type: string
+            setSubjectMatterComment:
+              type: string
+              nullable: true
+            removeSubjectMatterComment:
+              type: string
+            removeAllSubjectMatterComment:
+              type: string
+            setSupportsTeaching:
+              type: string
+              nullable: true
+            removeSupportsTeaching:
+              type: string
+            removeAllSupportsTeaching:
+              type: string
+            setSupportsTeachingComment:
+              type: string
+              nullable: true
+            removeSupportsTeachingComment:
+              type: string
+            removeAllSupportsTeachingComment:
+              type: string
+            setAssessmentsQuality:
+              type: string
+              nullable: true
+            removeAssessmentsQuality:
+              type: string
+            removeAllAssessmentsQuality:
+              type: string
+            setAssessmentsQualityComment:
+              type: string
+              nullable: true
+            removeAssessmentsQualityComment:
+              type: string
+            removeAllAssessmentsQualityComment:
+              type: string
+            setInteractivityQuality:
+              type: string
+              nullable: true
+            removeInteractivityQuality:
+              type: string
+            removeAllInteractivityQuality:
+              type: string
+            setInteractivityQualityComment:
+              type: string
+              nullable: true
+            removeInteractivityQualityComment:
+              type: string
+            removeAllInteractivityQualityComment:
+              type: string
+            setInstructionalQuality:
+              type: string
+              nullable: true
+            removeInstructionalQuality:
+              type: string
+            removeAllInstructionalQuality:
+              type: string
+            setInstructionalQualityComment:
+              type: string
+              nullable: true
+            removeInstructionalQualityComment:
+              type: string
+            removeAllInstructionalQualityComment:
+              type: string
+            setDeeperLearning:
+              type: string
+              nullable: true
+            removeDeeperLearning:
+              type: string
+            removeAllDeeperLearning:
+              type: string
+            setDeeperLearningComment:
+              type: string
+              nullable: true
+            removeDeeperLearningComment:
+              type: string
+            removeAllDeeperLearningComment:
+              type: string
+            setPartner:
+              type: string
+              nullable: true
+            removePartner:
+              type: string
+            removeAllPartner:
+              type: string
+            setCreateDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeCreateDate:
+              type: string
+              format: date-time
+            removeAllCreateDate:
+              type: string
+              format: date-time
+            setType:
+              type: string
+              nullable: true
+            removeType:
+              type: string
+            removeAllType:
+              type: string
+            setFeatured:
+              type: string
+              nullable: true
+            removeFeatured:
+              type: string
+            removeAllFeatured:
+              type: string
+            setPage:
+              type: string
+              nullable: true
+            removePage:
+              type: string
+            removeAllPage:
+              type: string
+            setActive:
+              type: string
+              nullable: true
+            removeActive:
+              type: string
+            removeAllActive:
+              type: string
+            setPublic:
+              type: string
+              nullable: true
+            removePublic:
+              type: string
+            removeAllPublic:
+              type: string
+            setXwd_id:
+              type: string
+              nullable: true
+            removeXwd_id:
+              type: string
+            removeAllXwd_id:
+              type: string
+            setMediaType:
+              type: string
+              nullable: true
+            removeMediaType:
+              type: string
+            removeAllMediaType:
+              type: string
+            setAccess:
+              type: string
+              nullable: true
+            removeAccess:
+              type: string
+            removeAllAccess:
+              type: string
+            setMemberRating:
+              type: string
+              nullable: true
+            removeMemberRating:
+              type: string
+            removeAllMemberRating:
+              type: string
+            setAligned:
+              type: string
+              nullable: true
+            removeAligned:
+              type: string
+            removeAllAligned:
+              type: string
+            setPageUrl:
+              type: string
+              nullable: true
+            removePageUrl:
+              type: string
+            removeAllPageUrl:
+              type: string
+            setIndexed:
+              type: string
+              nullable: true
+            removeIndexed:
+              type: string
+            removeAllIndexed:
+              type: string
+            setLastIndexDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeLastIndexDate:
+              type: string
+              format: date-time
+            removeAllLastIndexDate:
+              type: string
+              format: date-time
+            setIndexRequired:
+              type: string
+              nullable: true
+            removeIndexRequired:
+              type: string
+            removeAllIndexRequired:
+              type: string
+            setIndexRequiredDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeIndexRequiredDate:
+              type: string
+              format: date-time
+            removeAllIndexRequiredDate:
+              type: string
+              format: date-time
+            setRescrape:
+              type: string
+              nullable: true
+            removeRescrape:
+              type: string
+            removeAllRescrape:
+              type: string
+            setGoButton:
+              type: string
+              nullable: true
+            removeGoButton:
+              type: string
+            removeAllGoButton:
+              type: string
+            setDownloadButton:
+              type: string
+              nullable: true
+            removeDownloadButton:
+              type: string
+            removeAllDownloadButton:
+              type: string
+            setTopOfSearch:
+              type: string
+              nullable: true
+            removeTopOfSearch:
+              type: string
+            removeAllTopOfSearch:
+              type: string
+            setRemove:
+              type: string
+              nullable: true
+            removeRemove:
+              type: string
+            removeAllRemove:
+              type: string
+            setSpam:
+              type: string
+              nullable: true
+            removeSpam:
+              type: string
+            removeAllSpam:
+              type: string
+            setTopOfSearchInt:
+              type: string
+              nullable: true
+            removeTopOfSearchInt:
+              type: string
+            removeAllTopOfSearchInt:
+              type: string
+            setPartnerInt:
+              type: string
+              nullable: true
+            removePartnerInt:
+              type: string
+            removeAllPartnerInt:
+              type: string
+            setReviewResource:
+              type: string
+              nullable: true
+            removeReviewResource:
+              type: string
+            removeAllReviewResource:
+              type: string
+            setOldUrl:
+              type: string
+              nullable: true
+            removeOldUrl:
+              type: string
+            removeAllOldUrl:
+              type: string
+            setContentDisplayOk:
+              type: string
+              nullable: true
+            removeContentDisplayOk:
+              type: string
+            removeAllContentDisplayOk:
+              type: string
+            setMetadata:
+              type: string
+              nullable: true
+            removeMetadata:
+              type: string
+            removeAllMetadata:
+              type: string
+            setApprovalStatus:
+              type: string
+              nullable: true
+            removeApprovalStatus:
+              type: string
+            removeAllApprovalStatus:
+              type: string
+            setApprovalStatusDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeApprovalStatusDate:
+              type: string
+              format: date-time
+            removeAllApprovalStatusDate:
+              type: string
+              format: date-time
+            setSpamUser:
+              type: string
+              nullable: true
+            removeSpamUser:
+              type: string
+            removeAllSpamUser:
+              type: string
+    PATCHCurrikiResourceResponse:
+      allOf:
+        - type: object
+          properties:
+            setResourceId:
+              type: string
+              nullable: true
+            removeResourceId:
+              type: string
+            removeAllResourceId:
+              type: string
+            setLicenseId:
+              type: string
+              nullable: true
+            removeLicenseId:
+              type: string
+            removeAllLicenseId:
+              type: string
+            setContributorId:
+              type: string
+              nullable: true
+            removeContributorId:
+              type: string
+            removeAllContributorId:
+              type: string
+            setContributionDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeContributionDate:
+              type: string
+              format: date-time
+            removeAllContributionDate:
+              type: string
+              format: date-time
+            setDescription:
+              type: string
+              nullable: true
+            removeDescription:
+              type: string
+            removeAllDescription:
+              type: string
+            setTitle:
+              type: string
+              nullable: true
+            removeTitle:
+              type: string
+            removeAllTitle:
+              type: string
+            setKeywordsStr:
+              type: string
+              nullable: true
+            removeKeywordsStr:
+              type: string
+            removeAllKeywordsStr:
+              type: string
+            setKeywords:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeKeywords:
+              type: string
+            removeAllKeywords:
+              type: array
+              items:
+                type: string
+            addKeywords:
+              type: string
+            addAllKeywords:
+              type: array
+              items:
+                type: string
+            setGeneratedKeywordsStr:
+              type: string
+              nullable: true
+            removeGeneratedKeywordsStr:
+              type: string
+            removeAllGeneratedKeywordsStr:
+              type: string
+            setGeneratedKeywords:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeGeneratedKeywords:
+              type: string
+            removeAllGeneratedKeywords:
+              type: array
+              items:
+                type: string
+            addGeneratedKeywords:
+              type: string
+            addAllGeneratedKeywords:
+              type: array
+              items:
+                type: string
+            setLanguage:
+              type: string
+              nullable: true
+            removeLanguage:
+              type: string
+            removeAllLanguage:
+              type: string
+            setLastEditorId:
+              type: string
+              nullable: true
+            removeLastEditorId:
+              type: string
+            removeAllLastEditorId:
+              type: string
+            setLastEditDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeLastEditDate:
+              type: string
+              format: date-time
+            removeAllLastEditDate:
+              type: string
+              format: date-time
+            setCurrikiLicense:
+              type: string
+              nullable: true
+            removeCurrikiLicense:
+              type: string
+            removeAllCurrikiLicense:
+              type: string
+            setExternalUrl:
+              type: string
+              nullable: true
+            removeExternalUrl:
+              type: string
+            removeAllExternalUrl:
+              type: string
+            setResourceChecked:
+              type: string
+              nullable: true
+            removeResourceChecked:
+              type: string
+            removeAllResourceChecked:
+              type: string
+            setContent:
+              type: string
+              nullable: true
+            removeContent:
+              type: string
+            removeAllContent:
+              type: string
+            setResourceCheckRequestNote:
+              type: string
+              nullable: true
+            removeResourceCheckRequestNote:
+              type: string
+            removeAllResourceCheckRequestNote:
+              type: string
+            setResourceCheckDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeResourceCheckDate:
+              type: string
+              format: date-time
+            removeAllResourceCheckDate:
+              type: string
+              format: date-time
+            setResourceCheckId:
+              type: string
+              nullable: true
+            removeResourceCheckId:
+              type: string
+            removeAllResourceCheckId:
+              type: string
+            setResourceCheckNote:
+              type: string
+              nullable: true
+            removeResourceCheckNote:
+              type: string
+            removeAllResourceCheckNote:
+              type: string
+            setStudentFacing:
+              type: string
+              nullable: true
+            removeStudentFacing:
+              type: string
+            removeAllStudentFacing:
+              type: string
+            setSource:
+              type: string
+              nullable: true
+            removeSource:
+              type: string
+            removeAllSource:
+              type: string
+            setReviewStatus:
+              type: string
+              nullable: true
+            removeReviewStatus:
+              type: string
+            removeAllReviewStatus:
+              type: string
+            setLastReviewDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeLastReviewDate:
+              type: string
+              format: date-time
+            removeAllLastReviewDate:
+              type: string
+              format: date-time
+            setReviewByID:
+              type: string
+              nullable: true
+            removeReviewByID:
+              type: string
+            removeAllReviewByID:
+              type: string
+            setReviewRating:
+              type: string
+              nullable: true
+            removeReviewRating:
+              type: string
+            removeAllReviewRating:
+              type: string
+            setTechnicalCompleteness:
+              type: string
+              nullable: true
+            removeTechnicalCompleteness:
+              type: string
+            removeAllTechnicalCompleteness:
+              type: string
+            setContentAccuracy:
+              type: string
+              nullable: true
+            removeContentAccuracy:
+              type: string
+            removeAllContentAccuracy:
+              type: string
+            setPedagogy:
+              type: string
+              nullable: true
+            removePedagogy:
+              type: string
+            removeAllPedagogy:
+              type: string
+            setRatingComment:
+              type: string
+              nullable: true
+            removeRatingComment:
+              type: string
+            removeAllRatingComment:
+              type: string
+            setStandardsAlignment:
+              type: string
+              nullable: true
+            removeStandardsAlignment:
+              type: string
+            removeAllStandardsAlignment:
+              type: string
+            setStandardsAlignmentComment:
+              type: string
+              nullable: true
+            removeStandardsAlignmentComment:
+              type: string
+            removeAllStandardsAlignmentComment:
+              type: string
+            setSubjectMatter:
+              type: string
+              nullable: true
+            removeSubjectMatter:
+              type: string
+            removeAllSubjectMatter:
+              type: string
+            setSubjectMatterComment:
+              type: string
+              nullable: true
+            removeSubjectMatterComment:
+              type: string
+            removeAllSubjectMatterComment:
+              type: string
+            setSupportsTeaching:
+              type: string
+              nullable: true
+            removeSupportsTeaching:
+              type: string
+            removeAllSupportsTeaching:
+              type: string
+            setSupportsTeachingComment:
+              type: string
+              nullable: true
+            removeSupportsTeachingComment:
+              type: string
+            removeAllSupportsTeachingComment:
+              type: string
+            setAssessmentsQuality:
+              type: string
+              nullable: true
+            removeAssessmentsQuality:
+              type: string
+            removeAllAssessmentsQuality:
+              type: string
+            setAssessmentsQualityComment:
+              type: string
+              nullable: true
+            removeAssessmentsQualityComment:
+              type: string
+            removeAllAssessmentsQualityComment:
+              type: string
+            setInteractivityQuality:
+              type: string
+              nullable: true
+            removeInteractivityQuality:
+              type: string
+            removeAllInteractivityQuality:
+              type: string
+            setInteractivityQualityComment:
+              type: string
+              nullable: true
+            removeInteractivityQualityComment:
+              type: string
+            removeAllInteractivityQualityComment:
+              type: string
+            setInstructionalQuality:
+              type: string
+              nullable: true
+            removeInstructionalQuality:
+              type: string
+            removeAllInstructionalQuality:
+              type: string
+            setInstructionalQualityComment:
+              type: string
+              nullable: true
+            removeInstructionalQualityComment:
+              type: string
+            removeAllInstructionalQualityComment:
+              type: string
+            setDeeperLearning:
+              type: string
+              nullable: true
+            removeDeeperLearning:
+              type: string
+            removeAllDeeperLearning:
+              type: string
+            setDeeperLearningComment:
+              type: string
+              nullable: true
+            removeDeeperLearningComment:
+              type: string
+            removeAllDeeperLearningComment:
+              type: string
+            setPartner:
+              type: string
+              nullable: true
+            removePartner:
+              type: string
+            removeAllPartner:
+              type: string
+            setCreateDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeCreateDate:
+              type: string
+              format: date-time
+            removeAllCreateDate:
+              type: string
+              format: date-time
+            setType:
+              type: string
+              nullable: true
+            removeType:
+              type: string
+            removeAllType:
+              type: string
+            setFeatured:
+              type: string
+              nullable: true
+            removeFeatured:
+              type: string
+            removeAllFeatured:
+              type: string
+            setPage:
+              type: string
+              nullable: true
+            removePage:
+              type: string
+            removeAllPage:
+              type: string
+            setActive:
+              type: string
+              nullable: true
+            removeActive:
+              type: string
+            removeAllActive:
+              type: string
+            setPublic:
+              type: string
+              nullable: true
+            removePublic:
+              type: string
+            removeAllPublic:
+              type: string
+            setXwd_id:
+              type: string
+              nullable: true
+            removeXwd_id:
+              type: string
+            removeAllXwd_id:
+              type: string
+            setMediaType:
+              type: string
+              nullable: true
+            removeMediaType:
+              type: string
+            removeAllMediaType:
+              type: string
+            setAccess:
+              type: string
+              nullable: true
+            removeAccess:
+              type: string
+            removeAllAccess:
+              type: string
+            setMemberRating:
+              type: string
+              nullable: true
+            removeMemberRating:
+              type: string
+            removeAllMemberRating:
+              type: string
+            setAligned:
+              type: string
+              nullable: true
+            removeAligned:
+              type: string
+            removeAllAligned:
+              type: string
+            setPageUrl:
+              type: string
+              nullable: true
+            removePageUrl:
+              type: string
+            removeAllPageUrl:
+              type: string
+            setIndexed:
+              type: string
+              nullable: true
+            removeIndexed:
+              type: string
+            removeAllIndexed:
+              type: string
+            setLastIndexDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeLastIndexDate:
+              type: string
+              format: date-time
+            removeAllLastIndexDate:
+              type: string
+              format: date-time
+            setIndexRequired:
+              type: string
+              nullable: true
+            removeIndexRequired:
+              type: string
+            removeAllIndexRequired:
+              type: string
+            setIndexRequiredDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeIndexRequiredDate:
+              type: string
+              format: date-time
+            removeAllIndexRequiredDate:
+              type: string
+              format: date-time
+            setRescrape:
+              type: string
+              nullable: true
+            removeRescrape:
+              type: string
+            removeAllRescrape:
+              type: string
+            setGoButton:
+              type: string
+              nullable: true
+            removeGoButton:
+              type: string
+            removeAllGoButton:
+              type: string
+            setDownloadButton:
+              type: string
+              nullable: true
+            removeDownloadButton:
+              type: string
+            removeAllDownloadButton:
+              type: string
+            setTopOfSearch:
+              type: string
+              nullable: true
+            removeTopOfSearch:
+              type: string
+            removeAllTopOfSearch:
+              type: string
+            setRemove:
+              type: string
+              nullable: true
+            removeRemove:
+              type: string
+            removeAllRemove:
+              type: string
+            setSpam:
+              type: string
+              nullable: true
+            removeSpam:
+              type: string
+            removeAllSpam:
+              type: string
+            setTopOfSearchInt:
+              type: string
+              nullable: true
+            removeTopOfSearchInt:
+              type: string
+            removeAllTopOfSearchInt:
+              type: string
+            setPartnerInt:
+              type: string
+              nullable: true
+            removePartnerInt:
+              type: string
+            removeAllPartnerInt:
+              type: string
+            setReviewResource:
+              type: string
+              nullable: true
+            removeReviewResource:
+              type: string
+            removeAllReviewResource:
+              type: string
+            setOldUrl:
+              type: string
+              nullable: true
+            removeOldUrl:
+              type: string
+            removeAllOldUrl:
+              type: string
+            setContentDisplayOk:
+              type: string
+              nullable: true
+            removeContentDisplayOk:
+              type: string
+            removeAllContentDisplayOk:
+              type: string
+            setMetadata:
+              type: string
+              nullable: true
+            removeMetadata:
+              type: string
+            removeAllMetadata:
+              type: string
+            setApprovalStatus:
+              type: string
+              nullable: true
+            removeApprovalStatus:
+              type: string
+            removeAllApprovalStatus:
+              type: string
+            setApprovalStatusDate:
+              type: string
+              nullable: true
+              format: date-time
+            removeApprovalStatusDate:
+              type: string
+              format: date-time
+            removeAllApprovalStatusDate:
+              type: string
+              format: date-time
+            setSpamUser:
+              type: string
+              nullable: true
+            removeSpamUser:
+              type: string
+            removeAllSpamUser:
+              type: string
+    POSTCurrikiResourceRequest:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            licenseId:
+              type: string
+            contributorId:
+              type: string
+            contributionDate:
+              type: string
+              format: date-time
+            description:
+              type: string
+            title:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+            generatedKeywordsStr:
+              type: string
+            generatedKeywords:
+              type: array
+              items:
+                type: string
+            language:
+              type: string
+            lastEditorId:
+              type: string
+            lastEditDate:
+              type: string
+              format: date-time
+            currikiLicense:
+              type: string
+            externalUrl:
+              type: string
+            resourceChecked:
+              type: string
+            content:
+              type: string
+            resourceCheckRequestNote:
+              type: string
+            resourceCheckDate:
+              type: string
+              format: date-time
+            resourceCheckId:
+              type: string
+            resourceCheckNote:
+              type: string
+            studentFacing:
+              type: string
+            source:
+              type: string
+            reviewStatus:
+              type: string
+            lastReviewDate:
+              type: string
+              format: date-time
+            reviewByID:
+              type: string
+            reviewRating:
+              type: string
+            technicalCompleteness:
+              type: string
+            contentAccuracy:
+              type: string
+            pedagogy:
+              type: string
+            ratingComment:
+              type: string
+            standardsAlignment:
+              type: string
+            standardsAlignmentComment:
+              type: string
+            subjectMatter:
+              type: string
+            subjectMatterComment:
+              type: string
+            supportsTeaching:
+              type: string
+            supportsTeachingComment:
+              type: string
+            assessmentsQuality:
+              type: string
+            assessmentsQualityComment:
+              type: string
+            interactivityQuality:
+              type: string
+            interactivityQualityComment:
+              type: string
+            instructionalQuality:
+              type: string
+            instructionalQualityComment:
+              type: string
+            deeperLearning:
+              type: string
+            deeperLearningComment:
+              type: string
+            partner:
+              type: string
+            createDate:
+              type: string
+              format: date-time
+            type:
+              type: string
+            featured:
+              type: string
+            page:
+              type: string
+            active:
+              type: string
+            Public:
+              type: string
+            xwd_id:
+              type: string
+            mediaType:
+              type: string
+            access:
+              type: string
+            memberRating:
+              type: string
+            aligned:
+              type: string
+            pageUrl:
+              type: string
+            indexed:
+              type: string
+            lastIndexDate:
+              type: string
+              format: date-time
+            indexRequired:
+              type: string
+            indexRequiredDate:
+              type: string
+              format: date-time
+            rescrape:
+              type: string
+            goButton:
+              type: string
+            downloadButton:
+              type: string
+            topOfSearch:
+              type: string
+            remove:
+              type: string
+            spam:
+              type: string
+            topOfSearchInt:
+              type: string
+            partnerInt:
+              type: string
+            reviewResource:
+              type: string
+            oldUrl:
+              type: string
+            contentDisplayOk:
+              type: string
+            metadata:
+              type: string
+            approvalStatus:
+              type: string
+            approvalStatusDate:
+              type: string
+              format: date-time
+            spamUser:
+              type: string
+    POSTCurrikiResourceResponse:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            licenseId:
+              type: string
+            contributorId:
+              type: string
+            contributionDate:
+              type: string
+              format: date-time
+            description:
+              type: string
+            title:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+            generatedKeywordsStr:
+              type: string
+            generatedKeywords:
+              type: array
+              items:
+                type: string
+            language:
+              type: string
+            lastEditorId:
+              type: string
+            lastEditDate:
+              type: string
+              format: date-time
+            currikiLicense:
+              type: string
+            externalUrl:
+              type: string
+            resourceChecked:
+              type: string
+            content:
+              type: string
+            resourceCheckRequestNote:
+              type: string
+            resourceCheckDate:
+              type: string
+              format: date-time
+            resourceCheckId:
+              type: string
+            resourceCheckNote:
+              type: string
+            studentFacing:
+              type: string
+            source:
+              type: string
+            reviewStatus:
+              type: string
+            lastReviewDate:
+              type: string
+              format: date-time
+            reviewByID:
+              type: string
+            reviewRating:
+              type: string
+            technicalCompleteness:
+              type: string
+            contentAccuracy:
+              type: string
+            pedagogy:
+              type: string
+            ratingComment:
+              type: string
+            standardsAlignment:
+              type: string
+            standardsAlignmentComment:
+              type: string
+            subjectMatter:
+              type: string
+            subjectMatterComment:
+              type: string
+            supportsTeaching:
+              type: string
+            supportsTeachingComment:
+              type: string
+            assessmentsQuality:
+              type: string
+            assessmentsQualityComment:
+              type: string
+            interactivityQuality:
+              type: string
+            interactivityQualityComment:
+              type: string
+            instructionalQuality:
+              type: string
+            instructionalQualityComment:
+              type: string
+            deeperLearning:
+              type: string
+            deeperLearningComment:
+              type: string
+            partner:
+              type: string
+            createDate:
+              type: string
+              format: date-time
+            type:
+              type: string
+            featured:
+              type: string
+            page:
+              type: string
+            active:
+              type: string
+            Public:
+              type: string
+            xwd_id:
+              type: string
+            mediaType:
+              type: string
+            access:
+              type: string
+            memberRating:
+              type: string
+            aligned:
+              type: string
+            pageUrl:
+              type: string
+            indexed:
+              type: string
+            lastIndexDate:
+              type: string
+              format: date-time
+            indexRequired:
+              type: string
+            indexRequiredDate:
+              type: string
+              format: date-time
+            rescrape:
+              type: string
+            goButton:
+              type: string
+            downloadButton:
+              type: string
+            topOfSearch:
+              type: string
+            remove:
+              type: string
+            spam:
+              type: string
+            topOfSearchInt:
+              type: string
+            partnerInt:
+              type: string
+            reviewResource:
+              type: string
+            oldUrl:
+              type: string
+            contentDisplayOk:
+              type: string
+            metadata:
+              type: string
+            approvalStatus:
+              type: string
+            approvalStatusDate:
+              type: string
+              format: date-time
+            spamUser:
+              type: string
+    PUTImportCurrikiResourceRequest:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            licenseId:
+              type: string
+            contributorId:
+              type: string
+            contributionDate:
+              type: string
+              format: date-time
+            description:
+              type: string
+            title:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+            generatedKeywordsStr:
+              type: string
+            generatedKeywords:
+              type: array
+              items:
+                type: string
+            language:
+              type: string
+            lastEditorId:
+              type: string
+            lastEditDate:
+              type: string
+              format: date-time
+            currikiLicense:
+              type: string
+            externalUrl:
+              type: string
+            resourceChecked:
+              type: string
+            content:
+              type: string
+            resourceCheckRequestNote:
+              type: string
+            resourceCheckDate:
+              type: string
+              format: date-time
+            resourceCheckId:
+              type: string
+            resourceCheckNote:
+              type: string
+            studentFacing:
+              type: string
+            source:
+              type: string
+            reviewStatus:
+              type: string
+            lastReviewDate:
+              type: string
+              format: date-time
+            reviewByID:
+              type: string
+            reviewRating:
+              type: string
+            technicalCompleteness:
+              type: string
+            contentAccuracy:
+              type: string
+            pedagogy:
+              type: string
+            ratingComment:
+              type: string
+            standardsAlignment:
+              type: string
+            standardsAlignmentComment:
+              type: string
+            subjectMatter:
+              type: string
+            subjectMatterComment:
+              type: string
+            supportsTeaching:
+              type: string
+            supportsTeachingComment:
+              type: string
+            assessmentsQuality:
+              type: string
+            assessmentsQualityComment:
+              type: string
+            interactivityQuality:
+              type: string
+            interactivityQualityComment:
+              type: string
+            instructionalQuality:
+              type: string
+            instructionalQualityComment:
+              type: string
+            deeperLearning:
+              type: string
+            deeperLearningComment:
+              type: string
+            partner:
+              type: string
+            createDate:
+              type: string
+              format: date-time
+            type:
+              type: string
+            featured:
+              type: string
+            page:
+              type: string
+            active:
+              type: string
+            Public:
+              type: string
+            xwd_id:
+              type: string
+            mediaType:
+              type: string
+            access:
+              type: string
+            memberRating:
+              type: string
+            aligned:
+              type: string
+            pageUrl:
+              type: string
+            indexed:
+              type: string
+            lastIndexDate:
+              type: string
+              format: date-time
+            indexRequired:
+              type: string
+            indexRequiredDate:
+              type: string
+              format: date-time
+            rescrape:
+              type: string
+            goButton:
+              type: string
+            downloadButton:
+              type: string
+            topOfSearch:
+              type: string
+            remove:
+              type: string
+            spam:
+              type: string
+            topOfSearchInt:
+              type: string
+            partnerInt:
+              type: string
+            reviewResource:
+              type: string
+            oldUrl:
+              type: string
+            contentDisplayOk:
+              type: string
+            metadata:
+              type: string
+            approvalStatus:
+              type: string
+            approvalStatusDate:
+              type: string
+              format: date-time
+            spamUser:
+              type: string
+    PUTImportCurrikiResourceResponse:
+      allOf:
+        - type: object
+          properties:
+            resourceId:
+              type: string
+            licenseId:
+              type: string
+            contributorId:
+              type: string
+            contributionDate:
+              type: string
+              format: date-time
+            description:
+              type: string
+            title:
+              type: string
+            keywordsStr:
+              type: string
+            keywords:
+              type: array
+              items:
+                type: string
+            generatedKeywordsStr:
+              type: string
+            generatedKeywords:
+              type: array
+              items:
+                type: string
+            language:
+              type: string
+            lastEditorId:
+              type: string
+            lastEditDate:
+              type: string
+              format: date-time
+            currikiLicense:
+              type: string
+            externalUrl:
+              type: string
+            resourceChecked:
+              type: string
+            content:
+              type: string
+            resourceCheckRequestNote:
+              type: string
+            resourceCheckDate:
+              type: string
+              format: date-time
+            resourceCheckId:
+              type: string
+            resourceCheckNote:
+              type: string
+            studentFacing:
+              type: string
+            source:
+              type: string
+            reviewStatus:
+              type: string
+            lastReviewDate:
+              type: string
+              format: date-time
+            reviewByID:
+              type: string
+            reviewRating:
+              type: string
+            technicalCompleteness:
+              type: string
+            contentAccuracy:
+              type: string
+            pedagogy:
+              type: string
+            ratingComment:
+              type: string
+            standardsAlignment:
+              type: string
+            standardsAlignmentComment:
+              type: string
+            subjectMatter:
+              type: string
+            subjectMatterComment:
+              type: string
+            supportsTeaching:
+              type: string
+            supportsTeachingComment:
+              type: string
+            assessmentsQuality:
+              type: string
+            assessmentsQualityComment:
+              type: string
+            interactivityQuality:
+              type: string
+            interactivityQualityComment:
+              type: string
+            instructionalQuality:
+              type: string
+            instructionalQualityComment:
+              type: string
+            deeperLearning:
+              type: string
+            deeperLearningComment:
+              type: string
+            partner:
+              type: string
+            createDate:
+              type: string
+              format: date-time
+            type:
+              type: string
+            featured:
+              type: string
+            page:
+              type: string
+            active:
+              type: string
+            Public:
+              type: string
+            xwd_id:
+              type: string
+            mediaType:
+              type: string
+            access:
+              type: string
+            memberRating:
+              type: string
+            aligned:
+              type: string
+            pageUrl:
+              type: string
+            indexed:
+              type: string
+            lastIndexDate:
+              type: string
+              format: date-time
+            indexRequired:
+              type: string
+            indexRequiredDate:
+              type: string
+              format: date-time
+            rescrape:
+              type: string
+            goButton:
+              type: string
+            downloadButton:
+              type: string
+            topOfSearch:
+              type: string
+            remove:
+              type: string
+            spam:
+              type: string
+            topOfSearchInt:
+              type: string
+            partnerInt:
+              type: string
+            reviewResource:
+              type: string
+            oldUrl:
+              type: string
+            contentDisplayOk:
+              type: string
+            metadata:
+              type: string
+            approvalStatus:
+              type: string
+            approvalStatusDate:
+              type: string
+              format: date-time
+            spamUser:
+              type: string
+    SearchPageCurrikiResourceResponse:
+      allOf:
+        - type: string
+    SearchSiteUserResponse:
+      allOf:
+        - type: array
+          items:
+            type: object
+            properties:
+              userKeys:
+                type: array
+                items:
+                  type: string
+              userId:
+                type: string
+              userName:
+                type: string
+              userEmail:
+                type: string
+              userFirstName:
+                type: string
+              userLastName:
+                type: string
+              userFullName:
+                type: string
+              seeArchived:
+                type: boolean
+              seeDeleted:
+                type: boolean
+    PATCHSiteUserRequest:
+      allOf:
+        - type: object
+          properties:
+            setUserKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeUserKeys:
+              type: string
+            removeAllUserKeys:
+              type: array
+              items:
+                type: string
+            addUserKeys:
+              type: string
+            addAllUserKeys:
+              type: array
+              items:
+                type: string
+            setUserId:
+              type: string
+              nullable: true
+            removeUserId:
+              type: string
+            removeAllUserId:
+              type: string
+            setUserName:
+              type: string
+              nullable: true
+            removeUserName:
+              type: string
+            removeAllUserName:
+              type: string
+            setUserEmail:
+              type: string
+              nullable: true
+            removeUserEmail:
+              type: string
+            removeAllUserEmail:
+              type: string
+            setUserFirstName:
+              type: string
+              nullable: true
+            removeUserFirstName:
+              type: string
+            removeAllUserFirstName:
+              type: string
+            setUserLastName:
+              type: string
+              nullable: true
+            removeUserLastName:
+              type: string
+            removeAllUserLastName:
+              type: string
+            setUserFullName:
+              type: string
+              nullable: true
+            removeUserFullName:
+              type: string
+            removeAllUserFullName:
+              type: string
+            setSeeArchived:
+              type: boolean
+              nullable: true
+            removeSeeArchived:
+              type: boolean
+            removeAllSeeArchived:
+              type: boolean
+            setSeeDeleted:
+              type: boolean
+              nullable: true
+            removeSeeDeleted:
+              type: boolean
+            removeAllSeeDeleted:
+              type: boolean
+    PATCHSiteUserResponse:
+      allOf:
+        - type: object
+          properties:
+            setUserKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeUserKeys:
+              type: string
+            removeAllUserKeys:
+              type: array
+              items:
+                type: string
+            addUserKeys:
+              type: string
+            addAllUserKeys:
+              type: array
+              items:
+                type: string
+            setUserId:
+              type: string
+              nullable: true
+            removeUserId:
+              type: string
+            removeAllUserId:
+              type: string
+            setUserName:
+              type: string
+              nullable: true
+            removeUserName:
+              type: string
+            removeAllUserName:
+              type: string
+            setUserEmail:
+              type: string
+              nullable: true
+            removeUserEmail:
+              type: string
+            removeAllUserEmail:
+              type: string
+            setUserFirstName:
+              type: string
+              nullable: true
+            removeUserFirstName:
+              type: string
+            removeAllUserFirstName:
+              type: string
+            setUserLastName:
+              type: string
+              nullable: true
+            removeUserLastName:
+              type: string
+            removeAllUserLastName:
+              type: string
+            setUserFullName:
+              type: string
+              nullable: true
+            removeUserFullName:
+              type: string
+            removeAllUserFullName:
+              type: string
+            setSeeArchived:
+              type: boolean
+              nullable: true
+            removeSeeArchived:
+              type: boolean
+            removeAllSeeArchived:
+              type: boolean
+            setSeeDeleted:
+              type: boolean
+              nullable: true
+            removeSeeDeleted:
+              type: boolean
+            removeAllSeeDeleted:
+              type: boolean
+    POSTSiteUserRequest:
+      allOf:
+        - type: object
+          properties:
+            userKeys:
+              type: array
+              items:
+                type: string
+            userId:
+              type: string
+            userName:
+              type: string
+            userEmail:
+              type: string
+            userFirstName:
+              type: string
+            userLastName:
+              type: string
+            userFullName:
+              type: string
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    POSTSiteUserResponse:
+      allOf:
+        - type: object
+          properties:
+            userKeys:
+              type: array
+              items:
+                type: string
+            userId:
+              type: string
+            userName:
+              type: string
+            userEmail:
+              type: string
+            userFirstName:
+              type: string
+            userLastName:
+              type: string
+            userFullName:
+              type: string
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    PUTImportSiteUserRequest:
+      allOf:
+        - type: object
+          properties:
+            userKeys:
+              type: array
+              items:
+                type: string
+            userId:
+              type: string
+            userName:
+              type: string
+            userEmail:
+              type: string
+            userFirstName:
+              type: string
+            userLastName:
+              type: string
+            userFullName:
+              type: string
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    PUTImportSiteUserResponse:
+      allOf:
+        - type: object
+          properties:
+            userKeys:
+              type: array
+              items:
+                type: string
+            userId:
+              type: string
+            userName:
+              type: string
+            userEmail:
+              type: string
+            userFirstName:
+              type: string
+            userLastName:
+              type: string
+            userFullName:
+              type: string
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    SearchPageSiteUserResponse:
+      allOf:
+        - type: string

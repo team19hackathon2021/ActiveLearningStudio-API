@@ -743,7 +743,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	/**	
+	/**
 	 * Val.Complete.enUS:Refresh all data completed. 
 	 * Val.Started.enUS:Refresh all data started. 
 	 * Val.Fail.enUS:Refresh all data failed. 
@@ -833,7 +833,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 												apiCounter.incrementQueueNum();
 												try {
 													vertx.eventBus().request(
-															String.format("eventphenomenon-enUS-%s", tableName)
+															String.format("ActiveLearningStudio-API-enUS-%s", tableName)
 															, new JsonObject().put(
 																	"context"
 																	, new JsonObject().put(

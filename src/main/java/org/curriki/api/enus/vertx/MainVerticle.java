@@ -2,7 +2,6 @@ package org.curriki.api.enus.vertx;
 
 import java.net.URLDecoder;
 import java.text.Normalizer;
-import java.time.format.DateTimeFormatter;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +21,7 @@ import org.computate.vertx.verticle.EmailVerticle;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.model.resource.CurrikiResourceEnUSGenApiService;
 import org.curriki.api.enus.model.user.SiteUserEnUSGenApiService;
+import org.curriki.api.enus.page.HomePage;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,9 +77,10 @@ import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import io.vertx.sqlclient.PoolOptions;
- 
-/**	
- *	A Java class to start the Vert.x application as a main method. 
+
+
+/**
+ * Description: A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
  * Map.hackathonMission: to create a new Java class to run Vert.x verticle that will serve requests to the API and the UI. 
  * Map.hackathonColumn: Quarkus app development
@@ -88,13 +89,10 @@ import io.vertx.sqlclient.PoolOptions;
 public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
 
-	public final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
 	private Integer siteInstances;
 	private Integer workerPoolSize;
 	private Integer jdbcMaxPoolSize; 
 	private Integer jdbcMaxWaitQueueSize;
-
 	private CamelContext camelContext;
 
 	/**
@@ -417,7 +415,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 					if(StringUtils.startsWith(siteBaseUrl, "https://"))
 						sessionHandler.setCookieSecureFlag(true);
 			
-					RouterBuilder.create(vertx, "webroot/openapi3-enUS.yaml", b -> {
+					RouterBuilder.create(vertx, "webroot/openapi3-enUS.yml", b -> {
 						if (b.succeeded()) {
 							RouterBuilder routerBuilder = b.result();
 							routerBuilder.mountServicesFromExtensions();
@@ -497,13 +495,15 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 							LOG.info(configureOpenApiSuccess);
 							promise.complete();
 						} else {
-							LOG.error(configureOpenApiError, b.cause());
-							promise.fail(b.cause());
+							Exception ex = new RuntimeException("OpenID Connect Discovery failed");
+							LOG.error(configureOpenApiError, ex);
+							promise.fail(ex);
 						}
 					});
 				} else {
-					LOG.error(configureOpenApiError, a.cause());
-					promise.fail(a.cause());
+					Exception ex = new RuntimeException("OpenID Connect Discovery failed");
+					LOG.error(configureOpenApiError, ex);
+					promise.fail(ex);
 				}
 			});
 		} catch (Exception ex) {
@@ -733,22 +733,28 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			handlebars.registerHelpers(DateHelpers.class);
 
 			router.get("/").handler(a -> {
-				a.reroute("/template/enUS/home-page");
+				a.reroute("/template/enUS/HomePage");
 			});
  
 			router.get("/api").handler(ctx -> {
 				ctx.reroute("/template/enUS/openapi");
 			});
 
-			router.get("/template/*").handler(ctx -> {
-				ctx.put(ConfigKeys.STATIC_BASE_URL, staticBaseUrl);
-				ctx.put(ConfigKeys.SITE_BASE_URL, siteBaseUrl);
-				ctx.put(ConfigKeys.AUTH_URL, config().getString(ConfigKeys.AUTH_URL));
-				ctx.put(ConfigKeys.AUTH_REALM, config().getString(ConfigKeys.AUTH_REALM));
-				ctx.put(ConfigKeys.FONTAWESOME_KIT, config().getString(ConfigKeys.FONTAWESOME_KIT));
-				ctx.put("staticBaseUrl", staticBaseUrl);
-				ctx.put("siteBaseUrl", siteBaseUrl);
-				ctx.next();
+			router.get("/template/enUS/HomePage").handler(ctx -> {
+				HomePage t = new HomePage();
+				SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+				siteRequest.setConfig(config());
+				siteRequest.setRequestHeaders(ctx.response().headers());
+				siteRequest.initDeepSiteRequestEnUS();
+				t.promiseDeepForClass(siteRequest).onSuccess(a -> {
+					JsonObject json = JsonObject.mapFrom(t);
+					json.forEach(entry -> {
+						ctx.put(entry.getKey(), entry.getValue());
+					});
+					ctx.next();
+				}).onFailure(ex -> {
+					ctx.fail(ex);
+				});
 			});
 
 			router.get("/template/*").handler(templateHandler);

@@ -1,4 +1,4 @@
-package org.curriki.api.enus.model.user;
+package org.curriki.api.enus.page;
 
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.curriki.api.enus.model.base.BaseModel;
@@ -30,40 +30,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.math.RoundingMode;
 import java.util.Map;
-import org.curriki.api.enus.model.user.SiteUserGenPage;
+import org.curriki.api.enus.page.PageLayout;
 import org.computate.search.wrap.Wrap;
 import io.vertx.core.Promise;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUserPage">Find the class SiteUserPage in Solr. </a>
- * <br><br>Delete the class SiteUserPage in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUserPage&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.model.user in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.user&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.HomePage">Find the class HomePage in Solr. </a>
+ * <br><br>Delete the class HomePage in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.HomePage&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.curriki.api.enus.page in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.page&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>Delete  the project ActiveLearningStudio-API in Solr. 
  * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
-public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
-	protected static final Logger LOG = LoggerFactory.getLogger(SiteUserPage.class);
+public abstract class HomePageGen<DEV> extends PageLayout {
+	protected static final Logger LOG = LoggerFactory.getLogger(HomePage.class);
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepSiteUserPage(SiteRequestEnUS siteRequest_) {
+	public Future<Void> promiseDeepHomePage(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		return promiseDeepSiteUserPage();
+		return promiseDeepHomePage();
 	}
 
-	public Future<Void> promiseDeepSiteUserPage() {
+	public Future<Void> promiseDeepHomePage() {
 		Promise<Void> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
-		promiseSiteUserPage(promise2);
+		promiseHomePage(promise2);
 		promise2.future().onSuccess(a -> {
-			super.promiseDeepSiteUserGenPage(siteRequest_).onSuccess(b -> {
+			super.promiseDeepPageLayout(siteRequest_).onSuccess(b -> {
 				promise.complete();
 			}).onFailure(ex -> {
 				promise.fail(ex);
@@ -74,7 +74,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		return promise.future();
 	}
 
-	public Future<Void> promiseSiteUserPage(Promise<Void> promise) {
+	public Future<Void> promiseHomePage(Promise<Void> promise) {
 		Future.future(a -> a.complete()).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
@@ -92,19 +92,19 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	}
 
 	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
-		return promiseDeepSiteUserPage(siteRequest_);
+		return promiseDeepHomePage(siteRequest_);
 	}
 
 	/////////////////
 	// siteRequest //
 	/////////////////
 
-	public void siteRequestSiteUserPage(SiteRequestEnUS siteRequest_) {
-			super.siteRequestSiteUserGenPage(siteRequest_);
+	public void siteRequestHomePage(SiteRequestEnUS siteRequest_) {
+			super.siteRequestPageLayout(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
-		siteRequestSiteUserPage(siteRequest_);
+		siteRequestHomePage(siteRequest_);
 	}
 
 	/////////////
@@ -116,7 +116,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = obtainSiteUserPage(v);
+				o = obtainHomePage(v);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.obtainForClass(v);
@@ -128,11 +128,11 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		}
 		return o;
 	}
-	public Object obtainSiteUserPage(String var) {
-		SiteUserPage oSiteUserPage = (SiteUserPage)this;
+	public Object obtainHomePage(String var) {
+		HomePage oHomePage = (HomePage)this;
 		switch(var) {
 			default:
-				return super.obtainSiteUserGenPage(var);
+				return super.obtainPageLayout(var);
 		}
 	}
 
@@ -145,7 +145,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = relateSiteUserPage(v, val);
+				o = relateHomePage(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.relateForClass(v, val);
@@ -153,11 +153,11 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		}
 		return o != null;
 	}
-	public Object relateSiteUserPage(String var, Object val) {
-		SiteUserPage oSiteUserPage = (SiteUserPage)this;
+	public Object relateHomePage(String var, Object val) {
+		HomePage oHomePage = (HomePage)this;
 		switch(var) {
 			default:
-				return super.relateSiteUserGenPage(var, val);
+				return super.relatePageLayout(var, val);
 		}
 	}
 
@@ -166,12 +166,12 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	///////////////
 
 	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSetSiteUserPage(entityVar,  siteRequest_, o);
+		return staticSetHomePage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSetSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static Object staticSetHomePage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return SiteUserGenPage.staticSetSiteUserGenPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSetPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -180,12 +180,12 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	////////////////
 
 	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchSiteUserPage(entityVar,  siteRequest_, o);
+		return staticSearchHomePage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSearchSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchHomePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return SiteUserGenPage.staticSearchSiteUserGenPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -194,12 +194,12 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	///////////////////
 
 	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchStrSiteUserPage(entityVar,  siteRequest_, o);
+		return staticSearchStrHomePage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchStrSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrHomePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return SiteUserGenPage.staticSearchStrSiteUserGenPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchStrPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -208,12 +208,12 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	//////////////////
 
 	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSearchFqSiteUserPage(entityVar,  siteRequest_, o);
+		return staticSearchFqHomePage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchFqSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqHomePage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return SiteUserGenPage.staticSearchFqSiteUserGenPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchFqPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -227,16 +227,16 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		return sb.toString();
 	}
 
-	public static final String CLASS_SIMPLE_NAME = "SiteUserPage";
+	public static final String CLASS_SIMPLE_NAME = "HomePage";
 
 
 	public static String displayNameForClass(String var) {
-		return SiteUserPage.displayNameSiteUserPage(var);
+		return HomePage.displayNameHomePage(var);
 	}
-	public static String displayNameSiteUserPage(String var) {
+	public static String displayNameHomePage(String var) {
 		switch(var) {
 		default:
-			return SiteUserGenPage.displayNameSiteUserGenPage(var);
+			return PageLayout.displayNamePageLayout(var);
 		}
 	}
 }

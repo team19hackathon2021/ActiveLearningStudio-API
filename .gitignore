@@ -10,7 +10,7 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-config/ActiveLearningStudio-API.yml
+config/*.yml
 *.crt
 *.key
 *.jks
@@ -25,8 +25,7 @@ ansible/*.retry
 ansible/inventories/**
 .idea
 *.iml
-.buildpath
+vault/**
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
-
