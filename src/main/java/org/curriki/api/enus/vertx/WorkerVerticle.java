@@ -392,24 +392,34 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			Integer fetchSize = config().getInteger(ConfigKeys.MOONSHOTS_FETCH_SIZE);
 			sqlConnection.begin().onSuccess(transaction -> {
 				sqlConnection.prepare(
-						"SELECT resourceid, licenseid, contributorid, contributiondate,"
-						+ " description, title, keywords, generatedKeywords, language,"
-						+ " lasteditorid, lasteditdate, currikilicense, externalurl,"
-						+ " resourcechecked, content, resourcecheckrequestnote, resourcecheckdate,"
-						+ " resourcecheckid, resourcechecknote, studentfacing, source, reviewstatus,"
-						+ " lastreviewdate, reviewedbyid, reviewrating, technicalcompleteness,"
-						+ " contentaccuracy, pedagogy, ratingcomment, standardsalignment,"
-						+ " standardsalignmentcomment, subjectmatter, subjectmattercomment,"
-						+ " supportsteaching, supportsteachingcomment, assessmentsquality,"
-						+ " assessmentsqualitycomment, interactivityquality,"
-						+ " interactivityqualitycomment, instructionalquality,"
-						+ " instructionalqualitycomment, deeperlearning, deeperlearningcomment,"
-						+ " partner, createdate, type, featured, page, active, public, xwd_id,"
-						+ " mediatype, access, memberrating, aligned, pageurl, indexed,"
-						+ " lastindexdate, indexrequired, indexrequireddate, rescrape, gobutton,"
-						+ " downloadbutton, topofsearch, remove, spam, topofsearchint, partnerint,"
-						+ " reviewresource, oldurl, contentdisplayok, metadata, approvalStatus,"
-						+ " approvalStatusDate, spamUser from currikidb.resources"
+						"SELECT r.resourceid, r.licenseid, r.contributorid, r.contributiondate,"
+						+ " r.description, r.title, r.keywords, r.generatedKeywords, r.language,"
+						+ " r.lasteditorid, r.lasteditdate, r.currikilicense, r.externalurl,"
+						+ " r.resourcechecked, r.content, r.resourcecheckrequestnote, r.resourcecheckdate,"
+						+ " r.resourcecheckid, r.resourcechecknote, r.studentfacing, r.source, r.reviewstatus,"
+						+ " r.lastreviewdate, r.reviewedbyid, r.reviewrating, r.technicalcompleteness,"
+						+ " r.contentaccuracy, r.pedagogy, r.ratingcomment, r.standardsalignment,"
+						+ " r.standardsalignmentcomment, r.subjectmatter, r.subjectmattercomment,"
+						+ " r.supportsteaching, r.supportsteachingcomment, r.assessmentsquality,"
+						+ " r.assessmentsqualitycomment, r.interactivityquality,"
+						+ " r.interactivityqualitycomment, r.instructionalquality,"
+						+ " r.instructionalqualitycomment, r.deeperlearning, r.deeperlearningcomment,"
+						+ " r.partner, r.createdate, r.type, r.featured, r.page, r.active, r.public, r.xwd_id,"
+						+ " r.mediatype, r.access, r.memberrating, r.aligned, r.pageurl, r.indexed,"
+						+ " r.lastindexdate, r.indexrequired, r.indexrequireddate, r.rescrape, r.gobutton,"
+						+ " r.downloadbutton, r.topofsearch, r.remove, r.spam, r.topofsearchint, r.partnerint,"
+						+ " r.reviewresource, r.oldurl, r.contentdisplayok, r.metadata, r.approvalStatus,"
+						+ " r.approvalStatusDate, r.spamUser,"
+						+ " rl.url, rl.displayseqno, rf.fileid"
+						+ " from currikidb.resources as r"
+						+ " LEFT JOIN resourcelinks as rl on r.resourceid = rl.resourceid"
+						+ " LEFT JOIN resourcefiles as rf on r.resourceid = rf.resourceid"
+						+ " LEFT JOIN resource_educationlevels as redu on r.resourceid = redu.resourceid"
+						+ " LEFT JOIN educationlevels as edu on redu.educationlevelid = edu.levelid"
+						+ " LEFT JOIN resource_subjectareas as rsub on r.resourceid = rsub.resourceid"
+						+ " LEFT JOIN subjectareas as sub on rsub.subjectareaid = sub.subjectareaid"
+						+ " LEFT JOIN resource_instructiontypes as rinst on r.resourceid = rinst.resourceid"
+						+ " LEFT JOIN instructiontypes as inst on rinst.instructiontypeid = inst.instructiontypeid"
 						).onSuccess(preparedStatement -> {
 					Cursor cursor = preparedStatement.cursor();
 					importDataCurrikiResourceRow(cursor, fetchSize).onSuccess(a -> {
@@ -558,6 +568,9 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			String approvalStatus = row.getString(72);
 			LocalDateTime approvalStatusDate = row.getLocalDateTime(73);
 			String spamUser = row.getString(74);
+			String url = row.getString(75);
+			Integer displaySeqNo = row.getInteger(76);
+			Integer fileId = row.getInteger(77);
 			JsonObject body = new JsonObject();
 			body.put(CurrikiResource.VAR_saves, new JsonArray()
 					.add(CurrikiResource.VAR_inheritPk)
@@ -638,7 +651,11 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					.add(CurrikiResource.VAR_metadata)
 					.add(CurrikiResource.VAR_approvalStatus)
 					.add(CurrikiResource.VAR_approvalStatusDate)
-					.add(CurrikiResource.VAR_spamUser));
+					.add(CurrikiResource.VAR_spamUser)
+					.add(CurrikiResource.VAR_url)
+					.add(CurrikiResource.VAR_displaySeqNo)
+					.add(CurrikiResource.VAR_fileId)
+					);
 
 			body.put(CurrikiResource.VAR_pk, Optional.ofNullable(resourceId).map(v -> v.toString()).orElse(null));
 			body.put(CurrikiResource.VAR_resourceId, Optional.ofNullable(resourceId).map(v -> v.toString()).orElse(null));
@@ -716,6 +733,9 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			body.put(CurrikiResource.VAR_approvalStatus, approvalStatus);
 			body.put(CurrikiResource.VAR_approvalStatusDate, Optional.ofNullable(approvalStatusDate).map(v -> v.atZone(moonshotsZone).format(ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER)).orElse(null));
 			body.put(CurrikiResource.VAR_spamUser, spamUser);
+			body.put(CurrikiResource.VAR_url, url);
+			body.put(CurrikiResource.VAR_displaySeqNo, displaySeqNo);
+			body.put(CurrikiResource.VAR_fileId, fileId);
 
 			JsonObject params = new JsonObject();
 			params.put("body", body);

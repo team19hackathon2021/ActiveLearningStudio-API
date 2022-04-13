@@ -149,6 +149,9 @@ CREATE TABLE CurrikiResource(
 	, approvalStatus text
 	, approvalStatusDate timestamp with time zone
 	, spamUser text
+	, url text
+	, displaySeqNo integer
+	, fileId integer
 	);
 
 DROP TABLE SiteUser CASCADE;

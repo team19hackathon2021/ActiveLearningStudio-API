@@ -438,6 +438,11 @@
 {{> "htmApprovalStatusDate" classApiMethodMethod="PATCH"}}
 {{> "htmSpamUser" classApiMethodMethod="PATCH"}}
 							</div>
+							<div class="w3-cell-row ">
+{{> "htmUrl" classApiMethodMethod="PATCH"}}
+{{> "htmDisplaySeqNo" classApiMethodMethod="PATCH"}}
+{{> "htmFileId" classApiMethodMethod="PATCH"}}
+							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-blue "
 							onclick="patchCurrikiResource(null, $('#patchCurrikiResourceFormValues')); "
@@ -601,6 +606,11 @@
 							<div class="w3-cell-row ">
 {{> "htmApprovalStatusDate" classApiMethodMethod="POST"}}
 {{> "htmSpamUser" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmUrl" classApiMethodMethod="POST"}}
+{{> "htmDisplaySeqNo" classApiMethodMethod="POST"}}
+{{> "htmFileId" classApiMethodMethod="POST"}}
 							</div>
 						</div>
 						<button
@@ -792,6 +802,11 @@
 							<div class="w3-cell-row ">
 {{> "htmApprovalStatusDate" classApiMethodMethod="Page"}}
 {{> "htmSpamUser" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmUrl" classApiMethodMethod="Page"}}
+{{> "htmDisplaySeqNo" classApiMethodMethod="Page"}}
+{{> "htmFileId" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 					</div>
@@ -5898,6 +5913,204 @@
 													{{else}}
 														{{#ifContainsKeys userKeys}}
 															<span class="varCurrikiResource{{pk}}SpamUser ">{{currikiResource_.spamUser}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmUrl"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}CurrikiResourceUrl">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-blue">
+													<label for="{{classApiMethodMethod}}_url">URL</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputUrl"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-blue "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_url')); $('#{{classApiMethodMethod}}_url').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#CurrikiResourceForm :input[name=pk]').val() }], 'setUrl', null, function() { addGlow($('#{{classApiMethodMethod}}_url')); }, function() { addError($('#{{classApiMethodMethod}}_url')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputUrl"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="URL"
+															id="{{classApiMethodMethod}}_url"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setUrl classCurrikiResource inputCurrikiResource{{pk}}Url w3-input w3-border "
+																name="setUrl"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setUrl classCurrikiResource inputCurrikiResource{{pk}}Url w3-input w3-border "
+																name="setUrl"
+		{{else}}
+																class="valueUrl w3-input w3-border classCurrikiResource inputCurrikiResource{{pk}}Url w3-input w3-border "
+																name="url"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setUrl', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_url')); }, function() { addError($('#{{classApiMethodMethod}}_url')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{currikiResource_.url}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varCurrikiResource{{pk}}Url ">{{currikiResource_.url}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmDisplaySeqNo"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}CurrikiResourceDisplaySeqNo">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-blue">
+													<label for="{{classApiMethodMethod}}_displaySeqNo">Display Sequence Number</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputDisplaySeqNo"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-blue "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_displaySeqNo')); $('#{{classApiMethodMethod}}_displaySeqNo').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#CurrikiResourceForm :input[name=pk]').val() }], 'setDisplaySeqNo', null, function() { addGlow($('#{{classApiMethodMethod}}_displaySeqNo')); }, function() { addError($('#{{classApiMethodMethod}}_displaySeqNo')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputDisplaySeqNo"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="Display Sequence Number"
+															id="{{classApiMethodMethod}}_displaySeqNo"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setDisplaySeqNo classCurrikiResource inputCurrikiResource{{pk}}DisplaySeqNo w3-input w3-border "
+																name="setDisplaySeqNo"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setDisplaySeqNo classCurrikiResource inputCurrikiResource{{pk}}DisplaySeqNo w3-input w3-border "
+																name="setDisplaySeqNo"
+		{{else}}
+																class="valueDisplaySeqNo w3-input w3-border classCurrikiResource inputCurrikiResource{{pk}}DisplaySeqNo w3-input w3-border "
+																name="displaySeqNo"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setDisplaySeqNo', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_displaySeqNo')); }, function() { addError($('#{{classApiMethodMethod}}_displaySeqNo')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{currikiResource_.displaySeqNo}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varCurrikiResource{{pk}}DisplaySeqNo ">{{currikiResource_.displaySeqNo}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmFileId"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}CurrikiResourceFileId">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-blue">
+													<label for="{{classApiMethodMethod}}_fileId">File ID</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputFileId"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-blue "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_fileId')); $('#{{classApiMethodMethod}}_fileId').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#CurrikiResourceForm :input[name=pk]').val() }], 'setFileId', null, function() { addGlow($('#{{classApiMethodMethod}}_fileId')); }, function() { addError($('#{{classApiMethodMethod}}_fileId')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputFileId"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="File ID"
+															id="{{classApiMethodMethod}}_fileId"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setFileId classCurrikiResource inputCurrikiResource{{pk}}FileId w3-input w3-border "
+																name="setFileId"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setFileId classCurrikiResource inputCurrikiResource{{pk}}FileId w3-input w3-border "
+																name="setFileId"
+		{{else}}
+																class="valueFileId w3-input w3-border classCurrikiResource inputCurrikiResource{{pk}}FileId w3-input w3-border "
+																name="fileId"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setFileId', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_fileId')); }, function() { addError($('#{{classApiMethodMethod}}_fileId')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{currikiResource_.fileId}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varCurrikiResource{{pk}}FileId ">{{currikiResource_.fileId}}</span>
 			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}

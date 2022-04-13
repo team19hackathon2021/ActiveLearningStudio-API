@@ -1181,6 +1181,30 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							num++;
 							bParams.add(o2.sqlSpamUser());
 						break;
+					case "setUrl":
+							o2.setUrl(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_url + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUrl());
+						break;
+					case "setDisplaySeqNo":
+							o2.setDisplaySeqNo(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_displaySeqNo + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDisplaySeqNo());
+						break;
+					case "setFileId":
+							o2.setFileId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_fileId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlFileId());
+						break;
 				}
 			}
 			bSql.append(" WHERE pk=$" + num);
@@ -2177,6 +2201,33 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						bSql.append(CurrikiResource.VAR_spamUser + "=$" + num);
 						num++;
 						bParams.add(o2.sqlSpamUser());
+						break;
+					case CurrikiResource.VAR_url:
+						o2.setUrl(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_url + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUrl());
+						break;
+					case CurrikiResource.VAR_displaySeqNo:
+						o2.setDisplaySeqNo(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_displaySeqNo + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDisplaySeqNo());
+						break;
+					case CurrikiResource.VAR_fileId:
+						o2.setFileId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_fileId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlFileId());
 						break;
 					}
 				}
