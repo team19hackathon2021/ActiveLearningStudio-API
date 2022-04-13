@@ -1738,6 +1738,12 @@ components:
                 format: date-time
               spamUser:
                 type: string
+              url:
+                type: string
+              displaySeqNo:
+                type: string
+              fileId:
+                type: string
     PATCHCurrikiResourceRequest:
       allOf:
         - type: object
@@ -2324,6 +2330,27 @@ components:
             removeSpamUser:
               type: string
             removeAllSpamUser:
+              type: string
+            setUrl:
+              type: string
+              nullable: true
+            removeUrl:
+              type: string
+            removeAllUrl:
+              type: string
+            setDisplaySeqNo:
+              type: string
+              nullable: true
+            removeDisplaySeqNo:
+              type: string
+            removeAllDisplaySeqNo:
+              type: string
+            setFileId:
+              type: string
+              nullable: true
+            removeFileId:
+              type: string
+            removeAllFileId:
               type: string
     PATCHCurrikiResourceResponse:
       allOf:
@@ -2912,6 +2939,27 @@ components:
               type: string
             removeAllSpamUser:
               type: string
+            setUrl:
+              type: string
+              nullable: true
+            removeUrl:
+              type: string
+            removeAllUrl:
+              type: string
+            setDisplaySeqNo:
+              type: string
+              nullable: true
+            removeDisplaySeqNo:
+              type: string
+            removeAllDisplaySeqNo:
+              type: string
+            setFileId:
+              type: string
+              nullable: true
+            removeFileId:
+              type: string
+            removeAllFileId:
+              type: string
     POSTCurrikiResourceRequest:
       allOf:
         - type: object
@@ -3081,6 +3129,12 @@ components:
               type: string
               format: date-time
             spamUser:
+              type: string
+            url:
+              type: string
+            displaySeqNo:
+              type: string
+            fileId:
               type: string
     POSTCurrikiResourceResponse:
       allOf:
@@ -3252,6 +3306,12 @@ components:
               format: date-time
             spamUser:
               type: string
+            url:
+              type: string
+            displaySeqNo:
+              type: string
+            fileId:
+              type: string
     PUTImportCurrikiResourceRequest:
       allOf:
         - type: object
@@ -3422,6 +3482,12 @@ components:
               format: date-time
             spamUser:
               type: string
+            url:
+              type: string
+            displaySeqNo:
+              type: string
+            fileId:
+              type: string
     PUTImportCurrikiResourceResponse:
       allOf:
         - type: object
@@ -3591,6 +3657,12 @@ components:
               type: string
               format: date-time
             spamUser:
+              type: string
+            url:
+              type: string
+            displaySeqNo:
+              type: string
+            fileId:
               type: string
     SearchPageCurrikiResourceResponse:
       allOf:

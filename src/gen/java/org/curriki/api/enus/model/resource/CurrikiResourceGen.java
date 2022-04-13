@@ -4541,6 +4541,181 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return spamUser;
 	}
 
+	/////////
+	// url //
+	/////////
+
+	/**	 The entity url
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String url;
+
+	/**	<br> The entity url
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:url">Find the entity url in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _url(Wrap<String> w);
+
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String o) {
+		this.url = CurrikiResource.staticSetUrl(siteRequest_, o);
+	}
+	public static String staticSetUrl(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource urlInit() {
+		Wrap<String> urlWrap = new Wrap<String>().var("url");
+		if(url == null) {
+			_url(urlWrap);
+			setUrl(urlWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchUrl(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUrl(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUrl(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrUrl(siteRequest_, CurrikiResource.staticSearchUrl(siteRequest_, CurrikiResource.staticSetUrl(siteRequest_, o)));
+	}
+
+	public String sqlUrl() {
+		return url;
+	}
+
+	//////////////////
+	// displaySeqNo //
+	//////////////////
+
+	/**	 The entity displaySeqNo
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer displaySeqNo;
+
+	/**	<br> The entity displaySeqNo
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:displaySeqNo">Find the entity displaySeqNo in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _displaySeqNo(Wrap<Integer> w);
+
+	public Integer getDisplaySeqNo() {
+		return displaySeqNo;
+	}
+
+	public void setDisplaySeqNo(Integer displaySeqNo) {
+		this.displaySeqNo = displaySeqNo;
+	}
+	@JsonIgnore
+	public void setDisplaySeqNo(String o) {
+		this.displaySeqNo = CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o);
+	}
+	public static Integer staticSetDisplaySeqNo(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected CurrikiResource displaySeqNoInit() {
+		Wrap<Integer> displaySeqNoWrap = new Wrap<Integer>().var("displaySeqNo");
+		if(displaySeqNo == null) {
+			_displaySeqNo(displaySeqNoWrap);
+			setDisplaySeqNo(displaySeqNoWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static Integer staticSearchDisplaySeqNo(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSearchStrDisplaySeqNo(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqDisplaySeqNo(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrDisplaySeqNo(siteRequest_, CurrikiResource.staticSearchDisplaySeqNo(siteRequest_, CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o)));
+	}
+
+	public Integer sqlDisplaySeqNo() {
+		return displaySeqNo;
+	}
+
+	////////////
+	// fileId //
+	////////////
+
+	/**	 The entity fileId
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer fileId;
+
+	/**	<br> The entity fileId
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:fileId">Find the entity fileId in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _fileId(Wrap<Integer> w);
+
+	public Integer getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(Integer fileId) {
+		this.fileId = fileId;
+	}
+	@JsonIgnore
+	public void setFileId(String o) {
+		this.fileId = CurrikiResource.staticSetFileId(siteRequest_, o);
+	}
+	public static Integer staticSetFileId(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected CurrikiResource fileIdInit() {
+		Wrap<Integer> fileIdWrap = new Wrap<Integer>().var("fileId");
+		if(fileId == null) {
+			_fileId(fileIdWrap);
+			setFileId(fileIdWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static Integer staticSearchFileId(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSearchStrFileId(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqFileId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrFileId(siteRequest_, CurrikiResource.staticSearchFileId(siteRequest_, CurrikiResource.staticSetFileId(siteRequest_, o)));
+	}
+
+	public Integer sqlFileId() {
+		return fileId;
+	}
+
 	//////////////
 	// initDeep //
 	//////////////
@@ -4647,6 +4822,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				approvalStatusInit();
 				approvalStatusDateInit();
 				spamUserInit();
+				urlInit();
+				displaySeqNoInit();
+				fileIdInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -4854,6 +5032,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return oCurrikiResource.approvalStatusDate;
 			case "spamUser":
 				return oCurrikiResource.spamUser;
+			case "url":
+				return oCurrikiResource.url;
+			case "displaySeqNo":
+				return oCurrikiResource.displaySeqNo;
+			case "fileId":
+				return oCurrikiResource.fileId;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -5047,6 +5231,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o);
 		case "spamUser":
 			return CurrikiResource.staticSetSpamUser(siteRequest_, o);
+		case "url":
+			return CurrikiResource.staticSetUrl(siteRequest_, o);
+		case "displaySeqNo":
+			return CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o);
+		case "fileId":
+			return CurrikiResource.staticSetFileId(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5215,6 +5405,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSearchApprovalStatusDate(siteRequest_, (ZonedDateTime)o);
 		case "spamUser":
 			return CurrikiResource.staticSearchSpamUser(siteRequest_, (String)o);
+		case "url":
+			return CurrikiResource.staticSearchUrl(siteRequest_, (String)o);
+		case "displaySeqNo":
+			return CurrikiResource.staticSearchDisplaySeqNo(siteRequest_, (Integer)o);
+		case "fileId":
+			return CurrikiResource.staticSearchFileId(siteRequest_, (Integer)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5383,6 +5579,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSearchStrApprovalStatusDate(siteRequest_, (Date)o);
 		case "spamUser":
 			return CurrikiResource.staticSearchStrSpamUser(siteRequest_, (String)o);
+		case "url":
+			return CurrikiResource.staticSearchStrUrl(siteRequest_, (String)o);
+		case "displaySeqNo":
+			return CurrikiResource.staticSearchStrDisplaySeqNo(siteRequest_, (Integer)o);
+		case "fileId":
+			return CurrikiResource.staticSearchStrFileId(siteRequest_, (Integer)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5551,6 +5753,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSearchFqApprovalStatusDate(siteRequest_, o);
 		case "spamUser":
 			return CurrikiResource.staticSearchFqSpamUser(siteRequest_, o);
+		case "url":
+			return CurrikiResource.staticSearchFqUrl(siteRequest_, o);
+		case "displaySeqNo":
+			return CurrikiResource.staticSearchFqDisplaySeqNo(siteRequest_, o);
+		case "fileId":
+			return CurrikiResource.staticSearchFqFileId(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -6022,6 +6230,25 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 					setSpamUser((String)val);
 				saves.add("spamUser");
 				return val;
+			case "url":
+				if(val instanceof String)
+					setUrl((String)val);
+				saves.add("url");
+				return val;
+			case "displayseqno":
+				if(val instanceof Integer)
+					setDisplaySeqNo((Integer)val);
+				else if(val instanceof String)
+					setDisplaySeqNo((String)val);
+				saves.add("displaySeqNo");
+				return val;
+			case "fileid":
+				if(val instanceof Integer)
+					setFileId((Integer)val);
+				else if(val instanceof String)
+					setFileId((String)val);
+				saves.add("fileId");
+				return val;
 			default:
 				return super.persistBaseModel(var, val);
 		}
@@ -6283,6 +6510,15 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		if(spamUser != null) {
 			doc.put("spamUser_docvalues_string", spamUser);
 		}
+		if(url != null) {
+			doc.put("url_docvalues_string", url);
+		}
+		if(displaySeqNo != null) {
+			doc.put("displaySeqNo_docvalues_int", displaySeqNo);
+		}
+		if(fileId != null) {
+			doc.put("fileId_docvalues_int", fileId);
+		}
 		super.indexBaseModel(doc);
 
 	}
@@ -6435,6 +6671,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return "approvalStatusDate_docvalues_date";
 			case "spamUser":
 				return "spamUser_docvalues_string";
+			case "url":
+				return "url_docvalues_string";
+			case "displaySeqNo":
+				return "displaySeqNo_docvalues_int";
+			case "fileId":
+				return "fileId_docvalues_int";
 			default:
 				return BaseModel.varStoredBaseModel(entityVar);
 		}
@@ -6584,6 +6826,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return "approvalStatusDate_docvalues_date";
 			case "spamUser":
 				return "spamUser_docvalues_string";
+			case "url":
+				return "url_docvalues_string";
+			case "displaySeqNo":
+				return "displaySeqNo_docvalues_int";
+			case "fileId":
+				return "fileId_docvalues_int";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -6690,6 +6938,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setApprovalStatus(Optional.ofNullable(doc.get("approvalStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setApprovalStatusDate(Optional.ofNullable(doc.get("approvalStatusDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setSpamUser(Optional.ofNullable(doc.get("spamUser_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setUrl(Optional.ofNullable(doc.get("url_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDisplaySeqNo(Optional.ofNullable(doc.get("displaySeqNo_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setFileId(Optional.ofNullable(doc.get("fileId_docvalues_int")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
 	}
@@ -6857,6 +7108,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("approvalStatusDate");
 			if(!Objects.equals(spamUser, original.getSpamUser()))
 				apiRequest.addVars("spamUser");
+			if(!Objects.equals(url, original.getUrl()))
+				apiRequest.addVars("url");
+			if(!Objects.equals(displaySeqNo, original.getDisplaySeqNo()))
+				apiRequest.addVars("displaySeqNo");
+			if(!Objects.equals(fileId, original.getFileId()))
+				apiRequest.addVars("fileId");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -6945,6 +7202,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(approvalStatus).map(v -> "approvalStatus: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(approvalStatusDate).map(v -> "approvalStatusDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(spamUser).map(v -> "spamUser: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(url).map(v -> "url: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(displaySeqNo).map(v -> "displaySeqNo: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(fileId).map(v -> "fileId: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
@@ -7026,6 +7286,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String VAR_approvalStatus = "approvalStatus";
 	public static final String VAR_approvalStatusDate = "approvalStatusDate";
 	public static final String VAR_spamUser = "spamUser";
+	public static final String VAR_url = "url";
+	public static final String VAR_displaySeqNo = "displaySeqNo";
+	public static final String VAR_fileId = "fileId";
 
 	public static List<String> varsQForClass() {
 		return CurrikiResource.varsQCurrikiResource(new ArrayList<String>());
@@ -7110,6 +7373,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		vars.add(VAR_approvalStatus);
 		vars.add(VAR_approvalStatusDate);
 		vars.add(VAR_spamUser);
+		vars.add(VAR_url);
+		vars.add(VAR_displaySeqNo);
+		vars.add(VAR_fileId);
 		BaseModel.varsFqBaseModel(vars);
 		return vars;
 	}
@@ -7145,6 +7411,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		vars.add(VAR_topOfSearchInt);
 		vars.add(VAR_partnerInt);
 		vars.add(VAR_approvalStatusDate);
+		vars.add(VAR_displaySeqNo);
+		vars.add(VAR_fileId);
 		BaseModel.varsRangeBaseModel(vars);
 		return vars;
 	}
@@ -7226,6 +7494,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_approvalStatus = "Approval Status";
 	public static final String DISPLAY_NAME_approvalStatusDate = "Approval Status Date";
 	public static final String DISPLAY_NAME_spamUser = "Spam User";
+	public static final String DISPLAY_NAME_url = "URL";
+	public static final String DISPLAY_NAME_displaySeqNo = "Display Sequence Number";
+	public static final String DISPLAY_NAME_fileId = "File ID";
 
 	public static String displayNameForClass(String var) {
 		return CurrikiResource.displayNameCurrikiResource(var);
@@ -7386,6 +7657,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_approvalStatusDate;
 		case VAR_spamUser:
 			return DISPLAY_NAME_spamUser;
+		case VAR_url:
+			return DISPLAY_NAME_url;
+		case VAR_displaySeqNo:
+			return DISPLAY_NAME_displaySeqNo;
+		case VAR_fileId:
+			return DISPLAY_NAME_fileId;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}
@@ -7554,6 +7831,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return "ZonedDateTime";
 		case VAR_spamUser:
 			return "String";
+		case VAR_url:
+			return "String";
+		case VAR_displaySeqNo:
+			return "Integer";
+		case VAR_fileId:
+			return "Integer";
 			default:
 				return BaseModel.classSimpleNameBaseModel(var);
 		}
@@ -7722,6 +8005,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return 29;
 		case VAR_spamUser:
 			return 29;
+		case VAR_url:
+			return 30;
+		case VAR_displaySeqNo:
+			return 30;
+		case VAR_fileId:
+			return 30;
 			default:
 				return BaseModel.htmlRowBaseModel(var);
 		}
@@ -7883,6 +8172,12 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return 1;
 		case VAR_spamUser:
 			return 2;
+		case VAR_url:
+			return 1;
+		case VAR_displaySeqNo:
+			return 2;
+		case VAR_fileId:
+			return 3;
 			default:
 				return BaseModel.htmlCellBaseModel(var);
 		}

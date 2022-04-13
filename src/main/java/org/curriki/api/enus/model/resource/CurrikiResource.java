@@ -958,8 +958,44 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlCell: 2
 	 */
 	protected void _spamUser(Wrap<String> w) {
-		
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: URL
+	 * HtmlRow: 30
+	 * HtmlCell: 1
+	 */
+	protected void _url(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Display Sequence Number
+	 * HtmlRow: 30
+	 * HtmlCell: 2
+	 */
+	protected void _displaySeqNo(Wrap<Integer> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: File ID
+	 * HtmlRow: 30
+	 * HtmlCell: 3
+	 */
+	protected void _fileId(Wrap<Integer> w) {
+	}
+
+//	+ " rl.url, rl.displayseqno, rf.fileid, rf.filename, rf.uploaddate, rf.sequence, rf.uniquename,"
+//	+ " rf.ext, rf.active, rf.tempactive, rf.s3path, rf.SDFstatus, rf.transcoded, rf.lodestar,"
+//	+ " rf.archive, edu.identifier, edu.displayname, sub.subjectarea, sub.displayname, inst.displayname, inst.name"
 	
 	@Override
 	public String toString() {
