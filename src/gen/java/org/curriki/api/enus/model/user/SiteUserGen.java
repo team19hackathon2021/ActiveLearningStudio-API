@@ -44,9 +44,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.computate.search.response.solr.SolrResponse;
 
 /**	
- * Map.hackathonMission: to create a generated Java class that can be extended and override these methods to store information about site users in the system. 
- * Map.hackathonColumn: Develop SiteUser API
- * Map.hackathonLabels: Java
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser">Find the class SiteUser in Solr. </a>
  * <br><br>Delete the class SiteUser in Solr. 
  * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
@@ -72,7 +69,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String SiteUser_Title = "site users";
 	public static final String SiteUser_ThePluralName = "the site users";
 	public static final String SiteUser_NoNameFound = "no site user found";
-	public static final String SiteUser_NameVar = "siteUser";
+	public static final String SiteUser_NameVar = "user";
 	public static final String SiteUser_OfName = "of site user";
 	public static final String SiteUser_ANameAdjective = "a site user";
 	public static final String SiteUser_NameAdjectiveSingular = "site user";
@@ -1170,7 +1167,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 
 	public static final String DISPLAY_NAME_userKeys = "";
-	public static final String DISPLAY_NAME_userId = "user ID";
+	public static final String DISPLAY_NAME_userId = "";
 	public static final String DISPLAY_NAME_userName = "";
 	public static final String DISPLAY_NAME_userEmail = "";
 	public static final String DISPLAY_NAME_userFirstName = "";
@@ -1209,6 +1206,24 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public static String descriptionSiteUser(String var) {
 		switch(var) {
+		case VAR_userKeys:
+			return "User keys that relate to this user";
+		case VAR_userId:
+			return "The unique user ID from the SSO server";
+		case VAR_userName:
+			return "The user's username";
+		case VAR_userEmail:
+			return "The user's email";
+		case VAR_userFirstName:
+			return "The user's first name";
+		case VAR_userLastName:
+			return "The user's last name";
+		case VAR_userFullName:
+			return "The user's full name";
+		case VAR_seeArchived:
+			return "A user field allowing a user to see archived records";
+		case VAR_seeDeleted:
+			return "A user field allowing a user to see deleted records";
 			default:
 				return BaseModel.descriptionBaseModel(var);
 		}

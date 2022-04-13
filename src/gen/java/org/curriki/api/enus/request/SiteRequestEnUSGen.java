@@ -33,15 +33,12 @@ import java.util.Map;
 import java.lang.Object;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.ext.auth.User;
 import java.lang.String;
 import java.lang.Long;
 import io.vertx.core.json.JsonArray;
 import org.curriki.api.enus.model.user.SiteUser;
-import org.apache.solr.common.SolrDocument;
-import java.lang.Boolean;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.core.MultiMap;
 import org.computate.search.wrap.Wrap;
@@ -49,7 +46,6 @@ import io.vertx.core.Promise;
 import io.vertx.core.Future;
 
 /**	
- * Map.hackathonLabels: Java
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS">Find the class SiteRequestEnUS in Solr. </a>
  * <br><br>Delete the class SiteRequestEnUS in Solr. 
  * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
@@ -246,44 +242,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		if(jsonObject == null) {
 			_jsonObject(jsonObjectWrap);
 			setJsonObject(jsonObjectWrap.o);
-		}
-		return (SiteRequestEnUS)this;
-	}
-
-	///////////////
-	// solrQuery //
-	///////////////
-
-	/**	 The entity solrQuery
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected SolrQuery solrQuery;
-
-	/**	<br> The entity solrQuery
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:solrQuery">Find the entity solrQuery in Solr</a>
-	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _solrQuery(Wrap<SolrQuery> c);
-
-	public SolrQuery getSolrQuery() {
-		return solrQuery;
-	}
-
-	public void setSolrQuery(SolrQuery solrQuery) {
-		this.solrQuery = solrQuery;
-	}
-	public static SolrQuery staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteRequestEnUS solrQueryInit() {
-		Wrap<SolrQuery> solrQueryWrap = new Wrap<SolrQuery>().var("solrQuery");
-		if(solrQuery == null) {
-			_solrQuery(solrQueryWrap);
-			setSolrQuery(solrQueryWrap.o);
 		}
 		return (SiteRequestEnUS)this;
 	}
@@ -1057,98 +1015,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
-	//////////////////
-	// solrDocument //
-	//////////////////
-
-	/**	 The entity solrDocument
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected SolrDocument solrDocument;
-
-	/**	<br> The entity solrDocument
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:solrDocument">Find the entity solrDocument in Solr</a>
-	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _solrDocument(Wrap<SolrDocument> c);
-
-	public SolrDocument getSolrDocument() {
-		return solrDocument;
-	}
-
-	public void setSolrDocument(SolrDocument solrDocument) {
-		this.solrDocument = solrDocument;
-	}
-	public static SolrDocument staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteRequestEnUS solrDocumentInit() {
-		Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument");
-		if(solrDocument == null) {
-			_solrDocument(solrDocumentWrap);
-			setSolrDocument(solrDocumentWrap.o);
-		}
-		return (SiteRequestEnUS)this;
-	}
-
-	///////////////
-	// pageAdmin //
-	///////////////
-
-	/**	 The entity pageAdmin
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected Boolean pageAdmin;
-
-	/**	<br> The entity pageAdmin
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=entiteVar_enUS_indexed_string:pageAdmin">Find the entity pageAdmin in Solr</a>
-	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pageAdmin(Wrap<Boolean> c);
-
-	public Boolean getPageAdmin() {
-		return pageAdmin;
-	}
-
-	public void setPageAdmin(Boolean pageAdmin) {
-		this.pageAdmin = pageAdmin;
-	}
-	@JsonIgnore
-	public void setPageAdmin(String o) {
-		this.pageAdmin = SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
-	}
-	public static Boolean staticSetPageAdmin(SiteRequestEnUS siteRequest_, String o) {
-		return Boolean.parseBoolean(o);
-	}
-	protected SiteRequestEnUS pageAdminInit() {
-		Wrap<Boolean> pageAdminWrap = new Wrap<Boolean>().var("pageAdmin");
-		if(pageAdmin == null) {
-			_pageAdmin(pageAdminWrap);
-			setPageAdmin(pageAdminWrap.o);
-		}
-		return (SiteRequestEnUS)this;
-	}
-
-	public static Boolean staticSearchPageAdmin(SiteRequestEnUS siteRequest_, Boolean o) {
-		return o;
-	}
-
-	public static String staticSearchStrPageAdmin(SiteRequestEnUS siteRequest_, Boolean o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSearchFqPageAdmin(SiteRequestEnUS siteRequest_, String o) {
-		return SiteRequestEnUS.staticSearchStrPageAdmin(siteRequest_, SiteRequestEnUS.staticSearchPageAdmin(siteRequest_, SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o)));
-	}
-
 	///////////////
 	// requestPk //
 	///////////////
@@ -1434,7 +1300,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				webClientInit();
 				apiRequest_Init();
 				jsonObjectInit();
-				solrQueryInit();
 				serviceRequestInit();
 				userInit();
 				userPrincipalInit();
@@ -1451,8 +1316,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				userResourceInit();
 				userResourceRolesInit();
 				siteUser_Init();
-				solrDocumentInit();
-				pageAdminInit();
 				requestPkInit();
 				requestUriInit();
 				requestMethodInit();
@@ -1510,8 +1373,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.apiRequest_;
 			case "jsonObject":
 				return oSiteRequestEnUS.jsonObject;
-			case "solrQuery":
-				return oSiteRequestEnUS.solrQuery;
 			case "serviceRequest":
 				return oSiteRequestEnUS.serviceRequest;
 			case "user":
@@ -1544,10 +1405,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.userResourceRoles;
 			case "siteUser_":
 				return oSiteRequestEnUS.siteUser_;
-			case "solrDocument":
-				return oSiteRequestEnUS.solrDocument;
-			case "pageAdmin":
-				return oSiteRequestEnUS.pageAdmin;
 			case "requestPk":
 				return oSiteRequestEnUS.requestPk;
 			case "requestUri":
@@ -1621,8 +1478,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSetUserRealmRoles(siteRequest_, o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSetUserResourceRoles(siteRequest_, o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSetRequestPk(siteRequest_, o);
 		case "requestUri":
@@ -1665,8 +1520,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSearchUserRealmRoles(siteRequest_, (String)o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSearchUserResourceRoles(siteRequest_, (String)o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSearchPageAdmin(siteRequest_, (Boolean)o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSearchRequestPk(siteRequest_, (Long)o);
 		case "requestUri":
@@ -1709,8 +1562,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSearchStrUserRealmRoles(siteRequest_, (String)o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSearchStrUserResourceRoles(siteRequest_, (String)o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSearchStrPageAdmin(siteRequest_, (Boolean)o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSearchStrRequestPk(siteRequest_, (Long)o);
 		case "requestUri":
@@ -1753,8 +1604,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return SiteRequestEnUS.staticSearchFqUserRealmRoles(siteRequest_, o);
 		case "userResourceRoles":
 			return SiteRequestEnUS.staticSearchFqUserResourceRoles(siteRequest_, o);
-		case "pageAdmin":
-			return SiteRequestEnUS.staticSearchFqPageAdmin(siteRequest_, o);
 		case "requestPk":
 			return SiteRequestEnUS.staticSearchFqRequestPk(siteRequest_, o);
 		case "requestUri":
@@ -1781,7 +1630,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_webClient = "webClient";
 	public static final String VAR_apiRequest_ = "apiRequest_";
 	public static final String VAR_jsonObject = "jsonObject";
-	public static final String VAR_solrQuery = "solrQuery";
 	public static final String VAR_serviceRequest = "serviceRequest";
 	public static final String VAR_user = "user";
 	public static final String VAR_userPrincipal = "userPrincipal";
@@ -1798,8 +1646,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_userResource = "userResource";
 	public static final String VAR_userResourceRoles = "userResourceRoles";
 	public static final String VAR_siteUser_ = "siteUser_";
-	public static final String VAR_solrDocument = "solrDocument";
-	public static final String VAR_pageAdmin = "pageAdmin";
 	public static final String VAR_requestPk = "requestPk";
 	public static final String VAR_requestUri = "requestUri";
 	public static final String VAR_requestMethod = "requestMethod";
@@ -1812,7 +1658,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_webClient = "";
 	public static final String DISPLAY_NAME_apiRequest_ = "";
 	public static final String DISPLAY_NAME_jsonObject = "";
-	public static final String DISPLAY_NAME_solrQuery = "";
 	public static final String DISPLAY_NAME_serviceRequest = "";
 	public static final String DISPLAY_NAME_user = "";
 	public static final String DISPLAY_NAME_userPrincipal = "";
@@ -1829,8 +1674,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_userResource = "";
 	public static final String DISPLAY_NAME_userResourceRoles = "";
 	public static final String DISPLAY_NAME_siteUser_ = "";
-	public static final String DISPLAY_NAME_solrDocument = "";
-	public static final String DISPLAY_NAME_pageAdmin = "";
 	public static final String DISPLAY_NAME_requestPk = "";
 	public static final String DISPLAY_NAME_requestUri = "";
 	public static final String DISPLAY_NAME_requestMethod = "";
@@ -1853,8 +1696,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return DISPLAY_NAME_apiRequest_;
 		case VAR_jsonObject:
 			return DISPLAY_NAME_jsonObject;
-		case VAR_solrQuery:
-			return DISPLAY_NAME_solrQuery;
 		case VAR_serviceRequest:
 			return DISPLAY_NAME_serviceRequest;
 		case VAR_user:
@@ -1887,10 +1728,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			return DISPLAY_NAME_userResourceRoles;
 		case VAR_siteUser_:
 			return DISPLAY_NAME_siteUser_;
-		case VAR_solrDocument:
-			return DISPLAY_NAME_solrDocument;
-		case VAR_pageAdmin:
-			return DISPLAY_NAME_pageAdmin;
 		case VAR_requestPk:
 			return DISPLAY_NAME_requestPk;
 		case VAR_requestUri:

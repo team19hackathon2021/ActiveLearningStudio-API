@@ -1,4 +1,4 @@
-package org.curriki.api.enus.config;
+package {{ PROJECT_JAVA_PACKAGE }}.config;
 
 import org.computate.vertx.config.ComputateVertxConfigKeys;
 

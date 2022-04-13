@@ -53,9 +53,6 @@ import org.computate.search.response.solr.SolrResponse;
 import io.vertx.core.json.JsonObject;
 
 /**	
- * Map.hackathonMission: to create a generated Java class that can be extended and override these methods to serve as the base persistent object for primary key, created and modified dates and other useful base model data. 
- * Map.hackathonColumn: Develop Base Classes
- * Map.hackathonLabels: Java
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel">Find the class BaseModel in Solr. </a>
  * <br><br>Delete the class BaseModel in Solr. 
  * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
@@ -2118,8 +2115,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_objectTitle = "";
 	public static final String DISPLAY_NAME_objectId = "ID";
 	public static final String DISPLAY_NAME_objectNameVar = "";
-	public static final String DISPLAY_NAME_objectSuggest = "";
-	public static final String DISPLAY_NAME_objectText = "";
+	public static final String DISPLAY_NAME_objectSuggest = "autosuggest";
+	public static final String DISPLAY_NAME_objectText = "text";
 	public static final String DISPLAY_NAME_pageUrlId = "";
 	public static final String DISPLAY_NAME_pageUrlPk = "";
 	public static final String DISPLAY_NAME_pageUrlApi = "";
@@ -2187,6 +2184,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return "The primary key of this object in the database";
 		case VAR_inheritPk:
 			return "An optional inherited primary key from a legacy system for this object in the database";
+		case VAR_created:
+			return "A created timestamp for this record in the database";
 		case VAR_modified:
 			return "A modified timestamp for this record in the database";
 		case VAR_archived:
@@ -2219,6 +2218,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return "The link by name for this object in the UI";
 		case VAR_pageUrlPk:
 			return "The link by primary key for this object in the UI";
+		case VAR_pageUrlApi:
+			return "The link to this object in the API";
 		case VAR_id:
 			return "The unique key for this record in the search engine";
 			default:

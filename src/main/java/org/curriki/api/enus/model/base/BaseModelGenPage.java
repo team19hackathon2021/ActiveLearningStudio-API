@@ -299,6 +299,11 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 	}
 
 	@Override
+	protected void _pageDescription(Wrap<String> c) {
+			c.o("A reusable base class for all database model classes");
+	}
+
+	@Override
 	protected void _pageImageUri(Wrap<String> c) {
 			c.o("/png-999.png");
 	}

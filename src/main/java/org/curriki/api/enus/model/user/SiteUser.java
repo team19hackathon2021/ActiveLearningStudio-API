@@ -1,21 +1,20 @@
-package org.curriki.api.enus.model.user;   
+package org.curriki.api.enus.model.user;
 
 import java.util.List;
-
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.model.user.ComputateVertxSiteUser;
 import org.computate.vertx.request.ComputateVertxSiteRequest;
 import org.curriki.api.enus.model.base.BaseModel;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 
-
-/**   
+/**
  * Model: true
  * Api: true
  * Page: true
  * SuperPage.enUS: BaseModelPage
  * Indexed: true
- * Map.Integer.sqlSort: 3
+ * Map.Integer.sqlSort: 1
+ * Map.Integer.classSort: 1
  * 
  * ApiTag.enUS: User
  * ApiUri.enUS: /api/user
@@ -23,6 +22,7 @@ import org.curriki.api.enus.request.SiteRequestEnUS;
  * ApiMethod.enUS: Search
  * ApiMethod: PATCH
  * ApiMethod: POST
+ * ApiMethod: PUTImport
  * 
  * ApiMethod.enUS: SearchPage
  * PageSearchPage.enUS: SiteUserPage
@@ -32,37 +32,23 @@ import org.curriki.api.enus.request.SiteRequestEnUS;
  * Keyword: classSimpleNameSiteUser
  * Role.enUS: SiteAdmin
  * Filter: userId
- * Saves: true
  * 
  * AName.enUS: a site user
  * Color: gray
  * IconGroup: regular
  * IconName: user-cog
+ * NameVar.enUS: user
  * 
  * RoleUser: true
  * Role.enUS: SiteAdmin
- * 
- * Map.hackathonMission: to create a new Java class to store information about site users in the system. 
- * Map.hackathonColumn: Develop SiteUser API
- * Map.hackathonLabels: Java
- * Map.hackathonMissionGen: to create a generated Java class that can be extended and override these methods to store information about site users in the system. 
- * Map.hackathonColumnGen: Develop SiteUser API
- * Map.hackathonLabelsGen: Java
- * Map.hackathonMissionGenApiServiceImpl: to create a new Java API implementation class to persist information about site users in a database and a search engine. 
- * Map.hackathonColumnGenApiServiceImpl: Develop SiteUser API
- * Map.hackathonLabelsGenApiServiceImpl: Java,Vert.x
- * Map.hackathonMissionGenApiService: to create a new Java API interface to define API methods for adding, updating and querying site users. 
- * Map.hackathonColumnGenApiService: Develop SiteUser API
- * Map.hackathonLabelsGenApiService: Java,Vert.x
- * Map.hackathonMissionApiServiceImpl: to create a new Java API implementation class to extend and override any generated API functionality about site users in a database and a search engine. 
- * Map.hackathonColumnApiServiceImpl: Develop SiteUser API
- * Map.hackathonLabelsApiServiceImpl: Java,Vert.x
- */  
+ * Description: A user record for each site user
+ */
 public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSiteUser {
 
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
+	 * Description: User keys that relate to this user
 	 */
 	protected void _userKeys(List<Long> l) {
 		l.add(pk);
@@ -72,8 +58,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * Modify: false
-	 * DisplayName: user ID
+	 * Description: The unique user ID from the SSO server
 	 */
 	protected void _userId(Wrap<String> c) {
 	}
@@ -82,6 +67,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
+	 * Description: The user's username
 	 */
 	protected void _userName(Wrap<String> c) {
 	}
@@ -90,6 +76,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
+	 * Description: The user's email
 	 */
 	protected void _userEmail(Wrap<String> c) {
 	}
@@ -98,6 +85,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
+	 * Description: The user's first name
 	 */
 	protected void _userFirstName(Wrap<String> c) {
 	}
@@ -106,6 +94,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
+	 * Description: The user's last name
 	 */
 	protected void _userLastName(Wrap<String> c) {
 	}
@@ -114,9 +103,9 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
+	 * Description: The user's full name
 	 */
 	protected void _userFullName(Wrap<String> c) {
-		c.o(String.format("%s %s", userFirstName, userLastName));
 	}
 
 	/**
@@ -126,6 +115,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * HtmlRow: 3
 	 * HtmlCell: 2
 	 * DisplayName.enUS: see archived
+	 * Description: A user field allowing a user to see archived records
 	 */
 	protected void _seeArchived(Wrap<Boolean> c) {
 		c.o(false);
@@ -138,18 +128,33 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	 * HtmlRow: 3
 	 * HtmlCell: 3
 	 * DisplayName.enUS: see deleted
+	 * Description: A user field allowing a user to see deleted records
 	 */
 	protected void _seeDeleted(Wrap<Boolean> c) {
 		c.o(false);
 	}
 
+	/**
+	 * Description: An implementation for the interface for the object title
+	 */
 	@Override
 	protected void _objectTitle(Wrap<String> c) {
 		c.o(String.format("%s (%s) <%s>", userFullName, userName, userEmail));
 	}
 
+	/**
+	 * Description: An implementation for the interface to set the request object
+	 */
 	@Override
 	public <T extends ComputateVertxSiteRequest> void setSiteRequest_(T siteRequest) {
 		siteRequest_ = (SiteRequestEnUS)siteRequest;
+	}
+
+	/**
+	 * Description: An implementation for the interface to create a new API request object
+	 */
+	@Override
+	public void apiRequestSiteUser() {
+		apiRequestSiteUser();
 	}
 }

@@ -362,6 +362,40 @@
 			</div>
 		</div>
 {{/inline}}
+{{#*inline "htmFormSiteUserPage_putimportSiteUser"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-gray "
+			onclick="$('#putimportSiteUserModal').show(); "
+			>
+			<i class="fas fa-file-import "></i>
+			Import site users
+		</button>
+		<div id="putimportSiteUserModal" class="w3-modal ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-gray">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#putimportSiteUserModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Import site users</h2>
+					</header>
+					<div class="" id="putimportSiteUserFormValues">
+						<div class="w3-cell-row ">
+							<textarea
+								class="PUTImport_searchList w3-input w3-border "
+								style="height: 300px; "
+								placeholder="{ 'searchList': [ { 'pk': ... , 'saves': [ ... ] }, ... ] }"
+								></textarea>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-gray "
+							onclick="putimportSiteUser($('#putimportSiteUserFormValues')); "
+							>Import site users</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
 {{#*inline "htmFormSiteUserPage_searchpageSiteUser"}}
 		<div id="searchpageSiteUserModal" class="">
 			<div class="">
@@ -472,8 +506,8 @@
 	{{/inline}}
 {{#*inline "thead2SiteUserPage"}}
 			<tr>
-				<th>created</th>
 				<th></th>
+				<th>created</th>
 			</tr>
 {{/inline}}
 {{#*inline "tbody1SiteUserPage"}}
@@ -486,13 +520,13 @@
 			<tr>
 					<td>
 						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
+							<i class="far fa-user-cog "></i>
+							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
 						</a>
 					</td>
 					<td>
 						<a href="{{pageUrlPk}}">
-							<i class="far fa-user-cog "></i>
-							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
+							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
 						</a>
 					</td>
 			</tr>
@@ -505,11 +539,11 @@
 {{/inline}}
 {{#*inline "tfoot2SiteUserPage"}}
 		<tr>
-			{{#if getColumnCreated}}
+			{{#if getColumnObjectTitle}}
 				<td>
 				</td>
 			{{/if}}
-			{{#if getColumnObjectTitle}}
+			{{#if getColumnCreated}}
 				<td>
 				</td>
 			{{/if}}
@@ -530,6 +564,7 @@
 	{{#ifContainsAnyRoles roles authRolesAdmin}}
 {{#block "htmForm_patchSiteUser"}}{{/block}}
 {{#block "htmForm_postSiteUser"}}{{/block}}
+{{#block "htmForm_putimportSiteUser"}}{{/block}}
 	{{/ifContainsAnyRoles}}
 {{#block "htmSuggested"}}{{/block}}
 {{/inline}}
@@ -591,13 +626,23 @@
 									<div class="w3-padding ">
 										<div id="suggest{{classApiMethodMethod}}SiteUserUserId">
 											<div class="w3-card ">
-												<div class="w3-cell-row w3-gray">
-													<label for="{{classApiMethodMethod}}_userId">user ID</label>
-												</div>
 												<div class="w3-cell-row w3-padding ">
 													<div class="w3-cell ">
 														{{> "inputUserId"}}
 													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-gray "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_userId')); $('#{{classApiMethodMethod}}_userId').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#SiteUserForm :input[name=pk]').val() }], 'setUserId', null, function() { addGlow($('#{{classApiMethodMethod}}_userId')); }, function() { addError($('#{{classApiMethodMethod}}_userId')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
 												</div>
 											</div>
 										</div>
@@ -606,9 +651,35 @@
 {{/inline}}
 
 {{#*inline "inputUserId"}}
-	{{#eq 'Page' classApiMethodMethod}}
-														<span class="varSiteUser{{pk}}UserId ">{{siteUser_.userId}}</span>
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															title="The unique user ID from the SSO server"
+															id="{{classApiMethodMethod}}_userId"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setUserId classSiteUser inputSiteUser{{pk}}UserId w3-input w3-border "
+																name="setUserId"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setUserId classSiteUser inputSiteUser{{pk}}UserId w3-input w3-border "
+																name="setUserId"
+		{{else}}
+																class="valueUserId w3-input w3-border classSiteUser inputSiteUser{{pk}}UserId w3-input w3-border "
+																name="userId"
+		{{/eq}}
 	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setUserId', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_userId')); }, function() { addError($('#{{classApiMethodMethod}}_userId')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{siteUser_.userId}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+															<span class="varSiteUser{{pk}}UserId ">{{siteUser_.userId}}</span>
+		{{/ifContainsAnyRoles}}
 {{/inline}}
 
 {{#*inline "htmUserName"}}
@@ -644,6 +715,7 @@
 		{{#ifContainsAnyRoles roles rolesRequired}}
 														<input
 															type="text"
+															title="The user's username"
 															id="{{classApiMethodMethod}}_userName"
 	{{#eq "Page" classApiMethodMethod}}
 																class="setUserName classSiteUser inputSiteUser{{pk}}UserName w3-input w3-border "
@@ -704,6 +776,7 @@
 		{{#ifContainsAnyRoles roles rolesRequired}}
 														<input
 															type="text"
+															title="The user's email"
 															id="{{classApiMethodMethod}}_userEmail"
 	{{#eq "Page" classApiMethodMethod}}
 																class="setUserEmail classSiteUser inputSiteUser{{pk}}UserEmail w3-input w3-border "
@@ -764,6 +837,7 @@
 		{{#ifContainsAnyRoles roles rolesRequired}}
 														<input
 															type="text"
+															title="The user's first name"
 															id="{{classApiMethodMethod}}_userFirstName"
 	{{#eq "Page" classApiMethodMethod}}
 																class="setUserFirstName classSiteUser inputSiteUser{{pk}}UserFirstName w3-input w3-border "
@@ -824,6 +898,7 @@
 		{{#ifContainsAnyRoles roles rolesRequired}}
 														<input
 															type="text"
+															title="The user's last name"
 															id="{{classApiMethodMethod}}_userLastName"
 	{{#eq "Page" classApiMethodMethod}}
 																class="setUserLastName classSiteUser inputSiteUser{{pk}}UserLastName w3-input w3-border "
@@ -884,6 +959,7 @@
 		{{#ifContainsAnyRoles roles rolesRequired}}
 														<input
 															type="text"
+															title="The user's full name"
 															id="{{classApiMethodMethod}}_userFullName"
 	{{#eq "Page" classApiMethodMethod}}
 																class="setUserFullName classSiteUser inputSiteUser{{pk}}UserFullName w3-input w3-border "

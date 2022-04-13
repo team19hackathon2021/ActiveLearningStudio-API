@@ -1,33 +1,3 @@
-# About CurrikiStudio
-CurrikiStudio is an open source authoring platform for education. It is designed to let content authors develop and publish effective, engaging learning experiences quickly and easily.
-
-## Learn More
-Learn more about CurrikiStudio at https://www.curriki.org
-
-## About the CurrikiStudio API
-The CurrikiStudio API was developed in PHP using the Laravel framework.  All of its end points support the REST protocol.
-
-<img src="https://www.curriki.org/wp-content/uploads/2020/11/currikistudio-api.png">
-
-## Installation
-
-A Docker image is available to install the CurrikiStudio API here:
-https://hub.docker.com/r/curriki/api
-
-The complete CurrikiStudio suite, including the API and the ReactJS client can be installed to an AWS account using our CloudFormation template:
-https://github.com/ActiveLearningStudio/curriki-eks
-
-## Documentation
-
-The API end points are documented here:
-<a href="https://dev.currikistudio.org/api" target="new">https://dev.currikistudio.org/api</a> 
-
-## Dependencies
-
-```bash
-pkcon install -y java-11-openjdk-devel
-```
-
 
 # Setup ActiveLearningStudio-API development environment on MacOSX or Linux (Fedora, RHEL, CentOS)
 
@@ -114,38 +84,40 @@ git clone git@github.com:computate-org/computate_postgres.git ~/.ansible/roles/c
 git clone git@github.com:computate-org/computate_zookeeper.git ~/.ansible/roles/computate.computate_zookeeper
 git clone git@github.com:computate-org/computate_solr.git ~/.ansible/roles/computate.computate_solr
 git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/computate.computate_project
-git clone git@github.com:computate-org/computate_squirrelsql.git ~/.ansible/roles/computate.computate_squirrelsql
 ```
 
 ## Run the Ansible Galaxy roles to install the complete project locally. 
 
 ```bash
-
 ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml
-
 ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml
-
 ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml
-
-ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e SITE_ZONE=America/New_York -e @~/.local/src/ActiveLearningStudio-API-ansible/vaults/curriki-defaults/vault --vault-id @prompt
-
-ansible-playbook ~/.ansible/roles/computate.computate_squirrelsql/install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true
 ```
 
-# Setup Drivers and Connections in SquirreL SQL
+## Running the project install to override secret variables
 
-## Setup a MySQL driver
+You can also inject your own secret variables with an Ansible Vault into the project install automation if you want to override any values. 
 
-* Download the "Platform Independent" driver here: https://dev.mysql.com/downloads/connector/j/
-* Extract the mysql-connector-java-8.0.27.jar to this directory: ~/.local/opt/squirrel-sql/lib
-* In SQuirreL SQL, click the Drivers tab, then double click on "MySQL Driver"
-* Click the "Extra Class Path" tab and add this file: ~/.local/opt/squirrel-sql/lib/mysql-connector-java-8.0.27.jar
+Here is an example of creating a vault directory and creating a new vault, it will ask for a password. 
+Be sure to not commit your vault to source control, it should be ignored by default in the .gitignore file that is created in the project. 
 
-## Setup a MySQL connection
+```bash
+install -d ~/.local/src/ActiveLearningStudio-API/vault
+ansible-vault create ~/.local/src/ActiveLearningStudio-API/vault/$USER-local
+```
 
-* In the Aliases tab, click the [ + ] button.
-* Provide a name for your connection and enter the JDBC URL to your MySQL database, the username and password (Please reach out to the team for information to connect to the moonshots database).
-* Click [ Test ] button to test the connection, then click [ Connect ] to connect.
+You can edit the vault, it will ask for the password. 
+
+```bash
+ansible-vault edit ~/.local/src/ActiveLearningStudio-API/vault/$USER-local
+```
+
+You can then run the project install automation again with the secrets in the vault, it will ask for the password. 
+
+```bash
+ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e @~/.local/src/ActiveLearningStudio-API/vault/$USER-local --vault-id @prompt
+```
 
 # Configure Eclipse
 
@@ -166,9 +138,9 @@ ansible-playbook ~/.ansible/roles/computate.computate_squirrelsql/install.yml
 
 * In Eclipse, go to File -> Debug Configurations...
 * Right click on Java Application -> New Configuration
-* Name: ActiveLearningStudio-API QuarkusApp
+* Name: ActiveLearningStudio-API MainVerticle
 * Project: ActiveLearningStudio-API
-* Main class: org.curriki.api.enus.quarkus.QuarkusApp
+* Main class: org.ActiveLearningStudio-API.ActiveLearningStudio-API.enus.verticle.PhenomenalVerticle
 
 ### In the "Arguments" tab
 
@@ -235,7 +207,7 @@ Or the REDHAT_OPENSHIFT_STORAGE_CLASS_NAME which might be different than gp2 for
 If so, try creating a persistent volume in the UI to figure out a good storage class for your environment: 
 
 ```yaml
-SITE_NAME: ActiveLearningStudio-API
+PROJECT_NAME: ActiveLearningStudio-API
 
 REDHAT_OPENSHIFT_HOST: https://api.rh-us-east-1.openshift.com
 REDHAT_OPENSHIFT_TOKEN: OcrtrXzKNKVj0riR2FvfqORgGfnURx98G8zRPd2MUvs
@@ -260,7 +232,7 @@ AUTH_SECRET: 0518f65a-f86d-42e8-ad65-00f46920443d
 AUTH_HOST_NAME: sso.computate.org
 AUTH_PORT: 443
 AUTH_SSL: true
-AUTH_TOKEN_URI: "/auth/realms/{{ AUTH_REALM }}/protocol/openid-connect/token"
+AUTH_TOKEN_URI: "/auth/realms/RH-IMPACT/protocol/openid-connect/token"
 ```
 
 ## Run the Ansible automation to deploy the applications to OpenShift
@@ -276,6 +248,8 @@ ansible-playbook --vault-id @prompt -e @~/.local/src/ActiveLearningStudio-API-an
 ansible-playbook --vault-id @prompt -e @~/.local/src/ActiveLearningStudio-API-ansible/vaults/$USER-staging/vault ~/.ansible/roles/computate.computate_project_openshift/install.yml
 ```
 
-## See the ActiveLearningStudio-API application staged here in OpenShift
+## How the base classes for this project were created
 
-https://curriki.computate.org/
+```bash
+ansible-playbook -e @~/.local/src/ActiveLearningStudio-API/local/ansible_install_vars.yml ~/.local/src/computate-org/vertx_project.yml
+```

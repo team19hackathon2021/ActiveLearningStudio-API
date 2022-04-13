@@ -49,6 +49,23 @@ import io.vertx.core.json.JsonArray;
 public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
 
 /*
+CREATE TABLE SiteUser(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
+	, userId text
+	, userName text
+	, userEmail text
+	, userFirstName text
+	, userLastName text
+	, userFullName text
+	, seeArchived boolean
+	, seeDeleted boolean
+	);
 CREATE TABLE CurrikiResource(
 	pk bigserial primary key
 	, inheritPk text
@@ -133,26 +150,9 @@ CREATE TABLE CurrikiResource(
 	, approvalStatusDate timestamp with time zone
 	, spamUser text
 	);
-CREATE TABLE SiteUser(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, userId text
-	, userName text
-	, userEmail text
-	, userFirstName text
-	, userLastName text
-	, userFullName text
-	, seeArchived boolean
-	, seeDeleted boolean
-	);
 
-DROP TABLE CurrikiResource CASCADE;
 DROP TABLE SiteUser CASCADE;
+DROP TABLE CurrikiResource CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);

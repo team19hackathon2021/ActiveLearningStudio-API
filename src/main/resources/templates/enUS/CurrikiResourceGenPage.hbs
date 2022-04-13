@@ -883,8 +883,8 @@
 	{{/inline}}
 {{#*inline "thead2CurrikiResourcePage"}}
 			<tr>
-				<th>created</th>
 				<th></th>
+				<th>created</th>
 			</tr>
 {{/inline}}
 {{#*inline "tbody1CurrikiResourcePage"}}
@@ -897,13 +897,13 @@
 			<tr>
 					<td>
 						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
+							<i class="far fa-file "></i>
+							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
 						</a>
 					</td>
 					<td>
 						<a href="{{pageUrlPk}}">
-							<i class="far fa-file "></i>
-							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
+							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
 						</a>
 					</td>
 			</tr>
@@ -916,11 +916,11 @@
 {{/inline}}
 {{#*inline "tfoot2CurrikiResourcePage"}}
 		<tr>
-			{{#if getColumnCreated}}
+			{{#if getColumnObjectTitle}}
 				<td>
 				</td>
 			{{/if}}
-			{{#if getColumnObjectTitle}}
+			{{#if getColumnCreated}}
 				<td>
 				</td>
 			{{/if}}

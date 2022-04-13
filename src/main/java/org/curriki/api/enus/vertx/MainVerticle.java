@@ -8,13 +8,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.builder.ExpressionBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.vertx.VertxComponent;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.computate.vertx.handlebars.AuthHelpers;
@@ -25,6 +21,7 @@ import org.computate.vertx.verticle.EmailVerticle;
 import org.curriki.api.enus.config.ConfigKeys;
 import org.curriki.api.enus.model.resource.CurrikiResourceEnUSGenApiService;
 import org.curriki.api.enus.model.user.SiteUserEnUSGenApiService;
+import org.curriki.api.enus.page.HomePage;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -504,8 +501,9 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 						}
 					});
 				} else {
-					LOG.error(configureOpenApiError, a.cause());
-					promise.fail(a.cause());
+					Exception ex = new RuntimeException("OpenID Connect Discovery failed");
+					LOG.error(configureOpenApiError, ex);
+					promise.fail(ex);
 				}
 			});
 		} catch (Exception ex) {
@@ -735,29 +733,29 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			handlebars.registerHelpers(DateHelpers.class);
 
 			router.get("/").handler(a -> {
-				a.reroute("/template/enUS/home-page");
+				a.reroute("/template/enUS/HomePage");
 			});
  
 			router.get("/api").handler(ctx -> {
 				ctx.reroute("/template/enUS/openapi");
 			});
 
-//			router.get("/template/enUS/home-page").handler(ctx -> {
-//				HomePage t = new HomePage();
-//				SiteRequestEnUS siteRequest = new SiteRequestEnUS();
-//				siteRequest.setConfig(config());
-//				siteRequest.setRequestHeaders(ctx.response().headers());
-//				siteRequest.initDeepPhenomenalRequest();
-//				t.promiseDeepForClass(siteRequest).onSuccess(a -> {
-//					JsonObject json = JsonObject.mapFrom(t);
-//					json.forEach(entry -> {
-//						ctx.put(entry.getKey(), entry.getValue());
-//					});
-//					ctx.next();
-//				}).onFailure(ex -> {
-//					ctx.fail(ex);
-//				});
-//			});
+			router.get("/template/enUS/HomePage").handler(ctx -> {
+				HomePage t = new HomePage();
+				SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+				siteRequest.setConfig(config());
+				siteRequest.setRequestHeaders(ctx.response().headers());
+				siteRequest.initDeepSiteRequestEnUS();
+				t.promiseDeepForClass(siteRequest).onSuccess(a -> {
+					JsonObject json = JsonObject.mapFrom(t);
+					json.forEach(entry -> {
+						ctx.put(entry.getKey(), entry.getValue());
+					});
+					ctx.next();
+				}).onFailure(ex -> {
+					ctx.fail(ex);
+				});
+			});
 
 			router.get("/template/*").handler(templateHandler);
 			router.errorHandler(500,  ctx -> {
