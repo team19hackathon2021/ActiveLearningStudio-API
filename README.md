@@ -162,13 +162,13 @@ Add these update sites and install these useful plugins:
 * Browse to the directory: ~/.local/src/ActiveLearningStudio-API
 * Click [ Finish ]
 
-## Setup a Debug/Run configuration to run and debug ActiveLearningStudio-API
+## Setup a CodeReady Studio Debug/Run configuration to run and debug ActiveLearningStudio-API
 
 * In CodeReady Studio, go to File -> Debug Configurations...
 * Right click on Java Application -> New Configuration
 * Name: ActiveLearningStudio-API MainVerticle
 * Project: ActiveLearningStudio-API
-* Main class: org.ActiveLearningStudio-API.ActiveLearningStudio-API.enus.verticle.PhenomenalVerticle
+* Main class: org.curriki.api.enus.vertx.MainVerticle
 
 ### In the "Arguments" tab
 
