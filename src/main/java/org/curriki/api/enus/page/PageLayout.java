@@ -44,23 +44,45 @@ public class PageLayout extends PageLayoutGen<Object> {
 		w.o(siteRequest_.getConfig().getString(ConfigKeys.STATIC_BASE_URL));
 	}
 
-	protected void _authUrl(Wrap<String> w) {
+	protected void _STATIC_BASE_URL(Wrap<String> w) {
+		w.o(siteRequest_.getConfig().getString(ConfigKeys.STATIC_BASE_URL));
+	}
+
+	protected void _SITE_BASE_URL(Wrap<String> w) {
+		w.o(siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL));
+	}
+
+	protected void _SITE_AUTH_URL(Wrap<String> w) {
 		w.o(siteRequest_.getConfig().getString(ConfigKeys.AUTH_URL));
 	}
 
-	protected void _authRealm(Wrap<String> w) {
+	protected void _SITE_AUTH_REALM(Wrap<String> w) {
 		w.o(siteRequest_.getConfig().getString(ConfigKeys.AUTH_REALM));
 	}
 
+	protected void _FONTAWESOME_KIT(Wrap<String> w) {
+		w.o(siteRequest_.getConfig().getString(ConfigKeys.FONTAWESOME_KIT));
+	}
+
+	/**
+	 * Description: The current request URI
+	 */
 	protected void _pageUri(Wrap<String> w) {
-		w.o(serviceRequest.getExtra().getString("uri"));
+		w.o(Optional.ofNullable(serviceRequest).map(r -> r.getExtra()).map(e -> e.getString("uri")).orElse(null));
 	}
 
+	/**
+	 * Description: The current request HTTP method
+	 */
 	protected void _pageMethod(Wrap<String> w) {
-		w.o(serviceRequest.getExtra().getString("method"));
+		w.o(Optional.ofNullable(serviceRequest).map(r -> r.getExtra()).map(e -> e.getString("method")).orElse(null));
 	}
 
+	/**
+	 * Description: The current request parameters
+	 */
 	protected void _params(Wrap<JsonObject> w) {
+		w.o(Optional.ofNullable(serviceRequest).map(r -> r.getParams()).orElse(new JsonObject()));
 		w.o(serviceRequest.getParams());
 	}
 
@@ -133,6 +155,15 @@ public class PageLayout extends PageLayoutGen<Object> {
 	}
 
 	protected void _pagination(JsonObject pagination) {
+	}
+
+	protected void _varsQ(JsonObject vars) {
+	}
+
+	protected void _varsFq(JsonObject vars) {
+	}
+
+	protected void _varsRange(JsonObject vars) {
 	}
 
 	protected void _query(JsonObject query) {

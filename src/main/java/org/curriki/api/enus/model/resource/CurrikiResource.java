@@ -44,7 +44,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: resource ID
 	 * HtmlRow: 3
 	 * HtmlCell: 1
@@ -56,7 +56,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: license ID
 	 * HtmlRow: 3
 	 * HtmlCell: 2
@@ -68,7 +68,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: contributor ID
 	 * HtmlRow: 3
 	 * HtmlCell: 3
@@ -80,7 +80,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: contribution Date
 	 * HtmlRow: 4
 	 * HtmlCell: 1
@@ -92,7 +92,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: description
 	 * HtmlRow: 4
 	 * HtmlCell: 2
@@ -104,7 +104,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: title
 	 * HtmlRow: 4
 	 * HtmlCell: 3
@@ -115,7 +115,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
  
 	/**
 	 * {@inheritDoc}
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Keywords String
 	 * HtmlRow: 5
 	 * HtmlCell: 1
@@ -138,7 +138,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	
 	/**
 	 * {@inheritDoc}
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Generated Keywords String
 	 * HtmlRow: 5
 	 * HtmlCell: 3
@@ -162,7 +162,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Language
 	 * HtmlRow: 6
 	 * HtmlCell: 2
@@ -174,7 +174,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Last Editor ID
 	 * HtmlRow: 6
 	 * HtmlCell: 3
@@ -186,7 +186,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Last Edit Date
 	 * HtmlRow: 7
 	 * HtmlCell: 1
@@ -198,7 +198,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Curriki License
 	 * HtmlRow: 7
 	 * HtmlCell: 2
@@ -210,7 +210,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: External URL
 	 * HtmlRow: 7
 	 * HtmlCell: 3
@@ -222,7 +222,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Resource Checked
 	 * HtmlRow: 8
 	 * HtmlCell: 1
@@ -234,7 +234,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * Stored: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: External URL
 	 * HtmlRow: 8
 	 * HtmlCell: 2
@@ -245,7 +245,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	
 	/**
 	 * {@inheritDoc}
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Resource Check Request Note
 	 * HtmlRow: 8
 	 * HtmlCell: 3
@@ -257,7 +257,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Resource Check Date
 	 * HtmlRow: 9
 	 * HtmlCell: 1
@@ -269,7 +269,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Resource Check ID
 	 * HtmlRow: 9
 	 * HtmlCell: 2
@@ -280,7 +280,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	
 	/**
 	 * {@inheritDoc}
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Resource Check Note
 	 * HtmlRow: 9
 	 * HtmlCell: 3
@@ -292,7 +292,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Student Facing
 	 * HtmlRow: 10
 	 * HtmlCell: 1
@@ -304,7 +304,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Source
 	 * HtmlRow: 10
 	 * HtmlCell: 2
@@ -316,7 +316,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Review Status
 	 * HtmlRow: 10
 	 * HtmlCell: 3
@@ -328,7 +328,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Last Review Date
 	 * HtmlRow: 11
 	 * HtmlCell: 1
@@ -340,7 +340,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Review By ID
 	 * HtmlRow: 11
 	 * HtmlCell: 2
@@ -352,7 +352,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Review Rating
 	 * HtmlRow: 11
 	 * HtmlCell: 3
@@ -364,7 +364,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Technical Completeness
 	 * HtmlRow: 12
 	 * HtmlCell: 1
@@ -376,7 +376,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Content Accuracy
 	 * HtmlRow: 12
 	 * HtmlCell: 2
@@ -388,7 +388,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Pedagogy
 	 * HtmlRow: 12
 	 * HtmlCell: 3
@@ -400,7 +400,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * Stored: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Rating Comment
 	 * HtmlRow: 13
 	 * HtmlCell: 1
@@ -412,7 +412,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Standards Alignment
 	 * HtmlRow: 13
 	 * HtmlCell: 2
@@ -424,7 +424,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Standards Alignment Comment
 	 * HtmlRow: 13
 	 * HtmlCell: 3
@@ -436,7 +436,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Subject Matter
 	 * HtmlRow: 14
 	 * HtmlCell: 1
@@ -448,7 +448,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Subject Matter Comment
 	 * HtmlRow: 14
 	 * HtmlCell: 2
@@ -460,7 +460,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Supports Teaching
 	 * HtmlRow: 14
 	 * HtmlCell: 3
@@ -472,7 +472,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Supports Teaching Comment
 	 * HtmlRow: 15
 	 * HtmlCell: 1
@@ -484,7 +484,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Assessments Quality
 	 * HtmlRow: 15
 	 * HtmlCell: 2
@@ -496,7 +496,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Assessments Quality Comment
 	 * HtmlRow: 15
 	 * HtmlCell: 3
@@ -508,7 +508,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Interactivity Quality
 	 * HtmlRow: 16
 	 * HtmlCell: 1
@@ -520,7 +520,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Interactivity Quality Comment
 	 * HtmlRow: 16
 	 * HtmlCell: 2
@@ -532,7 +532,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Instructional Quality
 	 * HtmlRow: 16
 	 * HtmlCell: 3
@@ -544,7 +544,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Instructional Quality Comment
 	 * HtmlRow: 17
 	 * HtmlCell: 1
@@ -556,7 +556,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Deeper Learning
 	 * HtmlRow: 17
 	 * HtmlCell: 2
@@ -568,7 +568,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Deeper Learning Comment
 	 * HtmlRow: 17
 	 * HtmlCell: 3
@@ -580,7 +580,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Partner
 	 * HtmlRow: 18
 	 * HtmlCell: 1
@@ -592,7 +592,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Create Date
 	 * HtmlRow: 18
 	 * HtmlCell: 2
@@ -604,7 +604,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Type
 	 * HtmlRow: 18
 	 * HtmlCell: 3
@@ -616,7 +616,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Featured
 	 * HtmlRow: 19
 	 * HtmlCell: 1
@@ -628,7 +628,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Page
 	 * HtmlRow: 19
 	 * HtmlCell: 2
@@ -640,7 +640,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Active
 	 * HtmlRow: 19
 	 * HtmlCell: 3
@@ -652,7 +652,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Public
 	 * HtmlRow: 20
 	 * HtmlCell: 1
@@ -664,7 +664,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: xwd ID
 	 * HtmlRow: 20
 	 * HtmlCell: 2
@@ -676,7 +676,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Media Type
 	 * HtmlRow: 20
 	 * HtmlCell: 3
@@ -688,7 +688,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Access
 	 * HtmlRow: 21
 	 * HtmlCell: 1
@@ -700,7 +700,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Member Rating
 	 * HtmlRow: 21
 	 * HtmlCell: 2
@@ -712,7 +712,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Aligned
 	 * HtmlRow: 21
 	 * HtmlCell: 3
@@ -724,7 +724,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Page URL
 	 * HtmlRow: 22
 	 * HtmlCell: 1
@@ -736,7 +736,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Indexed
 	 * HtmlRow: 22
 	 * HtmlCell: 2
@@ -748,7 +748,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Last Index Date
 	 * HtmlRow: 22
 	 * HtmlCell: 3
@@ -760,7 +760,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Index Required
 	 * HtmlRow: 23
 	 * HtmlCell: 1
@@ -772,7 +772,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: IndexRequiredDate
 	 * HtmlRow: 23
 	 * HtmlCell: 2
@@ -784,7 +784,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: rescrape
 	 * HtmlRow: 24
 	 * HtmlCell: 3
@@ -796,7 +796,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Go Button
 	 * HtmlRow: 25
 	 * HtmlCell: 1
@@ -808,7 +808,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Download Button
 	 * HtmlRow: 25
 	 * HtmlCell: 2
@@ -820,7 +820,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Top of Search
 	 * HtmlRow: 25
 	 * HtmlCell: 3
@@ -832,7 +832,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Remove
 	 * HtmlRow: 26
 	 * HtmlCell: 1
@@ -844,7 +844,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Spam
 	 * HtmlRow: 26
 	 * HtmlCell: 2
@@ -856,7 +856,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Top of search int
 	 * HtmlRow: 26
 	 * HtmlCell: 3
@@ -868,7 +868,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Partner Int
 	 * HtmlRow: 27
 	 * HtmlCell: 1
@@ -880,7 +880,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Review Resource
 	 * HtmlRow: 27
 	 * HtmlCell: 2
@@ -892,7 +892,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Old URL
 	 * HtmlRow: 27
 	 * HtmlCell: 3
@@ -904,7 +904,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Content Display OK
 	 * HtmlRow: 28
 	 * HtmlCell: 1
@@ -916,7 +916,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Metadata
 	 * HtmlRow: 28
 	 * HtmlCell: 2
@@ -928,7 +928,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Approval Status
 	 * HtmlRow: 28
 	 * HtmlCell: 3
@@ -940,7 +940,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Approval Status Date
 	 * HtmlRow: 29
 	 * HtmlCell: 1
@@ -952,7 +952,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * DisplayName: Spam User
 	 * HtmlRow: 29
 	 * HtmlCell: 2

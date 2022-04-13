@@ -25,12 +25,24 @@
 {{#*inline "htmTitlePageLayout"}}		<!-- inline "htmTitlePageLayout" -->
 		<title>ActiveLearningStudio API</title>
 {{/inline}}
-{{#*inline "htmBodyStartPageLayout"}}		<!-- inline "htmBodyStartPageLayout" -->
+{{#*inline "htmBodyMenuMainTemplate"}}
 		<div class="w3-bar ">
-			<a href="https://www.openlearnx.org/">
-				<img class="w3-mobile w3-bar-item " style="height: 75px" src="https://www.openlearnx.org/wp-content/uploads/2021/09/openlearnx-logo-final.svg"/>
-			</a>
-			<div class="w3-bar-item w3-padding-16 w3-right ">
+			<div class="w3-bar w3-hide-small ">
+				<a class="w3-bar-item w3-button w3-button w3-text-teal " href="{{ SITE_BASE_URL }}"><i class="fad fa-house w3-text-teal "></i> Event Phenomenon</a>
+{{> "htmMenuItems"}}
+			</div>
+			<div class="w3-bar w3-hide-medium w3-hide-large ">
+				<a class="w3-bar-item w3-button w3-button w3-text-teal " href="{{ SITE_BASE_URL }}"><i class="fad fa-house w3-text-teal "></i> Event Phenomenon</a>
+				<div class="w3-dropdown-hover ">
+					<button class="w3-button w3-text-black "><i class="fad fa-menu w3-text-black "></i> Menu</button>
+					<div class="w3-dropdown-content w3-bar-block w3-card-4 ">
+{{> "htmMenuItems"}}
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmMenuItems"}}
 {{#if userKey}}
 				<a href="/user/{{ userKey }}" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> {{userName}}</a>
 				<a href="{{ logoutUrl }}" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> Logout</a>
@@ -39,6 +51,13 @@
 {{/if}}
 				<a href="{{siteBaseUrl}}/resource" class="w3-mobile w3-padding w3-text-blue "><i class="fad fa-file w3-text-blue "></i> Resources</a>
 				<a href="{{siteBaseUrl}}/" class="w3-mobile w3-padding w3-text-indigo "><i class="fad fa-home w3-text-indigo "></i> ActiveLearningStudio API</a>
+{{/inline}}
+{{#*inline "htmBodyStartPageLayout"}}		<!-- inline "htmBodyStartPageLayout" -->
+		<div class="w3-bar ">
+			<a href="https://www.openlearnx.org/">
+				<img class="w3-mobile w3-bar-item " style="height: 75px" src="https://www.openlearnx.org/wp-content/uploads/2021/09/openlearnx-logo-final.svg"/>
+			</a>
+			<div class="w3-bar-item w3-padding-16 w3-right ">
 			</div>
 		</div>
 {{/inline}}

@@ -1,53 +1,59 @@
 package org.curriki.api.enus.model.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.util.Date;
-import org.slf4j.LoggerFactory;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.apache.commons.lang3.StringUtils;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.computate.vertx.api.ApiRequest;
-import org.computate.search.response.solr.SolrResponse;
-import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.lang.Boolean;
-import io.vertx.core.json.JsonObject;
-import java.lang.String;
 import org.curriki.api.enus.model.base.BaseModel;
-import java.math.RoundingMode;
-import org.slf4j.Logger;
-import java.math.MathContext;
-import io.vertx.core.Promise;
+import io.vertx.core.json.JsonObject;
+import java.util.Date;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.computate.vertx.api.ApiRequest;
 import org.curriki.api.enus.config.ConfigKeys;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
-import java.util.List;
-import org.computate.search.wrap.Wrap;
-import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import java.lang.Long;
+import java.lang.String;
+import io.vertx.core.json.JsonArray;
+import java.lang.Boolean;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.computate.search.response.solr.SolrResponse;
 
 /**	
  * Map.hackathonMission: to create a generated Java class that can be extended and override these methods to store information about site users in the system. 
  * Map.hackathonColumn: Develop SiteUser API
  * Map.hackathonLabels: Java
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser">Find the class SiteUser in Solr. </a>
+ * <br><br>Delete the class SiteUser in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.curriki.api.enus.model.user in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.user&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project ActiveLearningStudio-API in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class SiteUserGen<DEV> extends BaseModel {
@@ -90,7 +96,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userKeys
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKeys">Find the entity userKeys in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userKeys">Find the entity userKeys in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -170,7 +176,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -223,7 +229,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -276,7 +282,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userEmail
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -329,7 +335,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userFirstName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -382,7 +388,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userLastName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -435,7 +441,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userFullName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -488,7 +494,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity seeArchived
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeArchived">Find the entity seeArchived in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:seeArchived">Find the entity seeArchived in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -546,7 +552,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity seeDeleted
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -859,25 +865,25 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 
 	/////////////
-	// define //
+	// persist //
 	/////////////
 
-	@Override public boolean defineForClass(String var, Object val) {
+	@Override public boolean persistForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = defineSiteUser(v, val);
+					o = persistSiteUser(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
+					o = oBaseModel.persistForClass(v, val);
 				}
 			}
 		}
 		return o != null;
 	}
-	public Object defineSiteUser(String var, Object val) {
+	public Object persistSiteUser(String var, Object val) {
 		switch(var.toLowerCase()) {
 			case "userid":
 				if(val instanceof String)
@@ -924,7 +930,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				saves.add("seeDeleted");
 				return val;
 			default:
-				return super.defineBaseModel(var, val);
+				return super.persistBaseModel(var, val);
 		}
 	}
 
@@ -978,6 +984,31 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		}
 		super.indexBaseModel(doc);
 
+	}
+
+	public static String varStoredSiteUser(String entityVar) {
+		switch(entityVar) {
+			case "userKeys":
+				return "userKeys_docvalues_longs";
+			case "userId":
+				return "userId_docvalues_string";
+			case "userName":
+				return "userName_docvalues_string";
+			case "userEmail":
+				return "userEmail_docvalues_string";
+			case "userFirstName":
+				return "userFirstName_docvalues_string";
+			case "userLastName":
+				return "userLastName_docvalues_string";
+			case "userFullName":
+				return "userFullName_docvalues_string";
+			case "seeArchived":
+				return "seeArchived_docvalues_boolean";
+			case "seeDeleted":
+				return "seeDeleted_docvalues_boolean";
+			default:
+				return BaseModel.varStoredBaseModel(entityVar);
+		}
 	}
 
 	public static String varIndexedSiteUser(String entityVar) {
@@ -1094,6 +1125,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return sb.toString();
 	}
 
+	public static final String CLASS_SIMPLE_NAME = "SiteUser";
 	public static final String VAR_userKeys = "userKeys";
 	public static final String VAR_userId = "userId";
 	public static final String VAR_userName = "userName";
@@ -1103,6 +1135,39 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String VAR_userFullName = "userFullName";
 	public static final String VAR_seeArchived = "seeArchived";
 	public static final String VAR_seeDeleted = "seeDeleted";
+
+	public static List<String> varsQForClass() {
+		return SiteUser.varsQSiteUser(new ArrayList<String>());
+	}
+	public static List<String> varsQSiteUser(List<String> vars) {
+		BaseModel.varsQBaseModel(vars);
+		return vars;
+	}
+
+	public static List<String> varsFqForClass() {
+		return SiteUser.varsFqSiteUser(new ArrayList<String>());
+	}
+	public static List<String> varsFqSiteUser(List<String> vars) {
+		vars.add(VAR_userKeys);
+		vars.add(VAR_userId);
+		vars.add(VAR_userName);
+		vars.add(VAR_userEmail);
+		vars.add(VAR_userFirstName);
+		vars.add(VAR_userLastName);
+		vars.add(VAR_userFullName);
+		vars.add(VAR_seeArchived);
+		vars.add(VAR_seeDeleted);
+		BaseModel.varsFqBaseModel(vars);
+		return vars;
+	}
+
+	public static List<String> varsRangeForClass() {
+		return SiteUser.varsRangeSiteUser(new ArrayList<String>());
+	}
+	public static List<String> varsRangeSiteUser(List<String> vars) {
+		BaseModel.varsRangeBaseModel(vars);
+		return vars;
+	}
 
 	public static final String DISPLAY_NAME_userKeys = "";
 	public static final String DISPLAY_NAME_userId = "user ID";
@@ -1139,6 +1204,95 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_seeDeleted;
 		default:
 			return BaseModel.displayNameBaseModel(var);
+		}
+	}
+
+	public static String descriptionSiteUser(String var) {
+		switch(var) {
+			default:
+				return BaseModel.descriptionBaseModel(var);
+		}
+	}
+
+	public static String classSimpleNameSiteUser(String var) {
+		switch(var) {
+		case VAR_userKeys:
+			return "List";
+		case VAR_userId:
+			return "String";
+		case VAR_userName:
+			return "String";
+		case VAR_userEmail:
+			return "String";
+		case VAR_userFirstName:
+			return "String";
+		case VAR_userLastName:
+			return "String";
+		case VAR_userFullName:
+			return "String";
+		case VAR_seeArchived:
+			return "Boolean";
+		case VAR_seeDeleted:
+			return "Boolean";
+			default:
+				return BaseModel.classSimpleNameBaseModel(var);
+		}
+	}
+
+	public static Integer htmlColumnSiteUser(String var) {
+		switch(var) {
+			default:
+				return BaseModel.htmlColumnBaseModel(var);
+		}
+	}
+
+	public static Integer htmlRowSiteUser(String var) {
+		switch(var) {
+		case VAR_seeArchived:
+			return 3;
+		case VAR_seeDeleted:
+			return 3;
+			default:
+				return BaseModel.htmlRowBaseModel(var);
+		}
+	}
+
+	public static Integer htmlCellSiteUser(String var) {
+		switch(var) {
+		case VAR_seeArchived:
+			return 2;
+		case VAR_seeDeleted:
+			return 3;
+			default:
+				return BaseModel.htmlCellBaseModel(var);
+		}
+	}
+
+	public static Integer lengthMinSiteUser(String var) {
+		switch(var) {
+			default:
+				return BaseModel.lengthMinBaseModel(var);
+		}
+	}
+
+	public static Integer lengthMaxSiteUser(String var) {
+		switch(var) {
+			default:
+				return BaseModel.lengthMaxBaseModel(var);
+		}
+	}
+
+	public static Integer maxSiteUser(String var) {
+		switch(var) {
+			default:
+				return BaseModel.maxBaseModel(var);
+		}
+	}
+
+	public static Integer minSiteUser(String var) {
+		switch(var) {
+			default:
+				return BaseModel.minBaseModel(var);
 		}
 	}
 }

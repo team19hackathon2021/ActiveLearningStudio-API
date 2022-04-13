@@ -1,49 +1,55 @@
 package org.curriki.api.enus.page;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.slf4j.LoggerFactory;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.apache.commons.lang3.StringUtils;
-import java.lang.Integer;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.computate.vertx.api.ApiRequest;
-import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.vertx.core.json.JsonObject;
-import java.lang.String;
 import org.curriki.api.enus.model.base.BaseModel;
-import java.math.RoundingMode;
-import java.lang.Void;
-import org.slf4j.Logger;
-import java.math.MathContext;
-import io.vertx.core.Promise;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.computate.vertx.api.ApiRequest;
 import org.curriki.api.enus.config.ConfigKeys;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import io.vertx.ext.web.api.service.ServiceRequest;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
-import java.util.List;
-import org.computate.search.wrap.Wrap;
-import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import java.lang.Object;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import java.lang.Object;
+import io.vertx.ext.web.api.service.ServiceRequest;
+import java.lang.String;
+import io.vertx.core.json.JsonObject;
+import java.lang.Long;
+import java.lang.Integer;
+import java.lang.Void;
+import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout">Find the class PageLayout in Solr. </a>
+ * <br><br>Delete the class PageLayout in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.curriki.api.enus.page in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.page&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project ActiveLearningStudio-API in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class PageLayoutGen<DEV> extends Object {
@@ -62,7 +68,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -100,7 +106,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity serviceRequest
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:serviceRequest">Find the entity serviceRequest in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:serviceRequest">Find the entity serviceRequest in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -138,7 +144,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity requestZoneId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestZoneId">Find the entity requestZoneId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:requestZoneId">Find the entity requestZoneId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -187,7 +193,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity requestLocaleId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestLocaleId">Find the entity requestLocaleId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:requestLocaleId">Find the entity requestLocaleId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -236,7 +242,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity staticBaseUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:staticBaseUrl">Find the entity staticBaseUrl in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:staticBaseUrl">Find the entity staticBaseUrl in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -272,102 +278,249 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return PageLayout.staticSearchStrStaticBaseUrl(siteRequest_, PageLayout.staticSearchStaticBaseUrl(siteRequest_, PageLayout.staticSetStaticBaseUrl(siteRequest_, o)));
 	}
 
-	/////////////
-	// authUrl //
-	/////////////
+	/////////////////////
+	// STATIC_BASE_URL //
+	/////////////////////
 
-	/**	 The entity authUrl
+	/**	 The entity STATIC_BASE_URL
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected String authUrl;
+	protected String STATIC_BASE_URL;
 
-	/**	<br> The entity authUrl
+	/**	<br> The entity STATIC_BASE_URL
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authUrl">Find the entity authUrl in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:STATIC_BASE_URL">Find the entity STATIC_BASE_URL in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _authUrl(Wrap<String> w);
+	protected abstract void _STATIC_BASE_URL(Wrap<String> w);
 
-	public String getAuthUrl() {
-		return authUrl;
+	public String getSTATIC_BASE_URL() {
+		return STATIC_BASE_URL;
 	}
-	public void setAuthUrl(String o) {
-		this.authUrl = PageLayout.staticSetAuthUrl(siteRequest_, o);
+	public void setSTATIC_BASE_URL(String o) {
+		this.STATIC_BASE_URL = PageLayout.staticSetSTATIC_BASE_URL(siteRequest_, o);
 	}
-	public static String staticSetAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSetSTATIC_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
-	protected PageLayout authUrlInit() {
-		Wrap<String> authUrlWrap = new Wrap<String>().var("authUrl");
-		if(authUrl == null) {
-			_authUrl(authUrlWrap);
-			setAuthUrl(authUrlWrap.o);
+	protected PageLayout STATIC_BASE_URLInit() {
+		Wrap<String> STATIC_BASE_URLWrap = new Wrap<String>().var("STATIC_BASE_URL");
+		if(STATIC_BASE_URL == null) {
+			_STATIC_BASE_URL(STATIC_BASE_URLWrap);
+			setSTATIC_BASE_URL(STATIC_BASE_URLWrap.o);
 		}
 		return (PageLayout)this;
 	}
 
-	public static String staticSearchAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchSTATIC_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrSTATIC_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqAuthUrl(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSearchStrAuthUrl(siteRequest_, PageLayout.staticSearchAuthUrl(siteRequest_, PageLayout.staticSetAuthUrl(siteRequest_, o)));
+	public static String staticSearchFqSTATIC_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrSTATIC_BASE_URL(siteRequest_, PageLayout.staticSearchSTATIC_BASE_URL(siteRequest_, PageLayout.staticSetSTATIC_BASE_URL(siteRequest_, o)));
 	}
 
-	///////////////
-	// authRealm //
-	///////////////
+	///////////////////
+	// SITE_BASE_URL //
+	///////////////////
 
-	/**	 The entity authRealm
+	/**	 The entity SITE_BASE_URL
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected String authRealm;
+	protected String SITE_BASE_URL;
 
-	/**	<br> The entity authRealm
+	/**	<br> The entity SITE_BASE_URL
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRealm">Find the entity authRealm in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:SITE_BASE_URL">Find the entity SITE_BASE_URL in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _authRealm(Wrap<String> w);
+	protected abstract void _SITE_BASE_URL(Wrap<String> w);
 
-	public String getAuthRealm() {
-		return authRealm;
+	public String getSITE_BASE_URL() {
+		return SITE_BASE_URL;
 	}
-	public void setAuthRealm(String o) {
-		this.authRealm = PageLayout.staticSetAuthRealm(siteRequest_, o);
+	public void setSITE_BASE_URL(String o) {
+		this.SITE_BASE_URL = PageLayout.staticSetSITE_BASE_URL(siteRequest_, o);
 	}
-	public static String staticSetAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSetSITE_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
-	protected PageLayout authRealmInit() {
-		Wrap<String> authRealmWrap = new Wrap<String>().var("authRealm");
-		if(authRealm == null) {
-			_authRealm(authRealmWrap);
-			setAuthRealm(authRealmWrap.o);
+	protected PageLayout SITE_BASE_URLInit() {
+		Wrap<String> SITE_BASE_URLWrap = new Wrap<String>().var("SITE_BASE_URL");
+		if(SITE_BASE_URL == null) {
+			_SITE_BASE_URL(SITE_BASE_URLWrap);
+			setSITE_BASE_URL(SITE_BASE_URLWrap.o);
 		}
 		return (PageLayout)this;
 	}
 
-	public static String staticSearchAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchSITE_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrSITE_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqAuthRealm(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSearchStrAuthRealm(siteRequest_, PageLayout.staticSearchAuthRealm(siteRequest_, PageLayout.staticSetAuthRealm(siteRequest_, o)));
+	public static String staticSearchFqSITE_BASE_URL(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrSITE_BASE_URL(siteRequest_, PageLayout.staticSearchSITE_BASE_URL(siteRequest_, PageLayout.staticSetSITE_BASE_URL(siteRequest_, o)));
+	}
+
+	///////////////////
+	// SITE_AUTH_URL //
+	///////////////////
+
+	/**	 The entity SITE_AUTH_URL
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String SITE_AUTH_URL;
+
+	/**	<br> The entity SITE_AUTH_URL
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:SITE_AUTH_URL">Find the entity SITE_AUTH_URL in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _SITE_AUTH_URL(Wrap<String> w);
+
+	public String getSITE_AUTH_URL() {
+		return SITE_AUTH_URL;
+	}
+	public void setSITE_AUTH_URL(String o) {
+		this.SITE_AUTH_URL = PageLayout.staticSetSITE_AUTH_URL(siteRequest_, o);
+	}
+	public static String staticSetSITE_AUTH_URL(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout SITE_AUTH_URLInit() {
+		Wrap<String> SITE_AUTH_URLWrap = new Wrap<String>().var("SITE_AUTH_URL");
+		if(SITE_AUTH_URL == null) {
+			_SITE_AUTH_URL(SITE_AUTH_URLWrap);
+			setSITE_AUTH_URL(SITE_AUTH_URLWrap.o);
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchSITE_AUTH_URL(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSITE_AUTH_URL(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSITE_AUTH_URL(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrSITE_AUTH_URL(siteRequest_, PageLayout.staticSearchSITE_AUTH_URL(siteRequest_, PageLayout.staticSetSITE_AUTH_URL(siteRequest_, o)));
+	}
+
+	/////////////////////
+	// SITE_AUTH_REALM //
+	/////////////////////
+
+	/**	 The entity SITE_AUTH_REALM
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String SITE_AUTH_REALM;
+
+	/**	<br> The entity SITE_AUTH_REALM
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:SITE_AUTH_REALM">Find the entity SITE_AUTH_REALM in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _SITE_AUTH_REALM(Wrap<String> w);
+
+	public String getSITE_AUTH_REALM() {
+		return SITE_AUTH_REALM;
+	}
+	public void setSITE_AUTH_REALM(String o) {
+		this.SITE_AUTH_REALM = PageLayout.staticSetSITE_AUTH_REALM(siteRequest_, o);
+	}
+	public static String staticSetSITE_AUTH_REALM(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout SITE_AUTH_REALMInit() {
+		Wrap<String> SITE_AUTH_REALMWrap = new Wrap<String>().var("SITE_AUTH_REALM");
+		if(SITE_AUTH_REALM == null) {
+			_SITE_AUTH_REALM(SITE_AUTH_REALMWrap);
+			setSITE_AUTH_REALM(SITE_AUTH_REALMWrap.o);
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchSITE_AUTH_REALM(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSITE_AUTH_REALM(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSITE_AUTH_REALM(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrSITE_AUTH_REALM(siteRequest_, PageLayout.staticSearchSITE_AUTH_REALM(siteRequest_, PageLayout.staticSetSITE_AUTH_REALM(siteRequest_, o)));
+	}
+
+	/////////////////////
+	// FONTAWESOME_KIT //
+	/////////////////////
+
+	/**	 The entity FONTAWESOME_KIT
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String FONTAWESOME_KIT;
+
+	/**	<br> The entity FONTAWESOME_KIT
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:FONTAWESOME_KIT">Find the entity FONTAWESOME_KIT in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _FONTAWESOME_KIT(Wrap<String> w);
+
+	public String getFONTAWESOME_KIT() {
+		return FONTAWESOME_KIT;
+	}
+	public void setFONTAWESOME_KIT(String o) {
+		this.FONTAWESOME_KIT = PageLayout.staticSetFONTAWESOME_KIT(siteRequest_, o);
+	}
+	public static String staticSetFONTAWESOME_KIT(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout FONTAWESOME_KITInit() {
+		Wrap<String> FONTAWESOME_KITWrap = new Wrap<String>().var("FONTAWESOME_KIT");
+		if(FONTAWESOME_KIT == null) {
+			_FONTAWESOME_KIT(FONTAWESOME_KITWrap);
+			setFONTAWESOME_KIT(FONTAWESOME_KITWrap.o);
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchFONTAWESOME_KIT(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrFONTAWESOME_KIT(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqFONTAWESOME_KIT(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrFONTAWESOME_KIT(siteRequest_, PageLayout.staticSearchFONTAWESOME_KIT(siteRequest_, PageLayout.staticSetFONTAWESOME_KIT(siteRequest_, o)));
 	}
 
 	/////////////
@@ -383,7 +536,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity pageUri
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUri">Find the entity pageUri in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:pageUri">Find the entity pageUri in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -432,7 +585,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity pageMethod
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageMethod">Find the entity pageMethod in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:pageMethod">Find the entity pageMethod in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -480,7 +633,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity params
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:params">Find the entity params in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:params">Find the entity params in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -519,7 +672,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity userKey
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -575,7 +728,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity userFullName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -624,7 +777,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity userName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -673,7 +826,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity userEmail
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -722,7 +875,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity logoutUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:logoutUrl">Find the entity logoutUrl in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:logoutUrl">Find the entity logoutUrl in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -772,7 +925,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity long0
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:long0">Find the entity long0 in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:long0">Find the entity long0 in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -829,7 +982,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity long1
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:long1">Find the entity long1 in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:long1">Find the entity long1 in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -886,7 +1039,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity int0
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:int0">Find the entity int0 in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:int0">Find the entity int0 in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -943,7 +1096,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity int1
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:int1">Find the entity int1 in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:int1">Find the entity int1 in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -999,7 +1152,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity promiseBefore
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseBefore">Find the entity promiseBefore in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:promiseBefore">Find the entity promiseBefore in Solr</a>
 	 * <br>
 	 * @param promise is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1041,7 +1194,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity classSimpleName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1090,7 +1243,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity pageTitle
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageTitle">Find the entity pageTitle in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:pageTitle">Find the entity pageTitle in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1140,7 +1293,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity roles
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:roles">Find the entity roles in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:roles">Find the entity roles in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -1206,7 +1359,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity rolesRequired
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rolesRequired">Find the entity rolesRequired in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:rolesRequired">Find the entity rolesRequired in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -1272,7 +1425,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity authRolesAdmin
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRolesAdmin">Find the entity authRolesAdmin in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:authRolesAdmin">Find the entity authRolesAdmin in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -1336,7 +1489,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity pagination
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pagination">Find the entity pagination in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:pagination">Find the entity pagination in Solr</a>
 	 * <br>
 	 * @param pagination is the entity already constructed. 
 	 **/
@@ -1358,6 +1511,105 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	///////////
+	// varsQ //
+	///////////
+
+	/**	 The entity varsQ
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected JsonObject varsQ = new JsonObject();
+
+	/**	<br> The entity varsQ
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:varsQ">Find the entity varsQ in Solr</a>
+	 * <br>
+	 * @param vars is the entity already constructed. 
+	 **/
+	protected abstract void _varsQ(JsonObject vars);
+
+	public JsonObject getVarsQ() {
+		return varsQ;
+	}
+
+	public void setVarsQ(JsonObject varsQ) {
+		this.varsQ = varsQ;
+	}
+	public static JsonObject staticSetVarsQ(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected PageLayout varsQInit() {
+		_varsQ(varsQ);
+		return (PageLayout)this;
+	}
+
+	////////////
+	// varsFq //
+	////////////
+
+	/**	 The entity varsFq
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected JsonObject varsFq = new JsonObject();
+
+	/**	<br> The entity varsFq
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:varsFq">Find the entity varsFq in Solr</a>
+	 * <br>
+	 * @param vars is the entity already constructed. 
+	 **/
+	protected abstract void _varsFq(JsonObject vars);
+
+	public JsonObject getVarsFq() {
+		return varsFq;
+	}
+
+	public void setVarsFq(JsonObject varsFq) {
+		this.varsFq = varsFq;
+	}
+	public static JsonObject staticSetVarsFq(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected PageLayout varsFqInit() {
+		_varsFq(varsFq);
+		return (PageLayout)this;
+	}
+
+	///////////////
+	// varsRange //
+	///////////////
+
+	/**	 The entity varsRange
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected JsonObject varsRange = new JsonObject();
+
+	/**	<br> The entity varsRange
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:varsRange">Find the entity varsRange in Solr</a>
+	 * <br>
+	 * @param vars is the entity already constructed. 
+	 **/
+	protected abstract void _varsRange(JsonObject vars);
+
+	public JsonObject getVarsRange() {
+		return varsRange;
+	}
+
+	public void setVarsRange(JsonObject varsRange) {
+		this.varsRange = varsRange;
+	}
+	public static JsonObject staticSetVarsRange(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected PageLayout varsRangeInit() {
+		_varsRange(varsRange);
+		return (PageLayout)this;
+	}
+
+	///////////
 	// query //
 	///////////
 
@@ -1369,7 +1621,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity query
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:query">Find the entity query in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:query">Find the entity query in Solr</a>
 	 * <br>
 	 * @param query is the entity already constructed. 
 	 **/
@@ -1403,7 +1655,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity promiseAfter
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseAfter">Find the entity promiseAfter in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:promiseAfter">Find the entity promiseAfter in Solr</a>
 	 * <br>
 	 * @param promise is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1445,7 +1697,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity pageImageUri
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageImageUri">Find the entity pageImageUri in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:pageImageUri">Find the entity pageImageUri in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1494,7 +1746,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity contextIconGroup
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconGroup">Find the entity contextIconGroup in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:contextIconGroup">Find the entity contextIconGroup in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1543,7 +1795,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	/**	<br> The entity contextIconName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconName">Find the entity contextIconName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.page.PageLayout&fq=entiteVar_enUS_indexed_string:contextIconName">Find the entity contextIconName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1609,8 +1861,11 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				requestZoneIdInit();
 				requestLocaleIdInit();
 				staticBaseUrlInit();
-				authUrlInit();
-				authRealmInit();
+				STATIC_BASE_URLInit();
+				SITE_BASE_URLInit();
+				SITE_AUTH_URLInit();
+				SITE_AUTH_REALMInit();
+				FONTAWESOME_KITInit();
 				pageUriInit();
 				pageMethodInit();
 				paramsInit();
@@ -1645,6 +1900,9 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				rolesRequiredInit();
 				authRolesAdminInit();
 				paginationInit();
+				varsQInit();
+				varsFqInit();
+				varsRangeInit();
 				queryInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -1727,10 +1985,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				return oPageLayout.requestLocaleId;
 			case "staticBaseUrl":
 				return oPageLayout.staticBaseUrl;
-			case "authUrl":
-				return oPageLayout.authUrl;
-			case "authRealm":
-				return oPageLayout.authRealm;
+			case "STATIC_BASE_URL":
+				return oPageLayout.STATIC_BASE_URL;
+			case "SITE_BASE_URL":
+				return oPageLayout.SITE_BASE_URL;
+			case "SITE_AUTH_URL":
+				return oPageLayout.SITE_AUTH_URL;
+			case "SITE_AUTH_REALM":
+				return oPageLayout.SITE_AUTH_REALM;
+			case "FONTAWESOME_KIT":
+				return oPageLayout.FONTAWESOME_KIT;
 			case "pageUri":
 				return oPageLayout.pageUri;
 			case "pageMethod":
@@ -1769,6 +2033,12 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				return oPageLayout.authRolesAdmin;
 			case "pagination":
 				return oPageLayout.pagination;
+			case "varsQ":
+				return oPageLayout.varsQ;
+			case "varsFq":
+				return oPageLayout.varsFq;
+			case "varsRange":
+				return oPageLayout.varsRange;
 			case "query":
 				return oPageLayout.query;
 			case "promiseAfter":
@@ -1824,10 +2094,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSetRequestLocaleId(siteRequest_, o);
 		case "staticBaseUrl":
 			return PageLayout.staticSetStaticBaseUrl(siteRequest_, o);
-		case "authUrl":
-			return PageLayout.staticSetAuthUrl(siteRequest_, o);
-		case "authRealm":
-			return PageLayout.staticSetAuthRealm(siteRequest_, o);
+		case "STATIC_BASE_URL":
+			return PageLayout.staticSetSTATIC_BASE_URL(siteRequest_, o);
+		case "SITE_BASE_URL":
+			return PageLayout.staticSetSITE_BASE_URL(siteRequest_, o);
+		case "SITE_AUTH_URL":
+			return PageLayout.staticSetSITE_AUTH_URL(siteRequest_, o);
+		case "SITE_AUTH_REALM":
+			return PageLayout.staticSetSITE_AUTH_REALM(siteRequest_, o);
+		case "FONTAWESOME_KIT":
+			return PageLayout.staticSetFONTAWESOME_KIT(siteRequest_, o);
 		case "pageUri":
 			return PageLayout.staticSetPageUri(siteRequest_, o);
 		case "pageMethod":
@@ -1886,10 +2162,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchRequestLocaleId(siteRequest_, (String)o);
 		case "staticBaseUrl":
 			return PageLayout.staticSearchStaticBaseUrl(siteRequest_, (String)o);
-		case "authUrl":
-			return PageLayout.staticSearchAuthUrl(siteRequest_, (String)o);
-		case "authRealm":
-			return PageLayout.staticSearchAuthRealm(siteRequest_, (String)o);
+		case "STATIC_BASE_URL":
+			return PageLayout.staticSearchSTATIC_BASE_URL(siteRequest_, (String)o);
+		case "SITE_BASE_URL":
+			return PageLayout.staticSearchSITE_BASE_URL(siteRequest_, (String)o);
+		case "SITE_AUTH_URL":
+			return PageLayout.staticSearchSITE_AUTH_URL(siteRequest_, (String)o);
+		case "SITE_AUTH_REALM":
+			return PageLayout.staticSearchSITE_AUTH_REALM(siteRequest_, (String)o);
+		case "FONTAWESOME_KIT":
+			return PageLayout.staticSearchFONTAWESOME_KIT(siteRequest_, (String)o);
 		case "pageUri":
 			return PageLayout.staticSearchPageUri(siteRequest_, (String)o);
 		case "pageMethod":
@@ -1948,10 +2230,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchStrRequestLocaleId(siteRequest_, (String)o);
 		case "staticBaseUrl":
 			return PageLayout.staticSearchStrStaticBaseUrl(siteRequest_, (String)o);
-		case "authUrl":
-			return PageLayout.staticSearchStrAuthUrl(siteRequest_, (String)o);
-		case "authRealm":
-			return PageLayout.staticSearchStrAuthRealm(siteRequest_, (String)o);
+		case "STATIC_BASE_URL":
+			return PageLayout.staticSearchStrSTATIC_BASE_URL(siteRequest_, (String)o);
+		case "SITE_BASE_URL":
+			return PageLayout.staticSearchStrSITE_BASE_URL(siteRequest_, (String)o);
+		case "SITE_AUTH_URL":
+			return PageLayout.staticSearchStrSITE_AUTH_URL(siteRequest_, (String)o);
+		case "SITE_AUTH_REALM":
+			return PageLayout.staticSearchStrSITE_AUTH_REALM(siteRequest_, (String)o);
+		case "FONTAWESOME_KIT":
+			return PageLayout.staticSearchStrFONTAWESOME_KIT(siteRequest_, (String)o);
 		case "pageUri":
 			return PageLayout.staticSearchStrPageUri(siteRequest_, (String)o);
 		case "pageMethod":
@@ -2010,10 +2298,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchFqRequestLocaleId(siteRequest_, o);
 		case "staticBaseUrl":
 			return PageLayout.staticSearchFqStaticBaseUrl(siteRequest_, o);
-		case "authUrl":
-			return PageLayout.staticSearchFqAuthUrl(siteRequest_, o);
-		case "authRealm":
-			return PageLayout.staticSearchFqAuthRealm(siteRequest_, o);
+		case "STATIC_BASE_URL":
+			return PageLayout.staticSearchFqSTATIC_BASE_URL(siteRequest_, o);
+		case "SITE_BASE_URL":
+			return PageLayout.staticSearchFqSITE_BASE_URL(siteRequest_, o);
+		case "SITE_AUTH_URL":
+			return PageLayout.staticSearchFqSITE_AUTH_URL(siteRequest_, o);
+		case "SITE_AUTH_REALM":
+			return PageLayout.staticSearchFqSITE_AUTH_REALM(siteRequest_, o);
+		case "FONTAWESOME_KIT":
+			return PageLayout.staticSearchFqFONTAWESOME_KIT(siteRequest_, o);
 		case "pageUri":
 			return PageLayout.staticSearchFqPageUri(siteRequest_, o);
 		case "pageMethod":
@@ -2066,13 +2360,17 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return sb.toString();
 	}
 
+	public static final String CLASS_SIMPLE_NAME = "PageLayout";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_serviceRequest = "serviceRequest";
 	public static final String VAR_requestZoneId = "requestZoneId";
 	public static final String VAR_requestLocaleId = "requestLocaleId";
 	public static final String VAR_staticBaseUrl = "staticBaseUrl";
-	public static final String VAR_authUrl = "authUrl";
-	public static final String VAR_authRealm = "authRealm";
+	public static final String VAR_STATIC_BASE_URL = "STATIC_BASE_URL";
+	public static final String VAR_SITE_BASE_URL = "SITE_BASE_URL";
+	public static final String VAR_SITE_AUTH_URL = "SITE_AUTH_URL";
+	public static final String VAR_SITE_AUTH_REALM = "SITE_AUTH_REALM";
+	public static final String VAR_FONTAWESOME_KIT = "FONTAWESOME_KIT";
 	public static final String VAR_pageUri = "pageUri";
 	public static final String VAR_pageMethod = "pageMethod";
 	public static final String VAR_params = "params";
@@ -2092,6 +2390,9 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String VAR_rolesRequired = "rolesRequired";
 	public static final String VAR_authRolesAdmin = "authRolesAdmin";
 	public static final String VAR_pagination = "pagination";
+	public static final String VAR_varsQ = "varsQ";
+	public static final String VAR_varsFq = "varsFq";
+	public static final String VAR_varsRange = "varsRange";
 	public static final String VAR_query = "query";
 	public static final String VAR_promiseAfter = "promiseAfter";
 	public static final String VAR_pageImageUri = "pageImageUri";
@@ -2103,8 +2404,11 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_requestZoneId = "";
 	public static final String DISPLAY_NAME_requestLocaleId = "";
 	public static final String DISPLAY_NAME_staticBaseUrl = "";
-	public static final String DISPLAY_NAME_authUrl = "";
-	public static final String DISPLAY_NAME_authRealm = "";
+	public static final String DISPLAY_NAME_STATIC_BASE_URL = "";
+	public static final String DISPLAY_NAME_SITE_BASE_URL = "";
+	public static final String DISPLAY_NAME_SITE_AUTH_URL = "";
+	public static final String DISPLAY_NAME_SITE_AUTH_REALM = "";
+	public static final String DISPLAY_NAME_FONTAWESOME_KIT = "";
 	public static final String DISPLAY_NAME_pageUri = "";
 	public static final String DISPLAY_NAME_pageMethod = "";
 	public static final String DISPLAY_NAME_params = "";
@@ -2124,6 +2428,9 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_rolesRequired = "";
 	public static final String DISPLAY_NAME_authRolesAdmin = "";
 	public static final String DISPLAY_NAME_pagination = "";
+	public static final String DISPLAY_NAME_varsQ = "";
+	public static final String DISPLAY_NAME_varsFq = "";
+	public static final String DISPLAY_NAME_varsRange = "";
 	public static final String DISPLAY_NAME_query = "";
 	public static final String DISPLAY_NAME_promiseAfter = "";
 	public static final String DISPLAY_NAME_pageImageUri = "";
@@ -2145,10 +2452,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return DISPLAY_NAME_requestLocaleId;
 		case VAR_staticBaseUrl:
 			return DISPLAY_NAME_staticBaseUrl;
-		case VAR_authUrl:
-			return DISPLAY_NAME_authUrl;
-		case VAR_authRealm:
-			return DISPLAY_NAME_authRealm;
+		case VAR_STATIC_BASE_URL:
+			return DISPLAY_NAME_STATIC_BASE_URL;
+		case VAR_SITE_BASE_URL:
+			return DISPLAY_NAME_SITE_BASE_URL;
+		case VAR_SITE_AUTH_URL:
+			return DISPLAY_NAME_SITE_AUTH_URL;
+		case VAR_SITE_AUTH_REALM:
+			return DISPLAY_NAME_SITE_AUTH_REALM;
+		case VAR_FONTAWESOME_KIT:
+			return DISPLAY_NAME_FONTAWESOME_KIT;
 		case VAR_pageUri:
 			return DISPLAY_NAME_pageUri;
 		case VAR_pageMethod:
@@ -2187,6 +2500,12 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return DISPLAY_NAME_authRolesAdmin;
 		case VAR_pagination:
 			return DISPLAY_NAME_pagination;
+		case VAR_varsQ:
+			return DISPLAY_NAME_varsQ;
+		case VAR_varsFq:
+			return DISPLAY_NAME_varsFq;
+		case VAR_varsRange:
+			return DISPLAY_NAME_varsRange;
 		case VAR_query:
 			return DISPLAY_NAME_query;
 		case VAR_promiseAfter:

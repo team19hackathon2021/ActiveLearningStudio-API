@@ -383,7 +383,12 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			}
 			listSiteUser.next().onSuccess(next -> {
 				if(next) {
-					listPATCHSiteUser(apiRequest, listSiteUser);
+					listPATCHSiteUser(apiRequest, listSiteUser).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listPATCHSiteUser failed. "), ex);
+						promise.fail(ex);
+					});
 				} else {
 					promise.complete();
 				}
@@ -457,7 +462,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				Promise<SiteUser> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHSiteUser(o, inheritPk).onSuccess(siteUser -> {
-					defineSiteUser(siteUser).onSuccess(c -> {
+					persistSiteUser(siteUser).onSuccess(c -> {
 						relateSiteUser(siteUser).onSuccess(d -> {
 							indexSiteUser(siteUser).onSuccess(e -> {
 								promise1.complete(siteUser);
@@ -757,7 +762,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				siteRequest.setSqlConnection(sqlConnection);
 				createSiteUser(siteRequest).onSuccess(siteUser -> {
 					sqlPOSTSiteUser(siteUser, inheritPk).onSuccess(b -> {
-						defineSiteUser(siteUser).onSuccess(c -> {
+						persistSiteUser(siteUser).onSuccess(c -> {
 							relateSiteUser(siteUser).onSuccess(d -> {
 								indexSiteUser(siteUser).onSuccess(e -> {
 									promise1.complete(siteUser);
@@ -1402,7 +1407,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void searchSiteUser2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<SiteUser> searchList) {
 	}
 
-	public Future<Void> defineSiteUser(SiteUser o) {
+	public Future<Void> persistSiteUser(SiteUser o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
@@ -1419,25 +1424,25 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							Object columnValue = definition.getValue(i);
 							if(!"pk".equals(columnName)) {
 								try {
-									o.defineForClass(columnName, columnValue);
+									o.persistForClass(columnName, columnValue);
 								} catch(Exception e) {
-									LOG.error(String.format("defineSiteUser failed. "), e);
+									LOG.error(String.format("persistSiteUser failed. "), e);
 								}
 							}
 						}
 					}
 					promise.complete();
 				} catch(Exception ex) {
-					LOG.error(String.format("defineSiteUser failed. "), ex);
+					LOG.error(String.format("persistSiteUser failed. "), ex);
 					promise.fail(ex);
 				}
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error(String.format("defineSiteUser failed. "), ex2);
+				LOG.error(String.format("persistSiteUser failed. "), ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("defineSiteUser failed. "), ex);
+			LOG.error(String.format("persistSiteUser failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();

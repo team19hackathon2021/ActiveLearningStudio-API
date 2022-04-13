@@ -71,7 +71,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * Modify: false
 	 * DisplayName: user ID
 	 */
@@ -81,7 +81,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 */
 	protected void _userName(Wrap<String> c) {
 	}
@@ -89,7 +89,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 */
 	protected void _userEmail(Wrap<String> c) {
 	}
@@ -97,7 +97,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 */
 	protected void _userFirstName(Wrap<String> c) {
 	}
@@ -105,7 +105,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 */
 	protected void _userLastName(Wrap<String> c) {
 	}
@@ -113,7 +113,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 */
 	protected void _userFullName(Wrap<String> c) {
 		c.o(String.format("%s %s", userFirstName, userLastName));
@@ -122,7 +122,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 2
 	 * DisplayName.enUS: see archived
@@ -134,7 +134,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSi
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 3
 	 * DisplayName.enUS: see deleted

@@ -415,7 +415,12 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			}
 			listCurrikiResource.next().onSuccess(next -> {
 				if(next) {
-					listPATCHCurrikiResource(apiRequest, listCurrikiResource);
+					listPATCHCurrikiResource(apiRequest, listCurrikiResource).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listPATCHCurrikiResource failed. "), ex);
+						promise.fail(ex);
+					});
 				} else {
 					promise.complete();
 				}
@@ -489,7 +494,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				Promise<CurrikiResource> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHCurrikiResource(o, inheritPk).onSuccess(currikiResource -> {
-					defineCurrikiResource(currikiResource).onSuccess(c -> {
+					persistCurrikiResource(currikiResource).onSuccess(c -> {
 						relateCurrikiResource(currikiResource).onSuccess(d -> {
 							indexCurrikiResource(currikiResource).onSuccess(e -> {
 								promise1.complete(currikiResource);
@@ -1349,7 +1354,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				siteRequest.setSqlConnection(sqlConnection);
 				createCurrikiResource(siteRequest).onSuccess(currikiResource -> {
 					sqlPOSTCurrikiResource(currikiResource, inheritPk).onSuccess(b -> {
-						defineCurrikiResource(currikiResource).onSuccess(c -> {
+						persistCurrikiResource(currikiResource).onSuccess(c -> {
 							relateCurrikiResource(currikiResource).onSuccess(d -> {
 								indexCurrikiResource(currikiResource).onSuccess(e -> {
 									promise1.complete(currikiResource);
@@ -2399,7 +2404,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									}
 								} else {
-									o2.defineForClass(f, bodyVal);
+									o2.persistForClass(f, bodyVal);
 									o2.relateForClass(f, bodyVal);
 									if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
@@ -2844,7 +2849,7 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	public void searchCurrikiResource2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<CurrikiResource> searchList) {
 	}
 
-	public Future<Void> defineCurrikiResource(CurrikiResource o) {
+	public Future<Void> persistCurrikiResource(CurrikiResource o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
@@ -2861,25 +2866,25 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							Object columnValue = definition.getValue(i);
 							if(!"pk".equals(columnName)) {
 								try {
-									o.defineForClass(columnName, columnValue);
+									o.persistForClass(columnName, columnValue);
 								} catch(Exception e) {
-									LOG.error(String.format("defineCurrikiResource failed. "), e);
+									LOG.error(String.format("persistCurrikiResource failed. "), e);
 								}
 							}
 						}
 					}
 					promise.complete();
 				} catch(Exception ex) {
-					LOG.error(String.format("defineCurrikiResource failed. "), ex);
+					LOG.error(String.format("persistCurrikiResource failed. "), ex);
 					promise.fail(ex);
 				}
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error(String.format("defineCurrikiResource failed. "), ex2);
+				LOG.error(String.format("persistCurrikiResource failed. "), ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("defineCurrikiResource failed. "), ex);
+			LOG.error(String.format("persistCurrikiResource failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();

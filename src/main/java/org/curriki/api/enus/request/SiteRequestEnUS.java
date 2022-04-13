@@ -1,4 +1,4 @@
-package org.curriki.api.enus.request;         
+package org.curriki.api.enus.request;
 
 import java.io.Serializable;
 import java.util.List;
