@@ -31,6 +31,7 @@ echo "source ~/python/bin/activate" | tee -a ~/.bash_profile
 ```bash
 pip install setuptools_rust wheel
 pip install --upgrade pip
+pip install ansible
 ```
 
 ## Install dependencies on Linux
