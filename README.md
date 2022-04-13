@@ -23,7 +23,8 @@ pip3 install virtualenv
 virtualenv ~/python
 
 source ~/python/bin/activate
-echo "source ~/python/bin/activate" | tee -a ~/.bash_profile
+echo "source ~/python/bin/activate" | tee -a ~/.bashrc
+source ~/.bashrc
 ```
 
 ## Install the latest Ansible
@@ -62,12 +63,7 @@ pkcon install -y java-11-openjdk
 brew install maven
 ```
 
-# Setup Ansible
-
-## Install python3 application dependencies
-
-```bash
-pip3 install psycopg2-binary
+# Setup the project
 ```
 
 ## Setup the directory for the project and clone the git repository into it 
@@ -120,24 +116,55 @@ You can then run the project install automation again with the secrets in the va
 ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e @~/.local/src/ActiveLearningStudio-API/vault/$USER-local --vault-id @prompt
 ```
 
-# Configure Eclipse
+# Configure Red Hat CodeReady Studio
 
-## Install the Maven plugin for Eclipse
+You can download Red Hat Code Ready Studio here: 
 
-* In Eclipse, go to Help -> Eclipse Marketplace...
-* Install "Maven Integration for Eclipse"
+https://developers.redhat.com/products/codeready-studio/download
 
-## Import the ActiveLearningStudio-API project into Eclipse
+You will want to create a Red Hat account if you do not already have one. 
 
-* In Eclipse, go to File -> Import...
+After you download CodeReady Studio, create a directory for it and install it with this command: 
+
+```bash
+install -d ~/.local/opt/codereadystudio
+java -jar ~/Downloads/codereadystudio-*-installer-standalone.jar
+```
+
+You can use the default installation settings. I suggest to install CodeReady Studio in your in $HOME/.local/opt/codereadystudio
+
+When you run CodeReady Studio, I suggest you create your workspace here: ~/.local/src
+
+## Install these update sites: 
+
+In CodeReady Studio, go to Help -> Install New Software...
+
+Add these update sites and install these useful plugins: 
+
+### Vrapper Vim Plugin
+- http://vrapper.sourceforge.net/update-site/stable
+    - Choose the "Vrapper" plugin if you want to be able to edit code with Vim commands
+    - Vrapper keys to unbind in Window -> Preferences -> General -> Keys: 
+        - ctrl+d, ctrl+u, ctrl+r, shift+ctrl+v, alt+v
+    - Vrapper keys to set: 
+        - and search for "Vrapper" and set the keys to alt+v
+
+### DevStyle for dark theme
+
+- http://www.genuitec.com/updates/devstyle/ci/
+    - Choose "DevStyle Features" for themes
+
+## Import the ActiveLearningStudio-API project into CodeReady Studio
+
+* In CodeReady Studio, go to File -> Import...
 * Select Maven -> Existing Maven Projects
 * Click [ Next > ]
 * Browse to the directory: ~/.local/src/ActiveLearningStudio-API
 * Click [ Finish ]
 
-## Setup an Eclipse Debug/Run configuration to run and debug ActiveLearningStudio-API
+## Setup a Debug/Run configuration to run and debug ActiveLearningStudio-API
 
-* In Eclipse, go to File -> Debug Configurations...
+* In CodeReady Studio, go to File -> Debug Configurations...
 * Right click on Java Application -> New Configuration
 * Name: ActiveLearningStudio-API MainVerticle
 * Project: ActiveLearningStudio-API
