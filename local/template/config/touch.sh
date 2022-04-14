@@ -5,7 +5,6 @@ touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/r
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/model/base/BaseModel.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/config/ConfigKeys.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/vertx/MainVerticle.java
-touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/quarkus/QuarkusApp.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/vertx/WorkerVerticle.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/page/PageLayout.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/model/user/SiteUser.java

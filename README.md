@@ -5,6 +5,7 @@
 
 ```bash
 pkcon install -y git
+pkcon install -y python3
 pkcon install -y python3-pip
 pkcon install -y python3-virtualenv
 ```
@@ -23,7 +24,8 @@ pip3 install virtualenv
 virtualenv ~/python
 
 source ~/python/bin/activate
-echo "source ~/python/bin/activate" | tee -a ~/.bash_profile
+echo "source ~/python/bin/activate" | tee -a ~/.bashrc
+source ~/.bashrc
 ```
 
 ## Install the latest Ansible
@@ -31,42 +33,10 @@ echo "source ~/python/bin/activate" | tee -a ~/.bash_profile
 ```bash
 pip install setuptools_rust wheel
 pip install --upgrade pip
+pip install ansible
 ```
 
-## Install dependencies on Linux
-
-```bash
-pkcon install -y maven
-pkcon install -y gcc
-pkcon install -y make
-pkcon install -y git
-pkcon install -y bison
-pkcon install -y flex
-pkcon install -y readline-devel
-pkcon install -y zlib-devel
-pkcon install -y systemd-devel
-pkcon install -y libxml2-devel
-pkcon install -y libxslt-devel
-pkcon install -y openssl-devel
-pkcon install -y perl-core
-pkcon install -y libselinux-devel
-pkcon install -y container-selinux
-pkcon install -y java-1.8.0-openjdk
-pkcon install -y java-11-openjdk
-```
-
-## Install dependencies on MacOSX
-
-```bash
-brew install maven
-```
-
-# Setup Ansible
-
-## Install python3 application dependencies
-
-```bash
-pip3 install psycopg2-binary
+# Setup the project
 ```
 
 ## Setup the directory for the project and clone the git repository into it 
@@ -89,9 +59,9 @@ git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/co
 ## Run the Ansible Galaxy roles to install the complete project locally. 
 
 ```bash
-ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml
-ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml
-ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml -K
 ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true
 ```
 
@@ -119,28 +89,88 @@ You can then run the project install automation again with the secrets in the va
 ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e @~/.local/src/ActiveLearningStudio-API/vault/$USER-local --vault-id @prompt
 ```
 
-# Configure Eclipse
+# Install SquirrelSQL to connect to the Moonshots database
 
-## Install the Maven plugin for Eclipse
+## Setup the Ansible Galaxy roles for installing the complete project locally. 
 
-* In Eclipse, go to Help -> Eclipse Marketplace...
-* Install "Maven Integration for Eclipse"
+```bash
+git clone git@github.com:computate-org/computate_squirrelsql.git ~/.ansible/roles/computate.computate_squirrelsql
+```
 
-## Import the ActiveLearningStudio-API project into Eclipse
+## Run the Ansible Galaxy roles to install the complete project locally. 
 
-* In Eclipse, go to File -> Import...
+```bash
+ansible-playbook ~/.ansible/roles/computate.computate_squirrelsql/install.yml
+```
+
+## Setup Drivers and Connections in SquirreL SQL
+
+### Setup a MySQL driver
+
+* Download the "Platform Independent" driver here: https://dev.mysql.com/downloads/connector/j/
+* Extract the mysql-connector-java-8.0.27.jar to this directory: ~/.local/opt/squirrel-sql/lib
+* In SQuirreL SQL, click the Drivers tab, then double click on "MySQL Driver"
+* Click the "Extra Class Path" tab and add this file: ~/.local/opt/squirrel-sql/lib/mysql-connector-java-8.0.27.jar
+
+### Setup a MySQL connection
+
+* In the Aliases tab, click the [ + ] button.
+* Provide a name for your connection and enter the JDBC URL to your MySQL database, the username and password (Please reach out to the team for information to connect to the moonshots database).
+* Click [ Test ] button to test the connection, then click [ Connect ] to connect.
+
+# Configure Red Hat CodeReady Studio
+
+You can download Red Hat Code Ready Studio here: 
+
+https://developers.redhat.com/products/codeready-studio/download
+
+You will want to create a Red Hat account if you do not already have one. 
+
+After you download CodeReady Studio, create a directory for it and install it with this command: 
+
+```bash
+install -d ~/.local/opt/codereadystudio
+java -jar ~/Downloads/codereadystudio-*-installer-standalone.jar
+```
+
+You can use the default installation settings. I suggest to install CodeReady Studio in your in $HOME/.local/opt/codereadystudio
+
+When you run CodeReady Studio, I suggest you create your workspace here: ~/.local/src
+
+## Install these update sites: 
+
+In CodeReady Studio, go to Help -> Install New Software...
+
+Add these update sites and install these useful plugins: 
+
+### Vrapper Vim Plugin
+- http://vrapper.sourceforge.net/update-site/stable
+    - Choose the "Vrapper" plugin if you want to be able to edit code with Vim commands
+    - Vrapper keys to unbind in Window -> Preferences -> General -> Keys: 
+        - ctrl+d, ctrl+u, ctrl+r, shift+ctrl+v, alt+v
+    - Vrapper keys to set: 
+        - and search for "Vrapper" and set the keys to alt+v
+
+### DevStyle for dark theme
+
+- http://www.genuitec.com/updates/devstyle/ci/
+    - Choose "DevStyle Features" for themes
+
+## Import the ActiveLearningStudio-API project into CodeReady Studio
+
+* In CodeReady Studio, go to File -> Import...
 * Select Maven -> Existing Maven Projects
 * Click [ Next > ]
 * Browse to the directory: ~/.local/src/ActiveLearningStudio-API
 * Click [ Finish ]
 
-## Setup an Eclipse Debug/Run configuration to run and debug ActiveLearningStudio-API
+## Setup a CodeReady Studio Debug/Run configuration to run and debug ActiveLearningStudio-API
 
-* In Eclipse, go to File -> Debug Configurations...
+* In CodeReady Studio, go to File -> Debug Configurations...
 * Right click on Java Application -> New Configuration
 * Name: ActiveLearningStudio-API MainVerticle
 * Project: ActiveLearningStudio-API
-* Main class: org.ActiveLearningStudio-API.ActiveLearningStudio-API.enus.verticle.PhenomenalVerticle
+* Main class: org.curriki.api.enus.vertx.MainVerticle
 
 ### In the "Arguments" tab
 
@@ -154,13 +184,8 @@ Setup the following VM arguments to disable caching for easier web development:
 
 Setup the following variables to setup the Vert.x verticle. 
 
-* CLUSTER_PORT: 10991
 * CONFIG_PATH: ~/.local/src/ActiveLearningStudio-API/config/ActiveLearningStudio-API.yml
-* SITE_INSTANCES: 5
 * VERTXWEB_ENVIRONMENT: dev
-* WORKER_POOL_SIZE: 2
-* ZOOKEEPER_HOST_NAME: localhost
-* ZOOKEEPER_PORT: 2181
 
 Click [ Apply ] and [ Debug ] to debug the application. 
 
