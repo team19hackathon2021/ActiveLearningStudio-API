@@ -5,6 +5,7 @@
 
 ```bash
 pkcon install -y git
+pkcon install -y python3
 pkcon install -y python3-pip
 pkcon install -y python3-virtualenv
 ```
@@ -86,9 +87,9 @@ git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/co
 ## Run the Ansible Galaxy roles to install the complete project locally. 
 
 ```bash
-ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml
-ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml
-ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml
+ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml -K
 ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true
 ```
 
