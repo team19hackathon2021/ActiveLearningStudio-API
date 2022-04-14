@@ -36,34 +36,6 @@ pip install --upgrade pip
 pip install ansible
 ```
 
-## Install dependencies on Linux
-
-```bash
-pkcon install -y maven
-pkcon install -y gcc
-pkcon install -y make
-pkcon install -y git
-pkcon install -y bison
-pkcon install -y flex
-pkcon install -y readline-devel
-pkcon install -y zlib-devel
-pkcon install -y systemd-devel
-pkcon install -y libxml2-devel
-pkcon install -y libxslt-devel
-pkcon install -y openssl-devel
-pkcon install -y perl-core
-pkcon install -y libselinux-devel
-pkcon install -y container-selinux
-pkcon install -y java-1.8.0-openjdk
-pkcon install -y java-11-openjdk
-```
-
-## Install dependencies on MacOSX
-
-```bash
-brew install maven
-```
-
 # Setup the project
 ```
 
@@ -116,6 +88,35 @@ You can then run the project install automation again with the secrets in the va
 ```bash
 ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true -e @~/.local/src/ActiveLearningStudio-API/vault/$USER-local --vault-id @prompt
 ```
+
+# Install SquirrelSQL to connect to the Moonshots database
+
+## Setup the Ansible Galaxy roles for installing the complete project locally. 
+
+```bash
+git clone git@github.com:computate-org/computate_squirrelsql.git ~/.ansible/roles/computate.computate_squirrelsql
+```
+
+## Run the Ansible Galaxy roles to install the complete project locally. 
+
+```bash
+ansible-playbook ~/.ansible/roles/computate.computate_squirrelsql/install.yml
+```
+
+## Setup Drivers and Connections in SquirreL SQL
+
+### Setup a MySQL driver
+
+* Download the "Platform Independent" driver here: https://dev.mysql.com/downloads/connector/j/
+* Extract the mysql-connector-java-8.0.27.jar to this directory: ~/.local/opt/squirrel-sql/lib
+* In SQuirreL SQL, click the Drivers tab, then double click on "MySQL Driver"
+* Click the "Extra Class Path" tab and add this file: ~/.local/opt/squirrel-sql/lib/mysql-connector-java-8.0.27.jar
+
+### Setup a MySQL connection
+
+* In the Aliases tab, click the [ + ] button.
+* Provide a name for your connection and enter the JDBC URL to your MySQL database, the username and password (Please reach out to the team for information to connect to the moonshots database).
+* Click [ Test ] button to test the connection, then click [ Connect ] to connect.
 
 # Configure Red Hat CodeReady Studio
 
@@ -183,13 +184,8 @@ Setup the following VM arguments to disable caching for easier web development:
 
 Setup the following variables to setup the Vert.x verticle. 
 
-* CLUSTER_PORT: 10991
 * CONFIG_PATH: ~/.local/src/ActiveLearningStudio-API/config/ActiveLearningStudio-API.yml
-* SITE_INSTANCES: 5
 * VERTXWEB_ENVIRONMENT: dev
-* WORKER_POOL_SIZE: 2
-* ZOOKEEPER_HOST_NAME: localhost
-* ZOOKEEPER_PORT: 2181
 
 Click [ Apply ] and [ Debug ] to debug the application. 
 

@@ -70,8 +70,8 @@ PROJECTS:
         template: license/DCO
       - path: "{{ PROJECT_SRC }}/LICENSE"
         template: license/LICENSE
-      - path: "{{ PROJECT_SRC }}/README.md"
-        template: local/README.md
+#      - path: "{{ PROJECT_SRC }}/README.md"
+#        template: local/README.md
       - path: "{{ PROJECT_SRC }}-static/js/jQuery-Autocomplete/jquery.autocomplete.js"
         template: js/jQuery-Autocomplete/jquery.autocomplete.js
       - path: "{{ PROJECT_SRC }}-static/js/jQuery-Autocomplete/license.txt"
