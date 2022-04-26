@@ -1,66 +1,65 @@
 package org.curriki.api.enus.model.base;
 
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.base.BaseModel;
-import org.computate.vertx.api.ApiRequest;
-import org.curriki.api.enus.config.ConfigKeys;
-import java.util.Optional;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.math.MathContext;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.math.RoundingMode;
-import java.util.Map;
-import java.lang.Object;
-import java.lang.Long;
-import java.lang.String;
-import java.time.ZonedDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import org.curriki.api.enus.base.BaseModel;
 import java.util.Date;
-import java.time.format.DateTimeFormatter;
-import java.time.Instant;
+import java.time.ZonedDateTime;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import java.lang.Long;
 import java.util.Locale;
-import java.time.OffsetDateTime;
-import java.lang.Boolean;
-import io.vertx.core.json.JsonArray;
-import org.computate.search.wrap.Wrap;
-import io.vertx.core.Promise;
+import java.util.Map;
+import java.time.ZoneOffset;
+import java.math.RoundingMode;
+import java.math.MathContext;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.Instant;
 import io.vertx.core.Future;
+import java.time.ZoneId;
+import java.util.Objects;
+import java.util.List;
+import java.time.OffsetDateTime;
+import org.apache.solr.client.solrj.SolrQuery;
+import java.util.Optional;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.solr.common.SolrInputDocument;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.computate.search.response.solr.SolrResponse;
-import io.vertx.core.json.JsonObject;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.curriki.api.enus.request.api.ApiRequest;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.curriki.api.enus.wrap.Wrap;
+import org.curriki.api.enus.java.ZonedDateTimeDeserializer;
+import org.apache.commons.collections.CollectionUtils;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.Boolean;
+import org.curriki.api.enus.java.ZonedDateTimeSerializer;
+import java.lang.String;
+import org.slf4j.Logger;
+import io.vertx.core.Promise;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.commons.text.StringEscapeUtils;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.curriki.api.enus.config.ConfigKeys;
+import org.apache.solr.client.solrj.SolrClient;
+import io.vertx.core.json.JsonArray;
+import org.apache.solr.common.SolrDocument;
+import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
+import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import java.lang.Object;
+import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel">Find the class BaseModel in Solr. </a>
- * <br><br>Delete the class BaseModel in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.model.base in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.base&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project ActiveLearningStudio-API in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br/>
  **/
 public abstract class BaseModelGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseModel.class);
@@ -77,10 +76,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br> The entity siteRequest_
+	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> w);
@@ -116,10 +115,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br> The entity pk
+	/**	<br/> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> w);
@@ -149,16 +148,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static Long staticSearchPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSearchStrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPk(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrPk(siteRequest_, BaseModel.staticSearchPk(siteRequest_, BaseModel.staticSetPk(siteRequest_, o)));
+	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPk(siteRequest_, BaseModel.staticSolrPk(siteRequest_, BaseModel.staticSetPk(siteRequest_, o)));
 	}
 
 	///////////////
@@ -172,10 +171,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String inheritPk;
 
-	/**	<br> The entity inheritPk
+	/**	<br/> The entity inheritPk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:inheritPk">Find the entity inheritPk in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:inheritPk">Find the entity inheritPk in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _inheritPk(Wrap<String> w);
@@ -198,20 +197,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchInheritPk(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrInheritPk(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrInheritPk(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrInheritPk(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqInheritPk(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrInheritPk(siteRequest_, BaseModel.staticSearchInheritPk(siteRequest_, BaseModel.staticSetInheritPk(siteRequest_, o)));
-	}
-
-	public String sqlInheritPk() {
-		return inheritPk;
+	public static String staticSolrFqInheritPk(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrInheritPk(siteRequest_, BaseModel.staticSolrInheritPk(siteRequest_, BaseModel.staticSetInheritPk(siteRequest_, o)));
 	}
 
 	/////////////
@@ -222,16 +217,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime created;
 
-	/**	<br> The entity created
+	/**	<br/> The entity created
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _created(Wrap<ZonedDateTime> w);
@@ -253,8 +248,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		this.created = BaseModel.staticSetCreated(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetCreated(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -273,20 +266,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static Date staticSearchCreated(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrCreated(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrCreated(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrCreated(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqCreated(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrCreated(siteRequest_, BaseModel.staticSearchCreated(siteRequest_, BaseModel.staticSetCreated(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlCreated() {
-		return created == null ? null : created.toOffsetDateTime();
+	public static String staticSolrFqCreated(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrCreated(siteRequest_, BaseModel.staticSolrCreated(siteRequest_, BaseModel.staticSetCreated(siteRequest_, o)));
 	}
 
 	//////////////
@@ -297,16 +286,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime modified;
 
-	/**	<br> The entity modified
+	/**	<br/> The entity modified
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:modified">Find the entity modified in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:modified">Find the entity modified in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _modified(Wrap<ZonedDateTime> w);
@@ -328,8 +317,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		this.modified = BaseModel.staticSetModified(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetModified(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -348,16 +335,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static Date staticSearchModified(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrModified(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrModified(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrModified(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqModified(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrModified(siteRequest_, BaseModel.staticSearchModified(siteRequest_, BaseModel.staticSetModified(siteRequest_, o)));
+	public static String staticSolrFqModified(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrModified(siteRequest_, BaseModel.staticSolrModified(siteRequest_, BaseModel.staticSetModified(siteRequest_, o)));
 	}
 
 	//////////////
@@ -371,10 +358,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean archived;
 
-	/**	<br> The entity archived
+	/**	<br/> The entity archived
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:archived">Find the entity archived in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:archived">Find the entity archived in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _archived(Wrap<Boolean> w);
@@ -402,20 +389,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static Boolean staticSearchArchived(SiteRequestEnUS siteRequest_, Boolean o) {
+	public static Boolean staticSolrArchived(SiteRequestEnUS siteRequest_, Boolean o) {
 		return o;
 	}
 
-	public static String staticSearchStrArchived(SiteRequestEnUS siteRequest_, Boolean o) {
+	public static String staticSolrStrArchived(SiteRequestEnUS siteRequest_, Boolean o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqArchived(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrArchived(siteRequest_, BaseModel.staticSearchArchived(siteRequest_, BaseModel.staticSetArchived(siteRequest_, o)));
-	}
-
-	public Boolean sqlArchived() {
-		return archived;
+	public static String staticSolrFqArchived(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrArchived(siteRequest_, BaseModel.staticSolrArchived(siteRequest_, BaseModel.staticSetArchived(siteRequest_, o)));
 	}
 
 	/////////////
@@ -429,10 +412,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean deleted;
 
-	/**	<br> The entity deleted
+	/**	<br/> The entity deleted
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:deleted">Find the entity deleted in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deleted">Find the entity deleted in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _deleted(Wrap<Boolean> w);
@@ -460,20 +443,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static Boolean staticSearchDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
+	public static Boolean staticSolrDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
 		return o;
 	}
 
-	public static String staticSearchStrDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
+	public static String staticSolrStrDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDeleted(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrDeleted(siteRequest_, BaseModel.staticSearchDeleted(siteRequest_, BaseModel.staticSetDeleted(siteRequest_, o)));
-	}
-
-	public Boolean sqlDeleted() {
-		return deleted;
+	public static String staticSolrFqDeleted(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrDeleted(siteRequest_, BaseModel.staticSolrDeleted(siteRequest_, BaseModel.staticSetDeleted(siteRequest_, o)));
 	}
 
 	////////////////////////
@@ -487,10 +466,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String classCanonicalName;
 
-	/**	<br> The entity classCanonicalName
+	/**	<br/> The entity classCanonicalName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:classCanonicalName">Find the entity classCanonicalName in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalName">Find the entity classCanonicalName in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _classCanonicalName(Wrap<String> w);
@@ -513,16 +492,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrClassCanonicalName(siteRequest_, BaseModel.staticSearchClassCanonicalName(siteRequest_, BaseModel.staticSetClassCanonicalName(siteRequest_, o)));
+	public static String staticSolrFqClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrClassCanonicalName(siteRequest_, BaseModel.staticSolrClassCanonicalName(siteRequest_, BaseModel.staticSetClassCanonicalName(siteRequest_, o)));
 	}
 
 	/////////////////////
@@ -536,10 +515,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String classSimpleName;
 
-	/**	<br> The entity classSimpleName
+	/**	<br/> The entity classSimpleName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _classSimpleName(Wrap<String> w);
@@ -562,16 +541,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrClassSimpleName(siteRequest_, BaseModel.staticSearchClassSimpleName(siteRequest_, BaseModel.staticSetClassSimpleName(siteRequest_, o)));
+	public static String staticSolrFqClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrClassSimpleName(siteRequest_, BaseModel.staticSolrClassSimpleName(siteRequest_, BaseModel.staticSetClassSimpleName(siteRequest_, o)));
 	}
 
 	/////////////////////////
@@ -579,18 +558,18 @@ public abstract class BaseModelGen<DEV> extends Object {
 	/////////////////////////
 
 	/**	 The entity classCanonicalNames
-	 *	 It is constructed before being initialized with the constructor by default. 
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> classCanonicalNames = new ArrayList<String>();
 
-	/**	<br> The entity classCanonicalNames
-	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
-	 * <br>
-	 * @param l is the entity already constructed. 
+	/**	<br/> The entity classCanonicalNames
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
+	 * <br/>
+	 * @param classCanonicalNames is the entity already constructed. 
 	 **/
 	protected abstract void _classCanonicalNames(List<String> l);
 
@@ -628,16 +607,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrClassCanonicalNames(siteRequest_, BaseModel.staticSearchClassCanonicalNames(siteRequest_, BaseModel.staticSetClassCanonicalNames(siteRequest_, o)));
+	public static String staticSolrFqClassCanonicalNames(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrClassCanonicalNames(siteRequest_, BaseModel.staticSolrClassCanonicalNames(siteRequest_, BaseModel.staticSetClassCanonicalNames(siteRequest_, o)));
 	}
 
 	///////////////
@@ -651,10 +630,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String sessionId;
 
-	/**	<br> The entity sessionId
+	/**	<br/> The entity sessionId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _sessionId(Wrap<String> w);
@@ -677,20 +656,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchSessionId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSessionId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSessionId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSessionId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSessionId(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrSessionId(siteRequest_, BaseModel.staticSearchSessionId(siteRequest_, BaseModel.staticSetSessionId(siteRequest_, o)));
-	}
-
-	public String sqlSessionId() {
-		return sessionId;
+	public static String staticSolrFqSessionId(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrSessionId(siteRequest_, BaseModel.staticSolrSessionId(siteRequest_, BaseModel.staticSetSessionId(siteRequest_, o)));
 	}
 
 	/////////////
@@ -705,10 +680,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long userKey;
 
-	/**	<br> The entity userKey
+	/**	<br/> The entity userKey
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
+	 * <br/>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userKey(Wrap<Long> c);
@@ -738,20 +713,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static Long staticSearchUserKey(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSolrUserKey(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSearchStrUserKey(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSolrStrUserKey(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqUserKey(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrUserKey(siteRequest_, BaseModel.staticSearchUserKey(siteRequest_, BaseModel.staticSetUserKey(siteRequest_, o)));
-	}
-
-	public Long sqlUserKey() {
-		return userKey;
+	public static String staticSolrFqUserKey(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrUserKey(siteRequest_, BaseModel.staticSolrUserKey(siteRequest_, BaseModel.staticSetUserKey(siteRequest_, o)));
 	}
 
 	///////////
@@ -759,18 +730,18 @@ public abstract class BaseModelGen<DEV> extends Object {
 	///////////
 
 	/**	 The entity saves
-	 *	 It is constructed before being initialized with the constructor by default. 
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> saves = new ArrayList<String>();
 
-	/**	<br> The entity saves
-	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
-	 * <br>
-	 * @param l is the entity already constructed. 
+	/**	<br/> The entity saves
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
+	 * <br/>
+	 * @param saves is the entity already constructed. 
 	 **/
 	protected abstract void _saves(List<String> l);
 
@@ -808,16 +779,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchSaves(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSaves(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSaves(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSaves(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSaves(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrSaves(siteRequest_, BaseModel.staticSearchSaves(siteRequest_, BaseModel.staticSetSaves(siteRequest_, o)));
+	public static String staticSolrFqSaves(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrSaves(siteRequest_, BaseModel.staticSolrSaves(siteRequest_, BaseModel.staticSetSaves(siteRequest_, o)));
 	}
 
 	/////////////////
@@ -831,10 +802,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectTitle;
 
-	/**	<br> The entity objectTitle
+	/**	<br/> The entity objectTitle
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:objectTitle">Find the entity objectTitle in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectTitle">Find the entity objectTitle in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectTitle(Wrap<String> w);
@@ -857,16 +828,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchObjectTitle(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrObjectTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrObjectTitle(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrObjectTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqObjectTitle(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrObjectTitle(siteRequest_, BaseModel.staticSearchObjectTitle(siteRequest_, BaseModel.staticSetObjectTitle(siteRequest_, o)));
+	public static String staticSolrFqObjectTitle(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrObjectTitle(siteRequest_, BaseModel.staticSolrObjectTitle(siteRequest_, BaseModel.staticSetObjectTitle(siteRequest_, o)));
 	}
 
 	//////////////
@@ -880,10 +851,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectId;
 
-	/**	<br> The entity objectId
+	/**	<br/> The entity objectId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectId(Wrap<String> w);
@@ -906,16 +877,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchObjectId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrObjectId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrObjectId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrObjectId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqObjectId(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrObjectId(siteRequest_, BaseModel.staticSearchObjectId(siteRequest_, BaseModel.staticSetObjectId(siteRequest_, o)));
+	public static String staticSolrFqObjectId(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrObjectId(siteRequest_, BaseModel.staticSolrObjectId(siteRequest_, BaseModel.staticSetObjectId(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -929,10 +900,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectNameVar;
 
-	/**	<br> The entity objectNameVar
+	/**	<br/> The entity objectNameVar
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:objectNameVar">Find the entity objectNameVar in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectNameVar">Find the entity objectNameVar in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectNameVar(Wrap<String> w);
@@ -955,16 +926,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrObjectNameVar(siteRequest_, BaseModel.staticSearchObjectNameVar(siteRequest_, BaseModel.staticSetObjectNameVar(siteRequest_, o)));
+	public static String staticSolrFqObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrObjectNameVar(siteRequest_, BaseModel.staticSolrObjectNameVar(siteRequest_, BaseModel.staticSetObjectNameVar(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -978,10 +949,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectSuggest;
 
-	/**	<br> The entity objectSuggest
+	/**	<br/> The entity objectSuggest
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectSuggest(Wrap<String> w);
@@ -1004,16 +975,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrObjectSuggest(siteRequest_, BaseModel.staticSearchObjectSuggest(siteRequest_, BaseModel.staticSetObjectSuggest(siteRequest_, o)));
+	public static String staticSolrFqObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrObjectSuggest(siteRequest_, BaseModel.staticSolrObjectSuggest(siteRequest_, BaseModel.staticSetObjectSuggest(siteRequest_, o)));
 	}
 
 	////////////////
@@ -1027,10 +998,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectText;
 
-	/**	<br> The entity objectText
+	/**	<br/> The entity objectText
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectText(Wrap<String> w);
@@ -1053,16 +1024,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchObjectText(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrObjectText(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrObjectText(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrObjectText(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqObjectText(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrObjectText(siteRequest_, BaseModel.staticSearchObjectText(siteRequest_, BaseModel.staticSetObjectText(siteRequest_, o)));
+	public static String staticSolrFqObjectText(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrObjectText(siteRequest_, BaseModel.staticSolrObjectText(siteRequest_, BaseModel.staticSetObjectText(siteRequest_, o)));
 	}
 
 	///////////////
@@ -1076,10 +1047,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrlId;
 
-	/**	<br> The entity pageUrlId
+	/**	<br/> The entity pageUrlId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrlId(Wrap<String> w);
@@ -1102,16 +1073,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPageUrlId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPageUrlId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPageUrlId(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrPageUrlId(siteRequest_, BaseModel.staticSearchPageUrlId(siteRequest_, BaseModel.staticSetPageUrlId(siteRequest_, o)));
+	public static String staticSolrFqPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPageUrlId(siteRequest_, BaseModel.staticSolrPageUrlId(siteRequest_, BaseModel.staticSetPageUrlId(siteRequest_, o)));
 	}
 
 	///////////////
@@ -1125,10 +1096,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrlPk;
 
-	/**	<br> The entity pageUrlPk
+	/**	<br/> The entity pageUrlPk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrlPk(Wrap<String> w);
@@ -1151,16 +1122,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrPageUrlPk(siteRequest_, BaseModel.staticSearchPageUrlPk(siteRequest_, BaseModel.staticSetPageUrlPk(siteRequest_, o)));
+	public static String staticSolrFqPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPageUrlPk(siteRequest_, BaseModel.staticSolrPageUrlPk(siteRequest_, BaseModel.staticSetPageUrlPk(siteRequest_, o)));
 	}
 
 	////////////////
@@ -1174,10 +1145,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrlApi;
 
-	/**	<br> The entity pageUrlApi
+	/**	<br/> The entity pageUrlApi
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrlApi(Wrap<String> w);
@@ -1200,16 +1171,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrPageUrlApi(siteRequest_, BaseModel.staticSearchPageUrlApi(siteRequest_, BaseModel.staticSetPageUrlApi(siteRequest_, o)));
+	public static String staticSolrFqPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPageUrlApi(siteRequest_, BaseModel.staticSolrPageUrlApi(siteRequest_, BaseModel.staticSetPageUrlApi(siteRequest_, o)));
 	}
 
 	////////
@@ -1223,10 +1194,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String id;
 
-	/**	<br> The entity id
+	/**	<br/> The entity id
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _id(Wrap<String> w);
@@ -1249,16 +1220,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 
-	public static String staticSearchId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqId(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSearchStrId(siteRequest_, BaseModel.staticSearchId(siteRequest_, BaseModel.staticSetId(siteRequest_, o)));
+	public static String staticSolrFqId(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrId(siteRequest_, BaseModel.staticSolrId(siteRequest_, BaseModel.staticSetId(siteRequest_, o)));
 	}
 
 	//////////////
@@ -1491,234 +1462,194 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 
 	////////////////
-	// staticSearch //
+	// staticSolr //
 	////////////////
 
-	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchBaseModel(entityVar,  siteRequest_, o);
+	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrBaseModel(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSearchBaseModel(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSolrBaseModel(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "pk":
-			return BaseModel.staticSearchPk(siteRequest_, (Long)o);
+			return BaseModel.staticSolrPk(siteRequest_, (Long)o);
 		case "inheritPk":
-			return BaseModel.staticSearchInheritPk(siteRequest_, (String)o);
+			return BaseModel.staticSolrInheritPk(siteRequest_, (String)o);
 		case "created":
-			return BaseModel.staticSearchCreated(siteRequest_, (ZonedDateTime)o);
+			return BaseModel.staticSolrCreated(siteRequest_, (ZonedDateTime)o);
 		case "modified":
-			return BaseModel.staticSearchModified(siteRequest_, (ZonedDateTime)o);
+			return BaseModel.staticSolrModified(siteRequest_, (ZonedDateTime)o);
 		case "archived":
-			return BaseModel.staticSearchArchived(siteRequest_, (Boolean)o);
+			return BaseModel.staticSolrArchived(siteRequest_, (Boolean)o);
 		case "deleted":
-			return BaseModel.staticSearchDeleted(siteRequest_, (Boolean)o);
+			return BaseModel.staticSolrDeleted(siteRequest_, (Boolean)o);
 		case "classCanonicalName":
-			return BaseModel.staticSearchClassCanonicalName(siteRequest_, (String)o);
+			return BaseModel.staticSolrClassCanonicalName(siteRequest_, (String)o);
 		case "classSimpleName":
-			return BaseModel.staticSearchClassSimpleName(siteRequest_, (String)o);
+			return BaseModel.staticSolrClassSimpleName(siteRequest_, (String)o);
 		case "classCanonicalNames":
-			return BaseModel.staticSearchClassCanonicalNames(siteRequest_, (String)o);
+			return BaseModel.staticSolrClassCanonicalNames(siteRequest_, (String)o);
 		case "sessionId":
-			return BaseModel.staticSearchSessionId(siteRequest_, (String)o);
+			return BaseModel.staticSolrSessionId(siteRequest_, (String)o);
 		case "userKey":
-			return BaseModel.staticSearchUserKey(siteRequest_, (Long)o);
+			return BaseModel.staticSolrUserKey(siteRequest_, (Long)o);
 		case "saves":
-			return BaseModel.staticSearchSaves(siteRequest_, (String)o);
+			return BaseModel.staticSolrSaves(siteRequest_, (String)o);
 		case "objectTitle":
-			return BaseModel.staticSearchObjectTitle(siteRequest_, (String)o);
+			return BaseModel.staticSolrObjectTitle(siteRequest_, (String)o);
 		case "objectId":
-			return BaseModel.staticSearchObjectId(siteRequest_, (String)o);
+			return BaseModel.staticSolrObjectId(siteRequest_, (String)o);
 		case "objectNameVar":
-			return BaseModel.staticSearchObjectNameVar(siteRequest_, (String)o);
+			return BaseModel.staticSolrObjectNameVar(siteRequest_, (String)o);
 		case "objectSuggest":
-			return BaseModel.staticSearchObjectSuggest(siteRequest_, (String)o);
+			return BaseModel.staticSolrObjectSuggest(siteRequest_, (String)o);
 		case "objectText":
-			return BaseModel.staticSearchObjectText(siteRequest_, (String)o);
+			return BaseModel.staticSolrObjectText(siteRequest_, (String)o);
 		case "pageUrlId":
-			return BaseModel.staticSearchPageUrlId(siteRequest_, (String)o);
+			return BaseModel.staticSolrPageUrlId(siteRequest_, (String)o);
 		case "pageUrlPk":
-			return BaseModel.staticSearchPageUrlPk(siteRequest_, (String)o);
+			return BaseModel.staticSolrPageUrlPk(siteRequest_, (String)o);
 		case "pageUrlApi":
-			return BaseModel.staticSearchPageUrlApi(siteRequest_, (String)o);
+			return BaseModel.staticSolrPageUrlApi(siteRequest_, (String)o);
 		case "id":
-			return BaseModel.staticSearchId(siteRequest_, (String)o);
+			return BaseModel.staticSolrId(siteRequest_, (String)o);
 			default:
 				return null;
 		}
 	}
 
 	///////////////////
-	// staticSearchStr //
+	// staticSolrStr //
 	///////////////////
 
-	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchStrBaseModel(entityVar,  siteRequest_, o);
+	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrStrBaseModel(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchStrBaseModel(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSolrStrBaseModel(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "pk":
-			return BaseModel.staticSearchStrPk(siteRequest_, (Long)o);
+			return BaseModel.staticSolrStrPk(siteRequest_, (Long)o);
 		case "inheritPk":
-			return BaseModel.staticSearchStrInheritPk(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrInheritPk(siteRequest_, (String)o);
 		case "created":
-			return BaseModel.staticSearchStrCreated(siteRequest_, (Date)o);
+			return BaseModel.staticSolrStrCreated(siteRequest_, (Date)o);
 		case "modified":
-			return BaseModel.staticSearchStrModified(siteRequest_, (Date)o);
+			return BaseModel.staticSolrStrModified(siteRequest_, (Date)o);
 		case "archived":
-			return BaseModel.staticSearchStrArchived(siteRequest_, (Boolean)o);
+			return BaseModel.staticSolrStrArchived(siteRequest_, (Boolean)o);
 		case "deleted":
-			return BaseModel.staticSearchStrDeleted(siteRequest_, (Boolean)o);
+			return BaseModel.staticSolrStrDeleted(siteRequest_, (Boolean)o);
 		case "classCanonicalName":
-			return BaseModel.staticSearchStrClassCanonicalName(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrClassCanonicalName(siteRequest_, (String)o);
 		case "classSimpleName":
-			return BaseModel.staticSearchStrClassSimpleName(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrClassSimpleName(siteRequest_, (String)o);
 		case "classCanonicalNames":
-			return BaseModel.staticSearchStrClassCanonicalNames(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrClassCanonicalNames(siteRequest_, (String)o);
 		case "sessionId":
-			return BaseModel.staticSearchStrSessionId(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrSessionId(siteRequest_, (String)o);
 		case "userKey":
-			return BaseModel.staticSearchStrUserKey(siteRequest_, (Long)o);
+			return BaseModel.staticSolrStrUserKey(siteRequest_, (Long)o);
 		case "saves":
-			return BaseModel.staticSearchStrSaves(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrSaves(siteRequest_, (String)o);
 		case "objectTitle":
-			return BaseModel.staticSearchStrObjectTitle(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrObjectTitle(siteRequest_, (String)o);
 		case "objectId":
-			return BaseModel.staticSearchStrObjectId(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrObjectId(siteRequest_, (String)o);
 		case "objectNameVar":
-			return BaseModel.staticSearchStrObjectNameVar(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrObjectNameVar(siteRequest_, (String)o);
 		case "objectSuggest":
-			return BaseModel.staticSearchStrObjectSuggest(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrObjectSuggest(siteRequest_, (String)o);
 		case "objectText":
-			return BaseModel.staticSearchStrObjectText(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrObjectText(siteRequest_, (String)o);
 		case "pageUrlId":
-			return BaseModel.staticSearchStrPageUrlId(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrPageUrlId(siteRequest_, (String)o);
 		case "pageUrlPk":
-			return BaseModel.staticSearchStrPageUrlPk(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrPageUrlPk(siteRequest_, (String)o);
 		case "pageUrlApi":
-			return BaseModel.staticSearchStrPageUrlApi(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrPageUrlApi(siteRequest_, (String)o);
 		case "id":
-			return BaseModel.staticSearchStrId(siteRequest_, (String)o);
+			return BaseModel.staticSolrStrId(siteRequest_, (String)o);
 			default:
 				return null;
 		}
 	}
 
 	//////////////////
-	// staticSearchFq //
+	// staticSolrFq //
 	//////////////////
 
-	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSearchFqBaseModel(entityVar,  siteRequest_, o);
+	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSolrFqBaseModel(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchFqBaseModel(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrFqBaseModel(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "pk":
-			return BaseModel.staticSearchFqPk(siteRequest_, o);
+			return BaseModel.staticSolrFqPk(siteRequest_, o);
 		case "inheritPk":
-			return BaseModel.staticSearchFqInheritPk(siteRequest_, o);
+			return BaseModel.staticSolrFqInheritPk(siteRequest_, o);
 		case "created":
-			return BaseModel.staticSearchFqCreated(siteRequest_, o);
+			return BaseModel.staticSolrFqCreated(siteRequest_, o);
 		case "modified":
-			return BaseModel.staticSearchFqModified(siteRequest_, o);
+			return BaseModel.staticSolrFqModified(siteRequest_, o);
 		case "archived":
-			return BaseModel.staticSearchFqArchived(siteRequest_, o);
+			return BaseModel.staticSolrFqArchived(siteRequest_, o);
 		case "deleted":
-			return BaseModel.staticSearchFqDeleted(siteRequest_, o);
+			return BaseModel.staticSolrFqDeleted(siteRequest_, o);
 		case "classCanonicalName":
-			return BaseModel.staticSearchFqClassCanonicalName(siteRequest_, o);
+			return BaseModel.staticSolrFqClassCanonicalName(siteRequest_, o);
 		case "classSimpleName":
-			return BaseModel.staticSearchFqClassSimpleName(siteRequest_, o);
+			return BaseModel.staticSolrFqClassSimpleName(siteRequest_, o);
 		case "classCanonicalNames":
-			return BaseModel.staticSearchFqClassCanonicalNames(siteRequest_, o);
+			return BaseModel.staticSolrFqClassCanonicalNames(siteRequest_, o);
 		case "sessionId":
-			return BaseModel.staticSearchFqSessionId(siteRequest_, o);
+			return BaseModel.staticSolrFqSessionId(siteRequest_, o);
 		case "userKey":
-			return BaseModel.staticSearchFqUserKey(siteRequest_, o);
+			return BaseModel.staticSolrFqUserKey(siteRequest_, o);
 		case "saves":
-			return BaseModel.staticSearchFqSaves(siteRequest_, o);
+			return BaseModel.staticSolrFqSaves(siteRequest_, o);
 		case "objectTitle":
-			return BaseModel.staticSearchFqObjectTitle(siteRequest_, o);
+			return BaseModel.staticSolrFqObjectTitle(siteRequest_, o);
 		case "objectId":
-			return BaseModel.staticSearchFqObjectId(siteRequest_, o);
+			return BaseModel.staticSolrFqObjectId(siteRequest_, o);
 		case "objectNameVar":
-			return BaseModel.staticSearchFqObjectNameVar(siteRequest_, o);
+			return BaseModel.staticSolrFqObjectNameVar(siteRequest_, o);
 		case "objectSuggest":
-			return BaseModel.staticSearchFqObjectSuggest(siteRequest_, o);
+			return BaseModel.staticSolrFqObjectSuggest(siteRequest_, o);
 		case "objectText":
-			return BaseModel.staticSearchFqObjectText(siteRequest_, o);
+			return BaseModel.staticSolrFqObjectText(siteRequest_, o);
 		case "pageUrlId":
-			return BaseModel.staticSearchFqPageUrlId(siteRequest_, o);
+			return BaseModel.staticSolrFqPageUrlId(siteRequest_, o);
 		case "pageUrlPk":
-			return BaseModel.staticSearchFqPageUrlPk(siteRequest_, o);
+			return BaseModel.staticSolrFqPageUrlPk(siteRequest_, o);
 		case "pageUrlApi":
-			return BaseModel.staticSearchFqPageUrlApi(siteRequest_, o);
+			return BaseModel.staticSolrFqPageUrlApi(siteRequest_, o);
 		case "id":
-			return BaseModel.staticSearchFqId(siteRequest_, o);
+			return BaseModel.staticSolrFqId(siteRequest_, o);
 			default:
 				return null;
 		}
 	}
 
 	/////////////
-	// persist //
+	// define //
 	/////////////
 
-	public boolean persistForClass(String var, Object val) {
+	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = persistBaseModel(v, val);
+					o = defineBaseModel(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.persistForClass(v, val);
+					o = oBaseModel.defineForClass(v, val);
 				}
 			}
 		}
 		return o != null;
 	}
-	public Object persistBaseModel(String var, Object val) {
+	public Object defineBaseModel(String var, Object val) {
 		switch(var.toLowerCase()) {
-			case "inheritpk":
-				if(val instanceof String)
-					setInheritPk((String)val);
-				saves.add("inheritPk");
-				return val;
-			case "created":
-				if(val instanceof ZonedDateTime)
-					setCreated((ZonedDateTime)val);
-				else if(val instanceof String)
-					setCreated((String)val);
-				else if(val instanceof OffsetDateTime)
-					setCreated(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("created");
-				return val;
-			case "archived":
-				if(val instanceof Boolean)
-					setArchived((Boolean)val);
-				else if(val instanceof String)
-					setArchived((String)val);
-				saves.add("archived");
-				return val;
-			case "deleted":
-				if(val instanceof Boolean)
-					setDeleted((Boolean)val);
-				else if(val instanceof String)
-					setDeleted((String)val);
-				saves.add("deleted");
-				return val;
-			case "sessionid":
-				if(val instanceof String)
-					setSessionId((String)val);
-				saves.add("sessionId");
-				return val;
-			case "userkey":
-				if(val instanceof Long)
-					setUserKey((Long)val);
-				else if(val instanceof String)
-					setUserKey((String)val);
-				saves.add("userKey");
-				return val;
 			default:
 				return null;
 		}
@@ -1728,128 +1659,81 @@ public abstract class BaseModelGen<DEV> extends Object {
 	// populate //
 	/////////////
 
-	public void populateForClass(SolrResponse.Doc doc) {
-		populateBaseModel(doc);
+	public void populateForClass(SolrDocument solrDocument) {
+		populateBaseModel(solrDocument);
 	}
-	public void populateBaseModel(SolrResponse.Doc doc) {
+	public void populateBaseModel(SolrDocument solrDocument) {
 		BaseModel oBaseModel = (BaseModel)this;
-		saves = doc.get("saves_docvalues_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 		}
 	}
 
-	public void indexBaseModel(JsonObject doc) {
+	public void indexBaseModel(SolrInputDocument document) {
 		if(pk != null) {
-			doc.put("pk_docvalues_long", pk);
+			document.addField("pk_docvalues_long", pk);
 		}
 		if(inheritPk != null) {
-			doc.put("inheritPk_docvalues_string", inheritPk);
+			document.addField("inheritPk_docvalues_string", inheritPk);
 		}
 		if(created != null) {
-			doc.put("created_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(created.toInstant(), ZoneId.of("UTC"))));
+			document.addField("created_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(created.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(modified != null) {
-			doc.put("modified_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(modified.toInstant(), ZoneId.of("UTC"))));
+			document.addField("modified_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(modified.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(archived != null) {
-			doc.put("archived_docvalues_boolean", archived);
+			document.addField("archived_docvalues_boolean", archived);
 		}
 		if(deleted != null) {
-			doc.put("deleted_docvalues_boolean", deleted);
+			document.addField("deleted_docvalues_boolean", deleted);
 		}
 		if(classCanonicalName != null) {
-			doc.put("classCanonicalName_docvalues_string", classCanonicalName);
+			document.addField("classCanonicalName_docvalues_string", classCanonicalName);
 		}
 		if(classSimpleName != null) {
-			doc.put("classSimpleName_docvalues_string", classSimpleName);
+			document.addField("classSimpleName_docvalues_string", classSimpleName);
 		}
 		if(classCanonicalNames != null) {
-			JsonArray l = new JsonArray();
-			doc.put("classCanonicalNames_docvalues_strings", l);
-			for(String o : classCanonicalNames) {
-				l.add(o);
+			for(java.lang.String o : classCanonicalNames) {
+				document.addField("classCanonicalNames_docvalues_strings", o);
 			}
 		}
 		if(sessionId != null) {
-			doc.put("sessionId_docvalues_string", sessionId);
+			document.addField("sessionId_docvalues_string", sessionId);
 		}
 		if(userKey != null) {
-			doc.put("userKey_docvalues_long", userKey);
+			document.addField("userKey_docvalues_long", userKey);
 		}
 		if(saves != null) {
-			JsonArray l = new JsonArray();
-			doc.put("saves_docvalues_strings", l);
-			for(String o : saves) {
-				l.add(o);
+			for(java.lang.String o : saves) {
+				document.addField("saves_docvalues_strings", o);
 			}
 		}
 		if(objectTitle != null) {
-			doc.put("objectTitle_docvalues_string", objectTitle);
+			document.addField("objectTitle_docvalues_string", objectTitle);
 		}
 		if(objectId != null) {
-			doc.put("objectId_docvalues_string", objectId);
+			document.addField("objectId_docvalues_string", objectId);
 		}
 		if(objectSuggest != null) {
-			doc.put("objectSuggest_suggested", objectSuggest);
+			document.addField("objectSuggest_suggested", objectSuggest);
 		}
 		if(objectText != null) {
-			doc.put("objectText_text_enUS", objectText.toString());
-			doc.put("objectText_docvalues_string", objectText);
+			document.addField("objectText_text_enUS", objectText.toString());
+			document.addField("objectText_docvalues_string", objectText);
 		}
 		if(pageUrlId != null) {
-			doc.put("pageUrlId_docvalues_string", pageUrlId);
+			document.addField("pageUrlId_docvalues_string", pageUrlId);
 		}
 		if(pageUrlPk != null) {
-			doc.put("pageUrlPk_docvalues_string", pageUrlPk);
+			document.addField("pageUrlPk_docvalues_string", pageUrlPk);
 		}
 		if(pageUrlApi != null) {
-			doc.put("pageUrlApi_docvalues_string", pageUrlApi);
+			document.addField("pageUrlApi_docvalues_string", pageUrlApi);
 		}
 		if(id != null) {
-			doc.put("id", id);
-		}
-	}
-
-	public static String varStoredBaseModel(String entityVar) {
-		switch(entityVar) {
-			case "pk":
-				return "pk_docvalues_long";
-			case "inheritPk":
-				return "inheritPk_docvalues_string";
-			case "created":
-				return "created_docvalues_date";
-			case "modified":
-				return "modified_docvalues_date";
-			case "archived":
-				return "archived_docvalues_boolean";
-			case "deleted":
-				return "deleted_docvalues_boolean";
-			case "classCanonicalName":
-				return "classCanonicalName_docvalues_string";
-			case "classSimpleName":
-				return "classSimpleName_docvalues_string";
-			case "classCanonicalNames":
-				return "classCanonicalNames_docvalues_strings";
-			case "sessionId":
-				return "sessionId_docvalues_string";
-			case "userKey":
-				return "userKey_docvalues_long";
-			case "saves":
-				return "saves_docvalues_strings";
-			case "objectTitle":
-				return "objectTitle_docvalues_string";
-			case "objectId":
-				return "objectId_docvalues_string";
-			case "objectText":
-				return "objectText_docvalues_string";
-			case "pageUrlId":
-				return "pageUrlId_docvalues_string";
-			case "pageUrlPk":
-				return "pageUrlPk_docvalues_string";
-			case "pageUrlApi":
-				return "pageUrlApi_docvalues_string";
-			default:
-				return null;
+			document.addField("id", id);
 		}
 	}
 
@@ -1924,37 +1808,37 @@ public abstract class BaseModelGen<DEV> extends Object {
 	// store //
 	/////////////
 
-	public void storeForClass(SolrResponse.Doc doc) {
-		storeBaseModel(doc);
+	public void storeForClass(SolrDocument solrDocument) {
+		storeBaseModel(solrDocument);
 	}
-	public void storeBaseModel(SolrResponse.Doc doc) {
+	public void storeBaseModel(SolrDocument solrDocument) {
 		BaseModel oBaseModel = (BaseModel)this;
 
-		oBaseModel.setPk(Optional.ofNullable(doc.get("pk_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setInheritPk(Optional.ofNullable(doc.get("inheritPk_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setCreated(Optional.ofNullable(doc.get("created_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setModified(Optional.ofNullable(doc.get("modified_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setArchived(Optional.ofNullable(doc.get("archived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setDeleted(Optional.ofNullable(doc.get("deleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setClassCanonicalName(Optional.ofNullable(doc.get("classCanonicalName_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setClassSimpleName(Optional.ofNullable(doc.get("classSimpleName_docvalues_string")).map(v -> v.toString()).orElse(null));
-		Optional.ofNullable((List<?>)doc.get("classCanonicalNames_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		oBaseModel.setPk(Optional.ofNullable(solrDocument.get("pk_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setInheritPk(Optional.ofNullable(solrDocument.get("inheritPk_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setCreated(Optional.ofNullable(solrDocument.get("created_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setModified(Optional.ofNullable(solrDocument.get("modified_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setArchived(Optional.ofNullable(solrDocument.get("archived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setDeleted(Optional.ofNullable(solrDocument.get("deleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setClassCanonicalName(Optional.ofNullable(solrDocument.get("classCanonicalName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setClassSimpleName(Optional.ofNullable(solrDocument.get("classSimpleName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)solrDocument.get("classCanonicalNames_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oBaseModel.addClassCanonicalNames(v.toString());
 		});
-		oBaseModel.setSessionId(Optional.ofNullable(doc.get("sessionId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setUserKey(Optional.ofNullable(doc.get("userKey_docvalues_long")).map(v -> v.toString()).orElse(null));
-		Optional.ofNullable((List<?>)doc.get("saves_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		oBaseModel.setSessionId(Optional.ofNullable(solrDocument.get("sessionId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setUserKey(Optional.ofNullable(solrDocument.get("userKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)solrDocument.get("saves_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oBaseModel.addSaves(v.toString());
 		});
-		oBaseModel.setObjectTitle(Optional.ofNullable(doc.get("objectTitle_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setObjectId(Optional.ofNullable(doc.get("objectId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		String objectSuggest = (String)doc.get("objectSuggest_suggested");
+		oBaseModel.setObjectTitle(Optional.ofNullable(solrDocument.get("objectTitle_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setObjectId(Optional.ofNullable(solrDocument.get("objectId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		String objectSuggest = (String)solrDocument.get("objectSuggest_suggested");
 		oBaseModel.setObjectSuggest(objectSuggest);
-		oBaseModel.setObjectText(Optional.ofNullable(doc.get("objectText_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setPageUrlId(Optional.ofNullable(doc.get("pageUrlId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setPageUrlPk(Optional.ofNullable(doc.get("pageUrlPk_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setPageUrlApi(Optional.ofNullable(doc.get("pageUrlApi_docvalues_string")).map(v -> v.toString()).orElse(null));
-		String id = (String)doc.get("id");
+		oBaseModel.setObjectText(Optional.ofNullable(solrDocument.get("objectText_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlId(Optional.ofNullable(solrDocument.get("pageUrlId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlPk(Optional.ofNullable(solrDocument.get("pageUrlPk_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlApi(Optional.ofNullable(solrDocument.get("pageUrlApi_docvalues_string")).map(v -> v.toString()).orElse(null));
+		String id = (String)solrDocument.get("id");
 		oBaseModel.setId(id);
 	}
 
@@ -1963,7 +1847,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 	//////////////////
 
 	public void apiRequestBaseModel() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(r -> r.getApiRequest_()).orElse(null);
+		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof BaseModel) {
 			BaseModel original = (BaseModel)o;
@@ -2039,7 +1923,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return sb.toString();
 	}
 
-	public static final String CLASS_SIMPLE_NAME = "BaseModel";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_pk = "pk";
 	public static final String VAR_inheritPk = "inheritPk";
@@ -2062,296 +1945,4 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String VAR_pageUrlPk = "pageUrlPk";
 	public static final String VAR_pageUrlApi = "pageUrlApi";
 	public static final String VAR_id = "id";
-
-	public static List<String> varsQForClass() {
-		return BaseModel.varsQBaseModel(new ArrayList<String>());
-	}
-	public static List<String> varsQBaseModel(List<String> vars) {
-		vars.add(VAR_objectSuggest);
-		vars.add(VAR_objectText);
-		return vars;
-	}
-
-	public static List<String> varsFqForClass() {
-		return BaseModel.varsFqBaseModel(new ArrayList<String>());
-	}
-	public static List<String> varsFqBaseModel(List<String> vars) {
-		vars.add(VAR_pk);
-		vars.add(VAR_inheritPk);
-		vars.add(VAR_created);
-		vars.add(VAR_modified);
-		vars.add(VAR_objectTitle);
-		vars.add(VAR_objectId);
-		vars.add(VAR_pageUrlId);
-		vars.add(VAR_pageUrlPk);
-		vars.add(VAR_pageUrlApi);
-		vars.add(VAR_id);
-		return vars;
-	}
-
-	public static List<String> varsRangeForClass() {
-		return BaseModel.varsRangeBaseModel(new ArrayList<String>());
-	}
-	public static List<String> varsRangeBaseModel(List<String> vars) {
-		vars.add(VAR_pk);
-		vars.add(VAR_created);
-		vars.add(VAR_modified);
-		return vars;
-	}
-
-	public static final String DISPLAY_NAME_siteRequest_ = "";
-	public static final String DISPLAY_NAME_pk = "primary key";
-	public static final String DISPLAY_NAME_inheritPk = "";
-	public static final String DISPLAY_NAME_created = "created";
-	public static final String DISPLAY_NAME_modified = "modified";
-	public static final String DISPLAY_NAME_archived = "archived";
-	public static final String DISPLAY_NAME_deleted = "deleted";
-	public static final String DISPLAY_NAME_classCanonicalName = "";
-	public static final String DISPLAY_NAME_classSimpleName = "";
-	public static final String DISPLAY_NAME_classCanonicalNames = "";
-	public static final String DISPLAY_NAME_sessionId = "";
-	public static final String DISPLAY_NAME_userKey = "";
-	public static final String DISPLAY_NAME_saves = "";
-	public static final String DISPLAY_NAME_objectTitle = "";
-	public static final String DISPLAY_NAME_objectId = "ID";
-	public static final String DISPLAY_NAME_objectNameVar = "";
-	public static final String DISPLAY_NAME_objectSuggest = "autosuggest";
-	public static final String DISPLAY_NAME_objectText = "text";
-	public static final String DISPLAY_NAME_pageUrlId = "";
-	public static final String DISPLAY_NAME_pageUrlPk = "";
-	public static final String DISPLAY_NAME_pageUrlApi = "";
-	public static final String DISPLAY_NAME_id = "";
-
-	public static String displayNameForClass(String var) {
-		return BaseModel.displayNameBaseModel(var);
-	}
-	public static String displayNameBaseModel(String var) {
-		switch(var) {
-		case VAR_siteRequest_:
-			return DISPLAY_NAME_siteRequest_;
-		case VAR_pk:
-			return DISPLAY_NAME_pk;
-		case VAR_inheritPk:
-			return DISPLAY_NAME_inheritPk;
-		case VAR_created:
-			return DISPLAY_NAME_created;
-		case VAR_modified:
-			return DISPLAY_NAME_modified;
-		case VAR_archived:
-			return DISPLAY_NAME_archived;
-		case VAR_deleted:
-			return DISPLAY_NAME_deleted;
-		case VAR_classCanonicalName:
-			return DISPLAY_NAME_classCanonicalName;
-		case VAR_classSimpleName:
-			return DISPLAY_NAME_classSimpleName;
-		case VAR_classCanonicalNames:
-			return DISPLAY_NAME_classCanonicalNames;
-		case VAR_sessionId:
-			return DISPLAY_NAME_sessionId;
-		case VAR_userKey:
-			return DISPLAY_NAME_userKey;
-		case VAR_saves:
-			return DISPLAY_NAME_saves;
-		case VAR_objectTitle:
-			return DISPLAY_NAME_objectTitle;
-		case VAR_objectId:
-			return DISPLAY_NAME_objectId;
-		case VAR_objectNameVar:
-			return DISPLAY_NAME_objectNameVar;
-		case VAR_objectSuggest:
-			return DISPLAY_NAME_objectSuggest;
-		case VAR_objectText:
-			return DISPLAY_NAME_objectText;
-		case VAR_pageUrlId:
-			return DISPLAY_NAME_pageUrlId;
-		case VAR_pageUrlPk:
-			return DISPLAY_NAME_pageUrlPk;
-		case VAR_pageUrlApi:
-			return DISPLAY_NAME_pageUrlApi;
-		case VAR_id:
-			return DISPLAY_NAME_id;
-		default:
-			return null;
-		}
-	}
-
-	public static String descriptionBaseModel(String var) {
-		switch(var) {
-		case VAR_siteRequest_:
-			return "The current request object";
-		case VAR_pk:
-			return "The primary key of this object in the database";
-		case VAR_inheritPk:
-			return "An optional inherited primary key from a legacy system for this object in the database";
-		case VAR_created:
-			return "A created timestamp for this record in the database";
-		case VAR_modified:
-			return "A modified timestamp for this record in the database";
-		case VAR_archived:
-			return "For archiving this record";
-		case VAR_deleted:
-			return "For deleting this record";
-		case VAR_classCanonicalName:
-			return "the canonical name of this Java class";
-		case VAR_classSimpleName:
-			return "The simple name of this Java class";
-		case VAR_classCanonicalNames:
-			return "All the inherited canonical names of this Java class";
-		case VAR_sessionId:
-			return "The session ID of the user that created this object";
-		case VAR_userKey:
-			return "The primary key of the user that created this record";
-		case VAR_saves:
-			return "A list of fields that are saved for this record in the database";
-		case VAR_objectTitle:
-			return "The title of this object";
-		case VAR_objectId:
-			return "A URL friendly unique ID for this object";
-		case VAR_objectNameVar:
-			return "The var that identifies this type of object in the API";
-		case VAR_objectSuggest:
-			return "The indexed field in the search engine for this record while using autosuggest";
-		case VAR_objectText:
-			return "The full text search field in the search engine for this record while using autosuggest";
-		case VAR_pageUrlId:
-			return "The link by name for this object in the UI";
-		case VAR_pageUrlPk:
-			return "The link by primary key for this object in the UI";
-		case VAR_pageUrlApi:
-			return "The link to this object in the API";
-		case VAR_id:
-			return "The unique key for this record in the search engine";
-			default:
-				return null;
-		}
-	}
-
-	public static String classSimpleNameBaseModel(String var) {
-		switch(var) {
-		case VAR_siteRequest_:
-			return "SiteRequestEnUS";
-		case VAR_pk:
-			return "Long";
-		case VAR_inheritPk:
-			return "String";
-		case VAR_created:
-			return "ZonedDateTime";
-		case VAR_modified:
-			return "ZonedDateTime";
-		case VAR_archived:
-			return "Boolean";
-		case VAR_deleted:
-			return "Boolean";
-		case VAR_classCanonicalName:
-			return "String";
-		case VAR_classSimpleName:
-			return "String";
-		case VAR_classCanonicalNames:
-			return "List";
-		case VAR_sessionId:
-			return "String";
-		case VAR_userKey:
-			return "Long";
-		case VAR_saves:
-			return "List";
-		case VAR_objectTitle:
-			return "String";
-		case VAR_objectId:
-			return "String";
-		case VAR_objectNameVar:
-			return "String";
-		case VAR_objectSuggest:
-			return "String";
-		case VAR_objectText:
-			return "String";
-		case VAR_pageUrlId:
-			return "String";
-		case VAR_pageUrlPk:
-			return "String";
-		case VAR_pageUrlApi:
-			return "String";
-		case VAR_id:
-			return "String";
-			default:
-				return null;
-		}
-	}
-
-	public static Integer htmlColumnBaseModel(String var) {
-		switch(var) {
-		case VAR_created:
-			return 2;
-		case VAR_objectTitle:
-			return 2;
-			default:
-				return null;
-		}
-	}
-
-	public static Integer htmlRowBaseModel(String var) {
-		switch(var) {
-		case VAR_pk:
-			return 1;
-		case VAR_created:
-			return 1;
-		case VAR_modified:
-			return 1;
-		case VAR_archived:
-			return 2;
-		case VAR_deleted:
-			return 2;
-		case VAR_objectId:
-			return 1;
-			default:
-				return null;
-		}
-	}
-
-	public static Integer htmlCellBaseModel(String var) {
-		switch(var) {
-		case VAR_pk:
-			return 1;
-		case VAR_created:
-			return 2;
-		case VAR_modified:
-			return 3;
-		case VAR_archived:
-			return 1;
-		case VAR_deleted:
-			return 2;
-		case VAR_objectId:
-			return 4;
-			default:
-				return null;
-		}
-	}
-
-	public static Integer lengthMinBaseModel(String var) {
-		switch(var) {
-			default:
-				return null;
-		}
-	}
-
-	public static Integer lengthMaxBaseModel(String var) {
-		switch(var) {
-			default:
-				return null;
-		}
-	}
-
-	public static Integer maxBaseModel(String var) {
-		switch(var) {
-			default:
-				return null;
-		}
-	}
-
-	public static Integer minBaseModel(String var) {
-		switch(var) {
-			default:
-				return null;
-		}
-	}
 }

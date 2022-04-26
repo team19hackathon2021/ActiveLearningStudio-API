@@ -1,67 +1,68 @@
 package org.curriki.api.enus.model.resource;
 
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.base.BaseModel;
-import io.vertx.core.json.JsonObject;
-import java.util.Date;
-import java.util.Set;
-import org.computate.vertx.api.ApiRequest;
-import org.curriki.api.enus.config.ConfigKeys;
-import java.util.Optional;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.math.MathContext;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.math.RoundingMode;
-import java.util.Map;
-import java.lang.String;
-import java.lang.Long;
+import org.curriki.api.enus.base.BaseModel;
+import java.util.Date;
 import java.time.ZonedDateTime;
-import java.time.ZoneId;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import java.lang.Integer;
+import java.math.BigDecimal;
+import java.lang.Long;
+import java.util.Locale;
+import java.util.Map;
+import io.vertx.core.json.JsonObject;
 import java.time.ZoneOffset;
+import java.math.RoundingMode;
+import org.curriki.api.enus.model.base.BaseModel;
+import java.math.MathContext;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.Instant;
+import io.vertx.core.Future;
+import java.time.ZoneId;
+import java.util.Objects;
+import java.util.List;
+import java.time.OffsetDateTime;
+import org.apache.solr.client.solrj.SolrQuery;
+import java.util.Optional;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.curriki.api.enus.request.api.ApiRequest;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.curriki.api.enus.wrap.Wrap;
+import org.curriki.api.enus.java.ZonedDateTimeDeserializer;
+import org.apache.commons.collections.CollectionUtils;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.curriki.api.enus.java.ZonedDateTimeSerializer;
+import java.lang.String;
+import org.slf4j.Logger;
+import io.vertx.core.Promise;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.commons.text.StringEscapeUtils;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.curriki.api.enus.config.ConfigKeys;
+import org.apache.solr.client.solrj.SolrClient;
+import io.vertx.core.json.JsonArray;
+import org.apache.solr.common.SolrDocument;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
-import java.time.Instant;
-import java.util.Locale;
-import java.time.OffsetDateTime;
-import io.vertx.core.json.JsonArray;
-import java.math.BigDecimal;
-import java.lang.Integer;
-import org.computate.search.wrap.Wrap;
-import io.vertx.core.Promise;
-import io.vertx.core.Future;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.computate.search.response.solr.SolrResponse;
+import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource">Find the class CurrikiResource in Solr. </a>
- * <br><br>Delete the class CurrikiResource in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.model.resource in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.resource&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project ActiveLearningStudio-API in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br/>
  **/
 public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(CurrikiResource.class);
@@ -99,10 +100,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String resourceId;
 
-	/**	<br> The entity resourceId
+	/**	<br/> The entity resourceId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceId">Find the entity resourceId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceId">Find the entity resourceId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resourceId(Wrap<String> w);
@@ -125,20 +126,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchResourceId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrResourceId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrResourceId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrResourceId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqResourceId(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrResourceId(siteRequest_, CurrikiResource.staticSearchResourceId(siteRequest_, CurrikiResource.staticSetResourceId(siteRequest_, o)));
-	}
-
-	public String sqlResourceId() {
-		return resourceId;
+	public static String staticSolrFqResourceId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceId(siteRequest_, CurrikiResource.staticSolrResourceId(siteRequest_, CurrikiResource.staticSetResourceId(siteRequest_, o)));
 	}
 
 	///////////////
@@ -152,10 +149,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String licenseId;
 
-	/**	<br> The entity licenseId
+	/**	<br/> The entity licenseId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:licenseId">Find the entity licenseId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:licenseId">Find the entity licenseId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _licenseId(Wrap<String> w);
@@ -178,20 +175,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchLicenseId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrLicenseId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrLicenseId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrLicenseId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqLicenseId(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrLicenseId(siteRequest_, CurrikiResource.staticSearchLicenseId(siteRequest_, CurrikiResource.staticSetLicenseId(siteRequest_, o)));
-	}
-
-	public String sqlLicenseId() {
-		return licenseId;
+	public static String staticSolrFqLicenseId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLicenseId(siteRequest_, CurrikiResource.staticSolrLicenseId(siteRequest_, CurrikiResource.staticSetLicenseId(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -206,10 +199,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Long contributorId;
 
-	/**	<br> The entity contributorId
+	/**	<br/> The entity contributorId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contributorId">Find the entity contributorId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contributorId">Find the entity contributorId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _contributorId(Wrap<Long> w);
@@ -239,20 +232,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Long staticSearchContributorId(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSolrContributorId(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSearchStrContributorId(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSolrStrContributorId(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqContributorId(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrContributorId(siteRequest_, CurrikiResource.staticSearchContributorId(siteRequest_, CurrikiResource.staticSetContributorId(siteRequest_, o)));
-	}
-
-	public Long sqlContributorId() {
-		return contributorId;
+	public static String staticSolrFqContributorId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrContributorId(siteRequest_, CurrikiResource.staticSolrContributorId(siteRequest_, CurrikiResource.staticSetContributorId(siteRequest_, o)));
 	}
 
 	//////////////////////
@@ -263,16 +252,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime contributionDate;
 
-	/**	<br> The entity contributionDate
+	/**	<br/> The entity contributionDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contributionDate">Find the entity contributionDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contributionDate">Find the entity contributionDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _contributionDate(Wrap<ZonedDateTime> w);
@@ -294,8 +283,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.contributionDate = CurrikiResource.staticSetContributionDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetContributionDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -314,20 +301,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchContributionDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrContributionDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrContributionDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrContributionDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqContributionDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrContributionDate(siteRequest_, CurrikiResource.staticSearchContributionDate(siteRequest_, CurrikiResource.staticSetContributionDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlContributionDate() {
-		return contributionDate == null ? null : contributionDate.toOffsetDateTime();
+	public static String staticSolrFqContributionDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrContributionDate(siteRequest_, CurrikiResource.staticSolrContributionDate(siteRequest_, CurrikiResource.staticSetContributionDate(siteRequest_, o)));
 	}
 
 	/////////////////
@@ -341,10 +324,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String description;
 
-	/**	<br> The entity description
+	/**	<br/> The entity description
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:description">Find the entity description in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:description">Find the entity description in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _description(Wrap<String> w);
@@ -367,20 +350,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchDescription(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrDescription(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrDescription(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrDescription(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDescription(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrDescription(siteRequest_, CurrikiResource.staticSearchDescription(siteRequest_, CurrikiResource.staticSetDescription(siteRequest_, o)));
-	}
-
-	public String sqlDescription() {
-		return description;
+	public static String staticSolrFqDescription(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDescription(siteRequest_, CurrikiResource.staticSolrDescription(siteRequest_, CurrikiResource.staticSetDescription(siteRequest_, o)));
 	}
 
 	///////////
@@ -394,10 +373,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String title;
 
-	/**	<br> The entity title
+	/**	<br/> The entity title
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:title">Find the entity title in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:title">Find the entity title in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _title(Wrap<String> w);
@@ -420,20 +399,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchTitle(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrTitle(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqTitle(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrTitle(siteRequest_, CurrikiResource.staticSearchTitle(siteRequest_, CurrikiResource.staticSetTitle(siteRequest_, o)));
-	}
-
-	public String sqlTitle() {
-		return title;
+	public static String staticSolrFqTitle(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTitle(siteRequest_, CurrikiResource.staticSolrTitle(siteRequest_, CurrikiResource.staticSetTitle(siteRequest_, o)));
 	}
 
 	/////////////////
@@ -447,10 +422,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String keywordsStr;
 
-	/**	<br> The entity keywordsStr
+	/**	<br/> The entity keywordsStr
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:keywordsStr">Find the entity keywordsStr in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:keywordsStr">Find the entity keywordsStr in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _keywordsStr(Wrap<String> w);
@@ -473,20 +448,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrKeywordsStr(siteRequest_, CurrikiResource.staticSearchKeywordsStr(siteRequest_, CurrikiResource.staticSetKeywordsStr(siteRequest_, o)));
-	}
-
-	public String sqlKeywordsStr() {
-		return keywordsStr;
+	public static String staticSolrFqKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrKeywordsStr(siteRequest_, CurrikiResource.staticSolrKeywordsStr(siteRequest_, CurrikiResource.staticSetKeywordsStr(siteRequest_, o)));
 	}
 
 	//////////////
@@ -494,18 +465,18 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	//////////////
 
 	/**	 The entity keywords
-	 *	 It is constructed before being initialized with the constructor by default. 
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> keywords = new ArrayList<String>();
 
-	/**	<br> The entity keywords
-	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:keywords">Find the entity keywords in Solr</a>
-	 * <br>
-	 * @param l is the entity already constructed. 
+	/**	<br/> The entity keywords
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:keywords">Find the entity keywords in Solr</a>
+	 * <br/>
+	 * @param keywords is the entity already constructed. 
 	 **/
 	protected abstract void _keywords(List<String> l);
 
@@ -543,16 +514,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchKeywords(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrKeywords(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrKeywords(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrKeywords(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqKeywords(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrKeywords(siteRequest_, CurrikiResource.staticSearchKeywords(siteRequest_, CurrikiResource.staticSetKeywords(siteRequest_, o)));
+	public static String staticSolrFqKeywords(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrKeywords(siteRequest_, CurrikiResource.staticSolrKeywords(siteRequest_, CurrikiResource.staticSetKeywords(siteRequest_, o)));
 	}
 
 	//////////////////////////
@@ -566,10 +537,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String generatedKeywordsStr;
 
-	/**	<br> The entity generatedKeywordsStr
+	/**	<br/> The entity generatedKeywordsStr
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:generatedKeywordsStr">Find the entity generatedKeywordsStr in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:generatedKeywordsStr">Find the entity generatedKeywordsStr in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _generatedKeywordsStr(Wrap<String> w);
@@ -592,20 +563,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchGeneratedKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrGeneratedKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrGeneratedKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrGeneratedKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqGeneratedKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrGeneratedKeywordsStr(siteRequest_, CurrikiResource.staticSearchGeneratedKeywordsStr(siteRequest_, CurrikiResource.staticSetGeneratedKeywordsStr(siteRequest_, o)));
-	}
-
-	public String sqlGeneratedKeywordsStr() {
-		return generatedKeywordsStr;
+	public static String staticSolrFqGeneratedKeywordsStr(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrGeneratedKeywordsStr(siteRequest_, CurrikiResource.staticSolrGeneratedKeywordsStr(siteRequest_, CurrikiResource.staticSetGeneratedKeywordsStr(siteRequest_, o)));
 	}
 
 	///////////////////////
@@ -613,18 +580,18 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	///////////////////////
 
 	/**	 The entity generatedKeywords
-	 *	 It is constructed before being initialized with the constructor by default. 
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> generatedKeywords = new ArrayList<String>();
 
-	/**	<br> The entity generatedKeywords
-	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:generatedKeywords">Find the entity generatedKeywords in Solr</a>
-	 * <br>
-	 * @param l is the entity already constructed. 
+	/**	<br/> The entity generatedKeywords
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:generatedKeywords">Find the entity generatedKeywords in Solr</a>
+	 * <br/>
+	 * @param generatedKeywords is the entity already constructed. 
 	 **/
 	protected abstract void _generatedKeywords(List<String> l);
 
@@ -662,16 +629,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchGeneratedKeywords(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrGeneratedKeywords(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrGeneratedKeywords(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrGeneratedKeywords(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqGeneratedKeywords(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrGeneratedKeywords(siteRequest_, CurrikiResource.staticSearchGeneratedKeywords(siteRequest_, CurrikiResource.staticSetGeneratedKeywords(siteRequest_, o)));
+	public static String staticSolrFqGeneratedKeywords(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrGeneratedKeywords(siteRequest_, CurrikiResource.staticSolrGeneratedKeywords(siteRequest_, CurrikiResource.staticSetGeneratedKeywords(siteRequest_, o)));
 	}
 
 	//////////////
@@ -685,10 +652,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String language;
 
-	/**	<br> The entity language
+	/**	<br/> The entity language
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:language">Find the entity language in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:language">Find the entity language in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _language(Wrap<String> w);
@@ -711,20 +678,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchLanguage(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrLanguage(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrLanguage(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrLanguage(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqLanguage(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrLanguage(siteRequest_, CurrikiResource.staticSearchLanguage(siteRequest_, CurrikiResource.staticSetLanguage(siteRequest_, o)));
-	}
-
-	public String sqlLanguage() {
-		return language;
+	public static String staticSolrFqLanguage(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLanguage(siteRequest_, CurrikiResource.staticSolrLanguage(siteRequest_, CurrikiResource.staticSetLanguage(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -739,10 +702,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Long lastEditorId;
 
-	/**	<br> The entity lastEditorId
+	/**	<br/> The entity lastEditorId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastEditorId">Find the entity lastEditorId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastEditorId">Find the entity lastEditorId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _lastEditorId(Wrap<Long> w);
@@ -772,20 +735,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Long staticSearchLastEditorId(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSolrLastEditorId(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSearchStrLastEditorId(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSolrStrLastEditorId(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqLastEditorId(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrLastEditorId(siteRequest_, CurrikiResource.staticSearchLastEditorId(siteRequest_, CurrikiResource.staticSetLastEditorId(siteRequest_, o)));
-	}
-
-	public Long sqlLastEditorId() {
-		return lastEditorId;
+	public static String staticSolrFqLastEditorId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLastEditorId(siteRequest_, CurrikiResource.staticSolrLastEditorId(siteRequest_, CurrikiResource.staticSetLastEditorId(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -796,16 +755,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime lastEditDate;
 
-	/**	<br> The entity lastEditDate
+	/**	<br/> The entity lastEditDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastEditDate">Find the entity lastEditDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastEditDate">Find the entity lastEditDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _lastEditDate(Wrap<ZonedDateTime> w);
@@ -827,8 +786,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.lastEditDate = CurrikiResource.staticSetLastEditDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetLastEditDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -847,20 +804,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchLastEditDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrLastEditDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrLastEditDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrLastEditDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqLastEditDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrLastEditDate(siteRequest_, CurrikiResource.staticSearchLastEditDate(siteRequest_, CurrikiResource.staticSetLastEditDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlLastEditDate() {
-		return lastEditDate == null ? null : lastEditDate.toOffsetDateTime();
+	public static String staticSolrFqLastEditDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLastEditDate(siteRequest_, CurrikiResource.staticSolrLastEditDate(siteRequest_, CurrikiResource.staticSetLastEditDate(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -874,10 +827,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String currikiLicense;
 
-	/**	<br> The entity currikiLicense
+	/**	<br/> The entity currikiLicense
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:currikiLicense">Find the entity currikiLicense in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:currikiLicense">Find the entity currikiLicense in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _currikiLicense(Wrap<String> w);
@@ -900,20 +853,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrCurrikiLicense(siteRequest_, CurrikiResource.staticSearchCurrikiLicense(siteRequest_, CurrikiResource.staticSetCurrikiLicense(siteRequest_, o)));
-	}
-
-	public String sqlCurrikiLicense() {
-		return currikiLicense;
+	public static String staticSolrFqCurrikiLicense(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrCurrikiLicense(siteRequest_, CurrikiResource.staticSolrCurrikiLicense(siteRequest_, CurrikiResource.staticSetCurrikiLicense(siteRequest_, o)));
 	}
 
 	/////////////////
@@ -927,10 +876,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String externalUrl;
 
-	/**	<br> The entity externalUrl
+	/**	<br/> The entity externalUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:externalUrl">Find the entity externalUrl in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:externalUrl">Find the entity externalUrl in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _externalUrl(Wrap<String> w);
@@ -953,20 +902,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchExternalUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrExternalUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrExternalUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrExternalUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqExternalUrl(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrExternalUrl(siteRequest_, CurrikiResource.staticSearchExternalUrl(siteRequest_, CurrikiResource.staticSetExternalUrl(siteRequest_, o)));
-	}
-
-	public String sqlExternalUrl() {
-		return externalUrl;
+	public static String staticSolrFqExternalUrl(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrExternalUrl(siteRequest_, CurrikiResource.staticSolrExternalUrl(siteRequest_, CurrikiResource.staticSetExternalUrl(siteRequest_, o)));
 	}
 
 	/////////////////////
@@ -980,10 +925,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String resourceChecked;
 
-	/**	<br> The entity resourceChecked
+	/**	<br/> The entity resourceChecked
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceChecked">Find the entity resourceChecked in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceChecked">Find the entity resourceChecked in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resourceChecked(Wrap<String> w);
@@ -1006,20 +951,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrResourceChecked(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrResourceChecked(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqResourceChecked(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrResourceChecked(siteRequest_, CurrikiResource.staticSearchResourceChecked(siteRequest_, CurrikiResource.staticSetResourceChecked(siteRequest_, o)));
-	}
-
-	public String sqlResourceChecked() {
-		return resourceChecked;
+	public static String staticSolrFqResourceChecked(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceChecked(siteRequest_, CurrikiResource.staticSolrResourceChecked(siteRequest_, CurrikiResource.staticSetResourceChecked(siteRequest_, o)));
 	}
 
 	/////////////
@@ -1033,10 +974,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String content;
 
-	/**	<br> The entity content
+	/**	<br/> The entity content
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:content">Find the entity content in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:content">Find the entity content in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _content(Wrap<String> w);
@@ -1059,20 +1000,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchContent(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrContent(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrContent(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrContent(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqContent(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrContent(siteRequest_, CurrikiResource.staticSearchContent(siteRequest_, CurrikiResource.staticSetContent(siteRequest_, o)));
-	}
-
-	public String sqlContent() {
-		return content;
+	public static String staticSolrFqContent(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrContent(siteRequest_, CurrikiResource.staticSolrContent(siteRequest_, CurrikiResource.staticSetContent(siteRequest_, o)));
 	}
 
 	//////////////////////////////
@@ -1086,10 +1023,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String resourceCheckRequestNote;
 
-	/**	<br> The entity resourceCheckRequestNote
+	/**	<br/> The entity resourceCheckRequestNote
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckRequestNote">Find the entity resourceCheckRequestNote in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckRequestNote">Find the entity resourceCheckRequestNote in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resourceCheckRequestNote(Wrap<String> w);
@@ -1112,20 +1049,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchResourceCheckRequestNote(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrResourceCheckRequestNote(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrResourceCheckRequestNote(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrResourceCheckRequestNote(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqResourceCheckRequestNote(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrResourceCheckRequestNote(siteRequest_, CurrikiResource.staticSearchResourceCheckRequestNote(siteRequest_, CurrikiResource.staticSetResourceCheckRequestNote(siteRequest_, o)));
-	}
-
-	public String sqlResourceCheckRequestNote() {
-		return resourceCheckRequestNote;
+	public static String staticSolrFqResourceCheckRequestNote(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceCheckRequestNote(siteRequest_, CurrikiResource.staticSolrResourceCheckRequestNote(siteRequest_, CurrikiResource.staticSetResourceCheckRequestNote(siteRequest_, o)));
 	}
 
 	///////////////////////
@@ -1136,16 +1069,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime resourceCheckDate;
 
-	/**	<br> The entity resourceCheckDate
+	/**	<br/> The entity resourceCheckDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckDate">Find the entity resourceCheckDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckDate">Find the entity resourceCheckDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resourceCheckDate(Wrap<ZonedDateTime> w);
@@ -1167,8 +1100,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.resourceCheckDate = CurrikiResource.staticSetResourceCheckDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetResourceCheckDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -1187,20 +1118,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchResourceCheckDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrResourceCheckDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrResourceCheckDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrResourceCheckDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqResourceCheckDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrResourceCheckDate(siteRequest_, CurrikiResource.staticSearchResourceCheckDate(siteRequest_, CurrikiResource.staticSetResourceCheckDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlResourceCheckDate() {
-		return resourceCheckDate == null ? null : resourceCheckDate.toOffsetDateTime();
+	public static String staticSolrFqResourceCheckDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceCheckDate(siteRequest_, CurrikiResource.staticSolrResourceCheckDate(siteRequest_, CurrikiResource.staticSetResourceCheckDate(siteRequest_, o)));
 	}
 
 	/////////////////////
@@ -1215,10 +1142,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Long resourceCheckId;
 
-	/**	<br> The entity resourceCheckId
+	/**	<br/> The entity resourceCheckId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckId">Find the entity resourceCheckId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckId">Find the entity resourceCheckId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resourceCheckId(Wrap<Long> w);
@@ -1248,20 +1175,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Long staticSearchResourceCheckId(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSolrResourceCheckId(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSearchStrResourceCheckId(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSolrStrResourceCheckId(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqResourceCheckId(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrResourceCheckId(siteRequest_, CurrikiResource.staticSearchResourceCheckId(siteRequest_, CurrikiResource.staticSetResourceCheckId(siteRequest_, o)));
-	}
-
-	public Long sqlResourceCheckId() {
-		return resourceCheckId;
+	public static String staticSolrFqResourceCheckId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceCheckId(siteRequest_, CurrikiResource.staticSolrResourceCheckId(siteRequest_, CurrikiResource.staticSetResourceCheckId(siteRequest_, o)));
 	}
 
 	///////////////////////
@@ -1275,10 +1198,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String resourceCheckNote;
 
-	/**	<br> The entity resourceCheckNote
+	/**	<br/> The entity resourceCheckNote
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckNote">Find the entity resourceCheckNote in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckNote">Find the entity resourceCheckNote in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resourceCheckNote(Wrap<String> w);
@@ -1301,20 +1224,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchResourceCheckNote(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrResourceCheckNote(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrResourceCheckNote(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrResourceCheckNote(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqResourceCheckNote(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrResourceCheckNote(siteRequest_, CurrikiResource.staticSearchResourceCheckNote(siteRequest_, CurrikiResource.staticSetResourceCheckNote(siteRequest_, o)));
-	}
-
-	public String sqlResourceCheckNote() {
-		return resourceCheckNote;
+	public static String staticSolrFqResourceCheckNote(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceCheckNote(siteRequest_, CurrikiResource.staticSolrResourceCheckNote(siteRequest_, CurrikiResource.staticSetResourceCheckNote(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -1328,10 +1247,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String studentFacing;
 
-	/**	<br> The entity studentFacing
+	/**	<br/> The entity studentFacing
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:studentFacing">Find the entity studentFacing in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:studentFacing">Find the entity studentFacing in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _studentFacing(Wrap<String> w);
@@ -1354,20 +1273,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStudentFacing(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrStudentFacing(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqStudentFacing(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrStudentFacing(siteRequest_, CurrikiResource.staticSearchStudentFacing(siteRequest_, CurrikiResource.staticSetStudentFacing(siteRequest_, o)));
-	}
-
-	public String sqlStudentFacing() {
-		return studentFacing;
+	public static String staticSolrFqStudentFacing(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrStudentFacing(siteRequest_, CurrikiResource.staticSolrStudentFacing(siteRequest_, CurrikiResource.staticSetStudentFacing(siteRequest_, o)));
 	}
 
 	////////////
@@ -1381,10 +1296,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String source;
 
-	/**	<br> The entity source
+	/**	<br/> The entity source
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:source">Find the entity source in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:source">Find the entity source in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _source(Wrap<String> w);
@@ -1407,20 +1322,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchSource(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSource(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSource(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSource(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSource(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSource(siteRequest_, CurrikiResource.staticSearchSource(siteRequest_, CurrikiResource.staticSetSource(siteRequest_, o)));
-	}
-
-	public String sqlSource() {
-		return source;
+	public static String staticSolrFqSource(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSource(siteRequest_, CurrikiResource.staticSolrSource(siteRequest_, CurrikiResource.staticSetSource(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -1434,10 +1345,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String reviewStatus;
 
-	/**	<br> The entity reviewStatus
+	/**	<br/> The entity reviewStatus
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewStatus">Find the entity reviewStatus in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewStatus">Find the entity reviewStatus in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _reviewStatus(Wrap<String> w);
@@ -1460,20 +1371,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchReviewStatus(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrReviewStatus(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrReviewStatus(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrReviewStatus(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqReviewStatus(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrReviewStatus(siteRequest_, CurrikiResource.staticSearchReviewStatus(siteRequest_, CurrikiResource.staticSetReviewStatus(siteRequest_, o)));
-	}
-
-	public String sqlReviewStatus() {
-		return reviewStatus;
+	public static String staticSolrFqReviewStatus(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrReviewStatus(siteRequest_, CurrikiResource.staticSolrReviewStatus(siteRequest_, CurrikiResource.staticSetReviewStatus(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -1484,16 +1391,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime lastReviewDate;
 
-	/**	<br> The entity lastReviewDate
+	/**	<br/> The entity lastReviewDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastReviewDate">Find the entity lastReviewDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastReviewDate">Find the entity lastReviewDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _lastReviewDate(Wrap<ZonedDateTime> w);
@@ -1515,8 +1422,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.lastReviewDate = CurrikiResource.staticSetLastReviewDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetLastReviewDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -1535,20 +1440,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchLastReviewDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrLastReviewDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrLastReviewDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrLastReviewDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqLastReviewDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrLastReviewDate(siteRequest_, CurrikiResource.staticSearchLastReviewDate(siteRequest_, CurrikiResource.staticSetLastReviewDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlLastReviewDate() {
-		return lastReviewDate == null ? null : lastReviewDate.toOffsetDateTime();
+	public static String staticSolrFqLastReviewDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLastReviewDate(siteRequest_, CurrikiResource.staticSolrLastReviewDate(siteRequest_, CurrikiResource.staticSetLastReviewDate(siteRequest_, o)));
 	}
 
 	////////////////
@@ -1563,10 +1464,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Long reviewByID;
 
-	/**	<br> The entity reviewByID
+	/**	<br/> The entity reviewByID
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewByID">Find the entity reviewByID in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewByID">Find the entity reviewByID in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _reviewByID(Wrap<Long> w);
@@ -1596,20 +1497,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Long staticSearchReviewByID(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSolrReviewByID(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSearchStrReviewByID(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSolrStrReviewByID(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqReviewByID(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrReviewByID(siteRequest_, CurrikiResource.staticSearchReviewByID(siteRequest_, CurrikiResource.staticSetReviewByID(siteRequest_, o)));
-	}
-
-	public Long sqlReviewByID() {
-		return reviewByID;
+	public static String staticSolrFqReviewByID(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrReviewByID(siteRequest_, CurrikiResource.staticSolrReviewByID(siteRequest_, CurrikiResource.staticSetReviewByID(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -1624,10 +1521,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal reviewRating;
 
-	/**	<br> The entity reviewRating
+	/**	<br/> The entity reviewRating
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewRating">Find the entity reviewRating in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewRating">Find the entity reviewRating in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _reviewRating(Wrap<BigDecimal> w);
@@ -1666,20 +1563,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Double staticSearchReviewRating(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSolrReviewRating(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSearchStrReviewRating(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSolrStrReviewRating(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqReviewRating(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrReviewRating(siteRequest_, CurrikiResource.staticSearchReviewRating(siteRequest_, CurrikiResource.staticSetReviewRating(siteRequest_, o)));
-	}
-
-	public BigDecimal sqlReviewRating() {
-		return reviewRating;
+	public static String staticSolrFqReviewRating(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrReviewRating(siteRequest_, CurrikiResource.staticSolrReviewRating(siteRequest_, CurrikiResource.staticSetReviewRating(siteRequest_, o)));
 	}
 
 	///////////////////////////
@@ -1694,10 +1587,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer technicalCompleteness;
 
-	/**	<br> The entity technicalCompleteness
+	/**	<br/> The entity technicalCompleteness
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:technicalCompleteness">Find the entity technicalCompleteness in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:technicalCompleteness">Find the entity technicalCompleteness in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _technicalCompleteness(Wrap<Integer> w);
@@ -1727,20 +1620,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchTechnicalCompleteness(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrTechnicalCompleteness(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrTechnicalCompleteness(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrTechnicalCompleteness(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqTechnicalCompleteness(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrTechnicalCompleteness(siteRequest_, CurrikiResource.staticSearchTechnicalCompleteness(siteRequest_, CurrikiResource.staticSetTechnicalCompleteness(siteRequest_, o)));
-	}
-
-	public Integer sqlTechnicalCompleteness() {
-		return technicalCompleteness;
+	public static String staticSolrFqTechnicalCompleteness(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTechnicalCompleteness(siteRequest_, CurrikiResource.staticSolrTechnicalCompleteness(siteRequest_, CurrikiResource.staticSetTechnicalCompleteness(siteRequest_, o)));
 	}
 
 	/////////////////////
@@ -1755,10 +1644,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer contentAccuracy;
 
-	/**	<br> The entity contentAccuracy
+	/**	<br/> The entity contentAccuracy
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contentAccuracy">Find the entity contentAccuracy in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contentAccuracy">Find the entity contentAccuracy in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _contentAccuracy(Wrap<Integer> w);
@@ -1788,20 +1677,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchContentAccuracy(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrContentAccuracy(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrContentAccuracy(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrContentAccuracy(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqContentAccuracy(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrContentAccuracy(siteRequest_, CurrikiResource.staticSearchContentAccuracy(siteRequest_, CurrikiResource.staticSetContentAccuracy(siteRequest_, o)));
-	}
-
-	public Integer sqlContentAccuracy() {
-		return contentAccuracy;
+	public static String staticSolrFqContentAccuracy(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrContentAccuracy(siteRequest_, CurrikiResource.staticSolrContentAccuracy(siteRequest_, CurrikiResource.staticSetContentAccuracy(siteRequest_, o)));
 	}
 
 	//////////////
@@ -1816,10 +1701,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer pedagogy;
 
-	/**	<br> The entity pedagogy
+	/**	<br/> The entity pedagogy
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:pedagogy">Find the entity pedagogy in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pedagogy">Find the entity pedagogy in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pedagogy(Wrap<Integer> w);
@@ -1849,20 +1734,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchPedagogy(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrPedagogy(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrPedagogy(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrPedagogy(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPedagogy(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrPedagogy(siteRequest_, CurrikiResource.staticSearchPedagogy(siteRequest_, CurrikiResource.staticSetPedagogy(siteRequest_, o)));
-	}
-
-	public Integer sqlPedagogy() {
-		return pedagogy;
+	public static String staticSolrFqPedagogy(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPedagogy(siteRequest_, CurrikiResource.staticSolrPedagogy(siteRequest_, CurrikiResource.staticSetPedagogy(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -1876,10 +1757,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String ratingComment;
 
-	/**	<br> The entity ratingComment
+	/**	<br/> The entity ratingComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:ratingComment">Find the entity ratingComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:ratingComment">Find the entity ratingComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _ratingComment(Wrap<String> w);
@@ -1902,20 +1783,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchRatingComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrRatingComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrRatingComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrRatingComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqRatingComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrRatingComment(siteRequest_, CurrikiResource.staticSearchRatingComment(siteRequest_, CurrikiResource.staticSetRatingComment(siteRequest_, o)));
-	}
-
-	public String sqlRatingComment() {
-		return ratingComment;
+	public static String staticSolrFqRatingComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrRatingComment(siteRequest_, CurrikiResource.staticSolrRatingComment(siteRequest_, CurrikiResource.staticSetRatingComment(siteRequest_, o)));
 	}
 
 	////////////////////////
@@ -1930,10 +1807,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer standardsAlignment;
 
-	/**	<br> The entity standardsAlignment
+	/**	<br/> The entity standardsAlignment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:standardsAlignment">Find the entity standardsAlignment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:standardsAlignment">Find the entity standardsAlignment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _standardsAlignment(Wrap<Integer> w);
@@ -1963,20 +1840,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchStandardsAlignment(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrStandardsAlignment(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrStandardsAlignment(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrStandardsAlignment(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqStandardsAlignment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrStandardsAlignment(siteRequest_, CurrikiResource.staticSearchStandardsAlignment(siteRequest_, CurrikiResource.staticSetStandardsAlignment(siteRequest_, o)));
-	}
-
-	public Integer sqlStandardsAlignment() {
-		return standardsAlignment;
+	public static String staticSolrFqStandardsAlignment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrStandardsAlignment(siteRequest_, CurrikiResource.staticSolrStandardsAlignment(siteRequest_, CurrikiResource.staticSetStandardsAlignment(siteRequest_, o)));
 	}
 
 	///////////////////////////////
@@ -1990,10 +1863,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String standardsAlignmentComment;
 
-	/**	<br> The entity standardsAlignmentComment
+	/**	<br/> The entity standardsAlignmentComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:standardsAlignmentComment">Find the entity standardsAlignmentComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:standardsAlignmentComment">Find the entity standardsAlignmentComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _standardsAlignmentComment(Wrap<String> w);
@@ -2016,20 +1889,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchStandardsAlignmentComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStandardsAlignmentComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrStandardsAlignmentComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrStandardsAlignmentComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqStandardsAlignmentComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrStandardsAlignmentComment(siteRequest_, CurrikiResource.staticSearchStandardsAlignmentComment(siteRequest_, CurrikiResource.staticSetStandardsAlignmentComment(siteRequest_, o)));
-	}
-
-	public String sqlStandardsAlignmentComment() {
-		return standardsAlignmentComment;
+	public static String staticSolrFqStandardsAlignmentComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrStandardsAlignmentComment(siteRequest_, CurrikiResource.staticSolrStandardsAlignmentComment(siteRequest_, CurrikiResource.staticSetStandardsAlignmentComment(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -2044,10 +1913,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer subjectMatter;
 
-	/**	<br> The entity subjectMatter
+	/**	<br/> The entity subjectMatter
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:subjectMatter">Find the entity subjectMatter in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectMatter">Find the entity subjectMatter in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _subjectMatter(Wrap<Integer> w);
@@ -2077,20 +1946,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchSubjectMatter(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrSubjectMatter(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrSubjectMatter(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrSubjectMatter(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSubjectMatter(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSubjectMatter(siteRequest_, CurrikiResource.staticSearchSubjectMatter(siteRequest_, CurrikiResource.staticSetSubjectMatter(siteRequest_, o)));
-	}
-
-	public Integer sqlSubjectMatter() {
-		return subjectMatter;
+	public static String staticSolrFqSubjectMatter(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSubjectMatter(siteRequest_, CurrikiResource.staticSolrSubjectMatter(siteRequest_, CurrikiResource.staticSetSubjectMatter(siteRequest_, o)));
 	}
 
 	//////////////////////////
@@ -2104,10 +1969,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String subjectMatterComment;
 
-	/**	<br> The entity subjectMatterComment
+	/**	<br/> The entity subjectMatterComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:subjectMatterComment">Find the entity subjectMatterComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectMatterComment">Find the entity subjectMatterComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _subjectMatterComment(Wrap<String> w);
@@ -2130,20 +1995,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchSubjectMatterComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSubjectMatterComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSubjectMatterComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSubjectMatterComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSubjectMatterComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSubjectMatterComment(siteRequest_, CurrikiResource.staticSearchSubjectMatterComment(siteRequest_, CurrikiResource.staticSetSubjectMatterComment(siteRequest_, o)));
-	}
-
-	public String sqlSubjectMatterComment() {
-		return subjectMatterComment;
+	public static String staticSolrFqSubjectMatterComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSubjectMatterComment(siteRequest_, CurrikiResource.staticSolrSubjectMatterComment(siteRequest_, CurrikiResource.staticSetSubjectMatterComment(siteRequest_, o)));
 	}
 
 	//////////////////////
@@ -2158,10 +2019,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer supportsTeaching;
 
-	/**	<br> The entity supportsTeaching
+	/**	<br/> The entity supportsTeaching
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:supportsTeaching">Find the entity supportsTeaching in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:supportsTeaching">Find the entity supportsTeaching in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _supportsTeaching(Wrap<Integer> w);
@@ -2191,20 +2052,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchSupportsTeaching(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrSupportsTeaching(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrSupportsTeaching(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrSupportsTeaching(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSupportsTeaching(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSupportsTeaching(siteRequest_, CurrikiResource.staticSearchSupportsTeaching(siteRequest_, CurrikiResource.staticSetSupportsTeaching(siteRequest_, o)));
-	}
-
-	public Integer sqlSupportsTeaching() {
-		return supportsTeaching;
+	public static String staticSolrFqSupportsTeaching(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSupportsTeaching(siteRequest_, CurrikiResource.staticSolrSupportsTeaching(siteRequest_, CurrikiResource.staticSetSupportsTeaching(siteRequest_, o)));
 	}
 
 	/////////////////////////////
@@ -2218,10 +2075,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String supportsTeachingComment;
 
-	/**	<br> The entity supportsTeachingComment
+	/**	<br/> The entity supportsTeachingComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:supportsTeachingComment">Find the entity supportsTeachingComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:supportsTeachingComment">Find the entity supportsTeachingComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _supportsTeachingComment(Wrap<String> w);
@@ -2244,20 +2101,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchSupportsTeachingComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSupportsTeachingComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSupportsTeachingComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSupportsTeachingComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSupportsTeachingComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSupportsTeachingComment(siteRequest_, CurrikiResource.staticSearchSupportsTeachingComment(siteRequest_, CurrikiResource.staticSetSupportsTeachingComment(siteRequest_, o)));
-	}
-
-	public String sqlSupportsTeachingComment() {
-		return supportsTeachingComment;
+	public static String staticSolrFqSupportsTeachingComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSupportsTeachingComment(siteRequest_, CurrikiResource.staticSolrSupportsTeachingComment(siteRequest_, CurrikiResource.staticSetSupportsTeachingComment(siteRequest_, o)));
 	}
 
 	////////////////////////
@@ -2272,10 +2125,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer assessmentsQuality;
 
-	/**	<br> The entity assessmentsQuality
+	/**	<br/> The entity assessmentsQuality
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:assessmentsQuality">Find the entity assessmentsQuality in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assessmentsQuality">Find the entity assessmentsQuality in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _assessmentsQuality(Wrap<Integer> w);
@@ -2305,20 +2158,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchAssessmentsQuality(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrAssessmentsQuality(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrAssessmentsQuality(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrAssessmentsQuality(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqAssessmentsQuality(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrAssessmentsQuality(siteRequest_, CurrikiResource.staticSearchAssessmentsQuality(siteRequest_, CurrikiResource.staticSetAssessmentsQuality(siteRequest_, o)));
-	}
-
-	public Integer sqlAssessmentsQuality() {
-		return assessmentsQuality;
+	public static String staticSolrFqAssessmentsQuality(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrAssessmentsQuality(siteRequest_, CurrikiResource.staticSolrAssessmentsQuality(siteRequest_, CurrikiResource.staticSetAssessmentsQuality(siteRequest_, o)));
 	}
 
 	///////////////////////////////
@@ -2332,10 +2181,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String assessmentsQualityComment;
 
-	/**	<br> The entity assessmentsQualityComment
+	/**	<br/> The entity assessmentsQualityComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:assessmentsQualityComment">Find the entity assessmentsQualityComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assessmentsQualityComment">Find the entity assessmentsQualityComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _assessmentsQualityComment(Wrap<String> w);
@@ -2358,20 +2207,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchAssessmentsQualityComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrAssessmentsQualityComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrAssessmentsQualityComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrAssessmentsQualityComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqAssessmentsQualityComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrAssessmentsQualityComment(siteRequest_, CurrikiResource.staticSearchAssessmentsQualityComment(siteRequest_, CurrikiResource.staticSetAssessmentsQualityComment(siteRequest_, o)));
-	}
-
-	public String sqlAssessmentsQualityComment() {
-		return assessmentsQualityComment;
+	public static String staticSolrFqAssessmentsQualityComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrAssessmentsQualityComment(siteRequest_, CurrikiResource.staticSolrAssessmentsQualityComment(siteRequest_, CurrikiResource.staticSetAssessmentsQualityComment(siteRequest_, o)));
 	}
 
 	//////////////////////////
@@ -2386,10 +2231,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer interactivityQuality;
 
-	/**	<br> The entity interactivityQuality
+	/**	<br/> The entity interactivityQuality
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:interactivityQuality">Find the entity interactivityQuality in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:interactivityQuality">Find the entity interactivityQuality in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _interactivityQuality(Wrap<Integer> w);
@@ -2419,20 +2264,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchInteractivityQuality(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrInteractivityQuality(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrInteractivityQuality(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrInteractivityQuality(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqInteractivityQuality(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrInteractivityQuality(siteRequest_, CurrikiResource.staticSearchInteractivityQuality(siteRequest_, CurrikiResource.staticSetInteractivityQuality(siteRequest_, o)));
-	}
-
-	public Integer sqlInteractivityQuality() {
-		return interactivityQuality;
+	public static String staticSolrFqInteractivityQuality(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrInteractivityQuality(siteRequest_, CurrikiResource.staticSolrInteractivityQuality(siteRequest_, CurrikiResource.staticSetInteractivityQuality(siteRequest_, o)));
 	}
 
 	/////////////////////////////////
@@ -2446,10 +2287,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String interactivityQualityComment;
 
-	/**	<br> The entity interactivityQualityComment
+	/**	<br/> The entity interactivityQualityComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:interactivityQualityComment">Find the entity interactivityQualityComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:interactivityQualityComment">Find the entity interactivityQualityComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _interactivityQualityComment(Wrap<String> w);
@@ -2472,20 +2313,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchInteractivityQualityComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrInteractivityQualityComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrInteractivityQualityComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrInteractivityQualityComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqInteractivityQualityComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrInteractivityQualityComment(siteRequest_, CurrikiResource.staticSearchInteractivityQualityComment(siteRequest_, CurrikiResource.staticSetInteractivityQualityComment(siteRequest_, o)));
-	}
-
-	public String sqlInteractivityQualityComment() {
-		return interactivityQualityComment;
+	public static String staticSolrFqInteractivityQualityComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrInteractivityQualityComment(siteRequest_, CurrikiResource.staticSolrInteractivityQualityComment(siteRequest_, CurrikiResource.staticSetInteractivityQualityComment(siteRequest_, o)));
 	}
 
 	//////////////////////////
@@ -2500,10 +2337,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer instructionalQuality;
 
-	/**	<br> The entity instructionalQuality
+	/**	<br/> The entity instructionalQuality
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:instructionalQuality">Find the entity instructionalQuality in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:instructionalQuality">Find the entity instructionalQuality in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _instructionalQuality(Wrap<Integer> w);
@@ -2533,20 +2370,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchInstructionalQuality(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrInstructionalQuality(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrInstructionalQuality(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrInstructionalQuality(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqInstructionalQuality(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrInstructionalQuality(siteRequest_, CurrikiResource.staticSearchInstructionalQuality(siteRequest_, CurrikiResource.staticSetInstructionalQuality(siteRequest_, o)));
-	}
-
-	public Integer sqlInstructionalQuality() {
-		return instructionalQuality;
+	public static String staticSolrFqInstructionalQuality(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrInstructionalQuality(siteRequest_, CurrikiResource.staticSolrInstructionalQuality(siteRequest_, CurrikiResource.staticSetInstructionalQuality(siteRequest_, o)));
 	}
 
 	/////////////////////////////////
@@ -2560,10 +2393,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String instructionalQualityComment;
 
-	/**	<br> The entity instructionalQualityComment
+	/**	<br/> The entity instructionalQualityComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:instructionalQualityComment">Find the entity instructionalQualityComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:instructionalQualityComment">Find the entity instructionalQualityComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _instructionalQualityComment(Wrap<String> w);
@@ -2586,20 +2419,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchInstructionalQualityComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrInstructionalQualityComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrInstructionalQualityComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrInstructionalQualityComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqInstructionalQualityComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrInstructionalQualityComment(siteRequest_, CurrikiResource.staticSearchInstructionalQualityComment(siteRequest_, CurrikiResource.staticSetInstructionalQualityComment(siteRequest_, o)));
-	}
-
-	public String sqlInstructionalQualityComment() {
-		return instructionalQualityComment;
+	public static String staticSolrFqInstructionalQualityComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrInstructionalQualityComment(siteRequest_, CurrikiResource.staticSolrInstructionalQualityComment(siteRequest_, CurrikiResource.staticSetInstructionalQualityComment(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -2614,10 +2443,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer deeperLearning;
 
-	/**	<br> The entity deeperLearning
+	/**	<br/> The entity deeperLearning
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:deeperLearning">Find the entity deeperLearning in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deeperLearning">Find the entity deeperLearning in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _deeperLearning(Wrap<Integer> w);
@@ -2647,20 +2476,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchDeeperLearning(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrDeeperLearning(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrDeeperLearning(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrDeeperLearning(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDeeperLearning(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrDeeperLearning(siteRequest_, CurrikiResource.staticSearchDeeperLearning(siteRequest_, CurrikiResource.staticSetDeeperLearning(siteRequest_, o)));
-	}
-
-	public Integer sqlDeeperLearning() {
-		return deeperLearning;
+	public static String staticSolrFqDeeperLearning(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDeeperLearning(siteRequest_, CurrikiResource.staticSolrDeeperLearning(siteRequest_, CurrikiResource.staticSetDeeperLearning(siteRequest_, o)));
 	}
 
 	///////////////////////////
@@ -2674,10 +2499,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String deeperLearningComment;
 
-	/**	<br> The entity deeperLearningComment
+	/**	<br/> The entity deeperLearningComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:deeperLearningComment">Find the entity deeperLearningComment in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deeperLearningComment">Find the entity deeperLearningComment in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _deeperLearningComment(Wrap<String> w);
@@ -2700,20 +2525,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchDeeperLearningComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrDeeperLearningComment(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrDeeperLearningComment(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrDeeperLearningComment(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDeeperLearningComment(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrDeeperLearningComment(siteRequest_, CurrikiResource.staticSearchDeeperLearningComment(siteRequest_, CurrikiResource.staticSetDeeperLearningComment(siteRequest_, o)));
-	}
-
-	public String sqlDeeperLearningComment() {
-		return deeperLearningComment;
+	public static String staticSolrFqDeeperLearningComment(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDeeperLearningComment(siteRequest_, CurrikiResource.staticSolrDeeperLearningComment(siteRequest_, CurrikiResource.staticSetDeeperLearningComment(siteRequest_, o)));
 	}
 
 	/////////////
@@ -2727,10 +2548,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String partner;
 
-	/**	<br> The entity partner
+	/**	<br/> The entity partner
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:partner">Find the entity partner in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:partner">Find the entity partner in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _partner(Wrap<String> w);
@@ -2753,20 +2574,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchPartner(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPartner(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPartner(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPartner(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPartner(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrPartner(siteRequest_, CurrikiResource.staticSearchPartner(siteRequest_, CurrikiResource.staticSetPartner(siteRequest_, o)));
-	}
-
-	public String sqlPartner() {
-		return partner;
+	public static String staticSolrFqPartner(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPartner(siteRequest_, CurrikiResource.staticSolrPartner(siteRequest_, CurrikiResource.staticSetPartner(siteRequest_, o)));
 	}
 
 	////////////////
@@ -2777,16 +2594,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime createDate;
 
-	/**	<br> The entity createDate
+	/**	<br/> The entity createDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:createDate">Find the entity createDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:createDate">Find the entity createDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _createDate(Wrap<ZonedDateTime> w);
@@ -2808,8 +2625,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.createDate = CurrikiResource.staticSetCreateDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetCreateDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -2828,20 +2643,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchCreateDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrCreateDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrCreateDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrCreateDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqCreateDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrCreateDate(siteRequest_, CurrikiResource.staticSearchCreateDate(siteRequest_, CurrikiResource.staticSetCreateDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlCreateDate() {
-		return createDate == null ? null : createDate.toOffsetDateTime();
+	public static String staticSolrFqCreateDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrCreateDate(siteRequest_, CurrikiResource.staticSolrCreateDate(siteRequest_, CurrikiResource.staticSetCreateDate(siteRequest_, o)));
 	}
 
 	//////////
@@ -2855,10 +2666,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String type;
 
-	/**	<br> The entity type
+	/**	<br/> The entity type
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:type">Find the entity type in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:type">Find the entity type in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _type(Wrap<String> w);
@@ -2881,20 +2692,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchType(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrType(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrType(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrType(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqType(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrType(siteRequest_, CurrikiResource.staticSearchType(siteRequest_, CurrikiResource.staticSetType(siteRequest_, o)));
-	}
-
-	public String sqlType() {
-		return type;
+	public static String staticSolrFqType(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrType(siteRequest_, CurrikiResource.staticSolrType(siteRequest_, CurrikiResource.staticSetType(siteRequest_, o)));
 	}
 
 	//////////////
@@ -2908,10 +2715,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String featured;
 
-	/**	<br> The entity featured
+	/**	<br/> The entity featured
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:featured">Find the entity featured in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:featured">Find the entity featured in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _featured(Wrap<String> w);
@@ -2934,20 +2741,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchFeatured(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrFeatured(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrFeatured(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrFeatured(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqFeatured(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrFeatured(siteRequest_, CurrikiResource.staticSearchFeatured(siteRequest_, CurrikiResource.staticSetFeatured(siteRequest_, o)));
-	}
-
-	public String sqlFeatured() {
-		return featured;
+	public static String staticSolrFqFeatured(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrFeatured(siteRequest_, CurrikiResource.staticSolrFeatured(siteRequest_, CurrikiResource.staticSetFeatured(siteRequest_, o)));
 	}
 
 	//////////
@@ -2961,10 +2764,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String page;
 
-	/**	<br> The entity page
+	/**	<br/> The entity page
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:page">Find the entity page in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:page">Find the entity page in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _page(Wrap<String> w);
@@ -2987,20 +2790,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchPage(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPage(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPage(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPage(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPage(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrPage(siteRequest_, CurrikiResource.staticSearchPage(siteRequest_, CurrikiResource.staticSetPage(siteRequest_, o)));
-	}
-
-	public String sqlPage() {
-		return page;
+	public static String staticSolrFqPage(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPage(siteRequest_, CurrikiResource.staticSolrPage(siteRequest_, CurrikiResource.staticSetPage(siteRequest_, o)));
 	}
 
 	////////////
@@ -3014,10 +2813,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String active;
 
-	/**	<br> The entity active
+	/**	<br/> The entity active
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:active">Find the entity active in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:active">Find the entity active in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _active(Wrap<String> w);
@@ -3040,20 +2839,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchActive(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrActive(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrActive(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrActive(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqActive(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrActive(siteRequest_, CurrikiResource.staticSearchActive(siteRequest_, CurrikiResource.staticSetActive(siteRequest_, o)));
-	}
-
-	public String sqlActive() {
-		return active;
+	public static String staticSolrFqActive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrActive(siteRequest_, CurrikiResource.staticSolrActive(siteRequest_, CurrikiResource.staticSetActive(siteRequest_, o)));
 	}
 
 	////////////
@@ -3067,10 +2862,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String Public;
 
-	/**	<br> The entity Public
+	/**	<br/> The entity Public
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:Public">Find the entity Public in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:Public">Find the entity Public in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _Public(Wrap<String> w);
@@ -3093,20 +2888,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchPublic(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPublic(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPublic(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPublic(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPublic(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrPublic(siteRequest_, CurrikiResource.staticSearchPublic(siteRequest_, CurrikiResource.staticSetPublic(siteRequest_, o)));
-	}
-
-	public String sqlPublic() {
-		return Public;
+	public static String staticSolrFqPublic(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPublic(siteRequest_, CurrikiResource.staticSolrPublic(siteRequest_, CurrikiResource.staticSetPublic(siteRequest_, o)));
 	}
 
 	////////////
@@ -3121,10 +2912,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer xwd_id;
 
-	/**	<br> The entity xwd_id
+	/**	<br/> The entity xwd_id
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:xwd_id">Find the entity xwd_id in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:xwd_id">Find the entity xwd_id in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _xwd_id(Wrap<Integer> w);
@@ -3154,20 +2945,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchXwd_id(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrXwd_id(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrXwd_id(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrXwd_id(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqXwd_id(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrXwd_id(siteRequest_, CurrikiResource.staticSearchXwd_id(siteRequest_, CurrikiResource.staticSetXwd_id(siteRequest_, o)));
-	}
-
-	public Integer sqlXwd_id() {
-		return xwd_id;
+	public static String staticSolrFqXwd_id(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrXwd_id(siteRequest_, CurrikiResource.staticSolrXwd_id(siteRequest_, CurrikiResource.staticSetXwd_id(siteRequest_, o)));
 	}
 
 	///////////////
@@ -3181,10 +2968,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String mediaType;
 
-	/**	<br> The entity mediaType
+	/**	<br/> The entity mediaType
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:mediaType">Find the entity mediaType in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:mediaType">Find the entity mediaType in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _mediaType(Wrap<String> w);
@@ -3207,20 +2994,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchMediaType(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrMediaType(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrMediaType(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrMediaType(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqMediaType(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrMediaType(siteRequest_, CurrikiResource.staticSearchMediaType(siteRequest_, CurrikiResource.staticSetMediaType(siteRequest_, o)));
-	}
-
-	public String sqlMediaType() {
-		return mediaType;
+	public static String staticSolrFqMediaType(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrMediaType(siteRequest_, CurrikiResource.staticSolrMediaType(siteRequest_, CurrikiResource.staticSetMediaType(siteRequest_, o)));
 	}
 
 	////////////
@@ -3234,10 +3017,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String access;
 
-	/**	<br> The entity access
+	/**	<br/> The entity access
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:access">Find the entity access in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:access">Find the entity access in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _access(Wrap<String> w);
@@ -3260,20 +3043,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchAccess(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrAccess(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrAccess(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrAccess(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqAccess(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrAccess(siteRequest_, CurrikiResource.staticSearchAccess(siteRequest_, CurrikiResource.staticSetAccess(siteRequest_, o)));
-	}
-
-	public String sqlAccess() {
-		return access;
+	public static String staticSolrFqAccess(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrAccess(siteRequest_, CurrikiResource.staticSolrAccess(siteRequest_, CurrikiResource.staticSetAccess(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -3288,10 +3067,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal memberRating;
 
-	/**	<br> The entity memberRating
+	/**	<br/> The entity memberRating
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:memberRating">Find the entity memberRating in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:memberRating">Find the entity memberRating in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _memberRating(Wrap<BigDecimal> w);
@@ -3330,20 +3109,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Double staticSearchMemberRating(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSolrMemberRating(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSearchStrMemberRating(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSolrStrMemberRating(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqMemberRating(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrMemberRating(siteRequest_, CurrikiResource.staticSearchMemberRating(siteRequest_, CurrikiResource.staticSetMemberRating(siteRequest_, o)));
-	}
-
-	public BigDecimal sqlMemberRating() {
-		return memberRating;
+	public static String staticSolrFqMemberRating(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrMemberRating(siteRequest_, CurrikiResource.staticSolrMemberRating(siteRequest_, CurrikiResource.staticSetMemberRating(siteRequest_, o)));
 	}
 
 	/////////////
@@ -3357,10 +3132,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String aligned;
 
-	/**	<br> The entity aligned
+	/**	<br/> The entity aligned
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:aligned">Find the entity aligned in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:aligned">Find the entity aligned in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _aligned(Wrap<String> w);
@@ -3383,20 +3158,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchAligned(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrAligned(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrAligned(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrAligned(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqAligned(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrAligned(siteRequest_, CurrikiResource.staticSearchAligned(siteRequest_, CurrikiResource.staticSetAligned(siteRequest_, o)));
-	}
-
-	public String sqlAligned() {
-		return aligned;
+	public static String staticSolrFqAligned(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrAligned(siteRequest_, CurrikiResource.staticSolrAligned(siteRequest_, CurrikiResource.staticSetAligned(siteRequest_, o)));
 	}
 
 	/////////////
@@ -3410,10 +3181,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrl;
 
-	/**	<br> The entity pageUrl
+	/**	<br/> The entity pageUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:pageUrl">Find the entity pageUrl in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrl">Find the entity pageUrl in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrl(Wrap<String> w);
@@ -3436,20 +3207,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchPageUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrPageUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrPageUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrPageUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPageUrl(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrPageUrl(siteRequest_, CurrikiResource.staticSearchPageUrl(siteRequest_, CurrikiResource.staticSetPageUrl(siteRequest_, o)));
-	}
-
-	public String sqlPageUrl() {
-		return pageUrl;
+	public static String staticSolrFqPageUrl(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPageUrl(siteRequest_, CurrikiResource.staticSolrPageUrl(siteRequest_, CurrikiResource.staticSetPageUrl(siteRequest_, o)));
 	}
 
 	/////////////
@@ -3463,10 +3230,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String indexed;
 
-	/**	<br> The entity indexed
+	/**	<br/> The entity indexed
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:indexed">Find the entity indexed in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:indexed">Find the entity indexed in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _indexed(Wrap<String> w);
@@ -3489,20 +3256,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchIndexed(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrIndexed(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrIndexed(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrIndexed(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqIndexed(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrIndexed(siteRequest_, CurrikiResource.staticSearchIndexed(siteRequest_, CurrikiResource.staticSetIndexed(siteRequest_, o)));
-	}
-
-	public String sqlIndexed() {
-		return indexed;
+	public static String staticSolrFqIndexed(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrIndexed(siteRequest_, CurrikiResource.staticSolrIndexed(siteRequest_, CurrikiResource.staticSetIndexed(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -3513,16 +3276,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime lastIndexDate;
 
-	/**	<br> The entity lastIndexDate
+	/**	<br/> The entity lastIndexDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastIndexDate">Find the entity lastIndexDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastIndexDate">Find the entity lastIndexDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _lastIndexDate(Wrap<ZonedDateTime> w);
@@ -3544,8 +3307,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.lastIndexDate = CurrikiResource.staticSetLastIndexDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetLastIndexDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -3564,20 +3325,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchLastIndexDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrLastIndexDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrLastIndexDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrLastIndexDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqLastIndexDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrLastIndexDate(siteRequest_, CurrikiResource.staticSearchLastIndexDate(siteRequest_, CurrikiResource.staticSetLastIndexDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlLastIndexDate() {
-		return lastIndexDate == null ? null : lastIndexDate.toOffsetDateTime();
+	public static String staticSolrFqLastIndexDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLastIndexDate(siteRequest_, CurrikiResource.staticSolrLastIndexDate(siteRequest_, CurrikiResource.staticSetLastIndexDate(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -3591,10 +3348,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String indexRequired;
 
-	/**	<br> The entity indexRequired
+	/**	<br/> The entity indexRequired
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:indexRequired">Find the entity indexRequired in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:indexRequired">Find the entity indexRequired in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _indexRequired(Wrap<String> w);
@@ -3617,20 +3374,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrIndexRequired(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrIndexRequired(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqIndexRequired(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrIndexRequired(siteRequest_, CurrikiResource.staticSearchIndexRequired(siteRequest_, CurrikiResource.staticSetIndexRequired(siteRequest_, o)));
-	}
-
-	public String sqlIndexRequired() {
-		return indexRequired;
+	public static String staticSolrFqIndexRequired(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrIndexRequired(siteRequest_, CurrikiResource.staticSolrIndexRequired(siteRequest_, CurrikiResource.staticSetIndexRequired(siteRequest_, o)));
 	}
 
 	///////////////////////
@@ -3641,16 +3394,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime indexRequiredDate;
 
-	/**	<br> The entity indexRequiredDate
+	/**	<br/> The entity indexRequiredDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:indexRequiredDate">Find the entity indexRequiredDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:indexRequiredDate">Find the entity indexRequiredDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _indexRequiredDate(Wrap<ZonedDateTime> w);
@@ -3672,8 +3425,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.indexRequiredDate = CurrikiResource.staticSetIndexRequiredDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetIndexRequiredDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -3692,20 +3443,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchIndexRequiredDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrIndexRequiredDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrIndexRequiredDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrIndexRequiredDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqIndexRequiredDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrIndexRequiredDate(siteRequest_, CurrikiResource.staticSearchIndexRequiredDate(siteRequest_, CurrikiResource.staticSetIndexRequiredDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlIndexRequiredDate() {
-		return indexRequiredDate == null ? null : indexRequiredDate.toOffsetDateTime();
+	public static String staticSolrFqIndexRequiredDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrIndexRequiredDate(siteRequest_, CurrikiResource.staticSolrIndexRequiredDate(siteRequest_, CurrikiResource.staticSetIndexRequiredDate(siteRequest_, o)));
 	}
 
 	//////////////
@@ -3719,10 +3466,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String rescrape;
 
-	/**	<br> The entity rescrape
+	/**	<br/> The entity rescrape
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:rescrape">Find the entity rescrape in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rescrape">Find the entity rescrape in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _rescrape(Wrap<String> w);
@@ -3745,20 +3492,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchRescrape(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrRescrape(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrRescrape(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrRescrape(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqRescrape(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrRescrape(siteRequest_, CurrikiResource.staticSearchRescrape(siteRequest_, CurrikiResource.staticSetRescrape(siteRequest_, o)));
-	}
-
-	public String sqlRescrape() {
-		return rescrape;
+	public static String staticSolrFqRescrape(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrRescrape(siteRequest_, CurrikiResource.staticSolrRescrape(siteRequest_, CurrikiResource.staticSetRescrape(siteRequest_, o)));
 	}
 
 	//////////////
@@ -3772,10 +3515,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String goButton;
 
-	/**	<br> The entity goButton
+	/**	<br/> The entity goButton
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:goButton">Find the entity goButton in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:goButton">Find the entity goButton in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _goButton(Wrap<String> w);
@@ -3798,20 +3541,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchGoButton(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrGoButton(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrGoButton(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrGoButton(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqGoButton(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrGoButton(siteRequest_, CurrikiResource.staticSearchGoButton(siteRequest_, CurrikiResource.staticSetGoButton(siteRequest_, o)));
-	}
-
-	public String sqlGoButton() {
-		return goButton;
+	public static String staticSolrFqGoButton(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrGoButton(siteRequest_, CurrikiResource.staticSolrGoButton(siteRequest_, CurrikiResource.staticSetGoButton(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -3825,10 +3564,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String downloadButton;
 
-	/**	<br> The entity downloadButton
+	/**	<br/> The entity downloadButton
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:downloadButton">Find the entity downloadButton in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:downloadButton">Find the entity downloadButton in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _downloadButton(Wrap<String> w);
@@ -3851,20 +3590,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrDownloadButton(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrDownloadButton(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDownloadButton(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrDownloadButton(siteRequest_, CurrikiResource.staticSearchDownloadButton(siteRequest_, CurrikiResource.staticSetDownloadButton(siteRequest_, o)));
-	}
-
-	public String sqlDownloadButton() {
-		return downloadButton;
+	public static String staticSolrFqDownloadButton(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDownloadButton(siteRequest_, CurrikiResource.staticSolrDownloadButton(siteRequest_, CurrikiResource.staticSetDownloadButton(siteRequest_, o)));
 	}
 
 	/////////////////
@@ -3878,10 +3613,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String topOfSearch;
 
-	/**	<br> The entity topOfSearch
+	/**	<br/> The entity topOfSearch
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:topOfSearch">Find the entity topOfSearch in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:topOfSearch">Find the entity topOfSearch in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _topOfSearch(Wrap<String> w);
@@ -3904,20 +3639,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrTopOfSearch(siteRequest_, CurrikiResource.staticSearchTopOfSearch(siteRequest_, CurrikiResource.staticSetTopOfSearch(siteRequest_, o)));
-	}
-
-	public String sqlTopOfSearch() {
-		return topOfSearch;
+	public static String staticSolrFqTopOfSearch(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTopOfSearch(siteRequest_, CurrikiResource.staticSolrTopOfSearch(siteRequest_, CurrikiResource.staticSetTopOfSearch(siteRequest_, o)));
 	}
 
 	////////////
@@ -3931,10 +3662,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String remove;
 
-	/**	<br> The entity remove
+	/**	<br/> The entity remove
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:remove">Find the entity remove in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:remove">Find the entity remove in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _remove(Wrap<String> w);
@@ -3957,20 +3688,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchRemove(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrRemove(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrRemove(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrRemove(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqRemove(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrRemove(siteRequest_, CurrikiResource.staticSearchRemove(siteRequest_, CurrikiResource.staticSetRemove(siteRequest_, o)));
-	}
-
-	public String sqlRemove() {
-		return remove;
+	public static String staticSolrFqRemove(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrRemove(siteRequest_, CurrikiResource.staticSolrRemove(siteRequest_, CurrikiResource.staticSetRemove(siteRequest_, o)));
 	}
 
 	//////////
@@ -3984,10 +3711,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String spam;
 
-	/**	<br> The entity spam
+	/**	<br/> The entity spam
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:spam">Find the entity spam in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:spam">Find the entity spam in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _spam(Wrap<String> w);
@@ -4010,20 +3737,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchSpam(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSpam(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSpam(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSpam(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSpam(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSpam(siteRequest_, CurrikiResource.staticSearchSpam(siteRequest_, CurrikiResource.staticSetSpam(siteRequest_, o)));
-	}
-
-	public String sqlSpam() {
-		return spam;
+	public static String staticSolrFqSpam(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSpam(siteRequest_, CurrikiResource.staticSolrSpam(siteRequest_, CurrikiResource.staticSetSpam(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -4038,10 +3761,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer topOfSearchInt;
 
-	/**	<br> The entity topOfSearchInt
+	/**	<br/> The entity topOfSearchInt
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:topOfSearchInt">Find the entity topOfSearchInt in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:topOfSearchInt">Find the entity topOfSearchInt in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _topOfSearchInt(Wrap<Integer> w);
@@ -4071,20 +3794,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchTopOfSearchInt(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrTopOfSearchInt(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrTopOfSearchInt(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrTopOfSearchInt(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqTopOfSearchInt(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrTopOfSearchInt(siteRequest_, CurrikiResource.staticSearchTopOfSearchInt(siteRequest_, CurrikiResource.staticSetTopOfSearchInt(siteRequest_, o)));
-	}
-
-	public Integer sqlTopOfSearchInt() {
-		return topOfSearchInt;
+	public static String staticSolrFqTopOfSearchInt(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTopOfSearchInt(siteRequest_, CurrikiResource.staticSolrTopOfSearchInt(siteRequest_, CurrikiResource.staticSetTopOfSearchInt(siteRequest_, o)));
 	}
 
 	////////////////
@@ -4099,10 +3818,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer partnerInt;
 
-	/**	<br> The entity partnerInt
+	/**	<br/> The entity partnerInt
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:partnerInt">Find the entity partnerInt in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:partnerInt">Find the entity partnerInt in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _partnerInt(Wrap<Integer> w);
@@ -4132,20 +3851,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchPartnerInt(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrPartnerInt(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrPartnerInt(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrPartnerInt(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqPartnerInt(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrPartnerInt(siteRequest_, CurrikiResource.staticSearchPartnerInt(siteRequest_, CurrikiResource.staticSetPartnerInt(siteRequest_, o)));
-	}
-
-	public Integer sqlPartnerInt() {
-		return partnerInt;
+	public static String staticSolrFqPartnerInt(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrPartnerInt(siteRequest_, CurrikiResource.staticSolrPartnerInt(siteRequest_, CurrikiResource.staticSetPartnerInt(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -4159,10 +3874,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String reviewResource;
 
-	/**	<br> The entity reviewResource
+	/**	<br/> The entity reviewResource
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewResource">Find the entity reviewResource in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewResource">Find the entity reviewResource in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _reviewResource(Wrap<String> w);
@@ -4185,20 +3900,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchReviewResource(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrReviewResource(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrReviewResource(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrReviewResource(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqReviewResource(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrReviewResource(siteRequest_, CurrikiResource.staticSearchReviewResource(siteRequest_, CurrikiResource.staticSetReviewResource(siteRequest_, o)));
-	}
-
-	public String sqlReviewResource() {
-		return reviewResource;
+	public static String staticSolrFqReviewResource(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrReviewResource(siteRequest_, CurrikiResource.staticSolrReviewResource(siteRequest_, CurrikiResource.staticSetReviewResource(siteRequest_, o)));
 	}
 
 	////////////
@@ -4212,10 +3923,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String oldUrl;
 
-	/**	<br> The entity oldUrl
+	/**	<br/> The entity oldUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:oldUrl">Find the entity oldUrl in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:oldUrl">Find the entity oldUrl in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _oldUrl(Wrap<String> w);
@@ -4238,20 +3949,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchOldUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrOldUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrOldUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrOldUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqOldUrl(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrOldUrl(siteRequest_, CurrikiResource.staticSearchOldUrl(siteRequest_, CurrikiResource.staticSetOldUrl(siteRequest_, o)));
-	}
-
-	public String sqlOldUrl() {
-		return oldUrl;
+	public static String staticSolrFqOldUrl(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrOldUrl(siteRequest_, CurrikiResource.staticSolrOldUrl(siteRequest_, CurrikiResource.staticSetOldUrl(siteRequest_, o)));
 	}
 
 	//////////////////////
@@ -4265,10 +3972,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String contentDisplayOk;
 
-	/**	<br> The entity contentDisplayOk
+	/**	<br/> The entity contentDisplayOk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contentDisplayOk">Find the entity contentDisplayOk in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contentDisplayOk">Find the entity contentDisplayOk in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _contentDisplayOk(Wrap<String> w);
@@ -4291,20 +3998,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrContentDisplayOk(siteRequest_, CurrikiResource.staticSearchContentDisplayOk(siteRequest_, CurrikiResource.staticSetContentDisplayOk(siteRequest_, o)));
-	}
-
-	public String sqlContentDisplayOk() {
-		return contentDisplayOk;
+	public static String staticSolrFqContentDisplayOk(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrContentDisplayOk(siteRequest_, CurrikiResource.staticSolrContentDisplayOk(siteRequest_, CurrikiResource.staticSetContentDisplayOk(siteRequest_, o)));
 	}
 
 	//////////////
@@ -4318,10 +4021,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String metadata;
 
-	/**	<br> The entity metadata
+	/**	<br/> The entity metadata
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:metadata">Find the entity metadata in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:metadata">Find the entity metadata in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _metadata(Wrap<String> w);
@@ -4344,20 +4047,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchMetadata(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrMetadata(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrMetadata(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrMetadata(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqMetadata(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrMetadata(siteRequest_, CurrikiResource.staticSearchMetadata(siteRequest_, CurrikiResource.staticSetMetadata(siteRequest_, o)));
-	}
-
-	public String sqlMetadata() {
-		return metadata;
+	public static String staticSolrFqMetadata(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrMetadata(siteRequest_, CurrikiResource.staticSolrMetadata(siteRequest_, CurrikiResource.staticSetMetadata(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -4371,10 +4070,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String approvalStatus;
 
-	/**	<br> The entity approvalStatus
+	/**	<br/> The entity approvalStatus
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:approvalStatus">Find the entity approvalStatus in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:approvalStatus">Find the entity approvalStatus in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _approvalStatus(Wrap<String> w);
@@ -4397,20 +4096,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchApprovalStatus(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrApprovalStatus(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrApprovalStatus(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrApprovalStatus(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqApprovalStatus(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrApprovalStatus(siteRequest_, CurrikiResource.staticSearchApprovalStatus(siteRequest_, CurrikiResource.staticSetApprovalStatus(siteRequest_, o)));
-	}
-
-	public String sqlApprovalStatus() {
-		return approvalStatus;
+	public static String staticSolrFqApprovalStatus(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrApprovalStatus(siteRequest_, CurrikiResource.staticSolrApprovalStatus(siteRequest_, CurrikiResource.staticSetApprovalStatus(siteRequest_, o)));
 	}
 
 	////////////////////////
@@ -4421,16 +4116,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = ComputateZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ComputateZonedDateTimeSerializer.class)
+	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime approvalStatusDate;
 
-	/**	<br> The entity approvalStatusDate
+	/**	<br/> The entity approvalStatusDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:approvalStatusDate">Find the entity approvalStatusDate in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:approvalStatusDate">Find the entity approvalStatusDate in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _approvalStatusDate(Wrap<ZonedDateTime> w);
@@ -4452,8 +4147,6 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		this.approvalStatusDate = CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o);
 	}
 	public static ZonedDateTime staticSetApprovalStatusDate(SiteRequestEnUS siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
 		if(StringUtils.endsWith(o, "Z"))
 			return o == null ? null : Instant.parse(o).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
 		else
@@ -4472,20 +4165,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Date staticSearchApprovalStatusDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
+	public static Date staticSolrApprovalStatusDate(SiteRequestEnUS siteRequest_, ZonedDateTime o) {
 		return o == null ? null : Date.from(o.toInstant());
 	}
 
-	public static String staticSearchStrApprovalStatusDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSolrStrApprovalStatusDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqApprovalStatusDate(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrApprovalStatusDate(siteRequest_, CurrikiResource.staticSearchApprovalStatusDate(siteRequest_, CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o)));
-	}
-
-	public OffsetDateTime sqlApprovalStatusDate() {
-		return approvalStatusDate == null ? null : approvalStatusDate.toOffsetDateTime();
+	public static String staticSolrFqApprovalStatusDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrApprovalStatusDate(siteRequest_, CurrikiResource.staticSolrApprovalStatusDate(siteRequest_, CurrikiResource.staticSetApprovalStatusDate(siteRequest_, o)));
 	}
 
 	//////////////
@@ -4499,10 +4188,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String spamUser;
 
-	/**	<br> The entity spamUser
+	/**	<br/> The entity spamUser
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:spamUser">Find the entity spamUser in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:spamUser">Find the entity spamUser in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _spamUser(Wrap<String> w);
@@ -4525,20 +4214,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchSpamUser(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrSpamUser(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrSpamUser(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrSpamUser(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSpamUser(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrSpamUser(siteRequest_, CurrikiResource.staticSearchSpamUser(siteRequest_, CurrikiResource.staticSetSpamUser(siteRequest_, o)));
-	}
-
-	public String sqlSpamUser() {
-		return spamUser;
+	public static String staticSolrFqSpamUser(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSpamUser(siteRequest_, CurrikiResource.staticSolrSpamUser(siteRequest_, CurrikiResource.staticSetSpamUser(siteRequest_, o)));
 	}
 
 	/////////
@@ -4552,10 +4237,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String url;
 
-	/**	<br> The entity url
+	/**	<br/> The entity url
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:url">Find the entity url in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:url">Find the entity url in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _url(Wrap<String> w);
@@ -4578,20 +4263,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSearchUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqUrl(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrUrl(siteRequest_, CurrikiResource.staticSearchUrl(siteRequest_, CurrikiResource.staticSetUrl(siteRequest_, o)));
-	}
-
-	public String sqlUrl() {
-		return url;
+	public static String staticSolrFqUrl(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrUrl(siteRequest_, CurrikiResource.staticSolrUrl(siteRequest_, CurrikiResource.staticSetUrl(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -4606,10 +4287,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer displaySeqNo;
 
-	/**	<br> The entity displaySeqNo
+	/**	<br/> The entity displaySeqNo
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:displaySeqNo">Find the entity displaySeqNo in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:displaySeqNo">Find the entity displaySeqNo in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _displaySeqNo(Wrap<Integer> w);
@@ -4639,20 +4320,16 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchDisplaySeqNo(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrDisplaySeqNo(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrDisplaySeqNo(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrDisplaySeqNo(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDisplaySeqNo(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrDisplaySeqNo(siteRequest_, CurrikiResource.staticSearchDisplaySeqNo(siteRequest_, CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o)));
-	}
-
-	public Integer sqlDisplaySeqNo() {
-		return displaySeqNo;
+	public static String staticSolrFqDisplaySeqNo(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDisplaySeqNo(siteRequest_, CurrikiResource.staticSolrDisplaySeqNo(siteRequest_, CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o)));
 	}
 
 	////////////
@@ -4667,10 +4344,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer fileId;
 
-	/**	<br> The entity fileId
+	/**	<br/> The entity fileId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:fileId">Find the entity fileId in Solr</a>
-	 * <br>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:fileId">Find the entity fileId in Solr</a>
+	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _fileId(Wrap<Integer> w);
@@ -4700,20 +4377,759 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSearchFileId(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSolrFileId(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrFileId(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrFileId(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqFileId(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSearchStrFileId(siteRequest_, CurrikiResource.staticSearchFileId(siteRequest_, CurrikiResource.staticSetFileId(siteRequest_, o)));
+	public static String staticSolrFqFileId(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrFileId(siteRequest_, CurrikiResource.staticSolrFileId(siteRequest_, CurrikiResource.staticSetFileId(siteRequest_, o)));
 	}
 
-	public Integer sqlFileId() {
-		return fileId;
+	//////////////
+	// fileName //
+	//////////////
+
+	/**	 The entity fileName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String fileName;
+
+	/**	<br/> The entity fileName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:fileName">Find the entity fileName in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _fileName(Wrap<String> w);
+
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String o) {
+		this.fileName = CurrikiResource.staticSetFileName(siteRequest_, o);
+	}
+	public static String staticSetFileName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource fileNameInit() {
+		Wrap<String> fileNameWrap = new Wrap<String>().var("fileName");
+		if(fileName == null) {
+			_fileName(fileNameWrap);
+			setFileName(fileNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrFileName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrFileName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqFileName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrFileName(siteRequest_, CurrikiResource.staticSolrFileName(siteRequest_, CurrikiResource.staticSetFileName(siteRequest_, o)));
+	}
+
+	////////////////
+	// uploadDate //
+	////////////////
+
+	/**	 The entity uploadDate
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String uploadDate;
+
+	/**	<br/> The entity uploadDate
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:uploadDate">Find the entity uploadDate in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _uploadDate(Wrap<String> w);
+
+	public String getUploadDate() {
+		return uploadDate;
+	}
+	public void setUploadDate(String o) {
+		this.uploadDate = CurrikiResource.staticSetUploadDate(siteRequest_, o);
+	}
+	public static String staticSetUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource uploadDateInit() {
+		Wrap<String> uploadDateWrap = new Wrap<String>().var("uploadDate");
+		if(uploadDate == null) {
+			_uploadDate(uploadDateWrap);
+			setUploadDate(uploadDateWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrUploadDate(siteRequest_, CurrikiResource.staticSolrUploadDate(siteRequest_, CurrikiResource.staticSetUploadDate(siteRequest_, o)));
+	}
+
+	//////////////
+	// sequence //
+	//////////////
+
+	/**	 The entity sequence
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer sequence;
+
+	/**	<br/> The entity sequence
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sequence">Find the entity sequence in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _sequence(Wrap<Integer> w);
+
+	public Integer getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
+	@JsonIgnore
+	public void setSequence(String o) {
+		this.sequence = CurrikiResource.staticSetSequence(siteRequest_, o);
+	}
+	public static Integer staticSetSequence(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected CurrikiResource sequenceInit() {
+		Wrap<Integer> sequenceWrap = new Wrap<Integer>().var("sequence");
+		if(sequence == null) {
+			_sequence(sequenceWrap);
+			setSequence(sequenceWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static Integer staticSolrSequence(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSolrStrSequence(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSequence(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSequence(siteRequest_, CurrikiResource.staticSolrSequence(siteRequest_, CurrikiResource.staticSetSequence(siteRequest_, o)));
+	}
+
+	////////////////
+	// uniqueName //
+	////////////////
+
+	/**	 The entity uniqueName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String uniqueName;
+
+	/**	<br/> The entity uniqueName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:uniqueName">Find the entity uniqueName in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _uniqueName(Wrap<String> w);
+
+	public String getUniqueName() {
+		return uniqueName;
+	}
+	public void setUniqueName(String o) {
+		this.uniqueName = CurrikiResource.staticSetUniqueName(siteRequest_, o);
+	}
+	public static String staticSetUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource uniqueNameInit() {
+		Wrap<String> uniqueNameWrap = new Wrap<String>().var("uniqueName");
+		if(uniqueName == null) {
+			_uniqueName(uniqueNameWrap);
+			setUniqueName(uniqueNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrUniqueName(siteRequest_, CurrikiResource.staticSolrUniqueName(siteRequest_, CurrikiResource.staticSetUniqueName(siteRequest_, o)));
+	}
+
+	/////////
+	// ext //
+	/////////
+
+	/**	 The entity ext
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String ext;
+
+	/**	<br/> The entity ext
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:ext">Find the entity ext in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _ext(Wrap<String> w);
+
+	public String getExt() {
+		return ext;
+	}
+	public void setExt(String o) {
+		this.ext = CurrikiResource.staticSetExt(siteRequest_, o);
+	}
+	public static String staticSetExt(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource extInit() {
+		Wrap<String> extWrap = new Wrap<String>().var("ext");
+		if(ext == null) {
+			_ext(extWrap);
+			setExt(extWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrExt(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrExt(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqExt(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrExt(siteRequest_, CurrikiResource.staticSolrExt(siteRequest_, CurrikiResource.staticSetExt(siteRequest_, o)));
+	}
+
+	////////////////
+	// tempactive //
+	////////////////
+
+	/**	 The entity tempactive
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String tempactive;
+
+	/**	<br/> The entity tempactive
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tempactive">Find the entity tempactive in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _tempactive(Wrap<String> w);
+
+	public String getTempactive() {
+		return tempactive;
+	}
+	public void setTempactive(String o) {
+		this.tempactive = CurrikiResource.staticSetTempactive(siteRequest_, o);
+	}
+	public static String staticSetTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource tempactiveInit() {
+		Wrap<String> tempactiveWrap = new Wrap<String>().var("tempactive");
+		if(tempactive == null) {
+			_tempactive(tempactiveWrap);
+			setTempactive(tempactiveWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTempactive(siteRequest_, CurrikiResource.staticSolrTempactive(siteRequest_, CurrikiResource.staticSetTempactive(siteRequest_, o)));
+	}
+
+	////////////
+	// s3path //
+	////////////
+
+	/**	 The entity s3path
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String s3path;
+
+	/**	<br/> The entity s3path
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:s3path">Find the entity s3path in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _s3path(Wrap<String> w);
+
+	public String getS3path() {
+		return s3path;
+	}
+	public void setS3path(String o) {
+		this.s3path = CurrikiResource.staticSetS3path(siteRequest_, o);
+	}
+	public static String staticSetS3path(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource s3pathInit() {
+		Wrap<String> s3pathWrap = new Wrap<String>().var("s3path");
+		if(s3path == null) {
+			_s3path(s3pathWrap);
+			setS3path(s3pathWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrS3path(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrS3path(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqS3path(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrS3path(siteRequest_, CurrikiResource.staticSolrS3path(siteRequest_, CurrikiResource.staticSetS3path(siteRequest_, o)));
+	}
+
+	///////////////
+	// sdfStatus //
+	///////////////
+
+	/**	 The entity sdfStatus
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String sdfStatus;
+
+	/**	<br/> The entity sdfStatus
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sdfStatus">Find the entity sdfStatus in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _sdfStatus(Wrap<String> w);
+
+	public String getSdfStatus() {
+		return sdfStatus;
+	}
+	public void setSdfStatus(String o) {
+		this.sdfStatus = CurrikiResource.staticSetSdfStatus(siteRequest_, o);
+	}
+	public static String staticSetSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource sdfStatusInit() {
+		Wrap<String> sdfStatusWrap = new Wrap<String>().var("sdfStatus");
+		if(sdfStatus == null) {
+			_sdfStatus(sdfStatusWrap);
+			setSdfStatus(sdfStatusWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSdfStatus(siteRequest_, CurrikiResource.staticSolrSdfStatus(siteRequest_, CurrikiResource.staticSetSdfStatus(siteRequest_, o)));
+	}
+
+	////////////////
+	// transcoded //
+	////////////////
+
+	/**	 The entity transcoded
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String transcoded;
+
+	/**	<br/> The entity transcoded
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:transcoded">Find the entity transcoded in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _transcoded(Wrap<String> w);
+
+	public String getTranscoded() {
+		return transcoded;
+	}
+	public void setTranscoded(String o) {
+		this.transcoded = CurrikiResource.staticSetTranscoded(siteRequest_, o);
+	}
+	public static String staticSetTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource transcodedInit() {
+		Wrap<String> transcodedWrap = new Wrap<String>().var("transcoded");
+		if(transcoded == null) {
+			_transcoded(transcodedWrap);
+			setTranscoded(transcodedWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrTranscoded(siteRequest_, CurrikiResource.staticSolrTranscoded(siteRequest_, CurrikiResource.staticSetTranscoded(siteRequest_, o)));
+	}
+
+	//////////////
+	// lodestar //
+	//////////////
+
+	/**	 The entity lodestar
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String lodestar;
+
+	/**	<br/> The entity lodestar
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lodestar">Find the entity lodestar in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _lodestar(Wrap<String> w);
+
+	public String getLodestar() {
+		return lodestar;
+	}
+	public void setLodestar(String o) {
+		this.lodestar = CurrikiResource.staticSetLodestar(siteRequest_, o);
+	}
+	public static String staticSetLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource lodestarInit() {
+		Wrap<String> lodestarWrap = new Wrap<String>().var("lodestar");
+		if(lodestar == null) {
+			_lodestar(lodestarWrap);
+			setLodestar(lodestarWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrLodestar(siteRequest_, CurrikiResource.staticSolrLodestar(siteRequest_, CurrikiResource.staticSetLodestar(siteRequest_, o)));
+	}
+
+	/////////////
+	// archive //
+	/////////////
+
+	/**	 The entity archive
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String archive;
+
+	/**	<br/> The entity archive
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:archive">Find the entity archive in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _archive(Wrap<String> w);
+
+	public String getArchive() {
+		return archive;
+	}
+	public void setArchive(String o) {
+		this.archive = CurrikiResource.staticSetArchive(siteRequest_, o);
+	}
+	public static String staticSetArchive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource archiveInit() {
+		Wrap<String> archiveWrap = new Wrap<String>().var("archive");
+		if(archive == null) {
+			_archive(archiveWrap);
+			setArchive(archiveWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrArchive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrArchive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqArchive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrArchive(siteRequest_, CurrikiResource.staticSolrArchive(siteRequest_, CurrikiResource.staticSetArchive(siteRequest_, o)));
+	}
+
+	////////////////
+	// identifier //
+	////////////////
+
+	/**	 The entity identifier
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String identifier;
+
+	/**	<br/> The entity identifier
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:identifier">Find the entity identifier in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _identifier(Wrap<String> w);
+
+	public String getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(String o) {
+		this.identifier = CurrikiResource.staticSetIdentifier(siteRequest_, o);
+	}
+	public static String staticSetIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource identifierInit() {
+		Wrap<String> identifierWrap = new Wrap<String>().var("identifier");
+		if(identifier == null) {
+			_identifier(identifierWrap);
+			setIdentifier(identifierWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrIdentifier(siteRequest_, CurrikiResource.staticSolrIdentifier(siteRequest_, CurrikiResource.staticSetIdentifier(siteRequest_, o)));
+	}
+
+	/////////////////
+	// displayName //
+	/////////////////
+
+	/**	 The entity displayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String displayName;
+
+	/**	<br/> The entity displayName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:displayName">Find the entity displayName in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _displayName(Wrap<String> w);
+
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String o) {
+		this.displayName = CurrikiResource.staticSetDisplayName(siteRequest_, o);
+	}
+	public static String staticSetDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource displayNameInit() {
+		Wrap<String> displayNameWrap = new Wrap<String>().var("displayName");
+		if(displayName == null) {
+			_displayName(displayNameWrap);
+			setDisplayName(displayNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrDisplayName(siteRequest_, CurrikiResource.staticSolrDisplayName(siteRequest_, CurrikiResource.staticSetDisplayName(siteRequest_, o)));
+	}
+
+	/////////////////
+	// subjectArea //
+	/////////////////
+
+	/**	 The entity subjectArea
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String subjectArea;
+
+	/**	<br/> The entity subjectArea
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectArea">Find the entity subjectArea in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _subjectArea(Wrap<String> w);
+
+	public String getSubjectArea() {
+		return subjectArea;
+	}
+	public void setSubjectArea(String o) {
+		this.subjectArea = CurrikiResource.staticSetSubjectArea(siteRequest_, o);
+	}
+	public static String staticSetSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource subjectAreaInit() {
+		Wrap<String> subjectAreaWrap = new Wrap<String>().var("subjectArea");
+		if(subjectArea == null) {
+			_subjectArea(subjectAreaWrap);
+			setSubjectArea(subjectAreaWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSubjectArea(siteRequest_, CurrikiResource.staticSolrSubjectArea(siteRequest_, CurrikiResource.staticSetSubjectArea(siteRequest_, o)));
+	}
+
+	//////////
+	// name //
+	//////////
+
+	/**	 The entity name
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String name;
+
+	/**	<br/> The entity name
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:name">Find the entity name in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _name(Wrap<String> w);
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String o) {
+		this.name = CurrikiResource.staticSetName(siteRequest_, o);
+	}
+	public static String staticSetName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource nameInit() {
+		Wrap<String> nameWrap = new Wrap<String>().var("name");
+		if(name == null) {
+			_name(nameWrap);
+			setName(nameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrName(siteRequest_, CurrikiResource.staticSolrName(siteRequest_, CurrikiResource.staticSetName(siteRequest_, o)));
 	}
 
 	//////////////
@@ -4825,6 +5241,21 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				urlInit();
 				displaySeqNoInit();
 				fileIdInit();
+				fileNameInit();
+				uploadDateInit();
+				sequenceInit();
+				uniqueNameInit();
+				extInit();
+				tempactiveInit();
+				s3pathInit();
+				sdfStatusInit();
+				transcodedInit();
+				lodestarInit();
+				archiveInit();
+				identifierInit();
+				displayNameInit();
+				subjectAreaInit();
+				nameInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -5038,6 +5469,36 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return oCurrikiResource.displaySeqNo;
 			case "fileId":
 				return oCurrikiResource.fileId;
+			case "fileName":
+				return oCurrikiResource.fileName;
+			case "uploadDate":
+				return oCurrikiResource.uploadDate;
+			case "sequence":
+				return oCurrikiResource.sequence;
+			case "uniqueName":
+				return oCurrikiResource.uniqueName;
+			case "ext":
+				return oCurrikiResource.ext;
+			case "tempactive":
+				return oCurrikiResource.tempactive;
+			case "s3path":
+				return oCurrikiResource.s3path;
+			case "sdfStatus":
+				return oCurrikiResource.sdfStatus;
+			case "transcoded":
+				return oCurrikiResource.transcoded;
+			case "lodestar":
+				return oCurrikiResource.lodestar;
+			case "archive":
+				return oCurrikiResource.archive;
+			case "identifier":
+				return oCurrikiResource.identifier;
+			case "displayName":
+				return oCurrikiResource.displayName;
+			case "subjectArea":
+				return oCurrikiResource.subjectArea;
+			case "name":
+				return oCurrikiResource.name;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -5237,1020 +5698,676 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o);
 		case "fileId":
 			return CurrikiResource.staticSetFileId(siteRequest_, o);
+		case "fileName":
+			return CurrikiResource.staticSetFileName(siteRequest_, o);
+		case "uploadDate":
+			return CurrikiResource.staticSetUploadDate(siteRequest_, o);
+		case "sequence":
+			return CurrikiResource.staticSetSequence(siteRequest_, o);
+		case "uniqueName":
+			return CurrikiResource.staticSetUniqueName(siteRequest_, o);
+		case "ext":
+			return CurrikiResource.staticSetExt(siteRequest_, o);
+		case "tempactive":
+			return CurrikiResource.staticSetTempactive(siteRequest_, o);
+		case "s3path":
+			return CurrikiResource.staticSetS3path(siteRequest_, o);
+		case "sdfStatus":
+			return CurrikiResource.staticSetSdfStatus(siteRequest_, o);
+		case "transcoded":
+			return CurrikiResource.staticSetTranscoded(siteRequest_, o);
+		case "lodestar":
+			return CurrikiResource.staticSetLodestar(siteRequest_, o);
+		case "archive":
+			return CurrikiResource.staticSetArchive(siteRequest_, o);
+		case "identifier":
+			return CurrikiResource.staticSetIdentifier(siteRequest_, o);
+		case "displayName":
+			return CurrikiResource.staticSetDisplayName(siteRequest_, o);
+		case "subjectArea":
+			return CurrikiResource.staticSetSubjectArea(siteRequest_, o);
+		case "name":
+			return CurrikiResource.staticSetName(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
 	////////////////
-	// staticSearch //
+	// staticSolr //
 	////////////////
 
-	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchCurrikiResource(entityVar,  siteRequest_, o);
+	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrCurrikiResource(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSearchCurrikiResource(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSolrCurrikiResource(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "resourceId":
-			return CurrikiResource.staticSearchResourceId(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrResourceId(siteRequest_, (String)o);
 		case "licenseId":
-			return CurrikiResource.staticSearchLicenseId(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrLicenseId(siteRequest_, (String)o);
 		case "contributorId":
-			return CurrikiResource.staticSearchContributorId(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrContributorId(siteRequest_, (Long)o);
 		case "contributionDate":
-			return CurrikiResource.staticSearchContributionDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrContributionDate(siteRequest_, (ZonedDateTime)o);
 		case "description":
-			return CurrikiResource.staticSearchDescription(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrDescription(siteRequest_, (String)o);
 		case "title":
-			return CurrikiResource.staticSearchTitle(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrTitle(siteRequest_, (String)o);
 		case "keywordsStr":
-			return CurrikiResource.staticSearchKeywordsStr(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrKeywordsStr(siteRequest_, (String)o);
 		case "keywords":
-			return CurrikiResource.staticSearchKeywords(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrKeywords(siteRequest_, (String)o);
 		case "generatedKeywordsStr":
-			return CurrikiResource.staticSearchGeneratedKeywordsStr(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrGeneratedKeywordsStr(siteRequest_, (String)o);
 		case "generatedKeywords":
-			return CurrikiResource.staticSearchGeneratedKeywords(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrGeneratedKeywords(siteRequest_, (String)o);
 		case "language":
-			return CurrikiResource.staticSearchLanguage(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrLanguage(siteRequest_, (String)o);
 		case "lastEditorId":
-			return CurrikiResource.staticSearchLastEditorId(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrLastEditorId(siteRequest_, (Long)o);
 		case "lastEditDate":
-			return CurrikiResource.staticSearchLastEditDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrLastEditDate(siteRequest_, (ZonedDateTime)o);
 		case "currikiLicense":
-			return CurrikiResource.staticSearchCurrikiLicense(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrCurrikiLicense(siteRequest_, (String)o);
 		case "externalUrl":
-			return CurrikiResource.staticSearchExternalUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrExternalUrl(siteRequest_, (String)o);
 		case "resourceChecked":
-			return CurrikiResource.staticSearchResourceChecked(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrResourceChecked(siteRequest_, (String)o);
 		case "content":
-			return CurrikiResource.staticSearchContent(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrContent(siteRequest_, (String)o);
 		case "resourceCheckRequestNote":
-			return CurrikiResource.staticSearchResourceCheckRequestNote(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrResourceCheckRequestNote(siteRequest_, (String)o);
 		case "resourceCheckDate":
-			return CurrikiResource.staticSearchResourceCheckDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrResourceCheckDate(siteRequest_, (ZonedDateTime)o);
 		case "resourceCheckId":
-			return CurrikiResource.staticSearchResourceCheckId(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrResourceCheckId(siteRequest_, (Long)o);
 		case "resourceCheckNote":
-			return CurrikiResource.staticSearchResourceCheckNote(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrResourceCheckNote(siteRequest_, (String)o);
 		case "studentFacing":
-			return CurrikiResource.staticSearchStudentFacing(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStudentFacing(siteRequest_, (String)o);
 		case "source":
-			return CurrikiResource.staticSearchSource(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrSource(siteRequest_, (String)o);
 		case "reviewStatus":
-			return CurrikiResource.staticSearchReviewStatus(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrReviewStatus(siteRequest_, (String)o);
 		case "lastReviewDate":
-			return CurrikiResource.staticSearchLastReviewDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrLastReviewDate(siteRequest_, (ZonedDateTime)o);
 		case "reviewByID":
-			return CurrikiResource.staticSearchReviewByID(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrReviewByID(siteRequest_, (Long)o);
 		case "reviewRating":
-			return CurrikiResource.staticSearchReviewRating(siteRequest_, (BigDecimal)o);
+			return CurrikiResource.staticSolrReviewRating(siteRequest_, (BigDecimal)o);
 		case "technicalCompleteness":
-			return CurrikiResource.staticSearchTechnicalCompleteness(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrTechnicalCompleteness(siteRequest_, (Integer)o);
 		case "contentAccuracy":
-			return CurrikiResource.staticSearchContentAccuracy(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrContentAccuracy(siteRequest_, (Integer)o);
 		case "pedagogy":
-			return CurrikiResource.staticSearchPedagogy(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrPedagogy(siteRequest_, (Integer)o);
 		case "ratingComment":
-			return CurrikiResource.staticSearchRatingComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrRatingComment(siteRequest_, (String)o);
 		case "standardsAlignment":
-			return CurrikiResource.staticSearchStandardsAlignment(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStandardsAlignment(siteRequest_, (Integer)o);
 		case "standardsAlignmentComment":
-			return CurrikiResource.staticSearchStandardsAlignmentComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStandardsAlignmentComment(siteRequest_, (String)o);
 		case "subjectMatter":
-			return CurrikiResource.staticSearchSubjectMatter(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrSubjectMatter(siteRequest_, (Integer)o);
 		case "subjectMatterComment":
-			return CurrikiResource.staticSearchSubjectMatterComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrSubjectMatterComment(siteRequest_, (String)o);
 		case "supportsTeaching":
-			return CurrikiResource.staticSearchSupportsTeaching(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrSupportsTeaching(siteRequest_, (Integer)o);
 		case "supportsTeachingComment":
-			return CurrikiResource.staticSearchSupportsTeachingComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrSupportsTeachingComment(siteRequest_, (String)o);
 		case "assessmentsQuality":
-			return CurrikiResource.staticSearchAssessmentsQuality(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrAssessmentsQuality(siteRequest_, (Integer)o);
 		case "assessmentsQualityComment":
-			return CurrikiResource.staticSearchAssessmentsQualityComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrAssessmentsQualityComment(siteRequest_, (String)o);
 		case "interactivityQuality":
-			return CurrikiResource.staticSearchInteractivityQuality(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrInteractivityQuality(siteRequest_, (Integer)o);
 		case "interactivityQualityComment":
-			return CurrikiResource.staticSearchInteractivityQualityComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrInteractivityQualityComment(siteRequest_, (String)o);
 		case "instructionalQuality":
-			return CurrikiResource.staticSearchInstructionalQuality(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrInstructionalQuality(siteRequest_, (Integer)o);
 		case "instructionalQualityComment":
-			return CurrikiResource.staticSearchInstructionalQualityComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrInstructionalQualityComment(siteRequest_, (String)o);
 		case "deeperLearning":
-			return CurrikiResource.staticSearchDeeperLearning(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrDeeperLearning(siteRequest_, (Integer)o);
 		case "deeperLearningComment":
-			return CurrikiResource.staticSearchDeeperLearningComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrDeeperLearningComment(siteRequest_, (String)o);
 		case "partner":
-			return CurrikiResource.staticSearchPartner(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrPartner(siteRequest_, (String)o);
 		case "createDate":
-			return CurrikiResource.staticSearchCreateDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrCreateDate(siteRequest_, (ZonedDateTime)o);
 		case "type":
-			return CurrikiResource.staticSearchType(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrType(siteRequest_, (String)o);
 		case "featured":
-			return CurrikiResource.staticSearchFeatured(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrFeatured(siteRequest_, (String)o);
 		case "page":
-			return CurrikiResource.staticSearchPage(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrPage(siteRequest_, (String)o);
 		case "active":
-			return CurrikiResource.staticSearchActive(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrActive(siteRequest_, (String)o);
 		case "Public":
-			return CurrikiResource.staticSearchPublic(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrPublic(siteRequest_, (String)o);
 		case "xwd_id":
-			return CurrikiResource.staticSearchXwd_id(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrXwd_id(siteRequest_, (Integer)o);
 		case "mediaType":
-			return CurrikiResource.staticSearchMediaType(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrMediaType(siteRequest_, (String)o);
 		case "access":
-			return CurrikiResource.staticSearchAccess(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrAccess(siteRequest_, (String)o);
 		case "memberRating":
-			return CurrikiResource.staticSearchMemberRating(siteRequest_, (BigDecimal)o);
+			return CurrikiResource.staticSolrMemberRating(siteRequest_, (BigDecimal)o);
 		case "aligned":
-			return CurrikiResource.staticSearchAligned(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrAligned(siteRequest_, (String)o);
 		case "pageUrl":
-			return CurrikiResource.staticSearchPageUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrPageUrl(siteRequest_, (String)o);
 		case "indexed":
-			return CurrikiResource.staticSearchIndexed(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrIndexed(siteRequest_, (String)o);
 		case "lastIndexDate":
-			return CurrikiResource.staticSearchLastIndexDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrLastIndexDate(siteRequest_, (ZonedDateTime)o);
 		case "indexRequired":
-			return CurrikiResource.staticSearchIndexRequired(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrIndexRequired(siteRequest_, (String)o);
 		case "indexRequiredDate":
-			return CurrikiResource.staticSearchIndexRequiredDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrIndexRequiredDate(siteRequest_, (ZonedDateTime)o);
 		case "rescrape":
-			return CurrikiResource.staticSearchRescrape(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrRescrape(siteRequest_, (String)o);
 		case "goButton":
-			return CurrikiResource.staticSearchGoButton(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrGoButton(siteRequest_, (String)o);
 		case "downloadButton":
-			return CurrikiResource.staticSearchDownloadButton(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrDownloadButton(siteRequest_, (String)o);
 		case "topOfSearch":
-			return CurrikiResource.staticSearchTopOfSearch(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrTopOfSearch(siteRequest_, (String)o);
 		case "remove":
-			return CurrikiResource.staticSearchRemove(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrRemove(siteRequest_, (String)o);
 		case "spam":
-			return CurrikiResource.staticSearchSpam(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrSpam(siteRequest_, (String)o);
 		case "topOfSearchInt":
-			return CurrikiResource.staticSearchTopOfSearchInt(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrTopOfSearchInt(siteRequest_, (Integer)o);
 		case "partnerInt":
-			return CurrikiResource.staticSearchPartnerInt(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrPartnerInt(siteRequest_, (Integer)o);
 		case "reviewResource":
-			return CurrikiResource.staticSearchReviewResource(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrReviewResource(siteRequest_, (String)o);
 		case "oldUrl":
-			return CurrikiResource.staticSearchOldUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrOldUrl(siteRequest_, (String)o);
 		case "contentDisplayOk":
-			return CurrikiResource.staticSearchContentDisplayOk(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrContentDisplayOk(siteRequest_, (String)o);
 		case "metadata":
-			return CurrikiResource.staticSearchMetadata(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrMetadata(siteRequest_, (String)o);
 		case "approvalStatus":
-			return CurrikiResource.staticSearchApprovalStatus(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrApprovalStatus(siteRequest_, (String)o);
 		case "approvalStatusDate":
-			return CurrikiResource.staticSearchApprovalStatusDate(siteRequest_, (ZonedDateTime)o);
+			return CurrikiResource.staticSolrApprovalStatusDate(siteRequest_, (ZonedDateTime)o);
 		case "spamUser":
-			return CurrikiResource.staticSearchSpamUser(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrSpamUser(siteRequest_, (String)o);
 		case "url":
-			return CurrikiResource.staticSearchUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrUrl(siteRequest_, (String)o);
 		case "displaySeqNo":
-			return CurrikiResource.staticSearchDisplaySeqNo(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrDisplaySeqNo(siteRequest_, (Integer)o);
 		case "fileId":
-			return CurrikiResource.staticSearchFileId(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrFileId(siteRequest_, (Integer)o);
+		case "fileName":
+			return CurrikiResource.staticSolrFileName(siteRequest_, (String)o);
+		case "uploadDate":
+			return CurrikiResource.staticSolrUploadDate(siteRequest_, (String)o);
+		case "sequence":
+			return CurrikiResource.staticSolrSequence(siteRequest_, (Integer)o);
+		case "uniqueName":
+			return CurrikiResource.staticSolrUniqueName(siteRequest_, (String)o);
+		case "ext":
+			return CurrikiResource.staticSolrExt(siteRequest_, (String)o);
+		case "tempactive":
+			return CurrikiResource.staticSolrTempactive(siteRequest_, (String)o);
+		case "s3path":
+			return CurrikiResource.staticSolrS3path(siteRequest_, (String)o);
+		case "sdfStatus":
+			return CurrikiResource.staticSolrSdfStatus(siteRequest_, (String)o);
+		case "transcoded":
+			return CurrikiResource.staticSolrTranscoded(siteRequest_, (String)o);
+		case "lodestar":
+			return CurrikiResource.staticSolrLodestar(siteRequest_, (String)o);
+		case "archive":
+			return CurrikiResource.staticSolrArchive(siteRequest_, (String)o);
+		case "identifier":
+			return CurrikiResource.staticSolrIdentifier(siteRequest_, (String)o);
+		case "displayName":
+			return CurrikiResource.staticSolrDisplayName(siteRequest_, (String)o);
+		case "subjectArea":
+			return CurrikiResource.staticSolrSubjectArea(siteRequest_, (String)o);
+		case "name":
+			return CurrikiResource.staticSolrName(siteRequest_, (String)o);
 			default:
-				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSolrBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSearchStr //
+	// staticSolrStr //
 	///////////////////
 
-	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSearchStrCurrikiResource(entityVar,  siteRequest_, o);
+	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrStrCurrikiResource(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchStrCurrikiResource(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSolrStrCurrikiResource(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "resourceId":
-			return CurrikiResource.staticSearchStrResourceId(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrResourceId(siteRequest_, (String)o);
 		case "licenseId":
-			return CurrikiResource.staticSearchStrLicenseId(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrLicenseId(siteRequest_, (String)o);
 		case "contributorId":
-			return CurrikiResource.staticSearchStrContributorId(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrStrContributorId(siteRequest_, (Long)o);
 		case "contributionDate":
-			return CurrikiResource.staticSearchStrContributionDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrContributionDate(siteRequest_, (Date)o);
 		case "description":
-			return CurrikiResource.staticSearchStrDescription(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrDescription(siteRequest_, (String)o);
 		case "title":
-			return CurrikiResource.staticSearchStrTitle(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrTitle(siteRequest_, (String)o);
 		case "keywordsStr":
-			return CurrikiResource.staticSearchStrKeywordsStr(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrKeywordsStr(siteRequest_, (String)o);
 		case "keywords":
-			return CurrikiResource.staticSearchStrKeywords(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrKeywords(siteRequest_, (String)o);
 		case "generatedKeywordsStr":
-			return CurrikiResource.staticSearchStrGeneratedKeywordsStr(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrGeneratedKeywordsStr(siteRequest_, (String)o);
 		case "generatedKeywords":
-			return CurrikiResource.staticSearchStrGeneratedKeywords(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrGeneratedKeywords(siteRequest_, (String)o);
 		case "language":
-			return CurrikiResource.staticSearchStrLanguage(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrLanguage(siteRequest_, (String)o);
 		case "lastEditorId":
-			return CurrikiResource.staticSearchStrLastEditorId(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrStrLastEditorId(siteRequest_, (Long)o);
 		case "lastEditDate":
-			return CurrikiResource.staticSearchStrLastEditDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrLastEditDate(siteRequest_, (Date)o);
 		case "currikiLicense":
-			return CurrikiResource.staticSearchStrCurrikiLicense(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrCurrikiLicense(siteRequest_, (String)o);
 		case "externalUrl":
-			return CurrikiResource.staticSearchStrExternalUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrExternalUrl(siteRequest_, (String)o);
 		case "resourceChecked":
-			return CurrikiResource.staticSearchStrResourceChecked(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrResourceChecked(siteRequest_, (String)o);
 		case "content":
-			return CurrikiResource.staticSearchStrContent(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrContent(siteRequest_, (String)o);
 		case "resourceCheckRequestNote":
-			return CurrikiResource.staticSearchStrResourceCheckRequestNote(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrResourceCheckRequestNote(siteRequest_, (String)o);
 		case "resourceCheckDate":
-			return CurrikiResource.staticSearchStrResourceCheckDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrResourceCheckDate(siteRequest_, (Date)o);
 		case "resourceCheckId":
-			return CurrikiResource.staticSearchStrResourceCheckId(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrStrResourceCheckId(siteRequest_, (Long)o);
 		case "resourceCheckNote":
-			return CurrikiResource.staticSearchStrResourceCheckNote(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrResourceCheckNote(siteRequest_, (String)o);
 		case "studentFacing":
-			return CurrikiResource.staticSearchStrStudentFacing(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrStudentFacing(siteRequest_, (String)o);
 		case "source":
-			return CurrikiResource.staticSearchStrSource(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrSource(siteRequest_, (String)o);
 		case "reviewStatus":
-			return CurrikiResource.staticSearchStrReviewStatus(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrReviewStatus(siteRequest_, (String)o);
 		case "lastReviewDate":
-			return CurrikiResource.staticSearchStrLastReviewDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrLastReviewDate(siteRequest_, (Date)o);
 		case "reviewByID":
-			return CurrikiResource.staticSearchStrReviewByID(siteRequest_, (Long)o);
+			return CurrikiResource.staticSolrStrReviewByID(siteRequest_, (Long)o);
 		case "reviewRating":
-			return CurrikiResource.staticSearchStrReviewRating(siteRequest_, (Double)o);
+			return CurrikiResource.staticSolrStrReviewRating(siteRequest_, (Double)o);
 		case "technicalCompleteness":
-			return CurrikiResource.staticSearchStrTechnicalCompleteness(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrTechnicalCompleteness(siteRequest_, (Integer)o);
 		case "contentAccuracy":
-			return CurrikiResource.staticSearchStrContentAccuracy(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrContentAccuracy(siteRequest_, (Integer)o);
 		case "pedagogy":
-			return CurrikiResource.staticSearchStrPedagogy(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrPedagogy(siteRequest_, (Integer)o);
 		case "ratingComment":
-			return CurrikiResource.staticSearchStrRatingComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrRatingComment(siteRequest_, (String)o);
 		case "standardsAlignment":
-			return CurrikiResource.staticSearchStrStandardsAlignment(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrStandardsAlignment(siteRequest_, (Integer)o);
 		case "standardsAlignmentComment":
-			return CurrikiResource.staticSearchStrStandardsAlignmentComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrStandardsAlignmentComment(siteRequest_, (String)o);
 		case "subjectMatter":
-			return CurrikiResource.staticSearchStrSubjectMatter(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrSubjectMatter(siteRequest_, (Integer)o);
 		case "subjectMatterComment":
-			return CurrikiResource.staticSearchStrSubjectMatterComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrSubjectMatterComment(siteRequest_, (String)o);
 		case "supportsTeaching":
-			return CurrikiResource.staticSearchStrSupportsTeaching(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrSupportsTeaching(siteRequest_, (Integer)o);
 		case "supportsTeachingComment":
-			return CurrikiResource.staticSearchStrSupportsTeachingComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrSupportsTeachingComment(siteRequest_, (String)o);
 		case "assessmentsQuality":
-			return CurrikiResource.staticSearchStrAssessmentsQuality(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrAssessmentsQuality(siteRequest_, (Integer)o);
 		case "assessmentsQualityComment":
-			return CurrikiResource.staticSearchStrAssessmentsQualityComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrAssessmentsQualityComment(siteRequest_, (String)o);
 		case "interactivityQuality":
-			return CurrikiResource.staticSearchStrInteractivityQuality(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrInteractivityQuality(siteRequest_, (Integer)o);
 		case "interactivityQualityComment":
-			return CurrikiResource.staticSearchStrInteractivityQualityComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrInteractivityQualityComment(siteRequest_, (String)o);
 		case "instructionalQuality":
-			return CurrikiResource.staticSearchStrInstructionalQuality(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrInstructionalQuality(siteRequest_, (Integer)o);
 		case "instructionalQualityComment":
-			return CurrikiResource.staticSearchStrInstructionalQualityComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrInstructionalQualityComment(siteRequest_, (String)o);
 		case "deeperLearning":
-			return CurrikiResource.staticSearchStrDeeperLearning(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrDeeperLearning(siteRequest_, (Integer)o);
 		case "deeperLearningComment":
-			return CurrikiResource.staticSearchStrDeeperLearningComment(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrDeeperLearningComment(siteRequest_, (String)o);
 		case "partner":
-			return CurrikiResource.staticSearchStrPartner(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrPartner(siteRequest_, (String)o);
 		case "createDate":
-			return CurrikiResource.staticSearchStrCreateDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrCreateDate(siteRequest_, (Date)o);
 		case "type":
-			return CurrikiResource.staticSearchStrType(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrType(siteRequest_, (String)o);
 		case "featured":
-			return CurrikiResource.staticSearchStrFeatured(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrFeatured(siteRequest_, (String)o);
 		case "page":
-			return CurrikiResource.staticSearchStrPage(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrPage(siteRequest_, (String)o);
 		case "active":
-			return CurrikiResource.staticSearchStrActive(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrActive(siteRequest_, (String)o);
 		case "Public":
-			return CurrikiResource.staticSearchStrPublic(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrPublic(siteRequest_, (String)o);
 		case "xwd_id":
-			return CurrikiResource.staticSearchStrXwd_id(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrXwd_id(siteRequest_, (Integer)o);
 		case "mediaType":
-			return CurrikiResource.staticSearchStrMediaType(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrMediaType(siteRequest_, (String)o);
 		case "access":
-			return CurrikiResource.staticSearchStrAccess(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrAccess(siteRequest_, (String)o);
 		case "memberRating":
-			return CurrikiResource.staticSearchStrMemberRating(siteRequest_, (Double)o);
+			return CurrikiResource.staticSolrStrMemberRating(siteRequest_, (Double)o);
 		case "aligned":
-			return CurrikiResource.staticSearchStrAligned(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrAligned(siteRequest_, (String)o);
 		case "pageUrl":
-			return CurrikiResource.staticSearchStrPageUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrPageUrl(siteRequest_, (String)o);
 		case "indexed":
-			return CurrikiResource.staticSearchStrIndexed(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrIndexed(siteRequest_, (String)o);
 		case "lastIndexDate":
-			return CurrikiResource.staticSearchStrLastIndexDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrLastIndexDate(siteRequest_, (Date)o);
 		case "indexRequired":
-			return CurrikiResource.staticSearchStrIndexRequired(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrIndexRequired(siteRequest_, (String)o);
 		case "indexRequiredDate":
-			return CurrikiResource.staticSearchStrIndexRequiredDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrIndexRequiredDate(siteRequest_, (Date)o);
 		case "rescrape":
-			return CurrikiResource.staticSearchStrRescrape(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrRescrape(siteRequest_, (String)o);
 		case "goButton":
-			return CurrikiResource.staticSearchStrGoButton(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrGoButton(siteRequest_, (String)o);
 		case "downloadButton":
-			return CurrikiResource.staticSearchStrDownloadButton(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrDownloadButton(siteRequest_, (String)o);
 		case "topOfSearch":
-			return CurrikiResource.staticSearchStrTopOfSearch(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrTopOfSearch(siteRequest_, (String)o);
 		case "remove":
-			return CurrikiResource.staticSearchStrRemove(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrRemove(siteRequest_, (String)o);
 		case "spam":
-			return CurrikiResource.staticSearchStrSpam(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrSpam(siteRequest_, (String)o);
 		case "topOfSearchInt":
-			return CurrikiResource.staticSearchStrTopOfSearchInt(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrTopOfSearchInt(siteRequest_, (Integer)o);
 		case "partnerInt":
-			return CurrikiResource.staticSearchStrPartnerInt(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrPartnerInt(siteRequest_, (Integer)o);
 		case "reviewResource":
-			return CurrikiResource.staticSearchStrReviewResource(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrReviewResource(siteRequest_, (String)o);
 		case "oldUrl":
-			return CurrikiResource.staticSearchStrOldUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrOldUrl(siteRequest_, (String)o);
 		case "contentDisplayOk":
-			return CurrikiResource.staticSearchStrContentDisplayOk(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrContentDisplayOk(siteRequest_, (String)o);
 		case "metadata":
-			return CurrikiResource.staticSearchStrMetadata(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrMetadata(siteRequest_, (String)o);
 		case "approvalStatus":
-			return CurrikiResource.staticSearchStrApprovalStatus(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrApprovalStatus(siteRequest_, (String)o);
 		case "approvalStatusDate":
-			return CurrikiResource.staticSearchStrApprovalStatusDate(siteRequest_, (Date)o);
+			return CurrikiResource.staticSolrStrApprovalStatusDate(siteRequest_, (Date)o);
 		case "spamUser":
-			return CurrikiResource.staticSearchStrSpamUser(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrSpamUser(siteRequest_, (String)o);
 		case "url":
-			return CurrikiResource.staticSearchStrUrl(siteRequest_, (String)o);
+			return CurrikiResource.staticSolrStrUrl(siteRequest_, (String)o);
 		case "displaySeqNo":
-			return CurrikiResource.staticSearchStrDisplaySeqNo(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrDisplaySeqNo(siteRequest_, (Integer)o);
 		case "fileId":
-			return CurrikiResource.staticSearchStrFileId(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrFileId(siteRequest_, (Integer)o);
+		case "fileName":
+			return CurrikiResource.staticSolrStrFileName(siteRequest_, (String)o);
+		case "uploadDate":
+			return CurrikiResource.staticSolrStrUploadDate(siteRequest_, (String)o);
+		case "sequence":
+			return CurrikiResource.staticSolrStrSequence(siteRequest_, (Integer)o);
+		case "uniqueName":
+			return CurrikiResource.staticSolrStrUniqueName(siteRequest_, (String)o);
+		case "ext":
+			return CurrikiResource.staticSolrStrExt(siteRequest_, (String)o);
+		case "tempactive":
+			return CurrikiResource.staticSolrStrTempactive(siteRequest_, (String)o);
+		case "s3path":
+			return CurrikiResource.staticSolrStrS3path(siteRequest_, (String)o);
+		case "sdfStatus":
+			return CurrikiResource.staticSolrStrSdfStatus(siteRequest_, (String)o);
+		case "transcoded":
+			return CurrikiResource.staticSolrStrTranscoded(siteRequest_, (String)o);
+		case "lodestar":
+			return CurrikiResource.staticSolrStrLodestar(siteRequest_, (String)o);
+		case "archive":
+			return CurrikiResource.staticSolrStrArchive(siteRequest_, (String)o);
+		case "identifier":
+			return CurrikiResource.staticSolrStrIdentifier(siteRequest_, (String)o);
+		case "displayName":
+			return CurrikiResource.staticSolrStrDisplayName(siteRequest_, (String)o);
+		case "subjectArea":
+			return CurrikiResource.staticSolrStrSubjectArea(siteRequest_, (String)o);
+		case "name":
+			return CurrikiResource.staticSolrStrName(siteRequest_, (String)o);
 			default:
-				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSolrStrBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSearchFq //
+	// staticSolrFq //
 	//////////////////
 
-	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSearchFqCurrikiResource(entityVar,  siteRequest_, o);
+	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSolrFqCurrikiResource(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchFqCurrikiResource(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrFqCurrikiResource(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "resourceId":
-			return CurrikiResource.staticSearchFqResourceId(siteRequest_, o);
+			return CurrikiResource.staticSolrFqResourceId(siteRequest_, o);
 		case "licenseId":
-			return CurrikiResource.staticSearchFqLicenseId(siteRequest_, o);
+			return CurrikiResource.staticSolrFqLicenseId(siteRequest_, o);
 		case "contributorId":
-			return CurrikiResource.staticSearchFqContributorId(siteRequest_, o);
+			return CurrikiResource.staticSolrFqContributorId(siteRequest_, o);
 		case "contributionDate":
-			return CurrikiResource.staticSearchFqContributionDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqContributionDate(siteRequest_, o);
 		case "description":
-			return CurrikiResource.staticSearchFqDescription(siteRequest_, o);
+			return CurrikiResource.staticSolrFqDescription(siteRequest_, o);
 		case "title":
-			return CurrikiResource.staticSearchFqTitle(siteRequest_, o);
+			return CurrikiResource.staticSolrFqTitle(siteRequest_, o);
 		case "keywordsStr":
-			return CurrikiResource.staticSearchFqKeywordsStr(siteRequest_, o);
+			return CurrikiResource.staticSolrFqKeywordsStr(siteRequest_, o);
 		case "keywords":
-			return CurrikiResource.staticSearchFqKeywords(siteRequest_, o);
+			return CurrikiResource.staticSolrFqKeywords(siteRequest_, o);
 		case "generatedKeywordsStr":
-			return CurrikiResource.staticSearchFqGeneratedKeywordsStr(siteRequest_, o);
+			return CurrikiResource.staticSolrFqGeneratedKeywordsStr(siteRequest_, o);
 		case "generatedKeywords":
-			return CurrikiResource.staticSearchFqGeneratedKeywords(siteRequest_, o);
+			return CurrikiResource.staticSolrFqGeneratedKeywords(siteRequest_, o);
 		case "language":
-			return CurrikiResource.staticSearchFqLanguage(siteRequest_, o);
+			return CurrikiResource.staticSolrFqLanguage(siteRequest_, o);
 		case "lastEditorId":
-			return CurrikiResource.staticSearchFqLastEditorId(siteRequest_, o);
+			return CurrikiResource.staticSolrFqLastEditorId(siteRequest_, o);
 		case "lastEditDate":
-			return CurrikiResource.staticSearchFqLastEditDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqLastEditDate(siteRequest_, o);
 		case "currikiLicense":
-			return CurrikiResource.staticSearchFqCurrikiLicense(siteRequest_, o);
+			return CurrikiResource.staticSolrFqCurrikiLicense(siteRequest_, o);
 		case "externalUrl":
-			return CurrikiResource.staticSearchFqExternalUrl(siteRequest_, o);
+			return CurrikiResource.staticSolrFqExternalUrl(siteRequest_, o);
 		case "resourceChecked":
-			return CurrikiResource.staticSearchFqResourceChecked(siteRequest_, o);
+			return CurrikiResource.staticSolrFqResourceChecked(siteRequest_, o);
 		case "content":
-			return CurrikiResource.staticSearchFqContent(siteRequest_, o);
+			return CurrikiResource.staticSolrFqContent(siteRequest_, o);
 		case "resourceCheckRequestNote":
-			return CurrikiResource.staticSearchFqResourceCheckRequestNote(siteRequest_, o);
+			return CurrikiResource.staticSolrFqResourceCheckRequestNote(siteRequest_, o);
 		case "resourceCheckDate":
-			return CurrikiResource.staticSearchFqResourceCheckDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqResourceCheckDate(siteRequest_, o);
 		case "resourceCheckId":
-			return CurrikiResource.staticSearchFqResourceCheckId(siteRequest_, o);
+			return CurrikiResource.staticSolrFqResourceCheckId(siteRequest_, o);
 		case "resourceCheckNote":
-			return CurrikiResource.staticSearchFqResourceCheckNote(siteRequest_, o);
+			return CurrikiResource.staticSolrFqResourceCheckNote(siteRequest_, o);
 		case "studentFacing":
-			return CurrikiResource.staticSearchFqStudentFacing(siteRequest_, o);
+			return CurrikiResource.staticSolrFqStudentFacing(siteRequest_, o);
 		case "source":
-			return CurrikiResource.staticSearchFqSource(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSource(siteRequest_, o);
 		case "reviewStatus":
-			return CurrikiResource.staticSearchFqReviewStatus(siteRequest_, o);
+			return CurrikiResource.staticSolrFqReviewStatus(siteRequest_, o);
 		case "lastReviewDate":
-			return CurrikiResource.staticSearchFqLastReviewDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqLastReviewDate(siteRequest_, o);
 		case "reviewByID":
-			return CurrikiResource.staticSearchFqReviewByID(siteRequest_, o);
+			return CurrikiResource.staticSolrFqReviewByID(siteRequest_, o);
 		case "reviewRating":
-			return CurrikiResource.staticSearchFqReviewRating(siteRequest_, o);
+			return CurrikiResource.staticSolrFqReviewRating(siteRequest_, o);
 		case "technicalCompleteness":
-			return CurrikiResource.staticSearchFqTechnicalCompleteness(siteRequest_, o);
+			return CurrikiResource.staticSolrFqTechnicalCompleteness(siteRequest_, o);
 		case "contentAccuracy":
-			return CurrikiResource.staticSearchFqContentAccuracy(siteRequest_, o);
+			return CurrikiResource.staticSolrFqContentAccuracy(siteRequest_, o);
 		case "pedagogy":
-			return CurrikiResource.staticSearchFqPedagogy(siteRequest_, o);
+			return CurrikiResource.staticSolrFqPedagogy(siteRequest_, o);
 		case "ratingComment":
-			return CurrikiResource.staticSearchFqRatingComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqRatingComment(siteRequest_, o);
 		case "standardsAlignment":
-			return CurrikiResource.staticSearchFqStandardsAlignment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqStandardsAlignment(siteRequest_, o);
 		case "standardsAlignmentComment":
-			return CurrikiResource.staticSearchFqStandardsAlignmentComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqStandardsAlignmentComment(siteRequest_, o);
 		case "subjectMatter":
-			return CurrikiResource.staticSearchFqSubjectMatter(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSubjectMatter(siteRequest_, o);
 		case "subjectMatterComment":
-			return CurrikiResource.staticSearchFqSubjectMatterComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSubjectMatterComment(siteRequest_, o);
 		case "supportsTeaching":
-			return CurrikiResource.staticSearchFqSupportsTeaching(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSupportsTeaching(siteRequest_, o);
 		case "supportsTeachingComment":
-			return CurrikiResource.staticSearchFqSupportsTeachingComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSupportsTeachingComment(siteRequest_, o);
 		case "assessmentsQuality":
-			return CurrikiResource.staticSearchFqAssessmentsQuality(siteRequest_, o);
+			return CurrikiResource.staticSolrFqAssessmentsQuality(siteRequest_, o);
 		case "assessmentsQualityComment":
-			return CurrikiResource.staticSearchFqAssessmentsQualityComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqAssessmentsQualityComment(siteRequest_, o);
 		case "interactivityQuality":
-			return CurrikiResource.staticSearchFqInteractivityQuality(siteRequest_, o);
+			return CurrikiResource.staticSolrFqInteractivityQuality(siteRequest_, o);
 		case "interactivityQualityComment":
-			return CurrikiResource.staticSearchFqInteractivityQualityComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqInteractivityQualityComment(siteRequest_, o);
 		case "instructionalQuality":
-			return CurrikiResource.staticSearchFqInstructionalQuality(siteRequest_, o);
+			return CurrikiResource.staticSolrFqInstructionalQuality(siteRequest_, o);
 		case "instructionalQualityComment":
-			return CurrikiResource.staticSearchFqInstructionalQualityComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqInstructionalQualityComment(siteRequest_, o);
 		case "deeperLearning":
-			return CurrikiResource.staticSearchFqDeeperLearning(siteRequest_, o);
+			return CurrikiResource.staticSolrFqDeeperLearning(siteRequest_, o);
 		case "deeperLearningComment":
-			return CurrikiResource.staticSearchFqDeeperLearningComment(siteRequest_, o);
+			return CurrikiResource.staticSolrFqDeeperLearningComment(siteRequest_, o);
 		case "partner":
-			return CurrikiResource.staticSearchFqPartner(siteRequest_, o);
+			return CurrikiResource.staticSolrFqPartner(siteRequest_, o);
 		case "createDate":
-			return CurrikiResource.staticSearchFqCreateDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqCreateDate(siteRequest_, o);
 		case "type":
-			return CurrikiResource.staticSearchFqType(siteRequest_, o);
+			return CurrikiResource.staticSolrFqType(siteRequest_, o);
 		case "featured":
-			return CurrikiResource.staticSearchFqFeatured(siteRequest_, o);
+			return CurrikiResource.staticSolrFqFeatured(siteRequest_, o);
 		case "page":
-			return CurrikiResource.staticSearchFqPage(siteRequest_, o);
+			return CurrikiResource.staticSolrFqPage(siteRequest_, o);
 		case "active":
-			return CurrikiResource.staticSearchFqActive(siteRequest_, o);
+			return CurrikiResource.staticSolrFqActive(siteRequest_, o);
 		case "Public":
-			return CurrikiResource.staticSearchFqPublic(siteRequest_, o);
+			return CurrikiResource.staticSolrFqPublic(siteRequest_, o);
 		case "xwd_id":
-			return CurrikiResource.staticSearchFqXwd_id(siteRequest_, o);
+			return CurrikiResource.staticSolrFqXwd_id(siteRequest_, o);
 		case "mediaType":
-			return CurrikiResource.staticSearchFqMediaType(siteRequest_, o);
+			return CurrikiResource.staticSolrFqMediaType(siteRequest_, o);
 		case "access":
-			return CurrikiResource.staticSearchFqAccess(siteRequest_, o);
+			return CurrikiResource.staticSolrFqAccess(siteRequest_, o);
 		case "memberRating":
-			return CurrikiResource.staticSearchFqMemberRating(siteRequest_, o);
+			return CurrikiResource.staticSolrFqMemberRating(siteRequest_, o);
 		case "aligned":
-			return CurrikiResource.staticSearchFqAligned(siteRequest_, o);
+			return CurrikiResource.staticSolrFqAligned(siteRequest_, o);
 		case "pageUrl":
-			return CurrikiResource.staticSearchFqPageUrl(siteRequest_, o);
+			return CurrikiResource.staticSolrFqPageUrl(siteRequest_, o);
 		case "indexed":
-			return CurrikiResource.staticSearchFqIndexed(siteRequest_, o);
+			return CurrikiResource.staticSolrFqIndexed(siteRequest_, o);
 		case "lastIndexDate":
-			return CurrikiResource.staticSearchFqLastIndexDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqLastIndexDate(siteRequest_, o);
 		case "indexRequired":
-			return CurrikiResource.staticSearchFqIndexRequired(siteRequest_, o);
+			return CurrikiResource.staticSolrFqIndexRequired(siteRequest_, o);
 		case "indexRequiredDate":
-			return CurrikiResource.staticSearchFqIndexRequiredDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqIndexRequiredDate(siteRequest_, o);
 		case "rescrape":
-			return CurrikiResource.staticSearchFqRescrape(siteRequest_, o);
+			return CurrikiResource.staticSolrFqRescrape(siteRequest_, o);
 		case "goButton":
-			return CurrikiResource.staticSearchFqGoButton(siteRequest_, o);
+			return CurrikiResource.staticSolrFqGoButton(siteRequest_, o);
 		case "downloadButton":
-			return CurrikiResource.staticSearchFqDownloadButton(siteRequest_, o);
+			return CurrikiResource.staticSolrFqDownloadButton(siteRequest_, o);
 		case "topOfSearch":
-			return CurrikiResource.staticSearchFqTopOfSearch(siteRequest_, o);
+			return CurrikiResource.staticSolrFqTopOfSearch(siteRequest_, o);
 		case "remove":
-			return CurrikiResource.staticSearchFqRemove(siteRequest_, o);
+			return CurrikiResource.staticSolrFqRemove(siteRequest_, o);
 		case "spam":
-			return CurrikiResource.staticSearchFqSpam(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSpam(siteRequest_, o);
 		case "topOfSearchInt":
-			return CurrikiResource.staticSearchFqTopOfSearchInt(siteRequest_, o);
+			return CurrikiResource.staticSolrFqTopOfSearchInt(siteRequest_, o);
 		case "partnerInt":
-			return CurrikiResource.staticSearchFqPartnerInt(siteRequest_, o);
+			return CurrikiResource.staticSolrFqPartnerInt(siteRequest_, o);
 		case "reviewResource":
-			return CurrikiResource.staticSearchFqReviewResource(siteRequest_, o);
+			return CurrikiResource.staticSolrFqReviewResource(siteRequest_, o);
 		case "oldUrl":
-			return CurrikiResource.staticSearchFqOldUrl(siteRequest_, o);
+			return CurrikiResource.staticSolrFqOldUrl(siteRequest_, o);
 		case "contentDisplayOk":
-			return CurrikiResource.staticSearchFqContentDisplayOk(siteRequest_, o);
+			return CurrikiResource.staticSolrFqContentDisplayOk(siteRequest_, o);
 		case "metadata":
-			return CurrikiResource.staticSearchFqMetadata(siteRequest_, o);
+			return CurrikiResource.staticSolrFqMetadata(siteRequest_, o);
 		case "approvalStatus":
-			return CurrikiResource.staticSearchFqApprovalStatus(siteRequest_, o);
+			return CurrikiResource.staticSolrFqApprovalStatus(siteRequest_, o);
 		case "approvalStatusDate":
-			return CurrikiResource.staticSearchFqApprovalStatusDate(siteRequest_, o);
+			return CurrikiResource.staticSolrFqApprovalStatusDate(siteRequest_, o);
 		case "spamUser":
-			return CurrikiResource.staticSearchFqSpamUser(siteRequest_, o);
+			return CurrikiResource.staticSolrFqSpamUser(siteRequest_, o);
 		case "url":
-			return CurrikiResource.staticSearchFqUrl(siteRequest_, o);
+			return CurrikiResource.staticSolrFqUrl(siteRequest_, o);
 		case "displaySeqNo":
-			return CurrikiResource.staticSearchFqDisplaySeqNo(siteRequest_, o);
+			return CurrikiResource.staticSolrFqDisplaySeqNo(siteRequest_, o);
 		case "fileId":
-			return CurrikiResource.staticSearchFqFileId(siteRequest_, o);
+			return CurrikiResource.staticSolrFqFileId(siteRequest_, o);
+		case "fileName":
+			return CurrikiResource.staticSolrFqFileName(siteRequest_, o);
+		case "uploadDate":
+			return CurrikiResource.staticSolrFqUploadDate(siteRequest_, o);
+		case "sequence":
+			return CurrikiResource.staticSolrFqSequence(siteRequest_, o);
+		case "uniqueName":
+			return CurrikiResource.staticSolrFqUniqueName(siteRequest_, o);
+		case "ext":
+			return CurrikiResource.staticSolrFqExt(siteRequest_, o);
+		case "tempactive":
+			return CurrikiResource.staticSolrFqTempactive(siteRequest_, o);
+		case "s3path":
+			return CurrikiResource.staticSolrFqS3path(siteRequest_, o);
+		case "sdfStatus":
+			return CurrikiResource.staticSolrFqSdfStatus(siteRequest_, o);
+		case "transcoded":
+			return CurrikiResource.staticSolrFqTranscoded(siteRequest_, o);
+		case "lodestar":
+			return CurrikiResource.staticSolrFqLodestar(siteRequest_, o);
+		case "archive":
+			return CurrikiResource.staticSolrFqArchive(siteRequest_, o);
+		case "identifier":
+			return CurrikiResource.staticSolrFqIdentifier(siteRequest_, o);
+		case "displayName":
+			return CurrikiResource.staticSolrFqDisplayName(siteRequest_, o);
+		case "subjectArea":
+			return CurrikiResource.staticSolrFqSubjectArea(siteRequest_, o);
+		case "name":
+			return CurrikiResource.staticSolrFqName(siteRequest_, o);
 			default:
-				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSolrFqBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
 	/////////////
-	// persist //
+	// define //
 	/////////////
 
-	@Override public boolean persistForClass(String var, Object val) {
+	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = persistCurrikiResource(v, val);
+					o = defineCurrikiResource(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.persistForClass(v, val);
+					o = oBaseModel.defineForClass(v, val);
 				}
 			}
 		}
 		return o != null;
 	}
-	public Object persistCurrikiResource(String var, Object val) {
+	public Object defineCurrikiResource(String var, Object val) {
 		switch(var.toLowerCase()) {
-			case "resourceid":
-				if(val instanceof String)
-					setResourceId((String)val);
-				saves.add("resourceId");
-				return val;
-			case "licenseid":
-				if(val instanceof String)
-					setLicenseId((String)val);
-				saves.add("licenseId");
-				return val;
-			case "contributorid":
-				if(val instanceof Long)
-					setContributorId((Long)val);
-				else if(val instanceof String)
-					setContributorId((String)val);
-				saves.add("contributorId");
-				return val;
-			case "contributiondate":
-				if(val instanceof ZonedDateTime)
-					setContributionDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setContributionDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setContributionDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("contributionDate");
-				return val;
-			case "description":
-				if(val instanceof String)
-					setDescription((String)val);
-				saves.add("description");
-				return val;
-			case "title":
-				if(val instanceof String)
-					setTitle((String)val);
-				saves.add("title");
-				return val;
-			case "keywordsstr":
-				if(val instanceof String)
-					setKeywordsStr((String)val);
-				saves.add("keywordsStr");
-				return val;
-			case "generatedkeywordsstr":
-				if(val instanceof String)
-					setGeneratedKeywordsStr((String)val);
-				saves.add("generatedKeywordsStr");
-				return val;
-			case "language":
-				if(val instanceof String)
-					setLanguage((String)val);
-				saves.add("language");
-				return val;
-			case "lasteditorid":
-				if(val instanceof Long)
-					setLastEditorId((Long)val);
-				else if(val instanceof String)
-					setLastEditorId((String)val);
-				saves.add("lastEditorId");
-				return val;
-			case "lasteditdate":
-				if(val instanceof ZonedDateTime)
-					setLastEditDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setLastEditDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setLastEditDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("lastEditDate");
-				return val;
-			case "currikilicense":
-				if(val instanceof String)
-					setCurrikiLicense((String)val);
-				saves.add("currikiLicense");
-				return val;
-			case "externalurl":
-				if(val instanceof String)
-					setExternalUrl((String)val);
-				saves.add("externalUrl");
-				return val;
-			case "resourcechecked":
-				if(val instanceof String)
-					setResourceChecked((String)val);
-				saves.add("resourceChecked");
-				return val;
-			case "content":
-				if(val instanceof String)
-					setContent((String)val);
-				saves.add("content");
-				return val;
-			case "resourcecheckrequestnote":
-				if(val instanceof String)
-					setResourceCheckRequestNote((String)val);
-				saves.add("resourceCheckRequestNote");
-				return val;
-			case "resourcecheckdate":
-				if(val instanceof ZonedDateTime)
-					setResourceCheckDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setResourceCheckDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setResourceCheckDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("resourceCheckDate");
-				return val;
-			case "resourcecheckid":
-				if(val instanceof Long)
-					setResourceCheckId((Long)val);
-				else if(val instanceof String)
-					setResourceCheckId((String)val);
-				saves.add("resourceCheckId");
-				return val;
-			case "resourcechecknote":
-				if(val instanceof String)
-					setResourceCheckNote((String)val);
-				saves.add("resourceCheckNote");
-				return val;
-			case "studentfacing":
-				if(val instanceof String)
-					setStudentFacing((String)val);
-				saves.add("studentFacing");
-				return val;
-			case "source":
-				if(val instanceof String)
-					setSource((String)val);
-				saves.add("source");
-				return val;
-			case "reviewstatus":
-				if(val instanceof String)
-					setReviewStatus((String)val);
-				saves.add("reviewStatus");
-				return val;
-			case "lastreviewdate":
-				if(val instanceof ZonedDateTime)
-					setLastReviewDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setLastReviewDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setLastReviewDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("lastReviewDate");
-				return val;
-			case "reviewbyid":
-				if(val instanceof Long)
-					setReviewByID((Long)val);
-				else if(val instanceof String)
-					setReviewByID((String)val);
-				saves.add("reviewByID");
-				return val;
-			case "reviewrating":
-				if(val instanceof String)
-					setReviewRating((String)val);
-				else if(val instanceof Number)
-					setReviewRating(new BigDecimal(((Number)val).doubleValue()));
-				saves.add("reviewRating");
-				return val;
-			case "technicalcompleteness":
-				if(val instanceof Integer)
-					setTechnicalCompleteness((Integer)val);
-				else if(val instanceof String)
-					setTechnicalCompleteness((String)val);
-				saves.add("technicalCompleteness");
-				return val;
-			case "contentaccuracy":
-				if(val instanceof Integer)
-					setContentAccuracy((Integer)val);
-				else if(val instanceof String)
-					setContentAccuracy((String)val);
-				saves.add("contentAccuracy");
-				return val;
-			case "pedagogy":
-				if(val instanceof Integer)
-					setPedagogy((Integer)val);
-				else if(val instanceof String)
-					setPedagogy((String)val);
-				saves.add("pedagogy");
-				return val;
-			case "ratingcomment":
-				if(val instanceof String)
-					setRatingComment((String)val);
-				saves.add("ratingComment");
-				return val;
-			case "standardsalignment":
-				if(val instanceof Integer)
-					setStandardsAlignment((Integer)val);
-				else if(val instanceof String)
-					setStandardsAlignment((String)val);
-				saves.add("standardsAlignment");
-				return val;
-			case "standardsalignmentcomment":
-				if(val instanceof String)
-					setStandardsAlignmentComment((String)val);
-				saves.add("standardsAlignmentComment");
-				return val;
-			case "subjectmatter":
-				if(val instanceof Integer)
-					setSubjectMatter((Integer)val);
-				else if(val instanceof String)
-					setSubjectMatter((String)val);
-				saves.add("subjectMatter");
-				return val;
-			case "subjectmattercomment":
-				if(val instanceof String)
-					setSubjectMatterComment((String)val);
-				saves.add("subjectMatterComment");
-				return val;
-			case "supportsteaching":
-				if(val instanceof Integer)
-					setSupportsTeaching((Integer)val);
-				else if(val instanceof String)
-					setSupportsTeaching((String)val);
-				saves.add("supportsTeaching");
-				return val;
-			case "supportsteachingcomment":
-				if(val instanceof String)
-					setSupportsTeachingComment((String)val);
-				saves.add("supportsTeachingComment");
-				return val;
-			case "assessmentsquality":
-				if(val instanceof Integer)
-					setAssessmentsQuality((Integer)val);
-				else if(val instanceof String)
-					setAssessmentsQuality((String)val);
-				saves.add("assessmentsQuality");
-				return val;
-			case "assessmentsqualitycomment":
-				if(val instanceof String)
-					setAssessmentsQualityComment((String)val);
-				saves.add("assessmentsQualityComment");
-				return val;
-			case "interactivityquality":
-				if(val instanceof Integer)
-					setInteractivityQuality((Integer)val);
-				else if(val instanceof String)
-					setInteractivityQuality((String)val);
-				saves.add("interactivityQuality");
-				return val;
-			case "interactivityqualitycomment":
-				if(val instanceof String)
-					setInteractivityQualityComment((String)val);
-				saves.add("interactivityQualityComment");
-				return val;
-			case "instructionalquality":
-				if(val instanceof Integer)
-					setInstructionalQuality((Integer)val);
-				else if(val instanceof String)
-					setInstructionalQuality((String)val);
-				saves.add("instructionalQuality");
-				return val;
-			case "instructionalqualitycomment":
-				if(val instanceof String)
-					setInstructionalQualityComment((String)val);
-				saves.add("instructionalQualityComment");
-				return val;
-			case "deeperlearning":
-				if(val instanceof Integer)
-					setDeeperLearning((Integer)val);
-				else if(val instanceof String)
-					setDeeperLearning((String)val);
-				saves.add("deeperLearning");
-				return val;
-			case "deeperlearningcomment":
-				if(val instanceof String)
-					setDeeperLearningComment((String)val);
-				saves.add("deeperLearningComment");
-				return val;
-			case "partner":
-				if(val instanceof String)
-					setPartner((String)val);
-				saves.add("partner");
-				return val;
-			case "createdate":
-				if(val instanceof ZonedDateTime)
-					setCreateDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setCreateDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setCreateDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("createDate");
-				return val;
-			case "type":
-				if(val instanceof String)
-					setType((String)val);
-				saves.add("type");
-				return val;
-			case "featured":
-				if(val instanceof String)
-					setFeatured((String)val);
-				saves.add("featured");
-				return val;
-			case "page":
-				if(val instanceof String)
-					setPage((String)val);
-				saves.add("page");
-				return val;
-			case "active":
-				if(val instanceof String)
-					setActive((String)val);
-				saves.add("active");
-				return val;
-			case "public":
-				if(val instanceof String)
-					setPublic((String)val);
-				saves.add("Public");
-				return val;
-			case "xwd_id":
-				if(val instanceof Integer)
-					setXwd_id((Integer)val);
-				else if(val instanceof String)
-					setXwd_id((String)val);
-				saves.add("xwd_id");
-				return val;
-			case "mediatype":
-				if(val instanceof String)
-					setMediaType((String)val);
-				saves.add("mediaType");
-				return val;
-			case "access":
-				if(val instanceof String)
-					setAccess((String)val);
-				saves.add("access");
-				return val;
-			case "memberrating":
-				if(val instanceof String)
-					setMemberRating((String)val);
-				else if(val instanceof Number)
-					setMemberRating(new BigDecimal(((Number)val).doubleValue()));
-				saves.add("memberRating");
-				return val;
-			case "aligned":
-				if(val instanceof String)
-					setAligned((String)val);
-				saves.add("aligned");
-				return val;
-			case "pageurl":
-				if(val instanceof String)
-					setPageUrl((String)val);
-				saves.add("pageUrl");
-				return val;
-			case "indexed":
-				if(val instanceof String)
-					setIndexed((String)val);
-				saves.add("indexed");
-				return val;
-			case "lastindexdate":
-				if(val instanceof ZonedDateTime)
-					setLastIndexDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setLastIndexDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setLastIndexDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("lastIndexDate");
-				return val;
-			case "indexrequired":
-				if(val instanceof String)
-					setIndexRequired((String)val);
-				saves.add("indexRequired");
-				return val;
-			case "indexrequireddate":
-				if(val instanceof ZonedDateTime)
-					setIndexRequiredDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setIndexRequiredDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setIndexRequiredDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("indexRequiredDate");
-				return val;
-			case "rescrape":
-				if(val instanceof String)
-					setRescrape((String)val);
-				saves.add("rescrape");
-				return val;
-			case "gobutton":
-				if(val instanceof String)
-					setGoButton((String)val);
-				saves.add("goButton");
-				return val;
-			case "downloadbutton":
-				if(val instanceof String)
-					setDownloadButton((String)val);
-				saves.add("downloadButton");
-				return val;
-			case "topofsearch":
-				if(val instanceof String)
-					setTopOfSearch((String)val);
-				saves.add("topOfSearch");
-				return val;
-			case "remove":
-				if(val instanceof String)
-					setRemove((String)val);
-				saves.add("remove");
-				return val;
-			case "spam":
-				if(val instanceof String)
-					setSpam((String)val);
-				saves.add("spam");
-				return val;
-			case "topofsearchint":
-				if(val instanceof Integer)
-					setTopOfSearchInt((Integer)val);
-				else if(val instanceof String)
-					setTopOfSearchInt((String)val);
-				saves.add("topOfSearchInt");
-				return val;
-			case "partnerint":
-				if(val instanceof Integer)
-					setPartnerInt((Integer)val);
-				else if(val instanceof String)
-					setPartnerInt((String)val);
-				saves.add("partnerInt");
-				return val;
-			case "reviewresource":
-				if(val instanceof String)
-					setReviewResource((String)val);
-				saves.add("reviewResource");
-				return val;
-			case "oldurl":
-				if(val instanceof String)
-					setOldUrl((String)val);
-				saves.add("oldUrl");
-				return val;
-			case "contentdisplayok":
-				if(val instanceof String)
-					setContentDisplayOk((String)val);
-				saves.add("contentDisplayOk");
-				return val;
-			case "metadata":
-				if(val instanceof String)
-					setMetadata((String)val);
-				saves.add("metadata");
-				return val;
-			case "approvalstatus":
-				if(val instanceof String)
-					setApprovalStatus((String)val);
-				saves.add("approvalStatus");
-				return val;
-			case "approvalstatusdate":
-				if(val instanceof ZonedDateTime)
-					setApprovalStatusDate((ZonedDateTime)val);
-				else if(val instanceof String)
-					setApprovalStatusDate((String)val);
-				else if(val instanceof OffsetDateTime)
-					setApprovalStatusDate(((OffsetDateTime)val).atZoneSameInstant(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-				saves.add("approvalStatusDate");
-				return val;
-			case "spamuser":
-				if(val instanceof String)
-					setSpamUser((String)val);
-				saves.add("spamUser");
-				return val;
-			case "url":
-				if(val instanceof String)
-					setUrl((String)val);
-				saves.add("url");
-				return val;
-			case "displayseqno":
-				if(val instanceof Integer)
-					setDisplaySeqNo((Integer)val);
-				else if(val instanceof String)
-					setDisplaySeqNo((String)val);
-				saves.add("displaySeqNo");
-				return val;
-			case "fileid":
-				if(val instanceof Integer)
-					setFileId((Integer)val);
-				else if(val instanceof String)
-					setFileId((String)val);
-				saves.add("fileId");
-				return val;
 			default:
-				return super.persistBaseModel(var, val);
+				return super.defineBaseModel(var, val);
 		}
 	}
 
@@ -6258,428 +6375,310 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	// populate //
 	/////////////
 
-	@Override public void populateForClass(SolrResponse.Doc doc) {
-		populateCurrikiResource(doc);
+	@Override public void populateForClass(SolrDocument solrDocument) {
+		populateCurrikiResource(solrDocument);
 	}
-	public void populateCurrikiResource(SolrResponse.Doc doc) {
+	public void populateCurrikiResource(SolrDocument solrDocument) {
 		CurrikiResource oCurrikiResource = (CurrikiResource)this;
-		saves = doc.get("saves_docvalues_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 
 			if(saves.contains("content")) {
-				String content = (String)doc.get("content_stored_string");
+				String content = (String)solrDocument.get("content_stored_string");
 				if(content != null)
 					oCurrikiResource.setContent(content);
 			}
 
 			if(saves.contains("ratingComment")) {
-				String ratingComment = (String)doc.get("ratingComment_stored_string");
+				String ratingComment = (String)solrDocument.get("ratingComment_stored_string");
 				if(ratingComment != null)
 					oCurrikiResource.setRatingComment(ratingComment);
 			}
 		}
 
-		super.populateBaseModel(doc);
+		super.populateBaseModel(solrDocument);
 	}
 
-	public void indexCurrikiResource(JsonObject doc) {
+	public void indexCurrikiResource(SolrInputDocument document) {
 		if(resourceId != null) {
-			doc.put("resourceId_docvalues_string", resourceId);
+			document.addField("resourceId_docvalues_string", resourceId);
 		}
 		if(licenseId != null) {
-			doc.put("licenseId_docvalues_string", licenseId);
+			document.addField("licenseId_docvalues_string", licenseId);
 		}
 		if(contributorId != null) {
-			doc.put("contributorId_docvalues_long", contributorId);
+			document.addField("contributorId_docvalues_long", contributorId);
 		}
 		if(contributionDate != null) {
-			doc.put("contributionDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(contributionDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("contributionDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(contributionDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(description != null) {
-			doc.put("description_docvalues_string", description);
+			document.addField("description_docvalues_string", description);
 		}
 		if(title != null) {
-			doc.put("title_docvalues_string", title);
+			document.addField("title_docvalues_string", title);
 		}
 		if(keywords != null) {
-			JsonArray l = new JsonArray();
-			doc.put("keywords_docvalues_strings", l);
-			for(String o : keywords) {
-				l.add(o);
+			for(java.lang.String o : keywords) {
+				document.addField("keywords_docvalues_strings", o);
 			}
 		}
 		if(generatedKeywords != null) {
-			JsonArray l = new JsonArray();
-			doc.put("generatedKeywords_docvalues_strings", l);
-			for(String o : generatedKeywords) {
-				l.add(o);
+			for(java.lang.String o : generatedKeywords) {
+				document.addField("generatedKeywords_docvalues_strings", o);
 			}
 		}
 		if(language != null) {
-			doc.put("language_docvalues_string", language);
+			document.addField("language_docvalues_string", language);
 		}
 		if(lastEditorId != null) {
-			doc.put("lastEditorId_docvalues_long", lastEditorId);
+			document.addField("lastEditorId_docvalues_long", lastEditorId);
 		}
 		if(lastEditDate != null) {
-			doc.put("lastEditDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastEditDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("lastEditDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastEditDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(currikiLicense != null) {
-			doc.put("currikiLicense_docvalues_string", currikiLicense);
+			document.addField("currikiLicense_docvalues_string", currikiLicense);
 		}
 		if(externalUrl != null) {
-			doc.put("externalUrl_docvalues_string", externalUrl);
+			document.addField("externalUrl_docvalues_string", externalUrl);
 		}
 		if(resourceChecked != null) {
-			doc.put("resourceChecked_docvalues_string", resourceChecked);
+			document.addField("resourceChecked_docvalues_string", resourceChecked);
 		}
 		if(content != null) {
-			doc.put("content_stored_string", content);
+			document.addField("content_stored_string", content);
 		}
 		if(resourceCheckDate != null) {
-			doc.put("resourceCheckDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(resourceCheckDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("resourceCheckDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(resourceCheckDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(resourceCheckId != null) {
-			doc.put("resourceCheckId_docvalues_long", resourceCheckId);
+			document.addField("resourceCheckId_docvalues_long", resourceCheckId);
 		}
 		if(studentFacing != null) {
-			doc.put("studentFacing_docvalues_string", studentFacing);
+			document.addField("studentFacing_docvalues_string", studentFacing);
 		}
 		if(source != null) {
-			doc.put("source_docvalues_string", source);
+			document.addField("source_docvalues_string", source);
 		}
 		if(reviewStatus != null) {
-			doc.put("reviewStatus_docvalues_string", reviewStatus);
+			document.addField("reviewStatus_docvalues_string", reviewStatus);
 		}
 		if(lastReviewDate != null) {
-			doc.put("lastReviewDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastReviewDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("lastReviewDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastReviewDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(reviewByID != null) {
-			doc.put("reviewByID_docvalues_long", reviewByID);
+			document.addField("reviewByID_docvalues_long", reviewByID);
 		}
 		if(reviewRating != null) {
-			doc.put("reviewRating_docvalues_double", reviewRating.doubleValue());
+			document.addField("reviewRating_docvalues_double", reviewRating.doubleValue());
 		}
 		if(technicalCompleteness != null) {
-			doc.put("technicalCompleteness_docvalues_int", technicalCompleteness);
+			document.addField("technicalCompleteness_docvalues_int", technicalCompleteness);
 		}
 		if(contentAccuracy != null) {
-			doc.put("contentAccuracy_docvalues_int", contentAccuracy);
+			document.addField("contentAccuracy_docvalues_int", contentAccuracy);
 		}
 		if(pedagogy != null) {
-			doc.put("pedagogy_docvalues_int", pedagogy);
+			document.addField("pedagogy_docvalues_int", pedagogy);
 		}
 		if(ratingComment != null) {
-			doc.put("ratingComment_stored_string", ratingComment);
+			document.addField("ratingComment_stored_string", ratingComment);
 		}
 		if(standardsAlignment != null) {
-			doc.put("standardsAlignment_docvalues_int", standardsAlignment);
+			document.addField("standardsAlignment_docvalues_int", standardsAlignment);
 		}
 		if(standardsAlignmentComment != null) {
-			doc.put("standardsAlignmentComment_docvalues_string", standardsAlignmentComment);
+			document.addField("standardsAlignmentComment_docvalues_string", standardsAlignmentComment);
 		}
 		if(subjectMatter != null) {
-			doc.put("subjectMatter_docvalues_int", subjectMatter);
+			document.addField("subjectMatter_docvalues_int", subjectMatter);
 		}
 		if(subjectMatterComment != null) {
-			doc.put("subjectMatterComment_docvalues_string", subjectMatterComment);
+			document.addField("subjectMatterComment_docvalues_string", subjectMatterComment);
 		}
 		if(supportsTeaching != null) {
-			doc.put("supportsTeaching_docvalues_int", supportsTeaching);
+			document.addField("supportsTeaching_docvalues_int", supportsTeaching);
 		}
 		if(supportsTeachingComment != null) {
-			doc.put("supportsTeachingComment_docvalues_string", supportsTeachingComment);
+			document.addField("supportsTeachingComment_docvalues_string", supportsTeachingComment);
 		}
 		if(assessmentsQuality != null) {
-			doc.put("assessmentsQuality_docvalues_int", assessmentsQuality);
+			document.addField("assessmentsQuality_docvalues_int", assessmentsQuality);
 		}
 		if(assessmentsQualityComment != null) {
-			doc.put("assessmentsQualityComment_docvalues_string", assessmentsQualityComment);
+			document.addField("assessmentsQualityComment_docvalues_string", assessmentsQualityComment);
 		}
 		if(interactivityQuality != null) {
-			doc.put("interactivityQuality_docvalues_int", interactivityQuality);
+			document.addField("interactivityQuality_docvalues_int", interactivityQuality);
 		}
 		if(interactivityQualityComment != null) {
-			doc.put("interactivityQualityComment_docvalues_string", interactivityQualityComment);
+			document.addField("interactivityQualityComment_docvalues_string", interactivityQualityComment);
 		}
 		if(instructionalQuality != null) {
-			doc.put("instructionalQuality_docvalues_int", instructionalQuality);
+			document.addField("instructionalQuality_docvalues_int", instructionalQuality);
 		}
 		if(instructionalQualityComment != null) {
-			doc.put("instructionalQualityComment_docvalues_string", instructionalQualityComment);
+			document.addField("instructionalQualityComment_docvalues_string", instructionalQualityComment);
 		}
 		if(deeperLearning != null) {
-			doc.put("deeperLearning_docvalues_int", deeperLearning);
+			document.addField("deeperLearning_docvalues_int", deeperLearning);
 		}
 		if(deeperLearningComment != null) {
-			doc.put("deeperLearningComment_docvalues_string", deeperLearningComment);
+			document.addField("deeperLearningComment_docvalues_string", deeperLearningComment);
 		}
 		if(partner != null) {
-			doc.put("partner_docvalues_string", partner);
+			document.addField("partner_docvalues_string", partner);
 		}
 		if(createDate != null) {
-			doc.put("createDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(createDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("createDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(createDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(type != null) {
-			doc.put("type_docvalues_string", type);
+			document.addField("type_docvalues_string", type);
 		}
 		if(featured != null) {
-			doc.put("featured_docvalues_string", featured);
+			document.addField("featured_docvalues_string", featured);
 		}
 		if(page != null) {
-			doc.put("page_docvalues_string", page);
+			document.addField("page_docvalues_string", page);
 		}
 		if(active != null) {
-			doc.put("active_docvalues_string", active);
+			document.addField("active_docvalues_string", active);
 		}
 		if(Public != null) {
-			doc.put("Public_docvalues_string", Public);
+			document.addField("Public_docvalues_string", Public);
 		}
 		if(xwd_id != null) {
-			doc.put("xwd_id_docvalues_int", xwd_id);
+			document.addField("xwd_id_docvalues_int", xwd_id);
 		}
 		if(mediaType != null) {
-			doc.put("mediaType_docvalues_string", mediaType);
+			document.addField("mediaType_docvalues_string", mediaType);
 		}
 		if(access != null) {
-			doc.put("access_docvalues_string", access);
+			document.addField("access_docvalues_string", access);
 		}
 		if(memberRating != null) {
-			doc.put("memberRating_docvalues_double", memberRating.doubleValue());
+			document.addField("memberRating_docvalues_double", memberRating.doubleValue());
 		}
 		if(aligned != null) {
-			doc.put("aligned_docvalues_string", aligned);
+			document.addField("aligned_docvalues_string", aligned);
 		}
 		if(pageUrl != null) {
-			doc.put("pageUrl_docvalues_string", pageUrl);
+			document.addField("pageUrl_docvalues_string", pageUrl);
 		}
 		if(indexed != null) {
-			doc.put("indexed_docvalues_string", indexed);
+			document.addField("indexed_docvalues_string", indexed);
 		}
 		if(lastIndexDate != null) {
-			doc.put("lastIndexDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastIndexDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("lastIndexDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(lastIndexDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(indexRequired != null) {
-			doc.put("indexRequired_docvalues_string", indexRequired);
+			document.addField("indexRequired_docvalues_string", indexRequired);
 		}
 		if(indexRequiredDate != null) {
-			doc.put("indexRequiredDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(indexRequiredDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("indexRequiredDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(indexRequiredDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(rescrape != null) {
-			doc.put("rescrape_docvalues_string", rescrape);
+			document.addField("rescrape_docvalues_string", rescrape);
 		}
 		if(goButton != null) {
-			doc.put("goButton_docvalues_string", goButton);
+			document.addField("goButton_docvalues_string", goButton);
 		}
 		if(downloadButton != null) {
-			doc.put("downloadButton_docvalues_string", downloadButton);
+			document.addField("downloadButton_docvalues_string", downloadButton);
 		}
 		if(topOfSearch != null) {
-			doc.put("topOfSearch_docvalues_string", topOfSearch);
+			document.addField("topOfSearch_docvalues_string", topOfSearch);
 		}
 		if(remove != null) {
-			doc.put("remove_docvalues_string", remove);
+			document.addField("remove_docvalues_string", remove);
 		}
 		if(spam != null) {
-			doc.put("spam_docvalues_string", spam);
+			document.addField("spam_docvalues_string", spam);
 		}
 		if(topOfSearchInt != null) {
-			doc.put("topOfSearchInt_docvalues_int", topOfSearchInt);
+			document.addField("topOfSearchInt_docvalues_int", topOfSearchInt);
 		}
 		if(partnerInt != null) {
-			doc.put("partnerInt_docvalues_int", partnerInt);
+			document.addField("partnerInt_docvalues_int", partnerInt);
 		}
 		if(reviewResource != null) {
-			doc.put("reviewResource_docvalues_string", reviewResource);
+			document.addField("reviewResource_docvalues_string", reviewResource);
 		}
 		if(oldUrl != null) {
-			doc.put("oldUrl_docvalues_string", oldUrl);
+			document.addField("oldUrl_docvalues_string", oldUrl);
 		}
 		if(contentDisplayOk != null) {
-			doc.put("contentDisplayOk_docvalues_string", contentDisplayOk);
+			document.addField("contentDisplayOk_docvalues_string", contentDisplayOk);
 		}
 		if(metadata != null) {
-			doc.put("metadata_docvalues_string", metadata);
+			document.addField("metadata_docvalues_string", metadata);
 		}
 		if(approvalStatus != null) {
-			doc.put("approvalStatus_docvalues_string", approvalStatus);
+			document.addField("approvalStatus_docvalues_string", approvalStatus);
 		}
 		if(approvalStatusDate != null) {
-			doc.put("approvalStatusDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(approvalStatusDate.toInstant(), ZoneId.of("UTC"))));
+			document.addField("approvalStatusDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(approvalStatusDate.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(spamUser != null) {
-			doc.put("spamUser_docvalues_string", spamUser);
+			document.addField("spamUser_docvalues_string", spamUser);
 		}
 		if(url != null) {
-			doc.put("url_docvalues_string", url);
+			document.addField("url_docvalues_string", url);
 		}
 		if(displaySeqNo != null) {
-			doc.put("displaySeqNo_docvalues_int", displaySeqNo);
+			document.addField("displaySeqNo_docvalues_int", displaySeqNo);
 		}
 		if(fileId != null) {
-			doc.put("fileId_docvalues_int", fileId);
+			document.addField("fileId_docvalues_int", fileId);
 		}
-		super.indexBaseModel(doc);
-
-	}
-
-	public static String varStoredCurrikiResource(String entityVar) {
-		switch(entityVar) {
-			case "resourceId":
-				return "resourceId_docvalues_string";
-			case "licenseId":
-				return "licenseId_docvalues_string";
-			case "contributorId":
-				return "contributorId_docvalues_long";
-			case "contributionDate":
-				return "contributionDate_docvalues_date";
-			case "description":
-				return "description_docvalues_string";
-			case "title":
-				return "title_docvalues_string";
-			case "keywords":
-				return "keywords_docvalues_strings";
-			case "generatedKeywords":
-				return "generatedKeywords_docvalues_strings";
-			case "language":
-				return "language_docvalues_string";
-			case "lastEditorId":
-				return "lastEditorId_docvalues_long";
-			case "lastEditDate":
-				return "lastEditDate_docvalues_date";
-			case "currikiLicense":
-				return "currikiLicense_docvalues_string";
-			case "externalUrl":
-				return "externalUrl_docvalues_string";
-			case "resourceChecked":
-				return "resourceChecked_docvalues_string";
-			case "content":
-				return "content_stored_string";
-			case "resourceCheckDate":
-				return "resourceCheckDate_docvalues_date";
-			case "resourceCheckId":
-				return "resourceCheckId_docvalues_long";
-			case "studentFacing":
-				return "studentFacing_docvalues_string";
-			case "source":
-				return "source_docvalues_string";
-			case "reviewStatus":
-				return "reviewStatus_docvalues_string";
-			case "lastReviewDate":
-				return "lastReviewDate_docvalues_date";
-			case "reviewByID":
-				return "reviewByID_docvalues_long";
-			case "reviewRating":
-				return "reviewRating_docvalues_double";
-			case "technicalCompleteness":
-				return "technicalCompleteness_docvalues_int";
-			case "contentAccuracy":
-				return "contentAccuracy_docvalues_int";
-			case "pedagogy":
-				return "pedagogy_docvalues_int";
-			case "ratingComment":
-				return "ratingComment_stored_string";
-			case "standardsAlignment":
-				return "standardsAlignment_docvalues_int";
-			case "standardsAlignmentComment":
-				return "standardsAlignmentComment_docvalues_string";
-			case "subjectMatter":
-				return "subjectMatter_docvalues_int";
-			case "subjectMatterComment":
-				return "subjectMatterComment_docvalues_string";
-			case "supportsTeaching":
-				return "supportsTeaching_docvalues_int";
-			case "supportsTeachingComment":
-				return "supportsTeachingComment_docvalues_string";
-			case "assessmentsQuality":
-				return "assessmentsQuality_docvalues_int";
-			case "assessmentsQualityComment":
-				return "assessmentsQualityComment_docvalues_string";
-			case "interactivityQuality":
-				return "interactivityQuality_docvalues_int";
-			case "interactivityQualityComment":
-				return "interactivityQualityComment_docvalues_string";
-			case "instructionalQuality":
-				return "instructionalQuality_docvalues_int";
-			case "instructionalQualityComment":
-				return "instructionalQualityComment_docvalues_string";
-			case "deeperLearning":
-				return "deeperLearning_docvalues_int";
-			case "deeperLearningComment":
-				return "deeperLearningComment_docvalues_string";
-			case "partner":
-				return "partner_docvalues_string";
-			case "createDate":
-				return "createDate_docvalues_date";
-			case "type":
-				return "type_docvalues_string";
-			case "featured":
-				return "featured_docvalues_string";
-			case "page":
-				return "page_docvalues_string";
-			case "active":
-				return "active_docvalues_string";
-			case "Public":
-				return "Public_docvalues_string";
-			case "xwd_id":
-				return "xwd_id_docvalues_int";
-			case "mediaType":
-				return "mediaType_docvalues_string";
-			case "access":
-				return "access_docvalues_string";
-			case "memberRating":
-				return "memberRating_docvalues_double";
-			case "aligned":
-				return "aligned_docvalues_string";
-			case "pageUrl":
-				return "pageUrl_docvalues_string";
-			case "indexed":
-				return "indexed_docvalues_string";
-			case "lastIndexDate":
-				return "lastIndexDate_docvalues_date";
-			case "indexRequired":
-				return "indexRequired_docvalues_string";
-			case "indexRequiredDate":
-				return "indexRequiredDate_docvalues_date";
-			case "rescrape":
-				return "rescrape_docvalues_string";
-			case "goButton":
-				return "goButton_docvalues_string";
-			case "downloadButton":
-				return "downloadButton_docvalues_string";
-			case "topOfSearch":
-				return "topOfSearch_docvalues_string";
-			case "remove":
-				return "remove_docvalues_string";
-			case "spam":
-				return "spam_docvalues_string";
-			case "topOfSearchInt":
-				return "topOfSearchInt_docvalues_int";
-			case "partnerInt":
-				return "partnerInt_docvalues_int";
-			case "reviewResource":
-				return "reviewResource_docvalues_string";
-			case "oldUrl":
-				return "oldUrl_docvalues_string";
-			case "contentDisplayOk":
-				return "contentDisplayOk_docvalues_string";
-			case "metadata":
-				return "metadata_docvalues_string";
-			case "approvalStatus":
-				return "approvalStatus_docvalues_string";
-			case "approvalStatusDate":
-				return "approvalStatusDate_docvalues_date";
-			case "spamUser":
-				return "spamUser_docvalues_string";
-			case "url":
-				return "url_docvalues_string";
-			case "displaySeqNo":
-				return "displaySeqNo_docvalues_int";
-			case "fileId":
-				return "fileId_docvalues_int";
-			default:
-				return BaseModel.varStoredBaseModel(entityVar);
+		if(fileName != null) {
+			document.addField("fileName_docvalues_string", fileName);
 		}
+		if(uploadDate != null) {
+			document.addField("uploadDate_docvalues_string", uploadDate);
+		}
+		if(sequence != null) {
+			document.addField("sequence_docvalues_int", sequence);
+		}
+		if(uniqueName != null) {
+			document.addField("uniqueName_docvalues_string", uniqueName);
+		}
+		if(ext != null) {
+			document.addField("ext_docvalues_string", ext);
+		}
+		if(tempactive != null) {
+			document.addField("tempactive_docvalues_string", tempactive);
+		}
+		if(s3path != null) {
+			document.addField("s3path_docvalues_string", s3path);
+		}
+		if(sdfStatus != null) {
+			document.addField("sdfStatus_docvalues_string", sdfStatus);
+		}
+		if(transcoded != null) {
+			document.addField("transcoded_docvalues_string", transcoded);
+		}
+		if(lodestar != null) {
+			document.addField("lodestar_docvalues_string", lodestar);
+		}
+		if(archive != null) {
+			document.addField("archive_docvalues_string", archive);
+		}
+		if(identifier != null) {
+			document.addField("identifier_docvalues_string", identifier);
+		}
+		if(displayName != null) {
+			document.addField("displayName_docvalues_string", displayName);
+		}
+		if(subjectArea != null) {
+			document.addField("subjectArea_docvalues_string", subjectArea);
+		}
+		if(name != null) {
+			document.addField("name_docvalues_string", name);
+		}
+		super.indexBaseModel(document);
+
 	}
 
 	public static String varIndexedCurrikiResource(String entityVar) {
@@ -6832,6 +6831,36 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return "displaySeqNo_docvalues_int";
 			case "fileId":
 				return "fileId_docvalues_int";
+			case "fileName":
+				return "fileName_docvalues_string";
+			case "uploadDate":
+				return "uploadDate_docvalues_string";
+			case "sequence":
+				return "sequence_docvalues_int";
+			case "uniqueName":
+				return "uniqueName_docvalues_string";
+			case "ext":
+				return "ext_docvalues_string";
+			case "tempactive":
+				return "tempactive_docvalues_string";
+			case "s3path":
+				return "s3path_docvalues_string";
+			case "sdfStatus":
+				return "sdfStatus_docvalues_string";
+			case "transcoded":
+				return "transcoded_docvalues_string";
+			case "lodestar":
+				return "lodestar_docvalues_string";
+			case "archive":
+				return "archive_docvalues_string";
+			case "identifier":
+				return "identifier_docvalues_string";
+			case "displayName":
+				return "displayName_docvalues_string";
+			case "subjectArea":
+				return "subjectArea_docvalues_string";
+			case "name":
+				return "name_docvalues_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -6855,94 +6884,109 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	// store //
 	/////////////
 
-	@Override public void storeForClass(SolrResponse.Doc doc) {
-		storeCurrikiResource(doc);
+	@Override public void storeForClass(SolrDocument solrDocument) {
+		storeCurrikiResource(solrDocument);
 	}
-	public void storeCurrikiResource(SolrResponse.Doc doc) {
+	public void storeCurrikiResource(SolrDocument solrDocument) {
 		CurrikiResource oCurrikiResource = (CurrikiResource)this;
 
-		oCurrikiResource.setResourceId(Optional.ofNullable(doc.get("resourceId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setLicenseId(Optional.ofNullable(doc.get("licenseId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setContributorId(Optional.ofNullable(doc.get("contributorId_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setContributionDate(Optional.ofNullable(doc.get("contributionDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDescription(Optional.ofNullable(doc.get("description_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setTitle(Optional.ofNullable(doc.get("title_docvalues_string")).map(v -> v.toString()).orElse(null));
-		Optional.ofNullable((List<?>)doc.get("keywords_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		oCurrikiResource.setResourceId(Optional.ofNullable(solrDocument.get("resourceId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLicenseId(Optional.ofNullable(solrDocument.get("licenseId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setContributorId(Optional.ofNullable(solrDocument.get("contributorId_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setContributionDate(Optional.ofNullable(solrDocument.get("contributionDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDescription(Optional.ofNullable(solrDocument.get("description_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTitle(Optional.ofNullable(solrDocument.get("title_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)solrDocument.get("keywords_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oCurrikiResource.addKeywords(v.toString());
 		});
-		Optional.ofNullable((List<?>)doc.get("generatedKeywords_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		Optional.ofNullable((List<?>)solrDocument.get("generatedKeywords_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oCurrikiResource.addGeneratedKeywords(v.toString());
 		});
-		oCurrikiResource.setLanguage(Optional.ofNullable(doc.get("language_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setLastEditorId(Optional.ofNullable(doc.get("lastEditorId_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setLastEditDate(Optional.ofNullable(doc.get("lastEditDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setCurrikiLicense(Optional.ofNullable(doc.get("currikiLicense_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setExternalUrl(Optional.ofNullable(doc.get("externalUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setResourceChecked(Optional.ofNullable(doc.get("resourceChecked_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setContent(Optional.ofNullable(doc.get("content_stored_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setResourceCheckDate(Optional.ofNullable(doc.get("resourceCheckDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setResourceCheckId(Optional.ofNullable(doc.get("resourceCheckId_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setStudentFacing(Optional.ofNullable(doc.get("studentFacing_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSource(Optional.ofNullable(doc.get("source_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setReviewStatus(Optional.ofNullable(doc.get("reviewStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setLastReviewDate(Optional.ofNullable(doc.get("lastReviewDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setReviewByID(Optional.ofNullable(doc.get("reviewByID_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setReviewRating(Optional.ofNullable(doc.get("reviewRating_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setTechnicalCompleteness(Optional.ofNullable(doc.get("technicalCompleteness_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setContentAccuracy(Optional.ofNullable(doc.get("contentAccuracy_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPedagogy(Optional.ofNullable(doc.get("pedagogy_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setRatingComment(Optional.ofNullable(doc.get("ratingComment_stored_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setStandardsAlignment(Optional.ofNullable(doc.get("standardsAlignment_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setStandardsAlignmentComment(Optional.ofNullable(doc.get("standardsAlignmentComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSubjectMatter(Optional.ofNullable(doc.get("subjectMatter_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSubjectMatterComment(Optional.ofNullable(doc.get("subjectMatterComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSupportsTeaching(Optional.ofNullable(doc.get("supportsTeaching_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSupportsTeachingComment(Optional.ofNullable(doc.get("supportsTeachingComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setAssessmentsQuality(Optional.ofNullable(doc.get("assessmentsQuality_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setAssessmentsQualityComment(Optional.ofNullable(doc.get("assessmentsQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setInteractivityQuality(Optional.ofNullable(doc.get("interactivityQuality_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setInteractivityQualityComment(Optional.ofNullable(doc.get("interactivityQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setInstructionalQuality(Optional.ofNullable(doc.get("instructionalQuality_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setInstructionalQualityComment(Optional.ofNullable(doc.get("instructionalQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDeeperLearning(Optional.ofNullable(doc.get("deeperLearning_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDeeperLearningComment(Optional.ofNullable(doc.get("deeperLearningComment_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPartner(Optional.ofNullable(doc.get("partner_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setCreateDate(Optional.ofNullable(doc.get("createDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setType(Optional.ofNullable(doc.get("type_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setFeatured(Optional.ofNullable(doc.get("featured_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPage(Optional.ofNullable(doc.get("page_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setActive(Optional.ofNullable(doc.get("active_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPublic(Optional.ofNullable(doc.get("Public_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setXwd_id(Optional.ofNullable(doc.get("xwd_id_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setMediaType(Optional.ofNullable(doc.get("mediaType_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setAccess(Optional.ofNullable(doc.get("access_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setMemberRating(Optional.ofNullable(doc.get("memberRating_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setAligned(Optional.ofNullable(doc.get("aligned_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPageUrl(Optional.ofNullable(doc.get("pageUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setIndexed(Optional.ofNullable(doc.get("indexed_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setLastIndexDate(Optional.ofNullable(doc.get("lastIndexDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setIndexRequired(Optional.ofNullable(doc.get("indexRequired_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setIndexRequiredDate(Optional.ofNullable(doc.get("indexRequiredDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setRescrape(Optional.ofNullable(doc.get("rescrape_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setGoButton(Optional.ofNullable(doc.get("goButton_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDownloadButton(Optional.ofNullable(doc.get("downloadButton_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setTopOfSearch(Optional.ofNullable(doc.get("topOfSearch_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setRemove(Optional.ofNullable(doc.get("remove_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSpam(Optional.ofNullable(doc.get("spam_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setTopOfSearchInt(Optional.ofNullable(doc.get("topOfSearchInt_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setPartnerInt(Optional.ofNullable(doc.get("partnerInt_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setReviewResource(Optional.ofNullable(doc.get("reviewResource_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setOldUrl(Optional.ofNullable(doc.get("oldUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setContentDisplayOk(Optional.ofNullable(doc.get("contentDisplayOk_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setMetadata(Optional.ofNullable(doc.get("metadata_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setApprovalStatus(Optional.ofNullable(doc.get("approvalStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setApprovalStatusDate(Optional.ofNullable(doc.get("approvalStatusDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSpamUser(Optional.ofNullable(doc.get("spamUser_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setUrl(Optional.ofNullable(doc.get("url_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDisplaySeqNo(Optional.ofNullable(doc.get("displaySeqNo_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setFileId(Optional.ofNullable(doc.get("fileId_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLanguage(Optional.ofNullable(solrDocument.get("language_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLastEditorId(Optional.ofNullable(solrDocument.get("lastEditorId_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLastEditDate(Optional.ofNullable(solrDocument.get("lastEditDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setCurrikiLicense(Optional.ofNullable(solrDocument.get("currikiLicense_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setExternalUrl(Optional.ofNullable(solrDocument.get("externalUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setResourceChecked(Optional.ofNullable(solrDocument.get("resourceChecked_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setContent(Optional.ofNullable(solrDocument.get("content_stored_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setResourceCheckDate(Optional.ofNullable(solrDocument.get("resourceCheckDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setResourceCheckId(Optional.ofNullable(solrDocument.get("resourceCheckId_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setStudentFacing(Optional.ofNullable(solrDocument.get("studentFacing_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSource(Optional.ofNullable(solrDocument.get("source_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setReviewStatus(Optional.ofNullable(solrDocument.get("reviewStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLastReviewDate(Optional.ofNullable(solrDocument.get("lastReviewDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setReviewByID(Optional.ofNullable(solrDocument.get("reviewByID_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setReviewRating(Optional.ofNullable(solrDocument.get("reviewRating_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTechnicalCompleteness(Optional.ofNullable(solrDocument.get("technicalCompleteness_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setContentAccuracy(Optional.ofNullable(solrDocument.get("contentAccuracy_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPedagogy(Optional.ofNullable(solrDocument.get("pedagogy_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setRatingComment(Optional.ofNullable(solrDocument.get("ratingComment_stored_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setStandardsAlignment(Optional.ofNullable(solrDocument.get("standardsAlignment_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setStandardsAlignmentComment(Optional.ofNullable(solrDocument.get("standardsAlignmentComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectMatter(Optional.ofNullable(solrDocument.get("subjectMatter_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectMatterComment(Optional.ofNullable(solrDocument.get("subjectMatterComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSupportsTeaching(Optional.ofNullable(solrDocument.get("supportsTeaching_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSupportsTeachingComment(Optional.ofNullable(solrDocument.get("supportsTeachingComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setAssessmentsQuality(Optional.ofNullable(solrDocument.get("assessmentsQuality_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setAssessmentsQualityComment(Optional.ofNullable(solrDocument.get("assessmentsQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInteractivityQuality(Optional.ofNullable(solrDocument.get("interactivityQuality_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInteractivityQualityComment(Optional.ofNullable(solrDocument.get("interactivityQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInstructionalQuality(Optional.ofNullable(solrDocument.get("instructionalQuality_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInstructionalQualityComment(Optional.ofNullable(solrDocument.get("instructionalQualityComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDeeperLearning(Optional.ofNullable(solrDocument.get("deeperLearning_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDeeperLearningComment(Optional.ofNullable(solrDocument.get("deeperLearningComment_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPartner(Optional.ofNullable(solrDocument.get("partner_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setCreateDate(Optional.ofNullable(solrDocument.get("createDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setType(Optional.ofNullable(solrDocument.get("type_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setFeatured(Optional.ofNullable(solrDocument.get("featured_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPage(Optional.ofNullable(solrDocument.get("page_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setActive(Optional.ofNullable(solrDocument.get("active_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPublic(Optional.ofNullable(solrDocument.get("Public_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setXwd_id(Optional.ofNullable(solrDocument.get("xwd_id_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setMediaType(Optional.ofNullable(solrDocument.get("mediaType_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setAccess(Optional.ofNullable(solrDocument.get("access_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setMemberRating(Optional.ofNullable(solrDocument.get("memberRating_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setAligned(Optional.ofNullable(solrDocument.get("aligned_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPageUrl(Optional.ofNullable(solrDocument.get("pageUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIndexed(Optional.ofNullable(solrDocument.get("indexed_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLastIndexDate(Optional.ofNullable(solrDocument.get("lastIndexDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIndexRequired(Optional.ofNullable(solrDocument.get("indexRequired_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIndexRequiredDate(Optional.ofNullable(solrDocument.get("indexRequiredDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setRescrape(Optional.ofNullable(solrDocument.get("rescrape_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setGoButton(Optional.ofNullable(solrDocument.get("goButton_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDownloadButton(Optional.ofNullable(solrDocument.get("downloadButton_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTopOfSearch(Optional.ofNullable(solrDocument.get("topOfSearch_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setRemove(Optional.ofNullable(solrDocument.get("remove_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSpam(Optional.ofNullable(solrDocument.get("spam_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTopOfSearchInt(Optional.ofNullable(solrDocument.get("topOfSearchInt_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setPartnerInt(Optional.ofNullable(solrDocument.get("partnerInt_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setReviewResource(Optional.ofNullable(solrDocument.get("reviewResource_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setOldUrl(Optional.ofNullable(solrDocument.get("oldUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setContentDisplayOk(Optional.ofNullable(solrDocument.get("contentDisplayOk_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setMetadata(Optional.ofNullable(solrDocument.get("metadata_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setApprovalStatus(Optional.ofNullable(solrDocument.get("approvalStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setApprovalStatusDate(Optional.ofNullable(solrDocument.get("approvalStatusDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSpamUser(Optional.ofNullable(solrDocument.get("spamUser_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setUrl(Optional.ofNullable(solrDocument.get("url_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDisplaySeqNo(Optional.ofNullable(solrDocument.get("displaySeqNo_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setFileId(Optional.ofNullable(solrDocument.get("fileId_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setFileName(Optional.ofNullable(solrDocument.get("fileName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setUploadDate(Optional.ofNullable(solrDocument.get("uploadDate_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSequence(Optional.ofNullable(solrDocument.get("sequence_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setUniqueName(Optional.ofNullable(solrDocument.get("uniqueName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setExt(Optional.ofNullable(solrDocument.get("ext_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTempactive(Optional.ofNullable(solrDocument.get("tempactive_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setS3path(Optional.ofNullable(solrDocument.get("s3path_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSdfStatus(Optional.ofNullable(solrDocument.get("sdfStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTranscoded(Optional.ofNullable(solrDocument.get("transcoded_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLodestar(Optional.ofNullable(solrDocument.get("lodestar_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setArchive(Optional.ofNullable(solrDocument.get("archive_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIdentifier(Optional.ofNullable(solrDocument.get("identifier_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setDisplayName(Optional.ofNullable(solrDocument.get("displayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectArea(Optional.ofNullable(solrDocument.get("subjectArea_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setName(Optional.ofNullable(solrDocument.get("name_docvalues_string")).map(v -> v.toString()).orElse(null));
 
-		super.storeBaseModel(doc);
+		super.storeBaseModel(solrDocument);
 	}
 
 	//////////////////
@@ -6950,7 +6994,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	//////////////////
 
 	public void apiRequestCurrikiResource() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(r -> r.getApiRequest_()).orElse(null);
+		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof CurrikiResource) {
 			CurrikiResource original = (CurrikiResource)o;
@@ -6966,12 +7010,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("description");
 			if(!Objects.equals(title, original.getTitle()))
 				apiRequest.addVars("title");
-			if(!Objects.equals(keywordsStr, original.getKeywordsStr()))
-				apiRequest.addVars("keywordsStr");
 			if(!Objects.equals(keywords, original.getKeywords()))
 				apiRequest.addVars("keywords");
-			if(!Objects.equals(generatedKeywordsStr, original.getGeneratedKeywordsStr()))
-				apiRequest.addVars("generatedKeywordsStr");
 			if(!Objects.equals(generatedKeywords, original.getGeneratedKeywords()))
 				apiRequest.addVars("generatedKeywords");
 			if(!Objects.equals(language, original.getLanguage()))
@@ -6988,14 +7028,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("resourceChecked");
 			if(!Objects.equals(content, original.getContent()))
 				apiRequest.addVars("content");
-			if(!Objects.equals(resourceCheckRequestNote, original.getResourceCheckRequestNote()))
-				apiRequest.addVars("resourceCheckRequestNote");
 			if(!Objects.equals(resourceCheckDate, original.getResourceCheckDate()))
 				apiRequest.addVars("resourceCheckDate");
 			if(!Objects.equals(resourceCheckId, original.getResourceCheckId()))
 				apiRequest.addVars("resourceCheckId");
-			if(!Objects.equals(resourceCheckNote, original.getResourceCheckNote()))
-				apiRequest.addVars("resourceCheckNote");
 			if(!Objects.equals(studentFacing, original.getStudentFacing()))
 				apiRequest.addVars("studentFacing");
 			if(!Objects.equals(source, original.getSource()))
@@ -7114,6 +7150,36 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("displaySeqNo");
 			if(!Objects.equals(fileId, original.getFileId()))
 				apiRequest.addVars("fileId");
+			if(!Objects.equals(fileName, original.getFileName()))
+				apiRequest.addVars("fileName");
+			if(!Objects.equals(uploadDate, original.getUploadDate()))
+				apiRequest.addVars("uploadDate");
+			if(!Objects.equals(sequence, original.getSequence()))
+				apiRequest.addVars("sequence");
+			if(!Objects.equals(uniqueName, original.getUniqueName()))
+				apiRequest.addVars("uniqueName");
+			if(!Objects.equals(ext, original.getExt()))
+				apiRequest.addVars("ext");
+			if(!Objects.equals(tempactive, original.getTempactive()))
+				apiRequest.addVars("tempactive");
+			if(!Objects.equals(s3path, original.getS3path()))
+				apiRequest.addVars("s3path");
+			if(!Objects.equals(sdfStatus, original.getSdfStatus()))
+				apiRequest.addVars("sdfStatus");
+			if(!Objects.equals(transcoded, original.getTranscoded()))
+				apiRequest.addVars("transcoded");
+			if(!Objects.equals(lodestar, original.getLodestar()))
+				apiRequest.addVars("lodestar");
+			if(!Objects.equals(archive, original.getArchive()))
+				apiRequest.addVars("archive");
+			if(!Objects.equals(identifier, original.getIdentifier()))
+				apiRequest.addVars("identifier");
+			if(!Objects.equals(displayName, original.getDisplayName()))
+				apiRequest.addVars("displayName");
+			if(!Objects.equals(subjectArea, original.getSubjectArea()))
+				apiRequest.addVars("subjectArea");
+			if(!Objects.equals(name, original.getName()))
+				apiRequest.addVars("name");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -7131,9 +7197,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(contributionDate).map(v -> "contributionDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(description).map(v -> "description: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(title).map(v -> "title: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(keywordsStr).map(v -> "keywordsStr: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(keywords).map(v -> "keywords: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(generatedKeywordsStr).map(v -> "generatedKeywordsStr: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(generatedKeywords).map(v -> "generatedKeywords: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(language).map(v -> "language: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(lastEditorId).map(v -> "lastEditorId: " + v + "\n").orElse(""));
@@ -7142,10 +7206,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(externalUrl).map(v -> "externalUrl: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(resourceChecked).map(v -> "resourceChecked: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(content).map(v -> "content: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(resourceCheckRequestNote).map(v -> "resourceCheckRequestNote: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(resourceCheckDate).map(v -> "resourceCheckDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(resourceCheckId).map(v -> "resourceCheckId: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(resourceCheckNote).map(v -> "resourceCheckNote: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(studentFacing).map(v -> "studentFacing: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(source).map(v -> "source: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(reviewStatus).map(v -> "reviewStatus: \"" + v + "\"\n" ).orElse(""));
@@ -7205,10 +7267,24 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(url).map(v -> "url: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(displaySeqNo).map(v -> "displaySeqNo: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(fileId).map(v -> "fileId: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(fileName).map(v -> "fileName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(uploadDate).map(v -> "uploadDate: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(sequence).map(v -> "sequence: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(uniqueName).map(v -> "uniqueName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(ext).map(v -> "ext: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(tempactive).map(v -> "tempactive: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(s3path).map(v -> "s3path: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(sdfStatus).map(v -> "sdfStatus: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(transcoded).map(v -> "transcoded: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(lodestar).map(v -> "lodestar: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(archive).map(v -> "archive: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(identifier).map(v -> "identifier: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(displayName).map(v -> "displayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(subjectArea).map(v -> "subjectArea: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(name).map(v -> "name: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
-	public static final String CLASS_SIMPLE_NAME = "CurrikiResource";
 	public static final String VAR_resourceId = "resourceId";
 	public static final String VAR_licenseId = "licenseId";
 	public static final String VAR_contributorId = "contributorId";
@@ -7289,925 +7365,19 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String VAR_url = "url";
 	public static final String VAR_displaySeqNo = "displaySeqNo";
 	public static final String VAR_fileId = "fileId";
-
-	public static List<String> varsQForClass() {
-		return CurrikiResource.varsQCurrikiResource(new ArrayList<String>());
-	}
-	public static List<String> varsQCurrikiResource(List<String> vars) {
-		BaseModel.varsQBaseModel(vars);
-		return vars;
-	}
-
-	public static List<String> varsFqForClass() {
-		return CurrikiResource.varsFqCurrikiResource(new ArrayList<String>());
-	}
-	public static List<String> varsFqCurrikiResource(List<String> vars) {
-		vars.add(VAR_resourceId);
-		vars.add(VAR_licenseId);
-		vars.add(VAR_contributorId);
-		vars.add(VAR_contributionDate);
-		vars.add(VAR_description);
-		vars.add(VAR_title);
-		vars.add(VAR_keywords);
-		vars.add(VAR_generatedKeywords);
-		vars.add(VAR_language);
-		vars.add(VAR_lastEditorId);
-		vars.add(VAR_lastEditDate);
-		vars.add(VAR_currikiLicense);
-		vars.add(VAR_externalUrl);
-		vars.add(VAR_resourceChecked);
-		vars.add(VAR_resourceCheckDate);
-		vars.add(VAR_resourceCheckId);
-		vars.add(VAR_studentFacing);
-		vars.add(VAR_source);
-		vars.add(VAR_reviewStatus);
-		vars.add(VAR_lastReviewDate);
-		vars.add(VAR_reviewByID);
-		vars.add(VAR_reviewRating);
-		vars.add(VAR_technicalCompleteness);
-		vars.add(VAR_contentAccuracy);
-		vars.add(VAR_pedagogy);
-		vars.add(VAR_standardsAlignment);
-		vars.add(VAR_standardsAlignmentComment);
-		vars.add(VAR_subjectMatter);
-		vars.add(VAR_subjectMatterComment);
-		vars.add(VAR_supportsTeaching);
-		vars.add(VAR_supportsTeachingComment);
-		vars.add(VAR_assessmentsQuality);
-		vars.add(VAR_assessmentsQualityComment);
-		vars.add(VAR_interactivityQuality);
-		vars.add(VAR_interactivityQualityComment);
-		vars.add(VAR_instructionalQuality);
-		vars.add(VAR_instructionalQualityComment);
-		vars.add(VAR_deeperLearning);
-		vars.add(VAR_deeperLearningComment);
-		vars.add(VAR_partner);
-		vars.add(VAR_createDate);
-		vars.add(VAR_type);
-		vars.add(VAR_featured);
-		vars.add(VAR_page);
-		vars.add(VAR_active);
-		vars.add(VAR_Public);
-		vars.add(VAR_xwd_id);
-		vars.add(VAR_mediaType);
-		vars.add(VAR_access);
-		vars.add(VAR_memberRating);
-		vars.add(VAR_aligned);
-		vars.add(VAR_pageUrl);
-		vars.add(VAR_indexed);
-		vars.add(VAR_lastIndexDate);
-		vars.add(VAR_indexRequired);
-		vars.add(VAR_indexRequiredDate);
-		vars.add(VAR_rescrape);
-		vars.add(VAR_goButton);
-		vars.add(VAR_downloadButton);
-		vars.add(VAR_topOfSearch);
-		vars.add(VAR_remove);
-		vars.add(VAR_spam);
-		vars.add(VAR_topOfSearchInt);
-		vars.add(VAR_partnerInt);
-		vars.add(VAR_reviewResource);
-		vars.add(VAR_oldUrl);
-		vars.add(VAR_contentDisplayOk);
-		vars.add(VAR_metadata);
-		vars.add(VAR_approvalStatus);
-		vars.add(VAR_approvalStatusDate);
-		vars.add(VAR_spamUser);
-		vars.add(VAR_url);
-		vars.add(VAR_displaySeqNo);
-		vars.add(VAR_fileId);
-		BaseModel.varsFqBaseModel(vars);
-		return vars;
-	}
-
-	public static List<String> varsRangeForClass() {
-		return CurrikiResource.varsRangeCurrikiResource(new ArrayList<String>());
-	}
-	public static List<String> varsRangeCurrikiResource(List<String> vars) {
-		vars.add(VAR_contributorId);
-		vars.add(VAR_contributionDate);
-		vars.add(VAR_lastEditorId);
-		vars.add(VAR_lastEditDate);
-		vars.add(VAR_resourceCheckDate);
-		vars.add(VAR_resourceCheckId);
-		vars.add(VAR_lastReviewDate);
-		vars.add(VAR_reviewByID);
-		vars.add(VAR_reviewRating);
-		vars.add(VAR_technicalCompleteness);
-		vars.add(VAR_contentAccuracy);
-		vars.add(VAR_pedagogy);
-		vars.add(VAR_standardsAlignment);
-		vars.add(VAR_subjectMatter);
-		vars.add(VAR_supportsTeaching);
-		vars.add(VAR_assessmentsQuality);
-		vars.add(VAR_interactivityQuality);
-		vars.add(VAR_instructionalQuality);
-		vars.add(VAR_deeperLearning);
-		vars.add(VAR_createDate);
-		vars.add(VAR_xwd_id);
-		vars.add(VAR_memberRating);
-		vars.add(VAR_lastIndexDate);
-		vars.add(VAR_indexRequiredDate);
-		vars.add(VAR_topOfSearchInt);
-		vars.add(VAR_partnerInt);
-		vars.add(VAR_approvalStatusDate);
-		vars.add(VAR_displaySeqNo);
-		vars.add(VAR_fileId);
-		BaseModel.varsRangeBaseModel(vars);
-		return vars;
-	}
-
-	public static final String DISPLAY_NAME_resourceId = "resource ID";
-	public static final String DISPLAY_NAME_licenseId = "license ID";
-	public static final String DISPLAY_NAME_contributorId = "contributor ID";
-	public static final String DISPLAY_NAME_contributionDate = "contribution Date";
-	public static final String DISPLAY_NAME_description = "description";
-	public static final String DISPLAY_NAME_title = "title";
-	public static final String DISPLAY_NAME_keywordsStr = "Keywords String";
-	public static final String DISPLAY_NAME_keywords = "Keywords List";
-	public static final String DISPLAY_NAME_generatedKeywordsStr = "Generated Keywords String";
-	public static final String DISPLAY_NAME_generatedKeywords = "Generated Keywords List";
-	public static final String DISPLAY_NAME_language = "Language";
-	public static final String DISPLAY_NAME_lastEditorId = "Last Editor ID";
-	public static final String DISPLAY_NAME_lastEditDate = "Last Edit Date";
-	public static final String DISPLAY_NAME_currikiLicense = "Curriki License";
-	public static final String DISPLAY_NAME_externalUrl = "External URL";
-	public static final String DISPLAY_NAME_resourceChecked = "Resource Checked";
-	public static final String DISPLAY_NAME_content = "External URL";
-	public static final String DISPLAY_NAME_resourceCheckRequestNote = "Resource Check Request Note";
-	public static final String DISPLAY_NAME_resourceCheckDate = "Resource Check Date";
-	public static final String DISPLAY_NAME_resourceCheckId = "Resource Check ID";
-	public static final String DISPLAY_NAME_resourceCheckNote = "Resource Check Note";
-	public static final String DISPLAY_NAME_studentFacing = "Student Facing";
-	public static final String DISPLAY_NAME_source = "Source";
-	public static final String DISPLAY_NAME_reviewStatus = "Review Status";
-	public static final String DISPLAY_NAME_lastReviewDate = "Last Review Date";
-	public static final String DISPLAY_NAME_reviewByID = "Review By ID";
-	public static final String DISPLAY_NAME_reviewRating = "Review Rating";
-	public static final String DISPLAY_NAME_technicalCompleteness = "Technical Completeness";
-	public static final String DISPLAY_NAME_contentAccuracy = "Content Accuracy";
-	public static final String DISPLAY_NAME_pedagogy = "Pedagogy";
-	public static final String DISPLAY_NAME_ratingComment = "Rating Comment";
-	public static final String DISPLAY_NAME_standardsAlignment = "Standards Alignment";
-	public static final String DISPLAY_NAME_standardsAlignmentComment = "Standards Alignment Comment";
-	public static final String DISPLAY_NAME_subjectMatter = "Subject Matter";
-	public static final String DISPLAY_NAME_subjectMatterComment = "Subject Matter Comment";
-	public static final String DISPLAY_NAME_supportsTeaching = "Supports Teaching";
-	public static final String DISPLAY_NAME_supportsTeachingComment = "Supports Teaching Comment";
-	public static final String DISPLAY_NAME_assessmentsQuality = "Assessments Quality";
-	public static final String DISPLAY_NAME_assessmentsQualityComment = "Assessments Quality Comment";
-	public static final String DISPLAY_NAME_interactivityQuality = "Interactivity Quality";
-	public static final String DISPLAY_NAME_interactivityQualityComment = "Interactivity Quality Comment";
-	public static final String DISPLAY_NAME_instructionalQuality = "Instructional Quality";
-	public static final String DISPLAY_NAME_instructionalQualityComment = "Instructional Quality Comment";
-	public static final String DISPLAY_NAME_deeperLearning = "Deeper Learning";
-	public static final String DISPLAY_NAME_deeperLearningComment = "Deeper Learning Comment";
-	public static final String DISPLAY_NAME_partner = "Partner";
-	public static final String DISPLAY_NAME_createDate = "Create Date";
-	public static final String DISPLAY_NAME_type = "Type";
-	public static final String DISPLAY_NAME_featured = "Featured";
-	public static final String DISPLAY_NAME_page = "Page";
-	public static final String DISPLAY_NAME_active = "Active";
-	public static final String DISPLAY_NAME_Public = "Public";
-	public static final String DISPLAY_NAME_xwd_id = "xwd ID";
-	public static final String DISPLAY_NAME_mediaType = "Media Type";
-	public static final String DISPLAY_NAME_access = "Access";
-	public static final String DISPLAY_NAME_memberRating = "Member Rating";
-	public static final String DISPLAY_NAME_aligned = "Aligned";
-	public static final String DISPLAY_NAME_pageUrl = "Page URL";
-	public static final String DISPLAY_NAME_indexed = "Indexed";
-	public static final String DISPLAY_NAME_lastIndexDate = "Last Index Date";
-	public static final String DISPLAY_NAME_indexRequired = "Index Required";
-	public static final String DISPLAY_NAME_indexRequiredDate = "IndexRequiredDate";
-	public static final String DISPLAY_NAME_rescrape = "rescrape";
-	public static final String DISPLAY_NAME_goButton = "Go Button";
-	public static final String DISPLAY_NAME_downloadButton = "Download Button";
-	public static final String DISPLAY_NAME_topOfSearch = "Top of Search";
-	public static final String DISPLAY_NAME_remove = "Remove";
-	public static final String DISPLAY_NAME_spam = "Spam";
-	public static final String DISPLAY_NAME_topOfSearchInt = "Top of search int";
-	public static final String DISPLAY_NAME_partnerInt = "Partner Int";
-	public static final String DISPLAY_NAME_reviewResource = "Review Resource";
-	public static final String DISPLAY_NAME_oldUrl = "Old URL";
-	public static final String DISPLAY_NAME_contentDisplayOk = "Content Display OK";
-	public static final String DISPLAY_NAME_metadata = "Metadata";
-	public static final String DISPLAY_NAME_approvalStatus = "Approval Status";
-	public static final String DISPLAY_NAME_approvalStatusDate = "Approval Status Date";
-	public static final String DISPLAY_NAME_spamUser = "Spam User";
-	public static final String DISPLAY_NAME_url = "URL";
-	public static final String DISPLAY_NAME_displaySeqNo = "Display Sequence Number";
-	public static final String DISPLAY_NAME_fileId = "File ID";
-
-	public static String displayNameForClass(String var) {
-		return CurrikiResource.displayNameCurrikiResource(var);
-	}
-	public static String displayNameCurrikiResource(String var) {
-		switch(var) {
-		case VAR_resourceId:
-			return DISPLAY_NAME_resourceId;
-		case VAR_licenseId:
-			return DISPLAY_NAME_licenseId;
-		case VAR_contributorId:
-			return DISPLAY_NAME_contributorId;
-		case VAR_contributionDate:
-			return DISPLAY_NAME_contributionDate;
-		case VAR_description:
-			return DISPLAY_NAME_description;
-		case VAR_title:
-			return DISPLAY_NAME_title;
-		case VAR_keywordsStr:
-			return DISPLAY_NAME_keywordsStr;
-		case VAR_keywords:
-			return DISPLAY_NAME_keywords;
-		case VAR_generatedKeywordsStr:
-			return DISPLAY_NAME_generatedKeywordsStr;
-		case VAR_generatedKeywords:
-			return DISPLAY_NAME_generatedKeywords;
-		case VAR_language:
-			return DISPLAY_NAME_language;
-		case VAR_lastEditorId:
-			return DISPLAY_NAME_lastEditorId;
-		case VAR_lastEditDate:
-			return DISPLAY_NAME_lastEditDate;
-		case VAR_currikiLicense:
-			return DISPLAY_NAME_currikiLicense;
-		case VAR_externalUrl:
-			return DISPLAY_NAME_externalUrl;
-		case VAR_resourceChecked:
-			return DISPLAY_NAME_resourceChecked;
-		case VAR_content:
-			return DISPLAY_NAME_content;
-		case VAR_resourceCheckRequestNote:
-			return DISPLAY_NAME_resourceCheckRequestNote;
-		case VAR_resourceCheckDate:
-			return DISPLAY_NAME_resourceCheckDate;
-		case VAR_resourceCheckId:
-			return DISPLAY_NAME_resourceCheckId;
-		case VAR_resourceCheckNote:
-			return DISPLAY_NAME_resourceCheckNote;
-		case VAR_studentFacing:
-			return DISPLAY_NAME_studentFacing;
-		case VAR_source:
-			return DISPLAY_NAME_source;
-		case VAR_reviewStatus:
-			return DISPLAY_NAME_reviewStatus;
-		case VAR_lastReviewDate:
-			return DISPLAY_NAME_lastReviewDate;
-		case VAR_reviewByID:
-			return DISPLAY_NAME_reviewByID;
-		case VAR_reviewRating:
-			return DISPLAY_NAME_reviewRating;
-		case VAR_technicalCompleteness:
-			return DISPLAY_NAME_technicalCompleteness;
-		case VAR_contentAccuracy:
-			return DISPLAY_NAME_contentAccuracy;
-		case VAR_pedagogy:
-			return DISPLAY_NAME_pedagogy;
-		case VAR_ratingComment:
-			return DISPLAY_NAME_ratingComment;
-		case VAR_standardsAlignment:
-			return DISPLAY_NAME_standardsAlignment;
-		case VAR_standardsAlignmentComment:
-			return DISPLAY_NAME_standardsAlignmentComment;
-		case VAR_subjectMatter:
-			return DISPLAY_NAME_subjectMatter;
-		case VAR_subjectMatterComment:
-			return DISPLAY_NAME_subjectMatterComment;
-		case VAR_supportsTeaching:
-			return DISPLAY_NAME_supportsTeaching;
-		case VAR_supportsTeachingComment:
-			return DISPLAY_NAME_supportsTeachingComment;
-		case VAR_assessmentsQuality:
-			return DISPLAY_NAME_assessmentsQuality;
-		case VAR_assessmentsQualityComment:
-			return DISPLAY_NAME_assessmentsQualityComment;
-		case VAR_interactivityQuality:
-			return DISPLAY_NAME_interactivityQuality;
-		case VAR_interactivityQualityComment:
-			return DISPLAY_NAME_interactivityQualityComment;
-		case VAR_instructionalQuality:
-			return DISPLAY_NAME_instructionalQuality;
-		case VAR_instructionalQualityComment:
-			return DISPLAY_NAME_instructionalQualityComment;
-		case VAR_deeperLearning:
-			return DISPLAY_NAME_deeperLearning;
-		case VAR_deeperLearningComment:
-			return DISPLAY_NAME_deeperLearningComment;
-		case VAR_partner:
-			return DISPLAY_NAME_partner;
-		case VAR_createDate:
-			return DISPLAY_NAME_createDate;
-		case VAR_type:
-			return DISPLAY_NAME_type;
-		case VAR_featured:
-			return DISPLAY_NAME_featured;
-		case VAR_page:
-			return DISPLAY_NAME_page;
-		case VAR_active:
-			return DISPLAY_NAME_active;
-		case VAR_Public:
-			return DISPLAY_NAME_Public;
-		case VAR_xwd_id:
-			return DISPLAY_NAME_xwd_id;
-		case VAR_mediaType:
-			return DISPLAY_NAME_mediaType;
-		case VAR_access:
-			return DISPLAY_NAME_access;
-		case VAR_memberRating:
-			return DISPLAY_NAME_memberRating;
-		case VAR_aligned:
-			return DISPLAY_NAME_aligned;
-		case VAR_pageUrl:
-			return DISPLAY_NAME_pageUrl;
-		case VAR_indexed:
-			return DISPLAY_NAME_indexed;
-		case VAR_lastIndexDate:
-			return DISPLAY_NAME_lastIndexDate;
-		case VAR_indexRequired:
-			return DISPLAY_NAME_indexRequired;
-		case VAR_indexRequiredDate:
-			return DISPLAY_NAME_indexRequiredDate;
-		case VAR_rescrape:
-			return DISPLAY_NAME_rescrape;
-		case VAR_goButton:
-			return DISPLAY_NAME_goButton;
-		case VAR_downloadButton:
-			return DISPLAY_NAME_downloadButton;
-		case VAR_topOfSearch:
-			return DISPLAY_NAME_topOfSearch;
-		case VAR_remove:
-			return DISPLAY_NAME_remove;
-		case VAR_spam:
-			return DISPLAY_NAME_spam;
-		case VAR_topOfSearchInt:
-			return DISPLAY_NAME_topOfSearchInt;
-		case VAR_partnerInt:
-			return DISPLAY_NAME_partnerInt;
-		case VAR_reviewResource:
-			return DISPLAY_NAME_reviewResource;
-		case VAR_oldUrl:
-			return DISPLAY_NAME_oldUrl;
-		case VAR_contentDisplayOk:
-			return DISPLAY_NAME_contentDisplayOk;
-		case VAR_metadata:
-			return DISPLAY_NAME_metadata;
-		case VAR_approvalStatus:
-			return DISPLAY_NAME_approvalStatus;
-		case VAR_approvalStatusDate:
-			return DISPLAY_NAME_approvalStatusDate;
-		case VAR_spamUser:
-			return DISPLAY_NAME_spamUser;
-		case VAR_url:
-			return DISPLAY_NAME_url;
-		case VAR_displaySeqNo:
-			return DISPLAY_NAME_displaySeqNo;
-		case VAR_fileId:
-			return DISPLAY_NAME_fileId;
-		default:
-			return BaseModel.displayNameBaseModel(var);
-		}
-	}
-
-	public static String descriptionCurrikiResource(String var) {
-		switch(var) {
-			default:
-				return BaseModel.descriptionBaseModel(var);
-		}
-	}
-
-	public static String classSimpleNameCurrikiResource(String var) {
-		switch(var) {
-		case VAR_resourceId:
-			return "String";
-		case VAR_licenseId:
-			return "String";
-		case VAR_contributorId:
-			return "Long";
-		case VAR_contributionDate:
-			return "ZonedDateTime";
-		case VAR_description:
-			return "String";
-		case VAR_title:
-			return "String";
-		case VAR_keywordsStr:
-			return "String";
-		case VAR_keywords:
-			return "List";
-		case VAR_generatedKeywordsStr:
-			return "String";
-		case VAR_generatedKeywords:
-			return "List";
-		case VAR_language:
-			return "String";
-		case VAR_lastEditorId:
-			return "Long";
-		case VAR_lastEditDate:
-			return "ZonedDateTime";
-		case VAR_currikiLicense:
-			return "String";
-		case VAR_externalUrl:
-			return "String";
-		case VAR_resourceChecked:
-			return "String";
-		case VAR_content:
-			return "String";
-		case VAR_resourceCheckRequestNote:
-			return "String";
-		case VAR_resourceCheckDate:
-			return "ZonedDateTime";
-		case VAR_resourceCheckId:
-			return "Long";
-		case VAR_resourceCheckNote:
-			return "String";
-		case VAR_studentFacing:
-			return "String";
-		case VAR_source:
-			return "String";
-		case VAR_reviewStatus:
-			return "String";
-		case VAR_lastReviewDate:
-			return "ZonedDateTime";
-		case VAR_reviewByID:
-			return "Long";
-		case VAR_reviewRating:
-			return "BigDecimal";
-		case VAR_technicalCompleteness:
-			return "Integer";
-		case VAR_contentAccuracy:
-			return "Integer";
-		case VAR_pedagogy:
-			return "Integer";
-		case VAR_ratingComment:
-			return "String";
-		case VAR_standardsAlignment:
-			return "Integer";
-		case VAR_standardsAlignmentComment:
-			return "String";
-		case VAR_subjectMatter:
-			return "Integer";
-		case VAR_subjectMatterComment:
-			return "String";
-		case VAR_supportsTeaching:
-			return "Integer";
-		case VAR_supportsTeachingComment:
-			return "String";
-		case VAR_assessmentsQuality:
-			return "Integer";
-		case VAR_assessmentsQualityComment:
-			return "String";
-		case VAR_interactivityQuality:
-			return "Integer";
-		case VAR_interactivityQualityComment:
-			return "String";
-		case VAR_instructionalQuality:
-			return "Integer";
-		case VAR_instructionalQualityComment:
-			return "String";
-		case VAR_deeperLearning:
-			return "Integer";
-		case VAR_deeperLearningComment:
-			return "String";
-		case VAR_partner:
-			return "String";
-		case VAR_createDate:
-			return "ZonedDateTime";
-		case VAR_type:
-			return "String";
-		case VAR_featured:
-			return "String";
-		case VAR_page:
-			return "String";
-		case VAR_active:
-			return "String";
-		case VAR_Public:
-			return "String";
-		case VAR_xwd_id:
-			return "Integer";
-		case VAR_mediaType:
-			return "String";
-		case VAR_access:
-			return "String";
-		case VAR_memberRating:
-			return "BigDecimal";
-		case VAR_aligned:
-			return "String";
-		case VAR_pageUrl:
-			return "String";
-		case VAR_indexed:
-			return "String";
-		case VAR_lastIndexDate:
-			return "ZonedDateTime";
-		case VAR_indexRequired:
-			return "String";
-		case VAR_indexRequiredDate:
-			return "ZonedDateTime";
-		case VAR_rescrape:
-			return "String";
-		case VAR_goButton:
-			return "String";
-		case VAR_downloadButton:
-			return "String";
-		case VAR_topOfSearch:
-			return "String";
-		case VAR_remove:
-			return "String";
-		case VAR_spam:
-			return "String";
-		case VAR_topOfSearchInt:
-			return "Integer";
-		case VAR_partnerInt:
-			return "Integer";
-		case VAR_reviewResource:
-			return "String";
-		case VAR_oldUrl:
-			return "String";
-		case VAR_contentDisplayOk:
-			return "String";
-		case VAR_metadata:
-			return "String";
-		case VAR_approvalStatus:
-			return "String";
-		case VAR_approvalStatusDate:
-			return "ZonedDateTime";
-		case VAR_spamUser:
-			return "String";
-		case VAR_url:
-			return "String";
-		case VAR_displaySeqNo:
-			return "Integer";
-		case VAR_fileId:
-			return "Integer";
-			default:
-				return BaseModel.classSimpleNameBaseModel(var);
-		}
-	}
-
-	public static Integer htmlColumnCurrikiResource(String var) {
-		switch(var) {
-			default:
-				return BaseModel.htmlColumnBaseModel(var);
-		}
-	}
-
-	public static Integer htmlRowCurrikiResource(String var) {
-		switch(var) {
-		case VAR_resourceId:
-			return 3;
-		case VAR_licenseId:
-			return 3;
-		case VAR_contributorId:
-			return 3;
-		case VAR_contributionDate:
-			return 4;
-		case VAR_description:
-			return 4;
-		case VAR_title:
-			return 4;
-		case VAR_keywordsStr:
-			return 5;
-		case VAR_keywords:
-			return 5;
-		case VAR_generatedKeywordsStr:
-			return 5;
-		case VAR_generatedKeywords:
-			return 6;
-		case VAR_language:
-			return 6;
-		case VAR_lastEditorId:
-			return 6;
-		case VAR_lastEditDate:
-			return 7;
-		case VAR_currikiLicense:
-			return 7;
-		case VAR_externalUrl:
-			return 7;
-		case VAR_resourceChecked:
-			return 8;
-		case VAR_content:
-			return 8;
-		case VAR_resourceCheckRequestNote:
-			return 8;
-		case VAR_resourceCheckDate:
-			return 9;
-		case VAR_resourceCheckId:
-			return 9;
-		case VAR_resourceCheckNote:
-			return 9;
-		case VAR_studentFacing:
-			return 10;
-		case VAR_source:
-			return 10;
-		case VAR_reviewStatus:
-			return 10;
-		case VAR_lastReviewDate:
-			return 11;
-		case VAR_reviewByID:
-			return 11;
-		case VAR_reviewRating:
-			return 11;
-		case VAR_technicalCompleteness:
-			return 12;
-		case VAR_contentAccuracy:
-			return 12;
-		case VAR_pedagogy:
-			return 12;
-		case VAR_ratingComment:
-			return 13;
-		case VAR_standardsAlignment:
-			return 13;
-		case VAR_standardsAlignmentComment:
-			return 13;
-		case VAR_subjectMatter:
-			return 14;
-		case VAR_subjectMatterComment:
-			return 14;
-		case VAR_supportsTeaching:
-			return 14;
-		case VAR_supportsTeachingComment:
-			return 15;
-		case VAR_assessmentsQuality:
-			return 15;
-		case VAR_assessmentsQualityComment:
-			return 15;
-		case VAR_interactivityQuality:
-			return 16;
-		case VAR_interactivityQualityComment:
-			return 16;
-		case VAR_instructionalQuality:
-			return 16;
-		case VAR_instructionalQualityComment:
-			return 17;
-		case VAR_deeperLearning:
-			return 17;
-		case VAR_deeperLearningComment:
-			return 17;
-		case VAR_partner:
-			return 18;
-		case VAR_createDate:
-			return 18;
-		case VAR_type:
-			return 18;
-		case VAR_featured:
-			return 19;
-		case VAR_page:
-			return 19;
-		case VAR_active:
-			return 19;
-		case VAR_Public:
-			return 20;
-		case VAR_xwd_id:
-			return 20;
-		case VAR_mediaType:
-			return 20;
-		case VAR_access:
-			return 21;
-		case VAR_memberRating:
-			return 21;
-		case VAR_aligned:
-			return 21;
-		case VAR_pageUrl:
-			return 22;
-		case VAR_indexed:
-			return 22;
-		case VAR_lastIndexDate:
-			return 22;
-		case VAR_indexRequired:
-			return 23;
-		case VAR_indexRequiredDate:
-			return 23;
-		case VAR_rescrape:
-			return 24;
-		case VAR_goButton:
-			return 25;
-		case VAR_downloadButton:
-			return 25;
-		case VAR_topOfSearch:
-			return 25;
-		case VAR_remove:
-			return 26;
-		case VAR_spam:
-			return 26;
-		case VAR_topOfSearchInt:
-			return 26;
-		case VAR_partnerInt:
-			return 27;
-		case VAR_reviewResource:
-			return 27;
-		case VAR_oldUrl:
-			return 27;
-		case VAR_contentDisplayOk:
-			return 28;
-		case VAR_metadata:
-			return 28;
-		case VAR_approvalStatus:
-			return 28;
-		case VAR_approvalStatusDate:
-			return 29;
-		case VAR_spamUser:
-			return 29;
-		case VAR_url:
-			return 30;
-		case VAR_displaySeqNo:
-			return 30;
-		case VAR_fileId:
-			return 30;
-			default:
-				return BaseModel.htmlRowBaseModel(var);
-		}
-	}
-
-	public static Integer htmlCellCurrikiResource(String var) {
-		switch(var) {
-		case VAR_resourceId:
-			return 1;
-		case VAR_licenseId:
-			return 2;
-		case VAR_contributorId:
-			return 3;
-		case VAR_contributionDate:
-			return 1;
-		case VAR_description:
-			return 2;
-		case VAR_title:
-			return 3;
-		case VAR_keywordsStr:
-			return 1;
-		case VAR_keywords:
-			return 2;
-		case VAR_generatedKeywordsStr:
-			return 3;
-		case VAR_generatedKeywords:
-			return 1;
-		case VAR_language:
-			return 2;
-		case VAR_lastEditorId:
-			return 3;
-		case VAR_lastEditDate:
-			return 1;
-		case VAR_currikiLicense:
-			return 2;
-		case VAR_externalUrl:
-			return 3;
-		case VAR_resourceChecked:
-			return 1;
-		case VAR_content:
-			return 2;
-		case VAR_resourceCheckRequestNote:
-			return 3;
-		case VAR_resourceCheckDate:
-			return 1;
-		case VAR_resourceCheckId:
-			return 2;
-		case VAR_resourceCheckNote:
-			return 3;
-		case VAR_studentFacing:
-			return 1;
-		case VAR_source:
-			return 2;
-		case VAR_reviewStatus:
-			return 3;
-		case VAR_lastReviewDate:
-			return 1;
-		case VAR_reviewByID:
-			return 2;
-		case VAR_reviewRating:
-			return 3;
-		case VAR_technicalCompleteness:
-			return 1;
-		case VAR_contentAccuracy:
-			return 2;
-		case VAR_pedagogy:
-			return 3;
-		case VAR_ratingComment:
-			return 1;
-		case VAR_standardsAlignment:
-			return 2;
-		case VAR_standardsAlignmentComment:
-			return 3;
-		case VAR_subjectMatter:
-			return 1;
-		case VAR_subjectMatterComment:
-			return 2;
-		case VAR_supportsTeaching:
-			return 3;
-		case VAR_supportsTeachingComment:
-			return 1;
-		case VAR_assessmentsQuality:
-			return 2;
-		case VAR_assessmentsQualityComment:
-			return 3;
-		case VAR_interactivityQuality:
-			return 1;
-		case VAR_interactivityQualityComment:
-			return 2;
-		case VAR_instructionalQuality:
-			return 3;
-		case VAR_instructionalQualityComment:
-			return 1;
-		case VAR_deeperLearning:
-			return 2;
-		case VAR_deeperLearningComment:
-			return 3;
-		case VAR_partner:
-			return 1;
-		case VAR_createDate:
-			return 2;
-		case VAR_type:
-			return 3;
-		case VAR_featured:
-			return 1;
-		case VAR_page:
-			return 2;
-		case VAR_active:
-			return 3;
-		case VAR_Public:
-			return 1;
-		case VAR_xwd_id:
-			return 2;
-		case VAR_mediaType:
-			return 3;
-		case VAR_access:
-			return 1;
-		case VAR_memberRating:
-			return 2;
-		case VAR_aligned:
-			return 3;
-		case VAR_pageUrl:
-			return 1;
-		case VAR_indexed:
-			return 2;
-		case VAR_lastIndexDate:
-			return 3;
-		case VAR_indexRequired:
-			return 1;
-		case VAR_indexRequiredDate:
-			return 2;
-		case VAR_rescrape:
-			return 3;
-		case VAR_goButton:
-			return 1;
-		case VAR_downloadButton:
-			return 2;
-		case VAR_topOfSearch:
-			return 3;
-		case VAR_remove:
-			return 1;
-		case VAR_spam:
-			return 2;
-		case VAR_topOfSearchInt:
-			return 3;
-		case VAR_partnerInt:
-			return 1;
-		case VAR_reviewResource:
-			return 2;
-		case VAR_oldUrl:
-			return 3;
-		case VAR_contentDisplayOk:
-			return 1;
-		case VAR_metadata:
-			return 2;
-		case VAR_approvalStatus:
-			return 3;
-		case VAR_approvalStatusDate:
-			return 1;
-		case VAR_spamUser:
-			return 2;
-		case VAR_url:
-			return 1;
-		case VAR_displaySeqNo:
-			return 2;
-		case VAR_fileId:
-			return 3;
-			default:
-				return BaseModel.htmlCellBaseModel(var);
-		}
-	}
-
-	public static Integer lengthMinCurrikiResource(String var) {
-		switch(var) {
-			default:
-				return BaseModel.lengthMinBaseModel(var);
-		}
-	}
-
-	public static Integer lengthMaxCurrikiResource(String var) {
-		switch(var) {
-			default:
-				return BaseModel.lengthMaxBaseModel(var);
-		}
-	}
-
-	public static Integer maxCurrikiResource(String var) {
-		switch(var) {
-			default:
-				return BaseModel.maxBaseModel(var);
-		}
-	}
-
-	public static Integer minCurrikiResource(String var) {
-		switch(var) {
-			default:
-				return BaseModel.minBaseModel(var);
-		}
-	}
+	public static final String VAR_fileName = "fileName";
+	public static final String VAR_uploadDate = "uploadDate";
+	public static final String VAR_sequence = "sequence";
+	public static final String VAR_uniqueName = "uniqueName";
+	public static final String VAR_ext = "ext";
+	public static final String VAR_tempactive = "tempactive";
+	public static final String VAR_s3path = "s3path";
+	public static final String VAR_sdfStatus = "sdfStatus";
+	public static final String VAR_transcoded = "transcoded";
+	public static final String VAR_lodestar = "lodestar";
+	public static final String VAR_archive = "archive";
+	public static final String VAR_identifier = "identifier";
+	public static final String VAR_displayName = "displayName";
+	public static final String VAR_subjectArea = "subjectArea";
+	public static final String VAR_name = "name";
 }

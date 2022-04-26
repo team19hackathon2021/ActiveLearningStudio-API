@@ -1,14 +1,18 @@
 package org.curriki.api.enus.model.user;
 
-import org.curriki.api.enus.page.PageLayout;
-import org.curriki.api.enus.model.base.BaseModelPage;
+import java.util.List;
+import java.lang.Long;
+import java.lang.String;
+import java.lang.Boolean;
+import org.curriki.api.enus.base.BaseModelPage;
 import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.user.SiteUser;
+import org.curriki.api.enus.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
-import org.computate.vertx.search.list.SearchList;
-import org.computate.search.wrap.Wrap;
+import org.curriki.api.enus.search.SearchList;
+import org.curriki.api.enus.wrap.Wrap;
+import org.curriki.api.enus.page.PageLayout;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -22,22 +26,20 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.apache.solr.common.util.SimpleOrderedMap;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import io.vertx.core.Promise;
 import org.curriki.api.enus.config.ConfigKeys;
-import org.computate.search.response.solr.SolrResponse;
-import java.util.HashMap;
-import org.computate.search.tool.TimeTool;
-import java.time.ZoneId;
 
 
 /**
@@ -52,91 +54,11 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 	protected void _searchListSiteUser_(Wrap<SearchList<SiteUser>> w) {
 	}
 
-	protected void _pageResponse(Wrap<String> w) {
-		if(searchListSiteUser_ != null)
-			w.o(JsonObject.mapFrom(searchListSiteUser_.getQueryResponse()).toString());
-	}
-
-	protected void _defaultZoneId(Wrap<String> w) {
-		w.o(Optional.ofNullable(siteRequest_.getRequestVars().get(VAR_defaultZoneId)).orElse(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE)));
-	}
-
-	/**
-	 * Ignore: true
-	 **/
-	protected void _defaultTimeZone(Wrap<ZoneId> w) {
-		w.o(ZoneId.of(defaultZoneId));
-	}
-
-	protected void _defaultLocaleId(Wrap<String> w) {
-		w.o(Optional.ofNullable(siteRequest_.getRequestHeaders().get("Accept-Language")).map(acceptLanguage -> StringUtils.substringBefore(acceptLanguage, ",")).orElse(siteRequest_.getConfig().getString(ConfigKeys.SITE_LOCALE)));
-	}
-
-	/**
-	 * Ignore: true
-	 **/
-	protected void _defaultLocale(Wrap<Locale> w) {
-		w.o(Locale.forLanguageTag(defaultLocaleId));
-	}
-
-	protected void _defaultRangeGap(Wrap<String> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetRangeGap()).orElse("+1DAY"));
-	}
-
-	protected void _defaultRangeEnd(Wrap<ZonedDateTime> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetRangeEnd()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(ZonedDateTime.now(defaultTimeZone).toLocalDate().atStartOfDay(defaultTimeZone).plusDays(1)));
-	}
-
-	protected void _defaultRangeStart(Wrap<ZonedDateTime> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetRangeStart()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(defaultRangeEnd.minusDays(7).toLocalDate().atStartOfDay(defaultTimeZone)));
-	}
-
-	protected void _defaultRangeVar(Wrap<String> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetRanges()).orElse(Arrays.asList()).stream().findFirst().map(v -> { if(v.contains("}")) return StringUtils.substringBefore(StringUtils.substringAfterLast(v, "}"), "_"); else return StringUtils.substringBefore(v, "_"); }).orElse("created"));
-	}
-
-	protected void _defaultFacetSort(Wrap<String> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetSort()).orElse("index"));
-	}
-
-	protected void _defaultFacetLimit(Wrap<Integer> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetLimit()).orElse(1));
-	}
-
-	protected void _defaultFacetMinCount(Wrap<Integer> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetMinCount()).orElse(1));
-	}
-
-	protected void _defaultPivotMinCount(Wrap<Integer> w) {
-		w.o(Optional.ofNullable(searchListSiteUser_.getFacetPivotMinCount()).orElse(0));
-	}
-
-	@Override
-	protected void _defaultPivotVars(List<String> l) {
-		Optional.ofNullable(searchListSiteUser_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
-			String facetPivot2 = facetPivot;
-			if(StringUtils.contains(facetPivot2, "}"))
-				facetPivot2 = StringUtils.substringAfterLast(facetPivot2, "}");
-			String[] parts = facetPivot2.split(",");
-			for(String part : parts) {
-				if(StringUtils.isNotBlank(part)) {
-					String var = StringUtils.substringBefore(part, "_");
-					if(StringUtils.isNotBlank(var))
-						l.add(var);
-				}
-			}
-		});
-	}
-
 	/**
 	 * {@inheritDoc}
 	 **/
 	protected void _listSiteUser(JsonArray l) {
 		Optional.ofNullable(searchListSiteUser_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
-	}
-
-	protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
-		w.o(searchListSiteUser_.getQueryResponse().getFacetCounts());
 	}
 
 	protected void _siteUserCount(Wrap<Integer> w) {
@@ -151,11 +73,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 	protected void _pk(Wrap<Long> w) {
 		if(siteUserCount == 1)
 			w.o(siteUser_.getPk());
-	}
-
-	protected void _id(Wrap<String> w) {
-		if(siteUserCount == 1)
-			w.o(siteUser_.getId());
 	}
 
 	@Override
@@ -182,7 +99,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/user");
+		c.o("/api/user");
 	}
 
 	@Override
@@ -202,7 +119,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		JsonArray pages = new JsonArray();
 		Long start = searchListSiteUser_.getStart().longValue();
 		Long rows = searchListSiteUser_.getRows().longValue();
-		Long foundNum = searchListSiteUser_.getQueryResponse().getResponse().getNumFound().longValue();
+		Long foundNum = searchListSiteUser_.getQueryResponse().getResults().getNumFound();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -243,67 +160,12 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 	}
 
 	@Override
-	protected void _varsQ(JsonObject vars) {
-		SiteUser.varsQForClass().forEach(var -> {
-			JsonObject json = new JsonObject();
-			json.put("var", var);
-			json.put("displayName", Optional.ofNullable(SiteUser.displayNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("classSimpleName", Optional.ofNullable(SiteUser.classSimpleNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("val", Optional.ofNullable(searchListSiteUser_.getRequest().getQuery()).filter(fq -> fq.startsWith(SiteUser.varIndexedSiteUser(var) + ":")).map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
-			vars.put(var, json);
-		});
-	}
-
-	@Override
-	protected void _varsFq(JsonObject vars) {
-		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
-		SiteUser.varsFqForClass().forEach(var -> {
-			String varIndexed = SiteUser.varIndexedSiteUser(var);
-			String varStored = SiteUser.varStoredSiteUser(var);
-			JsonObject json = new JsonObject();
-			json.put("var", var);
-			json.put("varStored", varStored);
-			json.put("varIndexed", varIndexed);
-			json.put("displayName", Optional.ofNullable(SiteUser.displayNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("classSimpleName", Optional.ofNullable(SiteUser.classSimpleNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("val", searchListSiteUser_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(SiteUser.varIndexedSiteUser(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
-			Optional.ofNullable(facetFields.get(varIndexed)).ifPresent(facetField -> {
-				JsonObject facetJson = new JsonObject();
-				JsonObject counts = new JsonObject();
-				facetJson.put("var", var);
-				facetField.getCounts().forEach((val, count) -> {
-					counts.put(val, count);
-				});
-				facetJson.put("counts", counts);
-				json.put("facetField", facetJson);
-			});
-			if(defaultPivotVars.contains(var)) {
-				json.put("pivot", true);
-			}
-			vars.put(var, json);
-		});
-	}
-
-	@Override
-	protected void _varsRange(JsonObject vars) {
-		SiteUser.varsRangeForClass().forEach(var -> {
-			String varIndexed = SiteUser.varIndexedSiteUser(var);
-			JsonObject json = new JsonObject();
-			json.put("var", var);
-			json.put("displayName", Optional.ofNullable(SiteUser.displayNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("classSimpleName", Optional.ofNullable(SiteUser.classSimpleNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("val", searchListSiteUser_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(SiteUser.varIndexedSiteUser(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
-			vars.put(var, json);
-		});
-	}
-
-	@Override
 	protected void _query(JsonObject query) {
 		ServiceRequest serviceRequest = siteRequest_.getServiceRequest();
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListSiteUser_.getQueryResponse().getResponse().getNumFound().longValue();
+		Long num = searchListSiteUser_.getQueryResponse().getResults().getNumFound();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -331,28 +193,27 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		}
 		query.put("q", q);
 
-		Long rows1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getRows()).orElse(10L);
-		Long start1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getStart()).orElse(1L);
-		Long start2 = start1 - rows1;
-		Long start3 = start1 + rows1;
-		Long rows2 = rows1 / 2;
-		Long rows3 = rows1 * 2;
+		Integer rows1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getRows()).orElse(10);
+		Integer start1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getStart()).orElse(1);
+		Integer start2 = start1 - rows1;
+		Integer start3 = start1 + rows1;
+		Integer rows2 = rows1 / 2;
+		Integer rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
-		JsonObject fqs = new JsonObject();
-		for(String fq : Optional.ofNullable(searchListSiteUser_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
+		JsonArray fqs = new JsonArray();
+		for(String fq : Optional.ofNullable(searchListSiteUser_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
 				if(!StringUtils.startsWithAny(fq, "classCanonicalNames_", "archived_", "deleted_", "sessionId", "userKeys"))
-					fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", SiteUser.displayNameForClass(fq1)));
+					fqs.add(new JsonObject().put("var", fq1).put("val", fq2));
 				}
 			}
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(String sort : Optional.ofNullable(searchListSiteUser_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-			String sort1 = StringUtils.substringBefore(sort, "_");
-			sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", SiteUser.displayNameForClass(sort1)));
+		for(SortClause sort : Optional.ofNullable(searchListSiteUser_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
 		}
 		query.put("sort", sorts);
 	}
@@ -369,7 +230,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/user-999.png");
+			c.o("/png/api/user-999.png");
 	}
 
 	@Override
