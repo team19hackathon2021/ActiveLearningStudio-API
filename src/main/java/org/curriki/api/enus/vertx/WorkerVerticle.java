@@ -579,17 +579,19 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			Integer sequence = row.getInteger(80);
 			String uniqueName = row.getString(81);
 			String ext = row.getString(82);
-			// String active = row.getString(83);
-			String tempactive = row.getString(83);
-			String s3path = row.getString(84);
-			String sdfStatus = row.getString(85);
-			String transcoded = row.getString(86);
-			String lodestar = row.getString(87);
-			String archive = row.getString(88);
-			String identifier = row.getString(89);
-			String displayName = row.getString(90);
-			String subjectArea = row.getString(91);
-			String name = row.getString(92);			
+			String resourceFilesActive = row.getString(83);
+			String tempactive = row.getString(84);
+			String s3path = row.getString(85);
+			String sdfStatus = row.getString(86);
+			String transcoded = row.getString(87);
+			String lodestar = row.getString(88);
+			String archive = row.getString(89);
+			String identifier = row.getString(90);
+			String educationLevelDisplayName = row.getString(91);
+			String subjectArea = row.getString(92);
+			String subjectAreaDisplayName = row.getString(93);
+			String instructionTypeDisplayName = row.getString(94);
+			String name = row.getString(95);
 			JsonObject body = new JsonObject();
 			body.put(CurrikiResource.VAR_saves, new JsonArray()
 					.add(CurrikiResource.VAR_inheritPk)
@@ -679,6 +681,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					.add(CurrikiResource.VAR_sequence)
 					.add(CurrikiResource.VAR_uniqueName)
 					.add(CurrikiResource.VAR_ext)
+					.add(CurrikiResource.VAR_resourceFilesActive)
 					.add(CurrikiResource.VAR_tempactive)
 					.add(CurrikiResource.VAR_s3path)
 					.add(CurrikiResource.VAR_sdfStatus)
@@ -686,8 +689,10 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					.add(CurrikiResource.VAR_lodestar)
 					.add(CurrikiResource.VAR_archive)
 					.add(CurrikiResource.VAR_identifier)
-					.add(CurrikiResource.VAR_displayName)
+					.add(CurrikiResource.VAR_educationLevelDisplayName)
 					.add(CurrikiResource.VAR_subjectArea)
+					.add(CurrikiResource.VAR_subjectAreaDisplayName)
+					.add(CurrikiResource.VAR_instructionTypeDisplayName)
 					.add(CurrikiResource.VAR_name)
 					);
 
@@ -775,6 +780,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			body.put(CurrikiResource.VAR_sequence, sequence);
 			body.put(CurrikiResource.VAR_uniqueName, uniqueName);
 			body.put(CurrikiResource.VAR_ext, ext);
+			body.put(CurrikiResource.VAR_resourceFilesActive, resourceFilesActive);
 			body.put(CurrikiResource.VAR_tempactive, tempactive);
 			body.put(CurrikiResource.VAR_s3path, s3path);
 			body.put(CurrikiResource.VAR_sdfStatus, sdfStatus);
@@ -782,8 +788,10 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			body.put(CurrikiResource.VAR_lodestar, lodestar);
 			body.put(CurrikiResource.VAR_archive, archive);
 			body.put(CurrikiResource.VAR_identifier, identifier);
-			body.put(CurrikiResource.VAR_displayName, displayName);
+			body.put(CurrikiResource.VAR_educationLevelDisplayName, educationLevelDisplayName);
 			body.put(CurrikiResource.VAR_subjectArea, subjectArea);
+			body.put(CurrikiResource.VAR_subjectAreaDisplayName, subjectAreaDisplayName);
+			body.put(CurrikiResource.VAR_instructionTypeDisplayName, instructionTypeDisplayName);
 			body.put(CurrikiResource.VAR_name, name);			
 
 			JsonObject params = new JsonObject();

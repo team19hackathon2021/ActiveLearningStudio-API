@@ -422,6 +422,7 @@
 							<div class="w3-cell-row ">
 {{> "htmUniqueName" classApiMethodMethod="Page"}}
 {{> "htmExt" classApiMethodMethod="Page"}}
+{{> "htmResourceFilesActive" classApiMethodMethod="Page"}}
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmTempactive" classApiMethodMethod="Page"}}
@@ -435,10 +436,12 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmIdentifier" classApiMethodMethod="Page"}}
-{{> "htmDisplayName" classApiMethodMethod="Page"}}
+{{> "htmEducationLevelDisplayName" classApiMethodMethod="Page"}}
 {{> "htmSubjectArea" classApiMethodMethod="Page"}}
 							</div>
 							<div class="w3-cell-row ">
+{{> "htmSubjectAreaDisplayName" classApiMethodMethod="Page"}}
+{{> "htmInstructionTypeDisplayName" classApiMethodMethod="Page"}}
 {{> "htmName" classApiMethodMethod="Page"}}
 							</div>
 						</div>
@@ -3072,6 +3075,35 @@
 	{{/eq}}
 {{/inline}}
 
+{{#*inline "htmResourceFilesActive"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									{{#eq 'Page' classApiMethodMethod}}
+										<div class="w3-padding ">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-blue">
+													<label>Resource Files Active</label>
+												</div>
+												<div class="w3-cell-row  ">
+													<div class="w3-cell ">
+														<div class="w3-rest ">
+															<span class="">
+																{{> "inputResourceFilesActive"}}
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+	{{/eq}}
+								</div>
+{{/inline}}
+
+{{#*inline "inputResourceFilesActive"}}
+	{{#eq 'Page' classApiMethodMethod}}
+														<span class="varCurrikiResource{{pk}}ResourceFilesActive ">{{currikiResource_.resourceFilesActive}}</span>
+	{{/eq}}
+{{/inline}}
+
 {{#*inline "htmTempactive"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
 									{{#eq 'Page' classApiMethodMethod}}
@@ -3275,19 +3307,19 @@
 	{{/eq}}
 {{/inline}}
 
-{{#*inline "htmDisplayName"}}
+{{#*inline "htmEducationLevelDisplayName"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
 									{{#eq 'Page' classApiMethodMethod}}
 										<div class="w3-padding ">
 											<div class="w3-card ">
 												<div class="w3-cell-row w3-blue">
-													<label>Display Name</label>
+													<label>Education Level Display Name</label>
 												</div>
 												<div class="w3-cell-row  ">
 													<div class="w3-cell ">
 														<div class="w3-rest ">
 															<span class="">
-																{{> "inputDisplayName"}}
+																{{> "inputEducationLevelDisplayName"}}
 															</span>
 														</div>
 													</div>
@@ -3298,9 +3330,9 @@
 								</div>
 {{/inline}}
 
-{{#*inline "inputDisplayName"}}
+{{#*inline "inputEducationLevelDisplayName"}}
 	{{#eq 'Page' classApiMethodMethod}}
-														<span class="varCurrikiResource{{pk}}DisplayName ">{{currikiResource_.displayName}}</span>
+														<span class="varCurrikiResource{{pk}}EducationLevelDisplayName ">{{currikiResource_.educationLevelDisplayName}}</span>
 	{{/eq}}
 {{/inline}}
 
@@ -3330,6 +3362,64 @@
 {{#*inline "inputSubjectArea"}}
 	{{#eq 'Page' classApiMethodMethod}}
 														<span class="varCurrikiResource{{pk}}SubjectArea ">{{currikiResource_.subjectArea}}</span>
+	{{/eq}}
+{{/inline}}
+
+{{#*inline "htmSubjectAreaDisplayName"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									{{#eq 'Page' classApiMethodMethod}}
+										<div class="w3-padding ">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-blue">
+													<label>Subject Area Display Name</label>
+												</div>
+												<div class="w3-cell-row  ">
+													<div class="w3-cell ">
+														<div class="w3-rest ">
+															<span class="">
+																{{> "inputSubjectAreaDisplayName"}}
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+	{{/eq}}
+								</div>
+{{/inline}}
+
+{{#*inline "inputSubjectAreaDisplayName"}}
+	{{#eq 'Page' classApiMethodMethod}}
+														<span class="varCurrikiResource{{pk}}SubjectAreaDisplayName ">{{currikiResource_.subjectAreaDisplayName}}</span>
+	{{/eq}}
+{{/inline}}
+
+{{#*inline "htmInstructionTypeDisplayName"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									{{#eq 'Page' classApiMethodMethod}}
+										<div class="w3-padding ">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-blue">
+													<label>Instruction Type Display Name</label>
+												</div>
+												<div class="w3-cell-row  ">
+													<div class="w3-cell ">
+														<div class="w3-rest ">
+															<span class="">
+																{{> "inputInstructionTypeDisplayName"}}
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+	{{/eq}}
+								</div>
+{{/inline}}
+
+{{#*inline "inputInstructionTypeDisplayName"}}
+	{{#eq 'Page' classApiMethodMethod}}
+														<span class="varCurrikiResource{{pk}}InstructionTypeDisplayName ">{{currikiResource_.instructionTypeDisplayName}}</span>
 	{{/eq}}
 {{/inline}}
 

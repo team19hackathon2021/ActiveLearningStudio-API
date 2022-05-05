@@ -4642,6 +4642,55 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return CurrikiResource.staticSolrStrExt(siteRequest_, CurrikiResource.staticSolrExt(siteRequest_, CurrikiResource.staticSetExt(siteRequest_, o)));
 	}
 
+	/////////////////////////
+	// resourceFilesActive //
+	/////////////////////////
+
+	/**	 The entity resourceFilesActive
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String resourceFilesActive;
+
+	/**	<br/> The entity resourceFilesActive
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceFilesActive">Find the entity resourceFilesActive in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _resourceFilesActive(Wrap<String> w);
+
+	public String getResourceFilesActive() {
+		return resourceFilesActive;
+	}
+	public void setResourceFilesActive(String o) {
+		this.resourceFilesActive = CurrikiResource.staticSetResourceFilesActive(siteRequest_, o);
+	}
+	public static String staticSetResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource resourceFilesActiveInit() {
+		Wrap<String> resourceFilesActiveWrap = new Wrap<String>().var("resourceFilesActive");
+		if(resourceFilesActive == null) {
+			_resourceFilesActive(resourceFilesActiveWrap);
+			setResourceFilesActive(resourceFilesActiveWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSolrResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrResourceFilesActive(siteRequest_, CurrikiResource.staticSolrResourceFilesActive(siteRequest_, CurrikiResource.staticSetResourceFilesActive(siteRequest_, o)));
+	}
+
 	////////////////
 	// tempactive //
 	////////////////
@@ -4985,53 +5034,53 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return CurrikiResource.staticSolrStrIdentifier(siteRequest_, CurrikiResource.staticSolrIdentifier(siteRequest_, CurrikiResource.staticSetIdentifier(siteRequest_, o)));
 	}
 
-	/////////////////
-	// displayName //
-	/////////////////
+	///////////////////////////////
+	// educationLevelDisplayName //
+	///////////////////////////////
 
-	/**	 The entity displayName
+	/**	 The entity educationLevelDisplayName
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected String displayName;
+	protected String educationLevelDisplayName;
 
-	/**	<br/> The entity displayName
+	/**	<br/> The entity educationLevelDisplayName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:displayName">Find the entity displayName in Solr</a>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:educationLevelDisplayName">Find the entity educationLevelDisplayName in Solr</a>
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _displayName(Wrap<String> w);
+	protected abstract void _educationLevelDisplayName(Wrap<String> w);
 
-	public String getDisplayName() {
-		return displayName;
+	public String getEducationLevelDisplayName() {
+		return educationLevelDisplayName;
 	}
-	public void setDisplayName(String o) {
-		this.displayName = CurrikiResource.staticSetDisplayName(siteRequest_, o);
+	public void setEducationLevelDisplayName(String o) {
+		this.educationLevelDisplayName = CurrikiResource.staticSetEducationLevelDisplayName(siteRequest_, o);
 	}
-	public static String staticSetDisplayName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSetEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
-	protected CurrikiResource displayNameInit() {
-		Wrap<String> displayNameWrap = new Wrap<String>().var("displayName");
-		if(displayName == null) {
-			_displayName(displayNameWrap);
-			setDisplayName(displayNameWrap.o);
+	protected CurrikiResource educationLevelDisplayNameInit() {
+		Wrap<String> educationLevelDisplayNameWrap = new Wrap<String>().var("educationLevelDisplayName");
+		if(educationLevelDisplayName == null) {
+			_educationLevelDisplayName(educationLevelDisplayNameWrap);
+			setEducationLevelDisplayName(educationLevelDisplayNameWrap.o);
 		}
 		return (CurrikiResource)this;
 	}
 
-	public static String staticSolrDisplayName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrDisplayName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrStrEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDisplayName(SiteRequestEnUS siteRequest_, String o) {
-		return CurrikiResource.staticSolrStrDisplayName(siteRequest_, CurrikiResource.staticSolrDisplayName(siteRequest_, CurrikiResource.staticSetDisplayName(siteRequest_, o)));
+	public static String staticSolrFqEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrEducationLevelDisplayName(siteRequest_, CurrikiResource.staticSolrEducationLevelDisplayName(siteRequest_, CurrikiResource.staticSetEducationLevelDisplayName(siteRequest_, o)));
 	}
 
 	/////////////////
@@ -5081,6 +5130,120 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	public static String staticSolrFqSubjectArea(SiteRequestEnUS siteRequest_, String o) {
 		return CurrikiResource.staticSolrStrSubjectArea(siteRequest_, CurrikiResource.staticSolrSubjectArea(siteRequest_, CurrikiResource.staticSetSubjectArea(siteRequest_, o)));
+	}
+
+	////////////////////////////
+	// subjectAreaDisplayName //
+	////////////////////////////
+
+	/**	 The entity subjectAreaDisplayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer subjectAreaDisplayName;
+
+	/**	<br/> The entity subjectAreaDisplayName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectAreaDisplayName">Find the entity subjectAreaDisplayName in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _subjectAreaDisplayName(Wrap<Integer> w);
+
+	public Integer getSubjectAreaDisplayName() {
+		return subjectAreaDisplayName;
+	}
+
+	public void setSubjectAreaDisplayName(Integer subjectAreaDisplayName) {
+		this.subjectAreaDisplayName = subjectAreaDisplayName;
+	}
+	@JsonIgnore
+	public void setSubjectAreaDisplayName(String o) {
+		this.subjectAreaDisplayName = CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o);
+	}
+	public static Integer staticSetSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected CurrikiResource subjectAreaDisplayNameInit() {
+		Wrap<Integer> subjectAreaDisplayNameWrap = new Wrap<Integer>().var("subjectAreaDisplayName");
+		if(subjectAreaDisplayName == null) {
+			_subjectAreaDisplayName(subjectAreaDisplayNameWrap);
+			setSubjectAreaDisplayName(subjectAreaDisplayNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static Integer staticSolrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSolrStrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrSubjectAreaDisplayName(siteRequest_, CurrikiResource.staticSolrSubjectAreaDisplayName(siteRequest_, CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o)));
+	}
+
+	////////////////////////////////
+	// instructionTypeDisplayName //
+	////////////////////////////////
+
+	/**	 The entity instructionTypeDisplayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer instructionTypeDisplayName;
+
+	/**	<br/> The entity instructionTypeDisplayName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:instructionTypeDisplayName">Find the entity instructionTypeDisplayName in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _instructionTypeDisplayName(Wrap<Integer> w);
+
+	public Integer getInstructionTypeDisplayName() {
+		return instructionTypeDisplayName;
+	}
+
+	public void setInstructionTypeDisplayName(Integer instructionTypeDisplayName) {
+		this.instructionTypeDisplayName = instructionTypeDisplayName;
+	}
+	@JsonIgnore
+	public void setInstructionTypeDisplayName(String o) {
+		this.instructionTypeDisplayName = CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o);
+	}
+	public static Integer staticSetInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected CurrikiResource instructionTypeDisplayNameInit() {
+		Wrap<Integer> instructionTypeDisplayNameWrap = new Wrap<Integer>().var("instructionTypeDisplayName");
+		if(instructionTypeDisplayName == null) {
+			_instructionTypeDisplayName(instructionTypeDisplayNameWrap);
+			setInstructionTypeDisplayName(instructionTypeDisplayNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static Integer staticSolrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSolrStrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSolrStrInstructionTypeDisplayName(siteRequest_, CurrikiResource.staticSolrInstructionTypeDisplayName(siteRequest_, CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o)));
 	}
 
 	//////////
@@ -5246,6 +5409,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				sequenceInit();
 				uniqueNameInit();
 				extInit();
+				resourceFilesActiveInit();
 				tempactiveInit();
 				s3pathInit();
 				sdfStatusInit();
@@ -5253,8 +5417,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				lodestarInit();
 				archiveInit();
 				identifierInit();
-				displayNameInit();
+				educationLevelDisplayNameInit();
 				subjectAreaInit();
+				subjectAreaDisplayNameInit();
+				instructionTypeDisplayNameInit();
 				nameInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -5479,6 +5645,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return oCurrikiResource.uniqueName;
 			case "ext":
 				return oCurrikiResource.ext;
+			case "resourceFilesActive":
+				return oCurrikiResource.resourceFilesActive;
 			case "tempactive":
 				return oCurrikiResource.tempactive;
 			case "s3path":
@@ -5493,10 +5661,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return oCurrikiResource.archive;
 			case "identifier":
 				return oCurrikiResource.identifier;
-			case "displayName":
-				return oCurrikiResource.displayName;
+			case "educationLevelDisplayName":
+				return oCurrikiResource.educationLevelDisplayName;
 			case "subjectArea":
 				return oCurrikiResource.subjectArea;
+			case "subjectAreaDisplayName":
+				return oCurrikiResource.subjectAreaDisplayName;
+			case "instructionTypeDisplayName":
+				return oCurrikiResource.instructionTypeDisplayName;
 			case "name":
 				return oCurrikiResource.name;
 			default:
@@ -5708,6 +5880,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetUniqueName(siteRequest_, o);
 		case "ext":
 			return CurrikiResource.staticSetExt(siteRequest_, o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSetResourceFilesActive(siteRequest_, o);
 		case "tempactive":
 			return CurrikiResource.staticSetTempactive(siteRequest_, o);
 		case "s3path":
@@ -5722,10 +5896,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetArchive(siteRequest_, o);
 		case "identifier":
 			return CurrikiResource.staticSetIdentifier(siteRequest_, o);
-		case "displayName":
-			return CurrikiResource.staticSetDisplayName(siteRequest_, o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSetEducationLevelDisplayName(siteRequest_, o);
 		case "subjectArea":
 			return CurrikiResource.staticSetSubjectArea(siteRequest_, o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o);
 		case "name":
 			return CurrikiResource.staticSetName(siteRequest_, o);
 			default:
@@ -5912,6 +6090,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrUniqueName(siteRequest_, (String)o);
 		case "ext":
 			return CurrikiResource.staticSolrExt(siteRequest_, (String)o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSolrResourceFilesActive(siteRequest_, (String)o);
 		case "tempactive":
 			return CurrikiResource.staticSolrTempactive(siteRequest_, (String)o);
 		case "s3path":
@@ -5926,10 +6106,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrArchive(siteRequest_, (String)o);
 		case "identifier":
 			return CurrikiResource.staticSolrIdentifier(siteRequest_, (String)o);
-		case "displayName":
-			return CurrikiResource.staticSolrDisplayName(siteRequest_, (String)o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSolrEducationLevelDisplayName(siteRequest_, (String)o);
 		case "subjectArea":
 			return CurrikiResource.staticSolrSubjectArea(siteRequest_, (String)o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSolrSubjectAreaDisplayName(siteRequest_, (Integer)o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSolrInstructionTypeDisplayName(siteRequest_, (Integer)o);
 		case "name":
 			return CurrikiResource.staticSolrName(siteRequest_, (String)o);
 			default:
@@ -6116,6 +6300,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrStrUniqueName(siteRequest_, (String)o);
 		case "ext":
 			return CurrikiResource.staticSolrStrExt(siteRequest_, (String)o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSolrStrResourceFilesActive(siteRequest_, (String)o);
 		case "tempactive":
 			return CurrikiResource.staticSolrStrTempactive(siteRequest_, (String)o);
 		case "s3path":
@@ -6130,10 +6316,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrStrArchive(siteRequest_, (String)o);
 		case "identifier":
 			return CurrikiResource.staticSolrStrIdentifier(siteRequest_, (String)o);
-		case "displayName":
-			return CurrikiResource.staticSolrStrDisplayName(siteRequest_, (String)o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSolrStrEducationLevelDisplayName(siteRequest_, (String)o);
 		case "subjectArea":
 			return CurrikiResource.staticSolrStrSubjectArea(siteRequest_, (String)o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSolrStrSubjectAreaDisplayName(siteRequest_, (Integer)o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSolrStrInstructionTypeDisplayName(siteRequest_, (Integer)o);
 		case "name":
 			return CurrikiResource.staticSolrStrName(siteRequest_, (String)o);
 			default:
@@ -6320,6 +6510,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrFqUniqueName(siteRequest_, o);
 		case "ext":
 			return CurrikiResource.staticSolrFqExt(siteRequest_, o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSolrFqResourceFilesActive(siteRequest_, o);
 		case "tempactive":
 			return CurrikiResource.staticSolrFqTempactive(siteRequest_, o);
 		case "s3path":
@@ -6334,10 +6526,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSolrFqArchive(siteRequest_, o);
 		case "identifier":
 			return CurrikiResource.staticSolrFqIdentifier(siteRequest_, o);
-		case "displayName":
-			return CurrikiResource.staticSolrFqDisplayName(siteRequest_, o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSolrFqEducationLevelDisplayName(siteRequest_, o);
 		case "subjectArea":
 			return CurrikiResource.staticSolrFqSubjectArea(siteRequest_, o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSolrFqSubjectAreaDisplayName(siteRequest_, o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSolrFqInstructionTypeDisplayName(siteRequest_, o);
 		case "name":
 			return CurrikiResource.staticSolrFqName(siteRequest_, o);
 			default:
@@ -6647,6 +6843,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		if(ext != null) {
 			document.addField("ext_docvalues_string", ext);
 		}
+		if(resourceFilesActive != null) {
+			document.addField("resourceFilesActive_docvalues_string", resourceFilesActive);
+		}
 		if(tempactive != null) {
 			document.addField("tempactive_docvalues_string", tempactive);
 		}
@@ -6668,11 +6867,17 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		if(identifier != null) {
 			document.addField("identifier_docvalues_string", identifier);
 		}
-		if(displayName != null) {
-			document.addField("displayName_docvalues_string", displayName);
+		if(educationLevelDisplayName != null) {
+			document.addField("educationLevelDisplayName_docvalues_string", educationLevelDisplayName);
 		}
 		if(subjectArea != null) {
 			document.addField("subjectArea_docvalues_string", subjectArea);
+		}
+		if(subjectAreaDisplayName != null) {
+			document.addField("subjectAreaDisplayName_docvalues_int", subjectAreaDisplayName);
+		}
+		if(instructionTypeDisplayName != null) {
+			document.addField("instructionTypeDisplayName_docvalues_int", instructionTypeDisplayName);
 		}
 		if(name != null) {
 			document.addField("name_docvalues_string", name);
@@ -6841,6 +7046,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return "uniqueName_docvalues_string";
 			case "ext":
 				return "ext_docvalues_string";
+			case "resourceFilesActive":
+				return "resourceFilesActive_docvalues_string";
 			case "tempactive":
 				return "tempactive_docvalues_string";
 			case "s3path":
@@ -6855,10 +7062,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return "archive_docvalues_string";
 			case "identifier":
 				return "identifier_docvalues_string";
-			case "displayName":
-				return "displayName_docvalues_string";
+			case "educationLevelDisplayName":
+				return "educationLevelDisplayName_docvalues_string";
 			case "subjectArea":
 				return "subjectArea_docvalues_string";
+			case "subjectAreaDisplayName":
+				return "subjectAreaDisplayName_docvalues_int";
+			case "instructionTypeDisplayName":
+				return "instructionTypeDisplayName_docvalues_int";
 			case "name":
 				return "name_docvalues_string";
 			default:
@@ -6975,6 +7186,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setSequence(Optional.ofNullable(solrDocument.get("sequence_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setUniqueName(Optional.ofNullable(solrDocument.get("uniqueName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setExt(Optional.ofNullable(solrDocument.get("ext_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setResourceFilesActive(Optional.ofNullable(solrDocument.get("resourceFilesActive_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setTempactive(Optional.ofNullable(solrDocument.get("tempactive_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setS3path(Optional.ofNullable(solrDocument.get("s3path_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setSdfStatus(Optional.ofNullable(solrDocument.get("sdfStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
@@ -6982,8 +7194,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setLodestar(Optional.ofNullable(solrDocument.get("lodestar_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setArchive(Optional.ofNullable(solrDocument.get("archive_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setIdentifier(Optional.ofNullable(solrDocument.get("identifier_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setDisplayName(Optional.ofNullable(solrDocument.get("displayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setEducationLevelDisplayName(Optional.ofNullable(solrDocument.get("educationLevelDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setSubjectArea(Optional.ofNullable(solrDocument.get("subjectArea_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectAreaDisplayName(Optional.ofNullable(solrDocument.get("subjectAreaDisplayName_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInstructionTypeDisplayName(Optional.ofNullable(solrDocument.get("instructionTypeDisplayName_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setName(Optional.ofNullable(solrDocument.get("name_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
@@ -7160,6 +7374,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("uniqueName");
 			if(!Objects.equals(ext, original.getExt()))
 				apiRequest.addVars("ext");
+			if(!Objects.equals(resourceFilesActive, original.getResourceFilesActive()))
+				apiRequest.addVars("resourceFilesActive");
 			if(!Objects.equals(tempactive, original.getTempactive()))
 				apiRequest.addVars("tempactive");
 			if(!Objects.equals(s3path, original.getS3path()))
@@ -7174,10 +7390,14 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("archive");
 			if(!Objects.equals(identifier, original.getIdentifier()))
 				apiRequest.addVars("identifier");
-			if(!Objects.equals(displayName, original.getDisplayName()))
-				apiRequest.addVars("displayName");
+			if(!Objects.equals(educationLevelDisplayName, original.getEducationLevelDisplayName()))
+				apiRequest.addVars("educationLevelDisplayName");
 			if(!Objects.equals(subjectArea, original.getSubjectArea()))
 				apiRequest.addVars("subjectArea");
+			if(!Objects.equals(subjectAreaDisplayName, original.getSubjectAreaDisplayName()))
+				apiRequest.addVars("subjectAreaDisplayName");
+			if(!Objects.equals(instructionTypeDisplayName, original.getInstructionTypeDisplayName()))
+				apiRequest.addVars("instructionTypeDisplayName");
 			if(!Objects.equals(name, original.getName()))
 				apiRequest.addVars("name");
 			super.apiRequestBaseModel();
@@ -7272,6 +7492,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(sequence).map(v -> "sequence: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(uniqueName).map(v -> "uniqueName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(ext).map(v -> "ext: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(resourceFilesActive).map(v -> "resourceFilesActive: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(tempactive).map(v -> "tempactive: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(s3path).map(v -> "s3path: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(sdfStatus).map(v -> "sdfStatus: \"" + v + "\"\n" ).orElse(""));
@@ -7279,8 +7500,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(lodestar).map(v -> "lodestar: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(archive).map(v -> "archive: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(identifier).map(v -> "identifier: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(displayName).map(v -> "displayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(educationLevelDisplayName).map(v -> "educationLevelDisplayName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(subjectArea).map(v -> "subjectArea: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(subjectAreaDisplayName).map(v -> "subjectAreaDisplayName: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(instructionTypeDisplayName).map(v -> "instructionTypeDisplayName: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(name).map(v -> "name: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
@@ -7370,6 +7593,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String VAR_sequence = "sequence";
 	public static final String VAR_uniqueName = "uniqueName";
 	public static final String VAR_ext = "ext";
+	public static final String VAR_resourceFilesActive = "resourceFilesActive";
 	public static final String VAR_tempactive = "tempactive";
 	public static final String VAR_s3path = "s3path";
 	public static final String VAR_sdfStatus = "sdfStatus";
@@ -7377,7 +7601,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String VAR_lodestar = "lodestar";
 	public static final String VAR_archive = "archive";
 	public static final String VAR_identifier = "identifier";
-	public static final String VAR_displayName = "displayName";
+	public static final String VAR_educationLevelDisplayName = "educationLevelDisplayName";
 	public static final String VAR_subjectArea = "subjectArea";
+	public static final String VAR_subjectAreaDisplayName = "subjectAreaDisplayName";
+	public static final String VAR_instructionTypeDisplayName = "instructionTypeDisplayName";
 	public static final String VAR_name = "name";
 }

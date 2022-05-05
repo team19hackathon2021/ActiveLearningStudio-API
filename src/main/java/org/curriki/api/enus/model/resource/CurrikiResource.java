@@ -38,7 +38,7 @@ import org.curriki.api.enus.model.base.BaseModel;
  * IconName: file
  *  
  * 
- */ 
+ */
 public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
  
 	/**
@@ -1048,17 +1048,17 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	protected void _ext(Wrap<String> w) {
 	}
 	
-//	/**
-//	 * {@inheritDoc}
-//	 * DocValues: true
-//	 * Persist: true
-//	 * DisplayName: Active
-//	 * HtmlRow: 32
-//	 * HtmlCell: 3
-//	 */
-//	protected void _active(Wrap<String> w) {
-//	}
-	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Resource Files Active
+	 * HtmlRow: 32
+	 * HtmlCell: 3
+	 */
+	protected void _resourceFilesActive(Wrap<String> w) {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
@@ -1140,11 +1140,11 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * DisplayName: Display Name
+	 * DisplayName: Education Level Display Name
 	 * HtmlRow: 35
 	 * HtmlCell: 2
 	 */
-	protected void _displayName(Wrap<String> w) {
+	protected void _educationLevelDisplayName(Wrap<String> w) {
 	}
 	
 	/**
@@ -1158,27 +1158,27 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	protected void _subjectArea(Wrap<String> w) {
 	}
 	
-//	/**
-//	 * {@inheritDoc}
-//	 * DocValues: true
-//	 * Persist: true
-//	 * DisplayName: Display Name
-//	 * HtmlRow: 30
-//	 * HtmlCell: 3
-//	 */
-//	protected void _displayName(Wrap<Integer> w) {
-//	}
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Subject Area Display Name
+	 * HtmlRow: 36
+	 * HtmlCell: 1
+	 */
+	protected void _subjectAreaDisplayName(Wrap<Integer> w) {
+	}
 	
-//	/**
-//	 * {@inheritDoc}
-//	 * DocValues: true
-//	 * Persist: true
-//	 * DisplayName: Display Name
-//	 * HtmlRow: 30
-//	 * HtmlCell: 3
-//	 */
-//	protected void _displayName(Wrap<Integer> w) {
-//	}
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Instruction Type Display Name
+	 * HtmlRow: 36
+	 * HtmlCell: 2
+	 */
+	protected void _instructionTypeDisplayName(Wrap<Integer> w) {
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -1186,14 +1186,10 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * Persist: true
 	 * DisplayName: Name
 	 * HtmlRow: 36
-	 * HtmlCell: 1
+	 * HtmlCell: 3
 	 */
 	protected void _name(Wrap<String> w) {
 	}
-
-//	+ " rl.url, rl.displayseqno, rf.fileid, rf.filename, rf.uploaddate, rf.sequence, rf.uniquename,"
-//	+ " rf.ext, rf.active, rf.tempactive, rf.s3path, rf.SDFstatus, rf.transcoded, rf.lodestar,"
-//	+ " rf.archive, edu.identifier, edu.displayname, sub.subjectarea, sub.displayname, inst.displayname, inst.name"
 	
 	@Override
 	public String toString() {
