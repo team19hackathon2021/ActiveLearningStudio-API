@@ -1157,7 +1157,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 */
 	protected void _subjectArea(Wrap<String> w) {
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
@@ -1166,7 +1166,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 36
 	 * HtmlCell: 1
 	 */
-	protected void _subjectAreaDisplayName(Wrap<Integer> w) {
+	protected void _subjectAreaDisplayName(Wrap<String> w) {
 	}
 	
 	/**
@@ -1177,7 +1177,7 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 * HtmlRow: 36
 	 * HtmlCell: 2
 	 */
-	protected void _instructionTypeDisplayName(Wrap<Integer> w) {
+	protected void _instructionTypeDisplayName(Wrap<String> w) {
 	}
 
 	/**

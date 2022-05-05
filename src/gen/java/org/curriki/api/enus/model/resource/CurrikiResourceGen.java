@@ -5140,9 +5140,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
-	protected Integer subjectAreaDisplayName;
+	protected String subjectAreaDisplayName;
 
 	/**	<br/> The entity subjectAreaDisplayName
 	 *  is defined as null before being initialized. 
@@ -5150,26 +5149,19 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _subjectAreaDisplayName(Wrap<Integer> w);
+	protected abstract void _subjectAreaDisplayName(Wrap<String> w);
 
-	public Integer getSubjectAreaDisplayName() {
+	public String getSubjectAreaDisplayName() {
 		return subjectAreaDisplayName;
 	}
-
-	public void setSubjectAreaDisplayName(Integer subjectAreaDisplayName) {
-		this.subjectAreaDisplayName = subjectAreaDisplayName;
-	}
-	@JsonIgnore
 	public void setSubjectAreaDisplayName(String o) {
 		this.subjectAreaDisplayName = CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o);
 	}
-	public static Integer staticSetSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Integer.parseInt(o);
-		return null;
+	public static String staticSetSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource subjectAreaDisplayNameInit() {
-		Wrap<Integer> subjectAreaDisplayNameWrap = new Wrap<Integer>().var("subjectAreaDisplayName");
+		Wrap<String> subjectAreaDisplayNameWrap = new Wrap<String>().var("subjectAreaDisplayName");
 		if(subjectAreaDisplayName == null) {
 			_subjectAreaDisplayName(subjectAreaDisplayNameWrap);
 			setSubjectAreaDisplayName(subjectAreaDisplayNameWrap.o);
@@ -5177,11 +5169,11 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSolrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
@@ -5197,9 +5189,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
-	protected Integer instructionTypeDisplayName;
+	protected String instructionTypeDisplayName;
 
 	/**	<br/> The entity instructionTypeDisplayName
 	 *  is defined as null before being initialized. 
@@ -5207,26 +5198,19 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	 * <br/>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _instructionTypeDisplayName(Wrap<Integer> w);
+	protected abstract void _instructionTypeDisplayName(Wrap<String> w);
 
-	public Integer getInstructionTypeDisplayName() {
+	public String getInstructionTypeDisplayName() {
 		return instructionTypeDisplayName;
 	}
-
-	public void setInstructionTypeDisplayName(Integer instructionTypeDisplayName) {
-		this.instructionTypeDisplayName = instructionTypeDisplayName;
-	}
-	@JsonIgnore
 	public void setInstructionTypeDisplayName(String o) {
 		this.instructionTypeDisplayName = CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o);
 	}
-	public static Integer staticSetInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Integer.parseInt(o);
-		return null;
+	public static String staticSetInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected CurrikiResource instructionTypeDisplayNameInit() {
-		Wrap<Integer> instructionTypeDisplayNameWrap = new Wrap<Integer>().var("instructionTypeDisplayName");
+		Wrap<String> instructionTypeDisplayNameWrap = new Wrap<String>().var("instructionTypeDisplayName");
 		if(instructionTypeDisplayName == null) {
 			_instructionTypeDisplayName(instructionTypeDisplayNameWrap);
 			setInstructionTypeDisplayName(instructionTypeDisplayNameWrap.o);
@@ -5234,11 +5218,11 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		return (CurrikiResource)this;
 	}
 
-	public static Integer staticSolrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
@@ -6111,9 +6095,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		case "subjectArea":
 			return CurrikiResource.staticSolrSubjectArea(siteRequest_, (String)o);
 		case "subjectAreaDisplayName":
-			return CurrikiResource.staticSolrSubjectAreaDisplayName(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrSubjectAreaDisplayName(siteRequest_, (String)o);
 		case "instructionTypeDisplayName":
-			return CurrikiResource.staticSolrInstructionTypeDisplayName(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrInstructionTypeDisplayName(siteRequest_, (String)o);
 		case "name":
 			return CurrikiResource.staticSolrName(siteRequest_, (String)o);
 			default:
@@ -6321,9 +6305,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		case "subjectArea":
 			return CurrikiResource.staticSolrStrSubjectArea(siteRequest_, (String)o);
 		case "subjectAreaDisplayName":
-			return CurrikiResource.staticSolrStrSubjectAreaDisplayName(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrSubjectAreaDisplayName(siteRequest_, (String)o);
 		case "instructionTypeDisplayName":
-			return CurrikiResource.staticSolrStrInstructionTypeDisplayName(siteRequest_, (Integer)o);
+			return CurrikiResource.staticSolrStrInstructionTypeDisplayName(siteRequest_, (String)o);
 		case "name":
 			return CurrikiResource.staticSolrStrName(siteRequest_, (String)o);
 			default:
@@ -6874,10 +6858,10 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			document.addField("subjectArea_docvalues_string", subjectArea);
 		}
 		if(subjectAreaDisplayName != null) {
-			document.addField("subjectAreaDisplayName_docvalues_int", subjectAreaDisplayName);
+			document.addField("subjectAreaDisplayName_docvalues_string", subjectAreaDisplayName);
 		}
 		if(instructionTypeDisplayName != null) {
-			document.addField("instructionTypeDisplayName_docvalues_int", instructionTypeDisplayName);
+			document.addField("instructionTypeDisplayName_docvalues_string", instructionTypeDisplayName);
 		}
 		if(name != null) {
 			document.addField("name_docvalues_string", name);
@@ -7067,9 +7051,9 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			case "subjectArea":
 				return "subjectArea_docvalues_string";
 			case "subjectAreaDisplayName":
-				return "subjectAreaDisplayName_docvalues_int";
+				return "subjectAreaDisplayName_docvalues_string";
 			case "instructionTypeDisplayName":
-				return "instructionTypeDisplayName_docvalues_int";
+				return "instructionTypeDisplayName_docvalues_string";
 			case "name":
 				return "name_docvalues_string";
 			default:
@@ -7196,8 +7180,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setIdentifier(Optional.ofNullable(solrDocument.get("identifier_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setEducationLevelDisplayName(Optional.ofNullable(solrDocument.get("educationLevelDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setSubjectArea(Optional.ofNullable(solrDocument.get("subjectArea_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setSubjectAreaDisplayName(Optional.ofNullable(solrDocument.get("subjectAreaDisplayName_docvalues_int")).map(v -> v.toString()).orElse(null));
-		oCurrikiResource.setInstructionTypeDisplayName(Optional.ofNullable(solrDocument.get("instructionTypeDisplayName_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectAreaDisplayName(Optional.ofNullable(solrDocument.get("subjectAreaDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInstructionTypeDisplayName(Optional.ofNullable(solrDocument.get("instructionTypeDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setName(Optional.ofNullable(solrDocument.get("name_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
@@ -7502,8 +7486,8 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(identifier).map(v -> "identifier: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(educationLevelDisplayName).map(v -> "educationLevelDisplayName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(subjectArea).map(v -> "subjectArea: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(subjectAreaDisplayName).map(v -> "subjectAreaDisplayName: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(instructionTypeDisplayName).map(v -> "instructionTypeDisplayName: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(subjectAreaDisplayName).map(v -> "subjectAreaDisplayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(instructionTypeDisplayName).map(v -> "instructionTypeDisplayName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(name).map(v -> "name: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
