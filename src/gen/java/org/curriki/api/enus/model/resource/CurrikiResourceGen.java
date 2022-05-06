@@ -1,66 +1,60 @@
 package org.curriki.api.enus.model.resource;
 
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.base.BaseModel;
-import io.vertx.core.json.JsonObject;
-import java.util.Date;
-import java.util.Set;
-import org.computate.vertx.api.ApiRequest;
-import org.curriki.api.enus.config.ConfigKeys;
-import java.util.Optional;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.math.MathContext;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.math.RoundingMode;
-import java.util.Map;
-import java.lang.String;
-import java.lang.Long;
+import java.util.Date;
 import java.time.ZonedDateTime;
-import java.time.ZoneId;
+import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.apache.commons.lang3.StringUtils;
+import java.lang.Integer;
+import org.computate.search.response.solr.SolrResponse;
+import java.math.BigDecimal;
+import java.lang.Long;
+import java.util.Locale;
+import java.util.Map;
+import io.vertx.core.json.JsonObject;
 import java.time.ZoneOffset;
+import org.curriki.api.enus.model.base.BaseModel;
+import java.math.RoundingMode;
+import java.math.MathContext;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.Instant;
+import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import java.time.ZoneId;
+import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import java.util.List;
+import java.time.OffsetDateTime;
+import org.computate.search.wrap.Wrap;
+import java.util.Optional;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.String;
+import org.slf4j.Logger;
+import io.vertx.core.Promise;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.curriki.api.enus.config.ConfigKeys;
+import io.vertx.core.json.JsonArray;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
-import java.time.Instant;
-import java.util.Locale;
-import java.time.OffsetDateTime;
-import io.vertx.core.json.JsonArray;
-import java.math.BigDecimal;
-import java.lang.Integer;
-import org.computate.search.wrap.Wrap;
-import io.vertx.core.Promise;
-import io.vertx.core.Future;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.computate.search.response.solr.SolrResponse;
+import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource">Find the class CurrikiResource in Solr. </a>
- * <br><br>Delete the class CurrikiResource in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.model.resource in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.resource&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project ActiveLearningStudio-API in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br>
  **/
 public abstract class CurrikiResourceGen<DEV> extends BaseModel {
@@ -101,7 +95,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity resourceId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceId">Find the entity resourceId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceId">Find the entity resourceId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -154,7 +148,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity licenseId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:licenseId">Find the entity licenseId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:licenseId">Find the entity licenseId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -208,7 +202,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity contributorId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contributorId">Find the entity contributorId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contributorId">Find the entity contributorId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -271,7 +265,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity contributionDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contributionDate">Find the entity contributionDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contributionDate">Find the entity contributionDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -343,7 +337,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity description
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:description">Find the entity description in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:description">Find the entity description in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -396,7 +390,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity title
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:title">Find the entity title in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:title">Find the entity title in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -449,7 +443,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity keywordsStr
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:keywordsStr">Find the entity keywordsStr in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:keywordsStr">Find the entity keywordsStr in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -503,7 +497,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity keywords
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:keywords">Find the entity keywords in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:keywords">Find the entity keywords in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -568,7 +562,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity generatedKeywordsStr
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:generatedKeywordsStr">Find the entity generatedKeywordsStr in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:generatedKeywordsStr">Find the entity generatedKeywordsStr in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -622,7 +616,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity generatedKeywords
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:generatedKeywords">Find the entity generatedKeywords in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:generatedKeywords">Find the entity generatedKeywords in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -687,7 +681,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity language
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:language">Find the entity language in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:language">Find the entity language in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -741,7 +735,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity lastEditorId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastEditorId">Find the entity lastEditorId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastEditorId">Find the entity lastEditorId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -804,7 +798,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity lastEditDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastEditDate">Find the entity lastEditDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastEditDate">Find the entity lastEditDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -876,7 +870,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity currikiLicense
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:currikiLicense">Find the entity currikiLicense in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:currikiLicense">Find the entity currikiLicense in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -929,7 +923,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity externalUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:externalUrl">Find the entity externalUrl in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:externalUrl">Find the entity externalUrl in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -982,7 +976,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity resourceChecked
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceChecked">Find the entity resourceChecked in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceChecked">Find the entity resourceChecked in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1035,7 +1029,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity content
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:content">Find the entity content in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:content">Find the entity content in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1088,7 +1082,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity resourceCheckRequestNote
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckRequestNote">Find the entity resourceCheckRequestNote in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckRequestNote">Find the entity resourceCheckRequestNote in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1144,7 +1138,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity resourceCheckDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckDate">Find the entity resourceCheckDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckDate">Find the entity resourceCheckDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1217,7 +1211,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity resourceCheckId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckId">Find the entity resourceCheckId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckId">Find the entity resourceCheckId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1277,7 +1271,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity resourceCheckNote
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:resourceCheckNote">Find the entity resourceCheckNote in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceCheckNote">Find the entity resourceCheckNote in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1330,7 +1324,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity studentFacing
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:studentFacing">Find the entity studentFacing in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:studentFacing">Find the entity studentFacing in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1383,7 +1377,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity source
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:source">Find the entity source in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:source">Find the entity source in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1436,7 +1430,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity reviewStatus
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewStatus">Find the entity reviewStatus in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewStatus">Find the entity reviewStatus in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1492,7 +1486,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity lastReviewDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastReviewDate">Find the entity lastReviewDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastReviewDate">Find the entity lastReviewDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1565,7 +1559,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity reviewByID
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewByID">Find the entity reviewByID in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewByID">Find the entity reviewByID in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1626,7 +1620,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity reviewRating
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewRating">Find the entity reviewRating in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewRating">Find the entity reviewRating in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1696,7 +1690,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity technicalCompleteness
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:technicalCompleteness">Find the entity technicalCompleteness in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:technicalCompleteness">Find the entity technicalCompleteness in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1757,7 +1751,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity contentAccuracy
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contentAccuracy">Find the entity contentAccuracy in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contentAccuracy">Find the entity contentAccuracy in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1818,7 +1812,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity pedagogy
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:pedagogy">Find the entity pedagogy in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pedagogy">Find the entity pedagogy in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1878,7 +1872,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity ratingComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:ratingComment">Find the entity ratingComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:ratingComment">Find the entity ratingComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1932,7 +1926,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity standardsAlignment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:standardsAlignment">Find the entity standardsAlignment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:standardsAlignment">Find the entity standardsAlignment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1992,7 +1986,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity standardsAlignmentComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:standardsAlignmentComment">Find the entity standardsAlignmentComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:standardsAlignmentComment">Find the entity standardsAlignmentComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2046,7 +2040,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity subjectMatter
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:subjectMatter">Find the entity subjectMatter in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectMatter">Find the entity subjectMatter in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2106,7 +2100,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity subjectMatterComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:subjectMatterComment">Find the entity subjectMatterComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectMatterComment">Find the entity subjectMatterComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2160,7 +2154,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity supportsTeaching
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:supportsTeaching">Find the entity supportsTeaching in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:supportsTeaching">Find the entity supportsTeaching in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2220,7 +2214,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity supportsTeachingComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:supportsTeachingComment">Find the entity supportsTeachingComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:supportsTeachingComment">Find the entity supportsTeachingComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2274,7 +2268,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity assessmentsQuality
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:assessmentsQuality">Find the entity assessmentsQuality in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assessmentsQuality">Find the entity assessmentsQuality in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2334,7 +2328,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity assessmentsQualityComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:assessmentsQualityComment">Find the entity assessmentsQualityComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assessmentsQualityComment">Find the entity assessmentsQualityComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2388,7 +2382,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity interactivityQuality
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:interactivityQuality">Find the entity interactivityQuality in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:interactivityQuality">Find the entity interactivityQuality in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2448,7 +2442,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity interactivityQualityComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:interactivityQualityComment">Find the entity interactivityQualityComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:interactivityQualityComment">Find the entity interactivityQualityComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2502,7 +2496,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity instructionalQuality
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:instructionalQuality">Find the entity instructionalQuality in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:instructionalQuality">Find the entity instructionalQuality in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2562,7 +2556,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity instructionalQualityComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:instructionalQualityComment">Find the entity instructionalQualityComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:instructionalQualityComment">Find the entity instructionalQualityComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2616,7 +2610,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity deeperLearning
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:deeperLearning">Find the entity deeperLearning in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deeperLearning">Find the entity deeperLearning in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2676,7 +2670,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity deeperLearningComment
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:deeperLearningComment">Find the entity deeperLearningComment in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deeperLearningComment">Find the entity deeperLearningComment in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2729,7 +2723,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity partner
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:partner">Find the entity partner in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:partner">Find the entity partner in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2785,7 +2779,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity createDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:createDate">Find the entity createDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:createDate">Find the entity createDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2857,7 +2851,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity type
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:type">Find the entity type in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:type">Find the entity type in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2910,7 +2904,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity featured
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:featured">Find the entity featured in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:featured">Find the entity featured in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -2963,7 +2957,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity page
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:page">Find the entity page in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:page">Find the entity page in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3016,7 +3010,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity active
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:active">Find the entity active in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:active">Find the entity active in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3069,7 +3063,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity Public
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:Public">Find the entity Public in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:Public">Find the entity Public in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3123,7 +3117,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity xwd_id
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:xwd_id">Find the entity xwd_id in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:xwd_id">Find the entity xwd_id in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3183,7 +3177,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity mediaType
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:mediaType">Find the entity mediaType in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:mediaType">Find the entity mediaType in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3236,7 +3230,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity access
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:access">Find the entity access in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:access">Find the entity access in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3290,7 +3284,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity memberRating
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:memberRating">Find the entity memberRating in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:memberRating">Find the entity memberRating in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3359,7 +3353,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity aligned
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:aligned">Find the entity aligned in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:aligned">Find the entity aligned in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3412,7 +3406,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity pageUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:pageUrl">Find the entity pageUrl in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrl">Find the entity pageUrl in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3465,7 +3459,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity indexed
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:indexed">Find the entity indexed in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:indexed">Find the entity indexed in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3521,7 +3515,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity lastIndexDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:lastIndexDate">Find the entity lastIndexDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lastIndexDate">Find the entity lastIndexDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3593,7 +3587,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity indexRequired
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:indexRequired">Find the entity indexRequired in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:indexRequired">Find the entity indexRequired in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3649,7 +3643,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity indexRequiredDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:indexRequiredDate">Find the entity indexRequiredDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:indexRequiredDate">Find the entity indexRequiredDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3721,7 +3715,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity rescrape
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:rescrape">Find the entity rescrape in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rescrape">Find the entity rescrape in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3774,7 +3768,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity goButton
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:goButton">Find the entity goButton in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:goButton">Find the entity goButton in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3827,7 +3821,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity downloadButton
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:downloadButton">Find the entity downloadButton in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:downloadButton">Find the entity downloadButton in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3880,7 +3874,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity topOfSearch
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:topOfSearch">Find the entity topOfSearch in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:topOfSearch">Find the entity topOfSearch in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3933,7 +3927,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity remove
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:remove">Find the entity remove in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:remove">Find the entity remove in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -3986,7 +3980,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity spam
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:spam">Find the entity spam in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:spam">Find the entity spam in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4040,7 +4034,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity topOfSearchInt
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:topOfSearchInt">Find the entity topOfSearchInt in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:topOfSearchInt">Find the entity topOfSearchInt in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4101,7 +4095,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity partnerInt
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:partnerInt">Find the entity partnerInt in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:partnerInt">Find the entity partnerInt in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4161,7 +4155,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity reviewResource
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:reviewResource">Find the entity reviewResource in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reviewResource">Find the entity reviewResource in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4214,7 +4208,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity oldUrl
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:oldUrl">Find the entity oldUrl in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:oldUrl">Find the entity oldUrl in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4267,7 +4261,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity contentDisplayOk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:contentDisplayOk">Find the entity contentDisplayOk in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contentDisplayOk">Find the entity contentDisplayOk in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4320,7 +4314,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity metadata
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:metadata">Find the entity metadata in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:metadata">Find the entity metadata in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4373,7 +4367,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity approvalStatus
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:approvalStatus">Find the entity approvalStatus in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:approvalStatus">Find the entity approvalStatus in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4429,7 +4423,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity approvalStatusDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:approvalStatusDate">Find the entity approvalStatusDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:approvalStatusDate">Find the entity approvalStatusDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4501,7 +4495,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity spamUser
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:spamUser">Find the entity spamUser in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:spamUser">Find the entity spamUser in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4554,7 +4548,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity url
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:url">Find the entity url in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:url">Find the entity url in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4608,7 +4602,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity displaySeqNo
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:displaySeqNo">Find the entity displaySeqNo in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:displaySeqNo">Find the entity displaySeqNo in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4669,7 +4663,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	/**	<br> The entity fileId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=entiteVar_enUS_indexed_string:fileId">Find the entity fileId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:fileId">Find the entity fileId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -4714,6 +4708,968 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 
 	public Integer sqlFileId() {
 		return fileId;
+	}
+
+	//////////////
+	// fileName //
+	//////////////
+
+	/**	 The entity fileName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String fileName;
+
+	/**	<br> The entity fileName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:fileName">Find the entity fileName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _fileName(Wrap<String> w);
+
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String o) {
+		this.fileName = CurrikiResource.staticSetFileName(siteRequest_, o);
+	}
+	public static String staticSetFileName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource fileNameInit() {
+		Wrap<String> fileNameWrap = new Wrap<String>().var("fileName");
+		if(fileName == null) {
+			_fileName(fileNameWrap);
+			setFileName(fileNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchFileName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrFileName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqFileName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrFileName(siteRequest_, CurrikiResource.staticSearchFileName(siteRequest_, CurrikiResource.staticSetFileName(siteRequest_, o)));
+	}
+
+	public String sqlFileName() {
+		return fileName;
+	}
+
+	////////////////
+	// uploadDate //
+	////////////////
+
+	/**	 The entity uploadDate
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String uploadDate;
+
+	/**	<br> The entity uploadDate
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:uploadDate">Find the entity uploadDate in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _uploadDate(Wrap<String> w);
+
+	public String getUploadDate() {
+		return uploadDate;
+	}
+	public void setUploadDate(String o) {
+		this.uploadDate = CurrikiResource.staticSetUploadDate(siteRequest_, o);
+	}
+	public static String staticSetUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource uploadDateInit() {
+		Wrap<String> uploadDateWrap = new Wrap<String>().var("uploadDate");
+		if(uploadDate == null) {
+			_uploadDate(uploadDateWrap);
+			setUploadDate(uploadDateWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUploadDate(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrUploadDate(siteRequest_, CurrikiResource.staticSearchUploadDate(siteRequest_, CurrikiResource.staticSetUploadDate(siteRequest_, o)));
+	}
+
+	public String sqlUploadDate() {
+		return uploadDate;
+	}
+
+	//////////////
+	// sequence //
+	//////////////
+
+	/**	 The entity sequence
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer sequence;
+
+	/**	<br> The entity sequence
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sequence">Find the entity sequence in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _sequence(Wrap<Integer> w);
+
+	public Integer getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
+	@JsonIgnore
+	public void setSequence(String o) {
+		this.sequence = CurrikiResource.staticSetSequence(siteRequest_, o);
+	}
+	public static Integer staticSetSequence(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected CurrikiResource sequenceInit() {
+		Wrap<Integer> sequenceWrap = new Wrap<Integer>().var("sequence");
+		if(sequence == null) {
+			_sequence(sequenceWrap);
+			setSequence(sequenceWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static Integer staticSearchSequence(SiteRequestEnUS siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSearchStrSequence(SiteRequestEnUS siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSequence(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrSequence(siteRequest_, CurrikiResource.staticSearchSequence(siteRequest_, CurrikiResource.staticSetSequence(siteRequest_, o)));
+	}
+
+	public Integer sqlSequence() {
+		return sequence;
+	}
+
+	////////////////
+	// uniqueName //
+	////////////////
+
+	/**	 The entity uniqueName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String uniqueName;
+
+	/**	<br> The entity uniqueName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:uniqueName">Find the entity uniqueName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _uniqueName(Wrap<String> w);
+
+	public String getUniqueName() {
+		return uniqueName;
+	}
+	public void setUniqueName(String o) {
+		this.uniqueName = CurrikiResource.staticSetUniqueName(siteRequest_, o);
+	}
+	public static String staticSetUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource uniqueNameInit() {
+		Wrap<String> uniqueNameWrap = new Wrap<String>().var("uniqueName");
+		if(uniqueName == null) {
+			_uniqueName(uniqueNameWrap);
+			setUniqueName(uniqueNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUniqueName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrUniqueName(siteRequest_, CurrikiResource.staticSearchUniqueName(siteRequest_, CurrikiResource.staticSetUniqueName(siteRequest_, o)));
+	}
+
+	public String sqlUniqueName() {
+		return uniqueName;
+	}
+
+	/////////
+	// ext //
+	/////////
+
+	/**	 The entity ext
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String ext;
+
+	/**	<br> The entity ext
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:ext">Find the entity ext in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _ext(Wrap<String> w);
+
+	public String getExt() {
+		return ext;
+	}
+	public void setExt(String o) {
+		this.ext = CurrikiResource.staticSetExt(siteRequest_, o);
+	}
+	public static String staticSetExt(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource extInit() {
+		Wrap<String> extWrap = new Wrap<String>().var("ext");
+		if(ext == null) {
+			_ext(extWrap);
+			setExt(extWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchExt(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrExt(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqExt(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrExt(siteRequest_, CurrikiResource.staticSearchExt(siteRequest_, CurrikiResource.staticSetExt(siteRequest_, o)));
+	}
+
+	public String sqlExt() {
+		return ext;
+	}
+
+	/////////////////////////
+	// resourceFilesActive //
+	/////////////////////////
+
+	/**	 The entity resourceFilesActive
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String resourceFilesActive;
+
+	/**	<br> The entity resourceFilesActive
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resourceFilesActive">Find the entity resourceFilesActive in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _resourceFilesActive(Wrap<String> w);
+
+	public String getResourceFilesActive() {
+		return resourceFilesActive;
+	}
+	public void setResourceFilesActive(String o) {
+		this.resourceFilesActive = CurrikiResource.staticSetResourceFilesActive(siteRequest_, o);
+	}
+	public static String staticSetResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource resourceFilesActiveInit() {
+		Wrap<String> resourceFilesActiveWrap = new Wrap<String>().var("resourceFilesActive");
+		if(resourceFilesActive == null) {
+			_resourceFilesActive(resourceFilesActiveWrap);
+			setResourceFilesActive(resourceFilesActiveWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqResourceFilesActive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrResourceFilesActive(siteRequest_, CurrikiResource.staticSearchResourceFilesActive(siteRequest_, CurrikiResource.staticSetResourceFilesActive(siteRequest_, o)));
+	}
+
+	public String sqlResourceFilesActive() {
+		return resourceFilesActive;
+	}
+
+	////////////////
+	// tempactive //
+	////////////////
+
+	/**	 The entity tempactive
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String tempactive;
+
+	/**	<br> The entity tempactive
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tempactive">Find the entity tempactive in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _tempactive(Wrap<String> w);
+
+	public String getTempactive() {
+		return tempactive;
+	}
+	public void setTempactive(String o) {
+		this.tempactive = CurrikiResource.staticSetTempactive(siteRequest_, o);
+	}
+	public static String staticSetTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource tempactiveInit() {
+		Wrap<String> tempactiveWrap = new Wrap<String>().var("tempactive");
+		if(tempactive == null) {
+			_tempactive(tempactiveWrap);
+			setTempactive(tempactiveWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqTempactive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrTempactive(siteRequest_, CurrikiResource.staticSearchTempactive(siteRequest_, CurrikiResource.staticSetTempactive(siteRequest_, o)));
+	}
+
+	public String sqlTempactive() {
+		return tempactive;
+	}
+
+	////////////
+	// s3path //
+	////////////
+
+	/**	 The entity s3path
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String s3path;
+
+	/**	<br> The entity s3path
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:s3path">Find the entity s3path in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _s3path(Wrap<String> w);
+
+	public String getS3path() {
+		return s3path;
+	}
+	public void setS3path(String o) {
+		this.s3path = CurrikiResource.staticSetS3path(siteRequest_, o);
+	}
+	public static String staticSetS3path(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource s3pathInit() {
+		Wrap<String> s3pathWrap = new Wrap<String>().var("s3path");
+		if(s3path == null) {
+			_s3path(s3pathWrap);
+			setS3path(s3pathWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchS3path(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrS3path(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqS3path(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrS3path(siteRequest_, CurrikiResource.staticSearchS3path(siteRequest_, CurrikiResource.staticSetS3path(siteRequest_, o)));
+	}
+
+	public String sqlS3path() {
+		return s3path;
+	}
+
+	///////////////
+	// sdfStatus //
+	///////////////
+
+	/**	 The entity sdfStatus
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String sdfStatus;
+
+	/**	<br> The entity sdfStatus
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sdfStatus">Find the entity sdfStatus in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _sdfStatus(Wrap<String> w);
+
+	public String getSdfStatus() {
+		return sdfStatus;
+	}
+	public void setSdfStatus(String o) {
+		this.sdfStatus = CurrikiResource.staticSetSdfStatus(siteRequest_, o);
+	}
+	public static String staticSetSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource sdfStatusInit() {
+		Wrap<String> sdfStatusWrap = new Wrap<String>().var("sdfStatus");
+		if(sdfStatus == null) {
+			_sdfStatus(sdfStatusWrap);
+			setSdfStatus(sdfStatusWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSdfStatus(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrSdfStatus(siteRequest_, CurrikiResource.staticSearchSdfStatus(siteRequest_, CurrikiResource.staticSetSdfStatus(siteRequest_, o)));
+	}
+
+	public String sqlSdfStatus() {
+		return sdfStatus;
+	}
+
+	////////////////
+	// transcoded //
+	////////////////
+
+	/**	 The entity transcoded
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String transcoded;
+
+	/**	<br> The entity transcoded
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:transcoded">Find the entity transcoded in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _transcoded(Wrap<String> w);
+
+	public String getTranscoded() {
+		return transcoded;
+	}
+	public void setTranscoded(String o) {
+		this.transcoded = CurrikiResource.staticSetTranscoded(siteRequest_, o);
+	}
+	public static String staticSetTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource transcodedInit() {
+		Wrap<String> transcodedWrap = new Wrap<String>().var("transcoded");
+		if(transcoded == null) {
+			_transcoded(transcodedWrap);
+			setTranscoded(transcodedWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqTranscoded(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrTranscoded(siteRequest_, CurrikiResource.staticSearchTranscoded(siteRequest_, CurrikiResource.staticSetTranscoded(siteRequest_, o)));
+	}
+
+	public String sqlTranscoded() {
+		return transcoded;
+	}
+
+	//////////////
+	// lodestar //
+	//////////////
+
+	/**	 The entity lodestar
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String lodestar;
+
+	/**	<br> The entity lodestar
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:lodestar">Find the entity lodestar in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _lodestar(Wrap<String> w);
+
+	public String getLodestar() {
+		return lodestar;
+	}
+	public void setLodestar(String o) {
+		this.lodestar = CurrikiResource.staticSetLodestar(siteRequest_, o);
+	}
+	public static String staticSetLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource lodestarInit() {
+		Wrap<String> lodestarWrap = new Wrap<String>().var("lodestar");
+		if(lodestar == null) {
+			_lodestar(lodestarWrap);
+			setLodestar(lodestarWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqLodestar(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrLodestar(siteRequest_, CurrikiResource.staticSearchLodestar(siteRequest_, CurrikiResource.staticSetLodestar(siteRequest_, o)));
+	}
+
+	public String sqlLodestar() {
+		return lodestar;
+	}
+
+	/////////////
+	// archive //
+	/////////////
+
+	/**	 The entity archive
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String archive;
+
+	/**	<br> The entity archive
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:archive">Find the entity archive in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _archive(Wrap<String> w);
+
+	public String getArchive() {
+		return archive;
+	}
+	public void setArchive(String o) {
+		this.archive = CurrikiResource.staticSetArchive(siteRequest_, o);
+	}
+	public static String staticSetArchive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource archiveInit() {
+		Wrap<String> archiveWrap = new Wrap<String>().var("archive");
+		if(archive == null) {
+			_archive(archiveWrap);
+			setArchive(archiveWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchArchive(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrArchive(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqArchive(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrArchive(siteRequest_, CurrikiResource.staticSearchArchive(siteRequest_, CurrikiResource.staticSetArchive(siteRequest_, o)));
+	}
+
+	public String sqlArchive() {
+		return archive;
+	}
+
+	////////////////
+	// identifier //
+	////////////////
+
+	/**	 The entity identifier
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String identifier;
+
+	/**	<br> The entity identifier
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:identifier">Find the entity identifier in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _identifier(Wrap<String> w);
+
+	public String getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(String o) {
+		this.identifier = CurrikiResource.staticSetIdentifier(siteRequest_, o);
+	}
+	public static String staticSetIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource identifierInit() {
+		Wrap<String> identifierWrap = new Wrap<String>().var("identifier");
+		if(identifier == null) {
+			_identifier(identifierWrap);
+			setIdentifier(identifierWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqIdentifier(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrIdentifier(siteRequest_, CurrikiResource.staticSearchIdentifier(siteRequest_, CurrikiResource.staticSetIdentifier(siteRequest_, o)));
+	}
+
+	public String sqlIdentifier() {
+		return identifier;
+	}
+
+	///////////////////////////////
+	// educationLevelDisplayName //
+	///////////////////////////////
+
+	/**	 The entity educationLevelDisplayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String educationLevelDisplayName;
+
+	/**	<br> The entity educationLevelDisplayName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:educationLevelDisplayName">Find the entity educationLevelDisplayName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _educationLevelDisplayName(Wrap<String> w);
+
+	public String getEducationLevelDisplayName() {
+		return educationLevelDisplayName;
+	}
+	public void setEducationLevelDisplayName(String o) {
+		this.educationLevelDisplayName = CurrikiResource.staticSetEducationLevelDisplayName(siteRequest_, o);
+	}
+	public static String staticSetEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource educationLevelDisplayNameInit() {
+		Wrap<String> educationLevelDisplayNameWrap = new Wrap<String>().var("educationLevelDisplayName");
+		if(educationLevelDisplayName == null) {
+			_educationLevelDisplayName(educationLevelDisplayNameWrap);
+			setEducationLevelDisplayName(educationLevelDisplayNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqEducationLevelDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrEducationLevelDisplayName(siteRequest_, CurrikiResource.staticSearchEducationLevelDisplayName(siteRequest_, CurrikiResource.staticSetEducationLevelDisplayName(siteRequest_, o)));
+	}
+
+	public String sqlEducationLevelDisplayName() {
+		return educationLevelDisplayName;
+	}
+
+	/////////////////
+	// subjectArea //
+	/////////////////
+
+	/**	 The entity subjectArea
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String subjectArea;
+
+	/**	<br> The entity subjectArea
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectArea">Find the entity subjectArea in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _subjectArea(Wrap<String> w);
+
+	public String getSubjectArea() {
+		return subjectArea;
+	}
+	public void setSubjectArea(String o) {
+		this.subjectArea = CurrikiResource.staticSetSubjectArea(siteRequest_, o);
+	}
+	public static String staticSetSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource subjectAreaInit() {
+		Wrap<String> subjectAreaWrap = new Wrap<String>().var("subjectArea");
+		if(subjectArea == null) {
+			_subjectArea(subjectAreaWrap);
+			setSubjectArea(subjectAreaWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSubjectArea(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrSubjectArea(siteRequest_, CurrikiResource.staticSearchSubjectArea(siteRequest_, CurrikiResource.staticSetSubjectArea(siteRequest_, o)));
+	}
+
+	public String sqlSubjectArea() {
+		return subjectArea;
+	}
+
+	////////////////////////////
+	// subjectAreaDisplayName //
+	////////////////////////////
+
+	/**	 The entity subjectAreaDisplayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String subjectAreaDisplayName;
+
+	/**	<br> The entity subjectAreaDisplayName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:subjectAreaDisplayName">Find the entity subjectAreaDisplayName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _subjectAreaDisplayName(Wrap<String> w);
+
+	public String getSubjectAreaDisplayName() {
+		return subjectAreaDisplayName;
+	}
+	public void setSubjectAreaDisplayName(String o) {
+		this.subjectAreaDisplayName = CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o);
+	}
+	public static String staticSetSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource subjectAreaDisplayNameInit() {
+		Wrap<String> subjectAreaDisplayNameWrap = new Wrap<String>().var("subjectAreaDisplayName");
+		if(subjectAreaDisplayName == null) {
+			_subjectAreaDisplayName(subjectAreaDisplayNameWrap);
+			setSubjectAreaDisplayName(subjectAreaDisplayNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSubjectAreaDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrSubjectAreaDisplayName(siteRequest_, CurrikiResource.staticSearchSubjectAreaDisplayName(siteRequest_, CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o)));
+	}
+
+	public String sqlSubjectAreaDisplayName() {
+		return subjectAreaDisplayName;
+	}
+
+	////////////////////////////////
+	// instructionTypeDisplayName //
+	////////////////////////////////
+
+	/**	 The entity instructionTypeDisplayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String instructionTypeDisplayName;
+
+	/**	<br> The entity instructionTypeDisplayName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:instructionTypeDisplayName">Find the entity instructionTypeDisplayName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _instructionTypeDisplayName(Wrap<String> w);
+
+	public String getInstructionTypeDisplayName() {
+		return instructionTypeDisplayName;
+	}
+	public void setInstructionTypeDisplayName(String o) {
+		this.instructionTypeDisplayName = CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o);
+	}
+	public static String staticSetInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource instructionTypeDisplayNameInit() {
+		Wrap<String> instructionTypeDisplayNameWrap = new Wrap<String>().var("instructionTypeDisplayName");
+		if(instructionTypeDisplayName == null) {
+			_instructionTypeDisplayName(instructionTypeDisplayNameWrap);
+			setInstructionTypeDisplayName(instructionTypeDisplayNameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqInstructionTypeDisplayName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrInstructionTypeDisplayName(siteRequest_, CurrikiResource.staticSearchInstructionTypeDisplayName(siteRequest_, CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o)));
+	}
+
+	public String sqlInstructionTypeDisplayName() {
+		return instructionTypeDisplayName;
+	}
+
+	//////////
+	// name //
+	//////////
+
+	/**	 The entity name
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String name;
+
+	/**	<br> The entity name
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResource&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:name">Find the entity name in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _name(Wrap<String> w);
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String o) {
+		this.name = CurrikiResource.staticSetName(siteRequest_, o);
+	}
+	public static String staticSetName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected CurrikiResource nameInit() {
+		Wrap<String> nameWrap = new Wrap<String>().var("name");
+		if(name == null) {
+			_name(nameWrap);
+			setName(nameWrap.o);
+		}
+		return (CurrikiResource)this;
+	}
+
+	public static String staticSearchName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqName(SiteRequestEnUS siteRequest_, String o) {
+		return CurrikiResource.staticSearchStrName(siteRequest_, CurrikiResource.staticSearchName(siteRequest_, CurrikiResource.staticSetName(siteRequest_, o)));
+	}
+
+	public String sqlName() {
+		return name;
 	}
 
 	//////////////
@@ -4825,6 +5781,24 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				urlInit();
 				displaySeqNoInit();
 				fileIdInit();
+				fileNameInit();
+				uploadDateInit();
+				sequenceInit();
+				uniqueNameInit();
+				extInit();
+				resourceFilesActiveInit();
+				tempactiveInit();
+				s3pathInit();
+				sdfStatusInit();
+				transcodedInit();
+				lodestarInit();
+				archiveInit();
+				identifierInit();
+				educationLevelDisplayNameInit();
+				subjectAreaInit();
+				subjectAreaDisplayNameInit();
+				instructionTypeDisplayNameInit();
+				nameInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -5038,6 +6012,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return oCurrikiResource.displaySeqNo;
 			case "fileId":
 				return oCurrikiResource.fileId;
+			case "fileName":
+				return oCurrikiResource.fileName;
+			case "uploadDate":
+				return oCurrikiResource.uploadDate;
+			case "sequence":
+				return oCurrikiResource.sequence;
+			case "uniqueName":
+				return oCurrikiResource.uniqueName;
+			case "ext":
+				return oCurrikiResource.ext;
+			case "resourceFilesActive":
+				return oCurrikiResource.resourceFilesActive;
+			case "tempactive":
+				return oCurrikiResource.tempactive;
+			case "s3path":
+				return oCurrikiResource.s3path;
+			case "sdfStatus":
+				return oCurrikiResource.sdfStatus;
+			case "transcoded":
+				return oCurrikiResource.transcoded;
+			case "lodestar":
+				return oCurrikiResource.lodestar;
+			case "archive":
+				return oCurrikiResource.archive;
+			case "identifier":
+				return oCurrikiResource.identifier;
+			case "educationLevelDisplayName":
+				return oCurrikiResource.educationLevelDisplayName;
+			case "subjectArea":
+				return oCurrikiResource.subjectArea;
+			case "subjectAreaDisplayName":
+				return oCurrikiResource.subjectAreaDisplayName;
+			case "instructionTypeDisplayName":
+				return oCurrikiResource.instructionTypeDisplayName;
+			case "name":
+				return oCurrikiResource.name;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -5237,6 +6247,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSetDisplaySeqNo(siteRequest_, o);
 		case "fileId":
 			return CurrikiResource.staticSetFileId(siteRequest_, o);
+		case "fileName":
+			return CurrikiResource.staticSetFileName(siteRequest_, o);
+		case "uploadDate":
+			return CurrikiResource.staticSetUploadDate(siteRequest_, o);
+		case "sequence":
+			return CurrikiResource.staticSetSequence(siteRequest_, o);
+		case "uniqueName":
+			return CurrikiResource.staticSetUniqueName(siteRequest_, o);
+		case "ext":
+			return CurrikiResource.staticSetExt(siteRequest_, o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSetResourceFilesActive(siteRequest_, o);
+		case "tempactive":
+			return CurrikiResource.staticSetTempactive(siteRequest_, o);
+		case "s3path":
+			return CurrikiResource.staticSetS3path(siteRequest_, o);
+		case "sdfStatus":
+			return CurrikiResource.staticSetSdfStatus(siteRequest_, o);
+		case "transcoded":
+			return CurrikiResource.staticSetTranscoded(siteRequest_, o);
+		case "lodestar":
+			return CurrikiResource.staticSetLodestar(siteRequest_, o);
+		case "archive":
+			return CurrikiResource.staticSetArchive(siteRequest_, o);
+		case "identifier":
+			return CurrikiResource.staticSetIdentifier(siteRequest_, o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSetEducationLevelDisplayName(siteRequest_, o);
+		case "subjectArea":
+			return CurrikiResource.staticSetSubjectArea(siteRequest_, o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSetSubjectAreaDisplayName(siteRequest_, o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSetInstructionTypeDisplayName(siteRequest_, o);
+		case "name":
+			return CurrikiResource.staticSetName(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5411,6 +6457,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSearchDisplaySeqNo(siteRequest_, (Integer)o);
 		case "fileId":
 			return CurrikiResource.staticSearchFileId(siteRequest_, (Integer)o);
+		case "fileName":
+			return CurrikiResource.staticSearchFileName(siteRequest_, (String)o);
+		case "uploadDate":
+			return CurrikiResource.staticSearchUploadDate(siteRequest_, (String)o);
+		case "sequence":
+			return CurrikiResource.staticSearchSequence(siteRequest_, (Integer)o);
+		case "uniqueName":
+			return CurrikiResource.staticSearchUniqueName(siteRequest_, (String)o);
+		case "ext":
+			return CurrikiResource.staticSearchExt(siteRequest_, (String)o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSearchResourceFilesActive(siteRequest_, (String)o);
+		case "tempactive":
+			return CurrikiResource.staticSearchTempactive(siteRequest_, (String)o);
+		case "s3path":
+			return CurrikiResource.staticSearchS3path(siteRequest_, (String)o);
+		case "sdfStatus":
+			return CurrikiResource.staticSearchSdfStatus(siteRequest_, (String)o);
+		case "transcoded":
+			return CurrikiResource.staticSearchTranscoded(siteRequest_, (String)o);
+		case "lodestar":
+			return CurrikiResource.staticSearchLodestar(siteRequest_, (String)o);
+		case "archive":
+			return CurrikiResource.staticSearchArchive(siteRequest_, (String)o);
+		case "identifier":
+			return CurrikiResource.staticSearchIdentifier(siteRequest_, (String)o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSearchEducationLevelDisplayName(siteRequest_, (String)o);
+		case "subjectArea":
+			return CurrikiResource.staticSearchSubjectArea(siteRequest_, (String)o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSearchSubjectAreaDisplayName(siteRequest_, (String)o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSearchInstructionTypeDisplayName(siteRequest_, (String)o);
+		case "name":
+			return CurrikiResource.staticSearchName(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5585,6 +6667,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSearchStrDisplaySeqNo(siteRequest_, (Integer)o);
 		case "fileId":
 			return CurrikiResource.staticSearchStrFileId(siteRequest_, (Integer)o);
+		case "fileName":
+			return CurrikiResource.staticSearchStrFileName(siteRequest_, (String)o);
+		case "uploadDate":
+			return CurrikiResource.staticSearchStrUploadDate(siteRequest_, (String)o);
+		case "sequence":
+			return CurrikiResource.staticSearchStrSequence(siteRequest_, (Integer)o);
+		case "uniqueName":
+			return CurrikiResource.staticSearchStrUniqueName(siteRequest_, (String)o);
+		case "ext":
+			return CurrikiResource.staticSearchStrExt(siteRequest_, (String)o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSearchStrResourceFilesActive(siteRequest_, (String)o);
+		case "tempactive":
+			return CurrikiResource.staticSearchStrTempactive(siteRequest_, (String)o);
+		case "s3path":
+			return CurrikiResource.staticSearchStrS3path(siteRequest_, (String)o);
+		case "sdfStatus":
+			return CurrikiResource.staticSearchStrSdfStatus(siteRequest_, (String)o);
+		case "transcoded":
+			return CurrikiResource.staticSearchStrTranscoded(siteRequest_, (String)o);
+		case "lodestar":
+			return CurrikiResource.staticSearchStrLodestar(siteRequest_, (String)o);
+		case "archive":
+			return CurrikiResource.staticSearchStrArchive(siteRequest_, (String)o);
+		case "identifier":
+			return CurrikiResource.staticSearchStrIdentifier(siteRequest_, (String)o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSearchStrEducationLevelDisplayName(siteRequest_, (String)o);
+		case "subjectArea":
+			return CurrikiResource.staticSearchStrSubjectArea(siteRequest_, (String)o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSearchStrSubjectAreaDisplayName(siteRequest_, (String)o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSearchStrInstructionTypeDisplayName(siteRequest_, (String)o);
+		case "name":
+			return CurrikiResource.staticSearchStrName(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -5759,6 +6877,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return CurrikiResource.staticSearchFqDisplaySeqNo(siteRequest_, o);
 		case "fileId":
 			return CurrikiResource.staticSearchFqFileId(siteRequest_, o);
+		case "fileName":
+			return CurrikiResource.staticSearchFqFileName(siteRequest_, o);
+		case "uploadDate":
+			return CurrikiResource.staticSearchFqUploadDate(siteRequest_, o);
+		case "sequence":
+			return CurrikiResource.staticSearchFqSequence(siteRequest_, o);
+		case "uniqueName":
+			return CurrikiResource.staticSearchFqUniqueName(siteRequest_, o);
+		case "ext":
+			return CurrikiResource.staticSearchFqExt(siteRequest_, o);
+		case "resourceFilesActive":
+			return CurrikiResource.staticSearchFqResourceFilesActive(siteRequest_, o);
+		case "tempactive":
+			return CurrikiResource.staticSearchFqTempactive(siteRequest_, o);
+		case "s3path":
+			return CurrikiResource.staticSearchFqS3path(siteRequest_, o);
+		case "sdfStatus":
+			return CurrikiResource.staticSearchFqSdfStatus(siteRequest_, o);
+		case "transcoded":
+			return CurrikiResource.staticSearchFqTranscoded(siteRequest_, o);
+		case "lodestar":
+			return CurrikiResource.staticSearchFqLodestar(siteRequest_, o);
+		case "archive":
+			return CurrikiResource.staticSearchFqArchive(siteRequest_, o);
+		case "identifier":
+			return CurrikiResource.staticSearchFqIdentifier(siteRequest_, o);
+		case "educationLevelDisplayName":
+			return CurrikiResource.staticSearchFqEducationLevelDisplayName(siteRequest_, o);
+		case "subjectArea":
+			return CurrikiResource.staticSearchFqSubjectArea(siteRequest_, o);
+		case "subjectAreaDisplayName":
+			return CurrikiResource.staticSearchFqSubjectAreaDisplayName(siteRequest_, o);
+		case "instructionTypeDisplayName":
+			return CurrikiResource.staticSearchFqInstructionTypeDisplayName(siteRequest_, o);
+		case "name":
+			return CurrikiResource.staticSearchFqName(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -6249,6 +7403,98 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 					setFileId((String)val);
 				saves.add("fileId");
 				return val;
+			case "filename":
+				if(val instanceof String)
+					setFileName((String)val);
+				saves.add("fileName");
+				return val;
+			case "uploaddate":
+				if(val instanceof String)
+					setUploadDate((String)val);
+				saves.add("uploadDate");
+				return val;
+			case "sequence":
+				if(val instanceof Integer)
+					setSequence((Integer)val);
+				else if(val instanceof String)
+					setSequence((String)val);
+				saves.add("sequence");
+				return val;
+			case "uniquename":
+				if(val instanceof String)
+					setUniqueName((String)val);
+				saves.add("uniqueName");
+				return val;
+			case "ext":
+				if(val instanceof String)
+					setExt((String)val);
+				saves.add("ext");
+				return val;
+			case "resourcefilesactive":
+				if(val instanceof String)
+					setResourceFilesActive((String)val);
+				saves.add("resourceFilesActive");
+				return val;
+			case "tempactive":
+				if(val instanceof String)
+					setTempactive((String)val);
+				saves.add("tempactive");
+				return val;
+			case "s3path":
+				if(val instanceof String)
+					setS3path((String)val);
+				saves.add("s3path");
+				return val;
+			case "sdfstatus":
+				if(val instanceof String)
+					setSdfStatus((String)val);
+				saves.add("sdfStatus");
+				return val;
+			case "transcoded":
+				if(val instanceof String)
+					setTranscoded((String)val);
+				saves.add("transcoded");
+				return val;
+			case "lodestar":
+				if(val instanceof String)
+					setLodestar((String)val);
+				saves.add("lodestar");
+				return val;
+			case "archive":
+				if(val instanceof String)
+					setArchive((String)val);
+				saves.add("archive");
+				return val;
+			case "identifier":
+				if(val instanceof String)
+					setIdentifier((String)val);
+				saves.add("identifier");
+				return val;
+			case "educationleveldisplayname":
+				if(val instanceof String)
+					setEducationLevelDisplayName((String)val);
+				saves.add("educationLevelDisplayName");
+				return val;
+			case "subjectarea":
+				if(val instanceof String)
+					setSubjectArea((String)val);
+				saves.add("subjectArea");
+				return val;
+			case "subjectareadisplayname":
+				if(val instanceof String)
+					setSubjectAreaDisplayName((String)val);
+				saves.add("subjectAreaDisplayName");
+				return val;
+			case "instructiontypedisplayname":
+				if(val instanceof String)
+					setInstructionTypeDisplayName((String)val);
+				saves.add("instructionTypeDisplayName");
+				return val;
+			case "name":
+				if(val instanceof String)
+					setName((String)val);
+				saves.add("name");
+				return val;
 			default:
 				return super.persistBaseModel(var, val);
 		}
@@ -6519,167 +7765,62 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		if(fileId != null) {
 			doc.put("fileId_docvalues_int", fileId);
 		}
+		if(fileName != null) {
+			doc.put("fileName_docvalues_string", fileName);
+		}
+		if(uploadDate != null) {
+			doc.put("uploadDate_docvalues_string", uploadDate);
+		}
+		if(sequence != null) {
+			doc.put("sequence_docvalues_int", sequence);
+		}
+		if(uniqueName != null) {
+			doc.put("uniqueName_docvalues_string", uniqueName);
+		}
+		if(ext != null) {
+			doc.put("ext_docvalues_string", ext);
+		}
+		if(resourceFilesActive != null) {
+			doc.put("resourceFilesActive_docvalues_string", resourceFilesActive);
+		}
+		if(tempactive != null) {
+			doc.put("tempactive_docvalues_string", tempactive);
+		}
+		if(s3path != null) {
+			doc.put("s3path_docvalues_string", s3path);
+		}
+		if(sdfStatus != null) {
+			doc.put("sdfStatus_docvalues_string", sdfStatus);
+		}
+		if(transcoded != null) {
+			doc.put("transcoded_docvalues_string", transcoded);
+		}
+		if(lodestar != null) {
+			doc.put("lodestar_docvalues_string", lodestar);
+		}
+		if(archive != null) {
+			doc.put("archive_docvalues_string", archive);
+		}
+		if(identifier != null) {
+			doc.put("identifier_docvalues_string", identifier);
+		}
+		if(educationLevelDisplayName != null) {
+			doc.put("educationLevelDisplayName_docvalues_string", educationLevelDisplayName);
+		}
+		if(subjectArea != null) {
+			doc.put("subjectArea_docvalues_string", subjectArea);
+		}
+		if(subjectAreaDisplayName != null) {
+			doc.put("subjectAreaDisplayName_docvalues_string", subjectAreaDisplayName);
+		}
+		if(instructionTypeDisplayName != null) {
+			doc.put("instructionTypeDisplayName_docvalues_string", instructionTypeDisplayName);
+		}
+		if(name != null) {
+			doc.put("name_docvalues_string", name);
+		}
 		super.indexBaseModel(doc);
 
-	}
-
-	public static String varStoredCurrikiResource(String entityVar) {
-		switch(entityVar) {
-			case "resourceId":
-				return "resourceId_docvalues_string";
-			case "licenseId":
-				return "licenseId_docvalues_string";
-			case "contributorId":
-				return "contributorId_docvalues_long";
-			case "contributionDate":
-				return "contributionDate_docvalues_date";
-			case "description":
-				return "description_docvalues_string";
-			case "title":
-				return "title_docvalues_string";
-			case "keywords":
-				return "keywords_docvalues_strings";
-			case "generatedKeywords":
-				return "generatedKeywords_docvalues_strings";
-			case "language":
-				return "language_docvalues_string";
-			case "lastEditorId":
-				return "lastEditorId_docvalues_long";
-			case "lastEditDate":
-				return "lastEditDate_docvalues_date";
-			case "currikiLicense":
-				return "currikiLicense_docvalues_string";
-			case "externalUrl":
-				return "externalUrl_docvalues_string";
-			case "resourceChecked":
-				return "resourceChecked_docvalues_string";
-			case "content":
-				return "content_stored_string";
-			case "resourceCheckDate":
-				return "resourceCheckDate_docvalues_date";
-			case "resourceCheckId":
-				return "resourceCheckId_docvalues_long";
-			case "studentFacing":
-				return "studentFacing_docvalues_string";
-			case "source":
-				return "source_docvalues_string";
-			case "reviewStatus":
-				return "reviewStatus_docvalues_string";
-			case "lastReviewDate":
-				return "lastReviewDate_docvalues_date";
-			case "reviewByID":
-				return "reviewByID_docvalues_long";
-			case "reviewRating":
-				return "reviewRating_docvalues_double";
-			case "technicalCompleteness":
-				return "technicalCompleteness_docvalues_int";
-			case "contentAccuracy":
-				return "contentAccuracy_docvalues_int";
-			case "pedagogy":
-				return "pedagogy_docvalues_int";
-			case "ratingComment":
-				return "ratingComment_stored_string";
-			case "standardsAlignment":
-				return "standardsAlignment_docvalues_int";
-			case "standardsAlignmentComment":
-				return "standardsAlignmentComment_docvalues_string";
-			case "subjectMatter":
-				return "subjectMatter_docvalues_int";
-			case "subjectMatterComment":
-				return "subjectMatterComment_docvalues_string";
-			case "supportsTeaching":
-				return "supportsTeaching_docvalues_int";
-			case "supportsTeachingComment":
-				return "supportsTeachingComment_docvalues_string";
-			case "assessmentsQuality":
-				return "assessmentsQuality_docvalues_int";
-			case "assessmentsQualityComment":
-				return "assessmentsQualityComment_docvalues_string";
-			case "interactivityQuality":
-				return "interactivityQuality_docvalues_int";
-			case "interactivityQualityComment":
-				return "interactivityQualityComment_docvalues_string";
-			case "instructionalQuality":
-				return "instructionalQuality_docvalues_int";
-			case "instructionalQualityComment":
-				return "instructionalQualityComment_docvalues_string";
-			case "deeperLearning":
-				return "deeperLearning_docvalues_int";
-			case "deeperLearningComment":
-				return "deeperLearningComment_docvalues_string";
-			case "partner":
-				return "partner_docvalues_string";
-			case "createDate":
-				return "createDate_docvalues_date";
-			case "type":
-				return "type_docvalues_string";
-			case "featured":
-				return "featured_docvalues_string";
-			case "page":
-				return "page_docvalues_string";
-			case "active":
-				return "active_docvalues_string";
-			case "Public":
-				return "Public_docvalues_string";
-			case "xwd_id":
-				return "xwd_id_docvalues_int";
-			case "mediaType":
-				return "mediaType_docvalues_string";
-			case "access":
-				return "access_docvalues_string";
-			case "memberRating":
-				return "memberRating_docvalues_double";
-			case "aligned":
-				return "aligned_docvalues_string";
-			case "pageUrl":
-				return "pageUrl_docvalues_string";
-			case "indexed":
-				return "indexed_docvalues_string";
-			case "lastIndexDate":
-				return "lastIndexDate_docvalues_date";
-			case "indexRequired":
-				return "indexRequired_docvalues_string";
-			case "indexRequiredDate":
-				return "indexRequiredDate_docvalues_date";
-			case "rescrape":
-				return "rescrape_docvalues_string";
-			case "goButton":
-				return "goButton_docvalues_string";
-			case "downloadButton":
-				return "downloadButton_docvalues_string";
-			case "topOfSearch":
-				return "topOfSearch_docvalues_string";
-			case "remove":
-				return "remove_docvalues_string";
-			case "spam":
-				return "spam_docvalues_string";
-			case "topOfSearchInt":
-				return "topOfSearchInt_docvalues_int";
-			case "partnerInt":
-				return "partnerInt_docvalues_int";
-			case "reviewResource":
-				return "reviewResource_docvalues_string";
-			case "oldUrl":
-				return "oldUrl_docvalues_string";
-			case "contentDisplayOk":
-				return "contentDisplayOk_docvalues_string";
-			case "metadata":
-				return "metadata_docvalues_string";
-			case "approvalStatus":
-				return "approvalStatus_docvalues_string";
-			case "approvalStatusDate":
-				return "approvalStatusDate_docvalues_date";
-			case "spamUser":
-				return "spamUser_docvalues_string";
-			case "url":
-				return "url_docvalues_string";
-			case "displaySeqNo":
-				return "displaySeqNo_docvalues_int";
-			case "fileId":
-				return "fileId_docvalues_int";
-			default:
-				return BaseModel.varStoredBaseModel(entityVar);
-		}
 	}
 
 	public static String varIndexedCurrikiResource(String entityVar) {
@@ -6832,6 +7973,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				return "displaySeqNo_docvalues_int";
 			case "fileId":
 				return "fileId_docvalues_int";
+			case "fileName":
+				return "fileName_docvalues_string";
+			case "uploadDate":
+				return "uploadDate_docvalues_string";
+			case "sequence":
+				return "sequence_docvalues_int";
+			case "uniqueName":
+				return "uniqueName_docvalues_string";
+			case "ext":
+				return "ext_docvalues_string";
+			case "resourceFilesActive":
+				return "resourceFilesActive_docvalues_string";
+			case "tempactive":
+				return "tempactive_docvalues_string";
+			case "s3path":
+				return "s3path_docvalues_string";
+			case "sdfStatus":
+				return "sdfStatus_docvalues_string";
+			case "transcoded":
+				return "transcoded_docvalues_string";
+			case "lodestar":
+				return "lodestar_docvalues_string";
+			case "archive":
+				return "archive_docvalues_string";
+			case "identifier":
+				return "identifier_docvalues_string";
+			case "educationLevelDisplayName":
+				return "educationLevelDisplayName_docvalues_string";
+			case "subjectArea":
+				return "subjectArea_docvalues_string";
+			case "subjectAreaDisplayName":
+				return "subjectAreaDisplayName_docvalues_string";
+			case "instructionTypeDisplayName":
+				return "instructionTypeDisplayName_docvalues_string";
+			case "name":
+				return "name_docvalues_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -6941,6 +8118,24 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		oCurrikiResource.setUrl(Optional.ofNullable(doc.get("url_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setDisplaySeqNo(Optional.ofNullable(doc.get("displaySeqNo_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oCurrikiResource.setFileId(Optional.ofNullable(doc.get("fileId_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setFileName(Optional.ofNullable(doc.get("fileName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setUploadDate(Optional.ofNullable(doc.get("uploadDate_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSequence(Optional.ofNullable(doc.get("sequence_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setUniqueName(Optional.ofNullable(doc.get("uniqueName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setExt(Optional.ofNullable(doc.get("ext_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setResourceFilesActive(Optional.ofNullable(doc.get("resourceFilesActive_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTempactive(Optional.ofNullable(doc.get("tempactive_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setS3path(Optional.ofNullable(doc.get("s3path_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSdfStatus(Optional.ofNullable(doc.get("sdfStatus_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setTranscoded(Optional.ofNullable(doc.get("transcoded_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setLodestar(Optional.ofNullable(doc.get("lodestar_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setArchive(Optional.ofNullable(doc.get("archive_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setIdentifier(Optional.ofNullable(doc.get("identifier_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setEducationLevelDisplayName(Optional.ofNullable(doc.get("educationLevelDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectArea(Optional.ofNullable(doc.get("subjectArea_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setSubjectAreaDisplayName(Optional.ofNullable(doc.get("subjectAreaDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setInstructionTypeDisplayName(Optional.ofNullable(doc.get("instructionTypeDisplayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oCurrikiResource.setName(Optional.ofNullable(doc.get("name_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
 	}
@@ -7114,6 +8309,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 				apiRequest.addVars("displaySeqNo");
 			if(!Objects.equals(fileId, original.getFileId()))
 				apiRequest.addVars("fileId");
+			if(!Objects.equals(fileName, original.getFileName()))
+				apiRequest.addVars("fileName");
+			if(!Objects.equals(uploadDate, original.getUploadDate()))
+				apiRequest.addVars("uploadDate");
+			if(!Objects.equals(sequence, original.getSequence()))
+				apiRequest.addVars("sequence");
+			if(!Objects.equals(uniqueName, original.getUniqueName()))
+				apiRequest.addVars("uniqueName");
+			if(!Objects.equals(ext, original.getExt()))
+				apiRequest.addVars("ext");
+			if(!Objects.equals(resourceFilesActive, original.getResourceFilesActive()))
+				apiRequest.addVars("resourceFilesActive");
+			if(!Objects.equals(tempactive, original.getTempactive()))
+				apiRequest.addVars("tempactive");
+			if(!Objects.equals(s3path, original.getS3path()))
+				apiRequest.addVars("s3path");
+			if(!Objects.equals(sdfStatus, original.getSdfStatus()))
+				apiRequest.addVars("sdfStatus");
+			if(!Objects.equals(transcoded, original.getTranscoded()))
+				apiRequest.addVars("transcoded");
+			if(!Objects.equals(lodestar, original.getLodestar()))
+				apiRequest.addVars("lodestar");
+			if(!Objects.equals(archive, original.getArchive()))
+				apiRequest.addVars("archive");
+			if(!Objects.equals(identifier, original.getIdentifier()))
+				apiRequest.addVars("identifier");
+			if(!Objects.equals(educationLevelDisplayName, original.getEducationLevelDisplayName()))
+				apiRequest.addVars("educationLevelDisplayName");
+			if(!Objects.equals(subjectArea, original.getSubjectArea()))
+				apiRequest.addVars("subjectArea");
+			if(!Objects.equals(subjectAreaDisplayName, original.getSubjectAreaDisplayName()))
+				apiRequest.addVars("subjectAreaDisplayName");
+			if(!Objects.equals(instructionTypeDisplayName, original.getInstructionTypeDisplayName()))
+				apiRequest.addVars("instructionTypeDisplayName");
+			if(!Objects.equals(name, original.getName()))
+				apiRequest.addVars("name");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -7205,10 +8436,27 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(url).map(v -> "url: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(displaySeqNo).map(v -> "displaySeqNo: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(fileId).map(v -> "fileId: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(fileName).map(v -> "fileName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(uploadDate).map(v -> "uploadDate: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(sequence).map(v -> "sequence: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(uniqueName).map(v -> "uniqueName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(ext).map(v -> "ext: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(resourceFilesActive).map(v -> "resourceFilesActive: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(tempactive).map(v -> "tempactive: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(s3path).map(v -> "s3path: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(sdfStatus).map(v -> "sdfStatus: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(transcoded).map(v -> "transcoded: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(lodestar).map(v -> "lodestar: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(archive).map(v -> "archive: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(identifier).map(v -> "identifier: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(educationLevelDisplayName).map(v -> "educationLevelDisplayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(subjectArea).map(v -> "subjectArea: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(subjectAreaDisplayName).map(v -> "subjectAreaDisplayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(instructionTypeDisplayName).map(v -> "instructionTypeDisplayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(name).map(v -> "name: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
-	public static final String CLASS_SIMPLE_NAME = "CurrikiResource";
 	public static final String VAR_resourceId = "resourceId";
 	public static final String VAR_licenseId = "licenseId";
 	public static final String VAR_contributorId = "contributorId";
@@ -7289,6 +8537,24 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String VAR_url = "url";
 	public static final String VAR_displaySeqNo = "displaySeqNo";
 	public static final String VAR_fileId = "fileId";
+	public static final String VAR_fileName = "fileName";
+	public static final String VAR_uploadDate = "uploadDate";
+	public static final String VAR_sequence = "sequence";
+	public static final String VAR_uniqueName = "uniqueName";
+	public static final String VAR_ext = "ext";
+	public static final String VAR_resourceFilesActive = "resourceFilesActive";
+	public static final String VAR_tempactive = "tempactive";
+	public static final String VAR_s3path = "s3path";
+	public static final String VAR_sdfStatus = "sdfStatus";
+	public static final String VAR_transcoded = "transcoded";
+	public static final String VAR_lodestar = "lodestar";
+	public static final String VAR_archive = "archive";
+	public static final String VAR_identifier = "identifier";
+	public static final String VAR_educationLevelDisplayName = "educationLevelDisplayName";
+	public static final String VAR_subjectArea = "subjectArea";
+	public static final String VAR_subjectAreaDisplayName = "subjectAreaDisplayName";
+	public static final String VAR_instructionTypeDisplayName = "instructionTypeDisplayName";
+	public static final String VAR_name = "name";
 
 	public static List<String> varsQForClass() {
 		return CurrikiResource.varsQCurrikiResource(new ArrayList<String>());
@@ -7376,6 +8642,24 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		vars.add(VAR_url);
 		vars.add(VAR_displaySeqNo);
 		vars.add(VAR_fileId);
+		vars.add(VAR_fileName);
+		vars.add(VAR_uploadDate);
+		vars.add(VAR_sequence);
+		vars.add(VAR_uniqueName);
+		vars.add(VAR_ext);
+		vars.add(VAR_resourceFilesActive);
+		vars.add(VAR_tempactive);
+		vars.add(VAR_s3path);
+		vars.add(VAR_sdfStatus);
+		vars.add(VAR_transcoded);
+		vars.add(VAR_lodestar);
+		vars.add(VAR_archive);
+		vars.add(VAR_identifier);
+		vars.add(VAR_educationLevelDisplayName);
+		vars.add(VAR_subjectArea);
+		vars.add(VAR_subjectAreaDisplayName);
+		vars.add(VAR_instructionTypeDisplayName);
+		vars.add(VAR_name);
 		BaseModel.varsFqBaseModel(vars);
 		return vars;
 	}
@@ -7413,6 +8697,7 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		vars.add(VAR_approvalStatusDate);
 		vars.add(VAR_displaySeqNo);
 		vars.add(VAR_fileId);
+		vars.add(VAR_sequence);
 		BaseModel.varsRangeBaseModel(vars);
 		return vars;
 	}
@@ -7497,6 +8782,24 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_url = "URL";
 	public static final String DISPLAY_NAME_displaySeqNo = "Display Sequence Number";
 	public static final String DISPLAY_NAME_fileId = "File ID";
+	public static final String DISPLAY_NAME_fileName = "Filename";
+	public static final String DISPLAY_NAME_uploadDate = "Upload Date";
+	public static final String DISPLAY_NAME_sequence = "Sequence";
+	public static final String DISPLAY_NAME_uniqueName = "Unique Name";
+	public static final String DISPLAY_NAME_ext = "Ext";
+	public static final String DISPLAY_NAME_resourceFilesActive = "Resource Files Active";
+	public static final String DISPLAY_NAME_tempactive = "Tempactive";
+	public static final String DISPLAY_NAME_s3path = "S3 Path";
+	public static final String DISPLAY_NAME_sdfStatus = "SDF Status";
+	public static final String DISPLAY_NAME_transcoded = "Transcoded";
+	public static final String DISPLAY_NAME_lodestar = "Lodestar";
+	public static final String DISPLAY_NAME_archive = "Archive";
+	public static final String DISPLAY_NAME_identifier = "Identifier";
+	public static final String DISPLAY_NAME_educationLevelDisplayName = "Education Level Display Name";
+	public static final String DISPLAY_NAME_subjectArea = "Subject Area";
+	public static final String DISPLAY_NAME_subjectAreaDisplayName = "Subject Area Display Name";
+	public static final String DISPLAY_NAME_instructionTypeDisplayName = "Instruction Type Display Name";
+	public static final String DISPLAY_NAME_name = "Name";
 
 	public static String displayNameForClass(String var) {
 		return CurrikiResource.displayNameCurrikiResource(var);
@@ -7663,6 +8966,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_displaySeqNo;
 		case VAR_fileId:
 			return DISPLAY_NAME_fileId;
+		case VAR_fileName:
+			return DISPLAY_NAME_fileName;
+		case VAR_uploadDate:
+			return DISPLAY_NAME_uploadDate;
+		case VAR_sequence:
+			return DISPLAY_NAME_sequence;
+		case VAR_uniqueName:
+			return DISPLAY_NAME_uniqueName;
+		case VAR_ext:
+			return DISPLAY_NAME_ext;
+		case VAR_resourceFilesActive:
+			return DISPLAY_NAME_resourceFilesActive;
+		case VAR_tempactive:
+			return DISPLAY_NAME_tempactive;
+		case VAR_s3path:
+			return DISPLAY_NAME_s3path;
+		case VAR_sdfStatus:
+			return DISPLAY_NAME_sdfStatus;
+		case VAR_transcoded:
+			return DISPLAY_NAME_transcoded;
+		case VAR_lodestar:
+			return DISPLAY_NAME_lodestar;
+		case VAR_archive:
+			return DISPLAY_NAME_archive;
+		case VAR_identifier:
+			return DISPLAY_NAME_identifier;
+		case VAR_educationLevelDisplayName:
+			return DISPLAY_NAME_educationLevelDisplayName;
+		case VAR_subjectArea:
+			return DISPLAY_NAME_subjectArea;
+		case VAR_subjectAreaDisplayName:
+			return DISPLAY_NAME_subjectAreaDisplayName;
+		case VAR_instructionTypeDisplayName:
+			return DISPLAY_NAME_instructionTypeDisplayName;
+		case VAR_name:
+			return DISPLAY_NAME_name;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}
@@ -7837,6 +9176,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return "Integer";
 		case VAR_fileId:
 			return "Integer";
+		case VAR_fileName:
+			return "String";
+		case VAR_uploadDate:
+			return "String";
+		case VAR_sequence:
+			return "Integer";
+		case VAR_uniqueName:
+			return "String";
+		case VAR_ext:
+			return "String";
+		case VAR_resourceFilesActive:
+			return "String";
+		case VAR_tempactive:
+			return "String";
+		case VAR_s3path:
+			return "String";
+		case VAR_sdfStatus:
+			return "String";
+		case VAR_transcoded:
+			return "String";
+		case VAR_lodestar:
+			return "String";
+		case VAR_archive:
+			return "String";
+		case VAR_identifier:
+			return "String";
+		case VAR_educationLevelDisplayName:
+			return "String";
+		case VAR_subjectArea:
+			return "String";
+		case VAR_subjectAreaDisplayName:
+			return "String";
+		case VAR_instructionTypeDisplayName:
+			return "String";
+		case VAR_name:
+			return "String";
 			default:
 				return BaseModel.classSimpleNameBaseModel(var);
 		}
@@ -8011,6 +9386,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 			return 30;
 		case VAR_fileId:
 			return 30;
+		case VAR_fileName:
+			return 31;
+		case VAR_uploadDate:
+			return 31;
+		case VAR_sequence:
+			return 31;
+		case VAR_uniqueName:
+			return 32;
+		case VAR_ext:
+			return 32;
+		case VAR_resourceFilesActive:
+			return 32;
+		case VAR_tempactive:
+			return 33;
+		case VAR_s3path:
+			return 33;
+		case VAR_sdfStatus:
+			return 33;
+		case VAR_transcoded:
+			return 34;
+		case VAR_lodestar:
+			return 34;
+		case VAR_archive:
+			return 34;
+		case VAR_identifier:
+			return 35;
+		case VAR_educationLevelDisplayName:
+			return 35;
+		case VAR_subjectArea:
+			return 35;
+		case VAR_subjectAreaDisplayName:
+			return 36;
+		case VAR_instructionTypeDisplayName:
+			return 36;
+		case VAR_name:
+			return 36;
 			default:
 				return BaseModel.htmlRowBaseModel(var);
 		}
@@ -8177,6 +9588,42 @@ public abstract class CurrikiResourceGen<DEV> extends BaseModel {
 		case VAR_displaySeqNo:
 			return 2;
 		case VAR_fileId:
+			return 3;
+		case VAR_fileName:
+			return 1;
+		case VAR_uploadDate:
+			return 2;
+		case VAR_sequence:
+			return 3;
+		case VAR_uniqueName:
+			return 1;
+		case VAR_ext:
+			return 2;
+		case VAR_resourceFilesActive:
+			return 3;
+		case VAR_tempactive:
+			return 1;
+		case VAR_s3path:
+			return 2;
+		case VAR_sdfStatus:
+			return 3;
+		case VAR_transcoded:
+			return 1;
+		case VAR_lodestar:
+			return 2;
+		case VAR_archive:
+			return 3;
+		case VAR_identifier:
+			return 1;
+		case VAR_educationLevelDisplayName:
+			return 2;
+		case VAR_subjectArea:
+			return 3;
+		case VAR_subjectAreaDisplayName:
+			return 1;
+		case VAR_instructionTypeDisplayName:
+			return 2;
+		case VAR_name:
 			return 3;
 			default:
 				return BaseModel.htmlCellBaseModel(var);

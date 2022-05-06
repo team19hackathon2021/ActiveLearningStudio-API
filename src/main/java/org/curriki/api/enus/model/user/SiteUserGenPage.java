@@ -182,7 +182,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/user");
+		c.o("/api/user");
 	}
 
 	@Override
@@ -259,11 +259,8 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
 		SiteUser.varsFqForClass().forEach(var -> {
 			String varIndexed = SiteUser.varIndexedSiteUser(var);
-			String varStored = SiteUser.varStoredSiteUser(var);
 			JsonObject json = new JsonObject();
 			json.put("var", var);
-			json.put("varStored", varStored);
-			json.put("varIndexed", varIndexed);
 			json.put("displayName", Optional.ofNullable(SiteUser.displayNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
 			json.put("classSimpleName", Optional.ofNullable(SiteUser.classSimpleNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
 			json.put("val", searchListSiteUser_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(SiteUser.varIndexedSiteUser(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
@@ -369,7 +366,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/user-999.png");
+			c.o("/png/api/user-999.png");
 	}
 
 	@Override

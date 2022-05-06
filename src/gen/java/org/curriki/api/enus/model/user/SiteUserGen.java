@@ -1,56 +1,50 @@
 package org.curriki.api.enus.model.user;
 
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.base.BaseModel;
-import io.vertx.core.json.JsonObject;
-import java.util.Date;
-import java.util.Set;
-import org.computate.vertx.api.ApiRequest;
-import org.curriki.api.enus.config.ConfigKeys;
-import java.util.Optional;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.math.MathContext;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.util.Date;
 import org.slf4j.LoggerFactory;
-import java.math.RoundingMode;
-import java.util.Map;
-import java.lang.Long;
-import java.lang.String;
-import io.vertx.core.json.JsonArray;
-import java.lang.Boolean;
-import org.computate.search.wrap.Wrap;
-import io.vertx.core.Promise;
-import io.vertx.core.Future;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import java.util.HashMap;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import org.apache.commons.lang3.StringUtils;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
 import org.computate.search.response.solr.SolrResponse;
+import java.lang.Long;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.Boolean;
+import io.vertx.core.json.JsonObject;
+import java.lang.String;
+import org.curriki.api.enus.model.base.BaseModel;
+import java.math.RoundingMode;
+import org.slf4j.Logger;
+import java.math.MathContext;
+import io.vertx.core.Promise;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.curriki.api.enus.config.ConfigKeys;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import io.vertx.core.json.JsonArray;
+import java.util.List;
+import org.computate.search.wrap.Wrap;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser">Find the class SiteUser in Solr. </a>
- * <br><br>Delete the class SiteUser in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.model.user in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.user&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project ActiveLearningStudio-API in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br>
  **/
 public abstract class SiteUserGen<DEV> extends BaseModel {
@@ -93,7 +87,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userKeys
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userKeys">Find the entity userKeys in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKeys">Find the entity userKeys in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -173,7 +167,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -226,7 +220,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -279,7 +273,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userEmail
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -332,7 +326,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userFirstName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -385,7 +379,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userLastName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -438,7 +432,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity userFullName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -491,7 +485,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity seeArchived
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:seeArchived">Find the entity seeArchived in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeArchived">Find the entity seeArchived in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -549,7 +543,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	/**	<br> The entity seeDeleted
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -983,31 +977,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	}
 
-	public static String varStoredSiteUser(String entityVar) {
-		switch(entityVar) {
-			case "userKeys":
-				return "userKeys_docvalues_longs";
-			case "userId":
-				return "userId_docvalues_string";
-			case "userName":
-				return "userName_docvalues_string";
-			case "userEmail":
-				return "userEmail_docvalues_string";
-			case "userFirstName":
-				return "userFirstName_docvalues_string";
-			case "userLastName":
-				return "userLastName_docvalues_string";
-			case "userFullName":
-				return "userFullName_docvalues_string";
-			case "seeArchived":
-				return "seeArchived_docvalues_boolean";
-			case "seeDeleted":
-				return "seeDeleted_docvalues_boolean";
-			default:
-				return BaseModel.varStoredBaseModel(entityVar);
-		}
-	}
-
 	public static String varIndexedSiteUser(String entityVar) {
 		switch(entityVar) {
 			case "userKeys":
@@ -1122,7 +1091,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return sb.toString();
 	}
 
-	public static final String CLASS_SIMPLE_NAME = "SiteUser";
 	public static final String VAR_userKeys = "userKeys";
 	public static final String VAR_userId = "userId";
 	public static final String VAR_userName = "userName";

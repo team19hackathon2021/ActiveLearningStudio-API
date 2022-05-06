@@ -1,63 +1,50 @@
 package org.curriki.api.enus.vertx;
 
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.base.BaseModel;
-import org.computate.vertx.api.ApiRequest;
-import org.curriki.api.enus.config.ConfigKeys;
-import java.util.Optional;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.math.MathContext;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
-import java.math.RoundingMode;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import java.util.HashMap;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import org.apache.commons.lang3.StringUtils;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
-import io.vertx.core.AbstractVerticle;
-import org.computate.search.wrap.Wrap;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.curriki.api.enus.model.base.BaseModel;
+import java.math.RoundingMode;
+import org.slf4j.Logger;
+import java.math.MathContext;
 import io.vertx.core.Promise;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.curriki.api.enus.config.ConfigKeys;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
 import io.vertx.core.json.JsonArray;
+import java.util.List;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.AbstractVerticle;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.vertx.MainVerticle">Find the class MainVerticle in Solr. </a>
- * <br><br>Delete the class MainVerticle in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.vertx.MainVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.vertx in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.vertx&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project ActiveLearningStudio-API in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.vertx.MainVerticle&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br>
  **/
 public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
 
 /*
 CREATE TABLE SiteUser(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, userId text
+	userId text
 	, userName text
 	, userEmail text
 	, userFirstName text
@@ -67,14 +54,7 @@ CREATE TABLE SiteUser(
 	, seeDeleted boolean
 	);
 CREATE TABLE CurrikiResource(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, resourceId text
+	resourceId text
 	, licenseId text
 	, contributorId bigint
 	, contributionDate timestamp with time zone
@@ -152,10 +132,38 @@ CREATE TABLE CurrikiResource(
 	, url text
 	, displaySeqNo integer
 	, fileId integer
+	, fileName text
+	, uploadDate text
+	, sequence integer
+	, uniqueName text
+	, ext text
+	, resourceFilesActive text
+	, tempactive text
+	, s3path text
+	, sdfStatus text
+	, transcoded text
+	, lodestar text
+	, archive text
+	, identifier text
+	, educationLevelDisplayName text
+	, subjectArea text
+	, subjectAreaDisplayName text
+	, instructionTypeDisplayName text
+	, name text
+	);
+CREATE TABLE BaseModel(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
 	);
 
 DROP TABLE SiteUser CASCADE;
 DROP TABLE CurrikiResource CASCADE;
+DROP TABLE BaseModel CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
@@ -377,7 +385,6 @@ DROP TABLE CurrikiResource CASCADE;
 
 	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureConfigComplete1, configureConfigFail1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, configureCamelFail1, configureCamelComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
 
-	public static final String CLASS_SIMPLE_NAME = "MainVerticle";
 
 
 	public static String displayNameForClass(String var) {

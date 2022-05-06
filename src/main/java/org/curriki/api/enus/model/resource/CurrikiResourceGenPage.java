@@ -182,7 +182,7 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/resource");
+		c.o("/api/resource");
 	}
 
 	@Override
@@ -259,11 +259,8 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
 		CurrikiResource.varsFqForClass().forEach(var -> {
 			String varIndexed = CurrikiResource.varIndexedCurrikiResource(var);
-			String varStored = CurrikiResource.varStoredCurrikiResource(var);
 			JsonObject json = new JsonObject();
 			json.put("var", var);
-			json.put("varStored", varStored);
-			json.put("varIndexed", varIndexed);
 			json.put("displayName", Optional.ofNullable(CurrikiResource.displayNameCurrikiResource(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
 			json.put("classSimpleName", Optional.ofNullable(CurrikiResource.classSimpleNameCurrikiResource(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
 			json.put("val", searchListCurrikiResource_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(CurrikiResource.varIndexedCurrikiResource(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
@@ -364,7 +361,7 @@ public class CurrikiResourceGenPage extends CurrikiResourceGenPageGen<BaseModelP
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/resource-999.png");
+			c.o("/png/api/resource-999.png");
 	}
 
 	@Override

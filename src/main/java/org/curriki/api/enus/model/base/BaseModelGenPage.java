@@ -96,6 +96,11 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 			w.o(searchListBaseModel_.get(0));
 	}
 
+	protected void _pk(Wrap<Long> w) {
+		if(baseModelCount == 1)
+			w.o(baseModel_.getPk());
+	}
+
 	protected void _id(Wrap<String> w) {
 		if(baseModelCount == 1)
 			w.o(baseModel_.getId());
@@ -195,11 +200,8 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
 		BaseModel.varsFqForClass().forEach(var -> {
 			String varIndexed = BaseModel.varIndexedBaseModel(var);
-			String varStored = BaseModel.varStoredBaseModel(var);
 			JsonObject json = new JsonObject();
 			json.put("var", var);
-			json.put("varStored", varStored);
-			json.put("varIndexed", varIndexed);
 			json.put("displayName", Optional.ofNullable(BaseModel.displayNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
 			json.put("classSimpleName", Optional.ofNullable(BaseModel.classSimpleNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
 			json.put("val", searchListBaseModel_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(BaseModel.varIndexedBaseModel(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));

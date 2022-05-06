@@ -1205,6 +1205,150 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							num++;
 							bParams.add(o2.sqlFileId());
 						break;
+					case "setFileName":
+							o2.setFileName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_fileName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlFileName());
+						break;
+					case "setUploadDate":
+							o2.setUploadDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_uploadDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUploadDate());
+						break;
+					case "setSequence":
+							o2.setSequence(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_sequence + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSequence());
+						break;
+					case "setUniqueName":
+							o2.setUniqueName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_uniqueName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUniqueName());
+						break;
+					case "setExt":
+							o2.setExt(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_ext + "=$" + num);
+							num++;
+							bParams.add(o2.sqlExt());
+						break;
+					case "setResourceFilesActive":
+							o2.setResourceFilesActive(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_resourceFilesActive + "=$" + num);
+							num++;
+							bParams.add(o2.sqlResourceFilesActive());
+						break;
+					case "setTempactive":
+							o2.setTempactive(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_tempactive + "=$" + num);
+							num++;
+							bParams.add(o2.sqlTempactive());
+						break;
+					case "setS3path":
+							o2.setS3path(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_s3path + "=$" + num);
+							num++;
+							bParams.add(o2.sqlS3path());
+						break;
+					case "setSdfStatus":
+							o2.setSdfStatus(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_sdfStatus + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSdfStatus());
+						break;
+					case "setTranscoded":
+							o2.setTranscoded(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_transcoded + "=$" + num);
+							num++;
+							bParams.add(o2.sqlTranscoded());
+						break;
+					case "setLodestar":
+							o2.setLodestar(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_lodestar + "=$" + num);
+							num++;
+							bParams.add(o2.sqlLodestar());
+						break;
+					case "setArchive":
+							o2.setArchive(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_archive + "=$" + num);
+							num++;
+							bParams.add(o2.sqlArchive());
+						break;
+					case "setIdentifier":
+							o2.setIdentifier(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_identifier + "=$" + num);
+							num++;
+							bParams.add(o2.sqlIdentifier());
+						break;
+					case "setEducationLevelDisplayName":
+							o2.setEducationLevelDisplayName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_educationLevelDisplayName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlEducationLevelDisplayName());
+						break;
+					case "setSubjectArea":
+							o2.setSubjectArea(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_subjectArea + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSubjectArea());
+						break;
+					case "setSubjectAreaDisplayName":
+							o2.setSubjectAreaDisplayName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_subjectAreaDisplayName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSubjectAreaDisplayName());
+						break;
+					case "setInstructionTypeDisplayName":
+							o2.setInstructionTypeDisplayName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_instructionTypeDisplayName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlInstructionTypeDisplayName());
+						break;
+					case "setName":
+							o2.setName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(CurrikiResource.VAR_name + "=$" + num);
+							num++;
+							bParams.add(o2.sqlName());
+						break;
 				}
 			}
 			bSql.append(" WHERE pk=$" + num);
@@ -1473,24 +1617,6 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				Set<String> entityVars = jsonObject.fieldNames();
 				for(String entityVar : entityVars) {
 					switch(entityVar) {
-					case CurrikiResource.VAR_sessionId:
-						o2.setSessionId(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(CurrikiResource.VAR_sessionId + "=$" + num);
-						num++;
-						bParams.add(o2.sqlSessionId());
-						break;
-					case CurrikiResource.VAR_userKey:
-						o2.setUserKey(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(CurrikiResource.VAR_userKey + "=$" + num);
-						num++;
-						bParams.add(o2.sqlUserKey());
-						break;
 					case CurrikiResource.VAR_inheritPk:
 						o2.setInheritPk(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -1526,6 +1652,24 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						bSql.append(CurrikiResource.VAR_deleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDeleted());
+						break;
+					case CurrikiResource.VAR_sessionId:
+						o2.setSessionId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_sessionId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSessionId());
+						break;
+					case CurrikiResource.VAR_userKey:
+						o2.setUserKey(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_userKey + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUserKey());
 						break;
 					case CurrikiResource.VAR_resourceId:
 						o2.setResourceId(jsonObject.getString(entityVar));
@@ -2228,6 +2372,168 @@ public class CurrikiResourceEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						bSql.append(CurrikiResource.VAR_fileId + "=$" + num);
 						num++;
 						bParams.add(o2.sqlFileId());
+						break;
+					case CurrikiResource.VAR_fileName:
+						o2.setFileName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_fileName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlFileName());
+						break;
+					case CurrikiResource.VAR_uploadDate:
+						o2.setUploadDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_uploadDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUploadDate());
+						break;
+					case CurrikiResource.VAR_sequence:
+						o2.setSequence(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_sequence + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSequence());
+						break;
+					case CurrikiResource.VAR_uniqueName:
+						o2.setUniqueName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_uniqueName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUniqueName());
+						break;
+					case CurrikiResource.VAR_ext:
+						o2.setExt(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_ext + "=$" + num);
+						num++;
+						bParams.add(o2.sqlExt());
+						break;
+					case CurrikiResource.VAR_resourceFilesActive:
+						o2.setResourceFilesActive(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_resourceFilesActive + "=$" + num);
+						num++;
+						bParams.add(o2.sqlResourceFilesActive());
+						break;
+					case CurrikiResource.VAR_tempactive:
+						o2.setTempactive(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_tempactive + "=$" + num);
+						num++;
+						bParams.add(o2.sqlTempactive());
+						break;
+					case CurrikiResource.VAR_s3path:
+						o2.setS3path(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_s3path + "=$" + num);
+						num++;
+						bParams.add(o2.sqlS3path());
+						break;
+					case CurrikiResource.VAR_sdfStatus:
+						o2.setSdfStatus(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_sdfStatus + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSdfStatus());
+						break;
+					case CurrikiResource.VAR_transcoded:
+						o2.setTranscoded(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_transcoded + "=$" + num);
+						num++;
+						bParams.add(o2.sqlTranscoded());
+						break;
+					case CurrikiResource.VAR_lodestar:
+						o2.setLodestar(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_lodestar + "=$" + num);
+						num++;
+						bParams.add(o2.sqlLodestar());
+						break;
+					case CurrikiResource.VAR_archive:
+						o2.setArchive(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_archive + "=$" + num);
+						num++;
+						bParams.add(o2.sqlArchive());
+						break;
+					case CurrikiResource.VAR_identifier:
+						o2.setIdentifier(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_identifier + "=$" + num);
+						num++;
+						bParams.add(o2.sqlIdentifier());
+						break;
+					case CurrikiResource.VAR_educationLevelDisplayName:
+						o2.setEducationLevelDisplayName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_educationLevelDisplayName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlEducationLevelDisplayName());
+						break;
+					case CurrikiResource.VAR_subjectArea:
+						o2.setSubjectArea(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_subjectArea + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSubjectArea());
+						break;
+					case CurrikiResource.VAR_subjectAreaDisplayName:
+						o2.setSubjectAreaDisplayName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_subjectAreaDisplayName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSubjectAreaDisplayName());
+						break;
+					case CurrikiResource.VAR_instructionTypeDisplayName:
+						o2.setInstructionTypeDisplayName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_instructionTypeDisplayName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlInstructionTypeDisplayName());
+						break;
+					case CurrikiResource.VAR_name:
+						o2.setName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(CurrikiResource.VAR_name + "=$" + num);
+						num++;
+						bParams.add(o2.sqlName());
 						break;
 					}
 				}

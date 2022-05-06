@@ -38,7 +38,7 @@ import org.curriki.api.enus.model.base.BaseModel;
  * IconName: file
  *  
  * 
- */ 
+ */
 public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
  
 	/**
@@ -992,10 +992,204 @@ public class CurrikiResource extends CurrikiResourceGen <BaseModel> {
 	 */
 	protected void _fileId(Wrap<Integer> w) {
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Filename
+	 * HtmlRow: 31
+	 * HtmlCell: 1
+	 */
+	protected void _fileName(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Upload Date
+	 * HtmlRow: 31
+	 * HtmlCell: 2
+	 */
+	protected void _uploadDate(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Sequence
+	 * HtmlRow: 31
+	 * HtmlCell: 3
+	 */
+	protected void _sequence(Wrap<Integer> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Unique Name
+	 * HtmlRow: 32
+	 * HtmlCell: 1
+	 */
+	protected void _uniqueName(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Ext
+	 * HtmlRow: 32
+	 * HtmlCell: 2
+	 */
+	protected void _ext(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Resource Files Active
+	 * HtmlRow: 32
+	 * HtmlCell: 3
+	 */
+	protected void _resourceFilesActive(Wrap<String> w) {
+	}
 
-//	+ " rl.url, rl.displayseqno, rf.fileid, rf.filename, rf.uploaddate, rf.sequence, rf.uniquename,"
-//	+ " rf.ext, rf.active, rf.tempactive, rf.s3path, rf.SDFstatus, rf.transcoded, rf.lodestar,"
-//	+ " rf.archive, edu.identifier, edu.displayname, sub.subjectarea, sub.displayname, inst.displayname, inst.name"
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Tempactive
+	 * HtmlRow: 33
+	 * HtmlCell: 1
+	 */
+	protected void _tempactive(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: S3 Path
+	 * HtmlRow: 33
+	 * HtmlCell: 2
+	 */
+	protected void _s3path(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: SDF Status
+	 * HtmlRow: 33
+	 * HtmlCell: 3
+	 */
+	protected void _sdfStatus(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Transcoded
+	 * HtmlRow: 34
+	 * HtmlCell: 1
+	 */
+	protected void _transcoded(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Lodestar
+	 * HtmlRow: 34
+	 * HtmlCell: 2
+	 */
+	protected void _lodestar(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Archive
+	 * HtmlRow: 34
+	 * HtmlCell: 3
+	 */
+	protected void _archive(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Identifier
+	 * HtmlRow: 35
+	 * HtmlCell: 1
+	 */
+	protected void _identifier(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Education Level Display Name
+	 * HtmlRow: 35
+	 * HtmlCell: 2
+	 */
+	protected void _educationLevelDisplayName(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Subject Area
+	 * HtmlRow: 35
+	 * HtmlCell: 3
+	 */
+	protected void _subjectArea(Wrap<String> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Subject Area Display Name
+	 * HtmlRow: 36
+	 * HtmlCell: 1
+	 */
+	protected void _subjectAreaDisplayName(Wrap<String> w) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Instruction Type Display Name
+	 * HtmlRow: 36
+	 * HtmlCell: 2
+	 */
+	protected void _instructionTypeDisplayName(Wrap<String> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * DisplayName: Name
+	 * HtmlRow: 36
+	 * HtmlCell: 3
+	 */
+	protected void _name(Wrap<String> w) {
+	}
 	
 	@Override
 	public String toString() {

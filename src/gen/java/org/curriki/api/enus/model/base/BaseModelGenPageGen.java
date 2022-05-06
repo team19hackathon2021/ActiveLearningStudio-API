@@ -1,53 +1,48 @@
 package org.curriki.api.enus.model.base;
 
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.model.base.BaseModel;
-import org.computate.vertx.api.ApiRequest;
-import org.curriki.api.enus.config.ConfigKeys;
-import java.util.Optional;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.math.MathContext;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.math.RoundingMode;
-import java.util.Map;
-import org.curriki.api.enus.page.PageLayout;
-import org.computate.vertx.search.list.SearchList;
-import java.lang.String;
-import io.vertx.core.json.JsonArray;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.computate.search.response.solr.SolrResponse.FacetCounts;
+import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import java.util.HashMap;
+import org.curriki.api.enus.request.SiteRequestEnUS;
+import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
-import org.computate.search.wrap.Wrap;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
+import java.lang.Long;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.String;
+import org.curriki.api.enus.model.base.BaseModel;
+import java.math.RoundingMode;
+import org.slf4j.Logger;
+import org.curriki.api.enus.page.PageLayout;
+import java.math.MathContext;
 import io.vertx.core.Promise;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.curriki.api.enus.config.ConfigKeys;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.vertx.search.list.SearchList;
+import io.vertx.core.json.JsonArray;
+import java.util.List;
+import org.computate.search.wrap.Wrap;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage">Find the class BaseModelGenPage in Solr. </a>
- * <br><br>Delete the class BaseModelGenPage in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.curriki.api.enus.model.base in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.curriki.api.enus.model.base&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project ActiveLearningStudio-API in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:ActiveLearningStudio\-API&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br>
  **/
 public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
@@ -66,7 +61,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity searchListBaseModel_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:searchListBaseModel_">Find the entity searchListBaseModel_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListBaseModel_">Find the entity searchListBaseModel_ in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -104,7 +99,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity pageResponse
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:pageResponse">Find the entity pageResponse in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageResponse">Find the entity pageResponse in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -154,7 +149,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity defaultPivotVars
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:defaultPivotVars">Find the entity defaultPivotVars in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:defaultPivotVars">Find the entity defaultPivotVars in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -218,7 +213,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity listBaseModel
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:listBaseModel">Find the entity listBaseModel in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listBaseModel">Find the entity listBaseModel in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -252,7 +247,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity facetCounts
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:facetCounts">Find the entity facetCounts in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:facetCounts">Find the entity facetCounts in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -291,7 +286,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity baseModelCount
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:baseModelCount">Find the entity baseModelCount in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:baseModelCount">Find the entity baseModelCount in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -347,7 +342,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity baseModel_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:baseModel_">Find the entity baseModel_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:baseModel_">Find the entity baseModel_ in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -373,6 +368,63 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 	}
 
 	////////
+	// pk //
+	////////
+
+	/**	 The entity pk
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Long pk;
+
+	/**	<br> The entity pk
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _pk(Wrap<Long> w);
+
+	public Long getPk() {
+		return pk;
+	}
+
+	public void setPk(Long pk) {
+		this.pk = pk;
+	}
+	@JsonIgnore
+	public void setPk(String o) {
+		this.pk = BaseModelGenPage.staticSetPk(siteRequest_, o);
+	}
+	public static Long staticSetPk(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	protected BaseModelGenPage pkInit() {
+		Wrap<Long> pkWrap = new Wrap<Long>().var("pk");
+		if(pk == null) {
+			_pk(pkWrap);
+			setPk(pkWrap.o);
+		}
+		return (BaseModelGenPage)this;
+	}
+
+	public static Long staticSearchPk(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrPk(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqPk(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModelGenPage.staticSearchStrPk(siteRequest_, BaseModelGenPage.staticSearchPk(siteRequest_, BaseModelGenPage.staticSetPk(siteRequest_, o)));
+	}
+
+	////////
 	// id //
 	////////
 
@@ -385,7 +437,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 
 	/**	<br> The entity id
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -457,6 +509,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 				facetCountsInit();
 				baseModelCountInit();
 				baseModel_Init();
+				pkInit();
 				idInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -525,6 +578,8 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 				return oBaseModelGenPage.baseModelCount;
 			case "baseModel_":
 				return oBaseModelGenPage.baseModel_;
+			case "pk":
+				return oBaseModelGenPage.pk;
 			case "id":
 				return oBaseModelGenPage.id;
 			default:
@@ -572,6 +627,8 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 			return BaseModelGenPage.staticSetDefaultPivotVars(siteRequest_, o);
 		case "baseModelCount":
 			return BaseModelGenPage.staticSetBaseModelCount(siteRequest_, o);
+		case "pk":
+			return BaseModelGenPage.staticSetPk(siteRequest_, o);
 		case "id":
 			return BaseModelGenPage.staticSetId(siteRequest_, o);
 			default:
@@ -594,6 +651,8 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 			return BaseModelGenPage.staticSearchDefaultPivotVars(siteRequest_, (String)o);
 		case "baseModelCount":
 			return BaseModelGenPage.staticSearchBaseModelCount(siteRequest_, (Integer)o);
+		case "pk":
+			return BaseModelGenPage.staticSearchPk(siteRequest_, (Long)o);
 		case "id":
 			return BaseModelGenPage.staticSearchId(siteRequest_, (String)o);
 			default:
@@ -616,6 +675,8 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 			return BaseModelGenPage.staticSearchStrDefaultPivotVars(siteRequest_, (String)o);
 		case "baseModelCount":
 			return BaseModelGenPage.staticSearchStrBaseModelCount(siteRequest_, (Integer)o);
+		case "pk":
+			return BaseModelGenPage.staticSearchStrPk(siteRequest_, (Long)o);
 		case "id":
 			return BaseModelGenPage.staticSearchStrId(siteRequest_, (String)o);
 			default:
@@ -638,6 +699,8 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 			return BaseModelGenPage.staticSearchFqDefaultPivotVars(siteRequest_, o);
 		case "baseModelCount":
 			return BaseModelGenPage.staticSearchFqBaseModelCount(siteRequest_, o);
+		case "pk":
+			return BaseModelGenPage.staticSearchFqPk(siteRequest_, o);
 		case "id":
 			return BaseModelGenPage.staticSearchFqId(siteRequest_, o);
 			default:
@@ -655,7 +718,6 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 		return sb.toString();
 	}
 
-	public static final String CLASS_SIMPLE_NAME = "BaseModelGenPage";
 	public static final String VAR_searchListBaseModel_ = "searchListBaseModel_";
 	public static final String VAR_pageResponse = "pageResponse";
 	public static final String VAR_defaultPivotVars = "defaultPivotVars";
@@ -663,6 +725,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 	public static final String VAR_facetCounts = "facetCounts";
 	public static final String VAR_baseModelCount = "baseModelCount";
 	public static final String VAR_baseModel_ = "baseModel_";
+	public static final String VAR_pk = "pk";
 	public static final String VAR_id = "id";
 
 	public static final String DISPLAY_NAME_searchListBaseModel_ = "";
@@ -672,6 +735,7 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 	public static final String DISPLAY_NAME_facetCounts = "";
 	public static final String DISPLAY_NAME_baseModelCount = "";
 	public static final String DISPLAY_NAME_baseModel_ = "";
+	public static final String DISPLAY_NAME_pk = "";
 	public static final String DISPLAY_NAME_id = "";
 
 	public static String displayNameForClass(String var) {
@@ -693,6 +757,8 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 			return DISPLAY_NAME_baseModelCount;
 		case VAR_baseModel_:
 			return DISPLAY_NAME_baseModel_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
 		case VAR_id:
 			return DISPLAY_NAME_id;
 		default:

@@ -14,6 +14,7 @@ import org.curriki.api.enus.request.SiteRequestEnUS;
 
 /**
  * Indexed: true
+ * Model: true
  * Page: true
  * SuperPage: PageLayout
  * Keyword: classSimpleNameBaseModel
@@ -39,6 +40,7 @@ public class BaseModel extends BaseModelGen<Object> implements ComputateVertxBas
 	 * HtmlCell: 1
 	 * DisplayName.enUS: primary key
 	 * Description: The primary key of this object in the database
+	 * Facet: true
 	 */
 	protected void _pk(Wrap<Long> w) {}
 
@@ -59,10 +61,11 @@ public class BaseModel extends BaseModelGen<Object> implements ComputateVertxBas
 	 * VarCreated: true
 	 * HtmlRow: 1
 	 * HtmlCell: 2
-	 * HtmlColumn: 2
+	 * HtmlColumn: 1
 	 * DisplayName.enUS: created
 	 * FormatHtm: MMM d, yyyy h:mm:ss a
 	 * Description: A created timestamp for this record in the database
+	 * Facet: true
 	 */
 	protected void _created(Wrap<ZonedDateTime> w) {}
 
@@ -219,8 +222,7 @@ public class BaseModel extends BaseModelGen<Object> implements ComputateVertxBas
 			Class<?> cl = getClass();
 
 			try {
-				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
-				w.o(o);
+				w.o(toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, String.format("%s_NameVar", cl.getSimpleName())).get(this)), "-")));
 			} catch (Exception e) {
 				ExceptionUtils.rethrow(e);
 			}
@@ -297,6 +299,7 @@ public class BaseModel extends BaseModelGen<Object> implements ComputateVertxBas
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
+	 * VarUrlApi: true
 	 * Description: The link to this object in the API
 	 */
 	protected void _pageUrlApi(Wrap<String> w) {
