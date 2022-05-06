@@ -222,7 +222,7 @@ public class BaseModel extends BaseModelGen<Object> implements ComputateVertxBas
 			Class<?> cl = getClass();
 
 			try {
-				w.o(toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, String.format("%s_NameVar_%s", cl.getSimpleName(), siteRequest_.getLang())).get(this)), "-")));
+				w.o(toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, String.format("%s_NameVar", cl.getSimpleName())).get(this)), "-")));
 			} catch (Exception e) {
 				ExceptionUtils.rethrow(e);
 			}
