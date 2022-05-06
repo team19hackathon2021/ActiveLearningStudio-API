@@ -3,42 +3,42 @@ package org.curriki.api.enus.model.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.curriki.api.enus.base.BaseModel;
-import org.curriki.api.enus.request.api.ApiRequest;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.apache.commons.lang3.StringUtils;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.curriki.api.enus.wrap.Wrap;
-import org.curriki.api.enus.java.ZonedDateTimeDeserializer;
-import org.apache.commons.collections.CollectionUtils;
+import org.computate.vertx.api.ApiRequest;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.curriki.api.enus.java.ZonedDateTimeSerializer;
+import org.curriki.api.enus.model.base.BaseModel;
 import java.math.RoundingMode;
 import org.curriki.api.enus.model.resource.CurrikiResourceGenPage;
 import org.slf4j.Logger;
 import java.math.MathContext;
 import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.curriki.api.enus.config.ConfigKeys;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
 import io.vertx.core.json.JsonArray;
+import java.util.List;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourcePage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.model.resource.CurrikiResourcePage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(CurrikiResourcePage.class);
@@ -170,83 +170,44 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrCurrikiResourcePage(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchCurrikiResourcePage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSolrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+				return CurrikiResourceGenPage.staticSearchCurrikiResourceGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrCurrikiResourcePage(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrCurrikiResourcePage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSolrStrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
+				return CurrikiResourceGenPage.staticSearchStrCurrikiResourceGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqCurrikiResourcePage(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqCurrikiResourcePage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqCurrikiResourcePage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return CurrikiResourceGenPage.staticSolrFqCurrikiResourceGenPage(entityVar,  siteRequest_, o);
-		}
-	}
-
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineCurrikiResourcePage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineCurrikiResourcePage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineCurrikiResourceGenPage(var, val);
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestCurrikiResourcePage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof CurrikiResourcePage) {
-			CurrikiResourcePage original = (CurrikiResourcePage)o;
-			super.apiRequestCurrikiResourceGenPage();
+				return CurrikiResourceGenPage.staticSearchFqCurrikiResourceGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -260,4 +221,15 @@ public abstract class CurrikiResourcePageGen<DEV> extends CurrikiResourceGenPage
 		return sb.toString();
 	}
 
+
+
+	public static String displayNameForClass(String var) {
+		return CurrikiResourcePage.displayNameCurrikiResourcePage(var);
+	}
+	public static String displayNameCurrikiResourcePage(String var) {
+		switch(var) {
+		default:
+			return CurrikiResourceGenPage.displayNameCurrikiResourceGenPage(var);
+		}
+	}
 }

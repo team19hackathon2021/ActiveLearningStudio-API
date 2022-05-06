@@ -1,5 +1,6 @@
 package org.curriki.api.enus.model.base;
 
+import org.curriki.api.enus.model.base.BaseModel;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import java.lang.Long;
 import java.lang.String;
@@ -9,12 +10,12 @@ import java.util.Locale;
 import java.lang.Boolean;
 import java.util.List;
 import org.curriki.api.enus.page.PageLayout;
-import org.curriki.api.enus.user.SiteUser;
+import org.curriki.api.enus.model.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
-import org.curriki.api.enus.search.SearchList;
-import org.curriki.api.enus.wrap.Wrap;
+import org.computate.vertx.search.list.SearchList;
+import org.computate.search.wrap.Wrap;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -27,18 +28,19 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import java.util.stream.Collectors;
 import java.util.Arrays;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import io.vertx.core.Promise;
 import org.curriki.api.enus.config.ConfigKeys;
+import org.computate.search.response.solr.SolrResponse;
+import java.util.HashMap;
+import org.computate.search.tool.TimeTool;
+import java.time.ZoneId;
 
 
 /**
@@ -53,11 +55,36 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 	protected void _searchListBaseModel_(Wrap<SearchList<BaseModel>> w) {
 	}
 
+	protected void _pageResponse(Wrap<String> w) {
+		if(searchListBaseModel_ != null)
+			w.o(JsonObject.mapFrom(searchListBaseModel_.getQueryResponse()).toString());
+	}
+
+	protected void _defaultPivotVars(List<String> l) {
+		Optional.ofNullable(searchListBaseModel_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
+			String facetPivot2 = facetPivot;
+			if(StringUtils.contains(facetPivot2, "}"))
+				facetPivot2 = StringUtils.substringAfterLast(facetPivot2, "}");
+			String[] parts = facetPivot2.split(",");
+			for(String part : parts) {
+				if(StringUtils.isNotBlank(part)) {
+					String var = StringUtils.substringBefore(part, "_");
+					if(StringUtils.isNotBlank(var))
+						l.add(var);
+				}
+			}
+		});
+	}
+
 	/**
 	 * {@inheritDoc}
 	 **/
 	protected void _listBaseModel(JsonArray l) {
 		Optional.ofNullable(searchListBaseModel_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+	}
+
+	protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
+		w.o(searchListBaseModel_.getQueryResponse().getFacetCounts());
 	}
 
 	protected void _baseModelCount(Wrap<Integer> w) {
@@ -72,6 +99,11 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 	protected void _pk(Wrap<Long> w) {
 		if(baseModelCount == 1)
 			w.o(baseModel_.getPk());
+	}
+
+	protected void _id(Wrap<String> w) {
+		if(baseModelCount == 1)
+			w.o(baseModel_.getId());
 	}
 
 	@Override
@@ -111,7 +143,7 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		JsonArray pages = new JsonArray();
 		Long start = searchListBaseModel_.getStart().longValue();
 		Long rows = searchListBaseModel_.getRows().longValue();
-		Long foundNum = searchListBaseModel_.getQueryResponse().getResults().getNumFound();
+		Long foundNum = searchListBaseModel_.getQueryResponse().getResponse().getNumFound().longValue();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -152,12 +184,64 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 	}
 
 	@Override
+	protected void _varsQ(JsonObject vars) {
+		BaseModel.varsQForClass().forEach(var -> {
+			JsonObject json = new JsonObject();
+			json.put("var", var);
+			json.put("displayName", Optional.ofNullable(BaseModel.displayNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(BaseModel.classSimpleNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", Optional.ofNullable(searchListBaseModel_.getRequest().getQuery()).filter(fq -> fq.startsWith(BaseModel.varIndexedBaseModel(var) + ":")).map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			vars.put(var, json);
+		});
+	}
+
+	@Override
+	protected void _varsFq(JsonObject vars) {
+		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
+		BaseModel.varsFqForClass().forEach(var -> {
+			String varIndexed = BaseModel.varIndexedBaseModel(var);
+			JsonObject json = new JsonObject();
+			json.put("var", var);
+			json.put("displayName", Optional.ofNullable(BaseModel.displayNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(BaseModel.classSimpleNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", searchListBaseModel_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(BaseModel.varIndexedBaseModel(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			Optional.ofNullable(facetFields.get(varIndexed)).ifPresent(facetField -> {
+				JsonObject facetJson = new JsonObject();
+				JsonObject counts = new JsonObject();
+				facetJson.put("var", var);
+				facetField.getCounts().forEach((val, count) -> {
+					counts.put(val, count);
+				});
+				facetJson.put("counts", counts);
+				json.put("facetField", facetJson);
+			});
+			if(defaultPivotVars.contains(var)) {
+				json.put("pivot", true);
+			}
+			vars.put(var, json);
+		});
+	}
+
+	@Override
+	protected void _varsRange(JsonObject vars) {
+		BaseModel.varsRangeForClass().forEach(var -> {
+			String varIndexed = BaseModel.varIndexedBaseModel(var);
+			JsonObject json = new JsonObject();
+			json.put("var", var);
+			json.put("displayName", Optional.ofNullable(BaseModel.displayNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(BaseModel.classSimpleNameBaseModel(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", searchListBaseModel_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(BaseModel.varIndexedBaseModel(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			vars.put(var, json);
+		});
+	}
+
+	@Override
 	protected void _query(JsonObject query) {
 		ServiceRequest serviceRequest = siteRequest_.getServiceRequest();
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListBaseModel_.getQueryResponse().getResults().getNumFound();
+		Long num = searchListBaseModel_.getQueryResponse().getResponse().getNumFound().longValue();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -185,27 +269,28 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getStart()).orElse(1);
-		Integer start2 = start1 - rows1;
-		Integer start3 = start1 + rows1;
-		Integer rows2 = rows1 / 2;
-		Integer rows3 = rows1 * 2;
+		Long rows1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getRows()).orElse(10L);
+		Long start1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getStart()).orElse(1L);
+		Long start2 = start1 - rows1;
+		Long start3 = start1 + rows1;
+		Long rows2 = rows1 / 2;
+		Long rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
-		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(searchListBaseModel_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		JsonObject fqs = new JsonObject();
+		for(String fq : Optional.ofNullable(searchListBaseModel_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
 				if(!StringUtils.startsWithAny(fq, "classCanonicalNames_", "archived_", "deleted_", "sessionId", "userKeys"))
-					fqs.add(new JsonObject().put("var", fq1).put("val", fq2));
+					fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", BaseModel.displayNameForClass(fq1)));
 				}
 			}
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(searchListBaseModel_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
+		for(String sort : Optional.ofNullable(searchListBaseModel_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+			String sort1 = StringUtils.substringBefore(sort, "_");
+			sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", BaseModel.displayNameForClass(sort1)));
 		}
 		query.put("sort", sorts);
 	}
